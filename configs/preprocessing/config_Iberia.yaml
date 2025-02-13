@@ -1,0 +1,4 @@
+countries:
+- ES
+- PT
+query: "not (x > 2 and y < 40)"

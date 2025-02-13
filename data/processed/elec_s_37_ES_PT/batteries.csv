@@ -1,0 +1,3 @@
+Battery,node,MC,annualized_cost,P_discharge_max,P_discharge_min,P_charge_max,P_charge_min,SOC_max,SOC_min,delta,eta_charge,eta_discharge
+ES1 0 bat,ES1 0,0,21958.9249402013,100000,0,100000,0,0.9,0.1,4.168664498693797e-05,0.98,0.97
+PT1 0 bat,PT1 0,0,21958.9249402013,100000,0,100000,0,0.9,0.1,4.168664498693797e-05,0.98,0.97

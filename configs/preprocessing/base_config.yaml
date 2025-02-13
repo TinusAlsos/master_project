@@ -1,0 +1,40 @@
+bus_columns:
+- x
+- y
+- country
+carrier_columns:
+- co2_emissions
+- color
+- nice_name
+carriers:
+- CCGT
+- coal
+- solar
+- onwind
+- offwind-ac
+- ror
+- hydro
+components:
+- buses
+- carriers
+- lines
+- generators
+countries:
+- ES
+- PT
+generator_columns:
+- bus
+- carrier
+- p_nom
+- marginal_cost
+- capital_cost
+line_columns:
+- bus0
+- bus1
+- s_nom
+- capital_cost
+- length
+branches_max_loss: 0.02 # Maximum loss in branches (fraction)
+network_name: elec_s_128
+query: 
+battery_config:       # Name of config file in batteries to use
