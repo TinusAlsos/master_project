@@ -2,19 +2,16 @@ import calendar
 import numpy as np
 import matplotlib.pyplot as plt
 import geopandas as gpd
-from shapely.geometry import LineString
+from shapely.geometry import LineString, Polygon, MultiPolygon
 import matplotlib.lines as mlines
 from matplotlib.collections import LineCollection
 import os
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import geopandas as gpd
-from shapely.geometry import LineString
 import seaborn as sns
 
 np.random.seed(3)  # For reproducibility
 
+COUNTIRES_TO_FILTER_TO_MAINLAND = ["France", "Norway"]
 node_to_city = {
     "ES1 0": "Murcia",
     "ES1 1": "Bilbao",
@@ -29,20 +26,150 @@ node_to_city = {
     "PT1 1": "Lisbon",
 }
 city_to_node = {v: k for k, v in node_to_city.items()}
-city_to_coordinates = {
-    "Barcelona": (2.1734, 41.3851),
-    "Madrid": (-3.7038, 40.4168),
-    "Bilbao": (-2.9349, 43.2630),
-    "Porto": (-8.6110, 41.1496),
-    "Lisbon": (-9.1393, 38.7223),
-    "Salamanca": (-5.6635, 40.9701),  # Salamanca's coordinates
-    "Sevilla": (-5.9845, 37.3891),  # Sevilla's coordinates
-    "Murcia": (-1.1307, 37.9922),  # Murcia's coordinates
-    "Zaragoza": (-0.8891, 41.6488),  # Zaragoza's coordinates
-    "Lugo": (-7.5560, 43.0125),  # Lugo's coordinates
-    "Valencia": (-0.3763, 39.4699),  # Valencia's coordinatesb
+GENERATOR_ORDER = [
+    "CCGT",
+    "coal",
+    "offwind-ac",
+    "onwind",
+    "solar",
+    "ror",
+    "oil",
+    "biomass",
+    "nuclear",
+    "offwind-dc",
+    "lignite",
+    "OCGT",
+]
+country_code_to_country = {
+    "AL": "Albania",
+    "AT": "Austria",
+    "BA": "Bosnia and Herz.",
+    "BE": "Belgium",
+    "BG": "Bulgaria",
+    "CH": "Switzerland",
+    "CZ": "Czechia",
+    "DE": "Germany",
+    "DK": "Denmark",
+    "EE": "Estonia",
+    "ES": "Spain",
+    "FI": "Finland",
+    "FR": "France",
+    "GB": "United Kingdom",
+    "GR": "Greece",
+    "HR": "Croatia",
+    "HU": "Hungary",
+    "IE": "Ireland",
+    "IT": "Italy",
+    "LT": "Lithuania",
+    "LU": "Luxembourg",
+    "LV": "Latvia",
+    "ME": "Montenegro",
+    "MK": "North Macedonia",
+    "NL": "Netherlands",
+    "NO": "Norway",
+    "PL": "Poland",
+    "PT": "Portugal",
+    "RO": "Romania",
+    "RS": "Serbia",
+    "SE": "Sweden",
+    "SI": "Slovenia",
+    "SK": "Slovakia",
 }
-GENERATOR_ORDER = ["CCGT", "coal", "offwind-ac", "onwind", "solar", "ror"]
+country_to_country_code = {v: k for k, v in country_code_to_country.items()}
+country_code_to_color = {
+    "AL": "lightblue",  # Albania
+    "AT": "palegreen",  # Austria (contrasts with CZ, DE, HU)
+    "BA": "paleturquoise",  # Bosnia and Herzegovina (contrasts with HR, RS)
+    "BE": "lightgoldenrodyellow",  # Belgium (contrasts with NL, FR, DE)
+    "BG": "lightsteelblue",  # Bulgaria (contrasts with RO, GR)
+    "CH": "rosybrown",  # Switzerland (contrasts with FR, DE, IT)
+    "CZ": "skyblue",  # Czech Republic (contrasts with DE, AT, PL)
+    "DE": "mistyrose",  # Germany (contrasts with NL, FR, PL, AT, CZ, DK)
+    "DK": "lavender",  # Denmark (contrasts with DE, SE)
+    "EE": "palegreen",  # Estonia (contrasts with LV, FI)
+    "ES": "gainsboro",  # Spain (contrasts with PT, FR)
+    "FI": "powderblue",  # Finland (contrasts with SE, NO, EE)
+    "FR": "lightsteelblue",  # France (contrasts with DE, BE, ES, IT, CH)
+    "GB": "pink",  # United Kingdom (contrasts with IE, FR)
+    "GR": "khaki",  # Greece (contrasts with AL, MK, BG)
+    "HR": "peachpuff",  # Croatia (contrasts with SI, BA, RS, HU)
+    "HU": "goldenrod",  # Hungary (contrasts with AT, SK, RO, HR, SR)
+    "IE": "tan",  # Ireland (contrasts with GB)
+    "IT": "navajowhite",  # Italy (contrasts with FR, CH, AT, SI)
+    "LT": "wheat",  # Lithuania (contrasts with LV, PL)
+    "LU": "mediumaquamarine",  # Luxembourg (contrasts with BE, DE, FR)
+    "LV": "aquamarine",  # Latvia (contrasts with EE, LT)
+    "ME": "burlywood",  # Montenegro (contrasts with RS, AL, BA)
+    "MK": "lemonchiffon",  # North Macedonia (contrasts with AL, GR, BG, RS)
+    "NL": "goldenrod",  # Netherlands (contrasts with BE, DE)
+    "NO": "lightgray",  # Norway (contrasts with SE, FI, DK)
+    "PL": "rosybrown",  # Poland (contrasts with DE, CZ, SK, LT)
+    "PT": "darkgrey",  # Portugal (contrasts with ES)
+    "RO": "lightpink",  # Romania (contrasts with HU, BG, RS)
+    "RS": "bisque",  # Serbia (contrasts with HU, RO, BG, MK, ME, HR, BA)
+    "SE": "lightseagreen",  # Sweden (contrasts with NO, FI, DK)
+    "SI": "lightcyan",  # Slovenia (contrasts with AT, HR, IT)
+    "SK": "palegoldenrod",  # Slovakia (contrasts with CZ, AT, HU, PL)
+}
+coordinates_to_city_or_country = {
+    (2.1734, 41.3851): "Barcelona",
+    (-3.7038, 40.4168): "Madrid",
+    (-2.9349, 43.2630): "Bilbao",
+    (-8.6110, 41.1496): "Porto",
+    (-9.1393, 38.7223): "Lisbon",
+    (-5.6635, 40.9701): "Salamanca",
+    (-5.9845, 37.3891): "Sevilla",
+    (-1.1307, 37.9922): "Murcia",
+    (-0.8891, 41.6488): "Zaragoza",
+    (-7.5560, 43.0125): "Lugo",
+    (-0.3763, 39.4699): "Valencia",
+}
+city_or_country_to_coordinates = {
+    v: k for k, v in coordinates_to_city_or_country.items()
+}
+
+
+def _filter_out_overseas(world: gpd.GeoDataFrame, countries: str) -> gpd.GeoDataFrame:
+    for country_name in countries:
+        country = world[world["NAME"] == country_name]
+        if isinstance(country["geometry"].values[0], MultiPolygon):
+            mainland_country = max(
+                country.iloc[0].geometry.geoms, key=lambda p: p.area
+            )  # Keep the largest polygon (mainland)
+            country.at[country.index[0], "geometry"] = (
+                mainland_country  # Overwrite Norway's geometry
+            )
+            world.loc[world["NAME"] == country_name, "geometry"] = country["geometry"]
+    return world
+
+
+def plot_background(nodes: pd.DataFrame) -> plt.Figure:
+    world = gpd.read_file(
+        r"c:\\Users\\tinus\\OneDrive\\Dokumenter\\0 Master\\code\\specialization_project\\market_clearing_quick\\data\\countries\\ne_110m_admin_0_countries.shp"
+    )
+
+    # Filter out overseas territories
+    COUNTIRES_TO_FILTER_TO_MAINLAND = ["France", "Norway"]
+    world = _filter_out_overseas(world, COUNTIRES_TO_FILTER_TO_MAINLAND)
+
+    relevant_countries = [
+        country_code_to_country[country_code]
+        for country_code in nodes["country"].unique()
+    ]
+    countries = [world[world["NAME"] == country] for country in relevant_countries]
+
+    # Plot the map and initialize the figure
+    fig, ax = plt.subplots(figsize=(10, 10))
+
+    for idx, country in enumerate(countries):
+        country.plot(
+            ax=ax,
+            color=country_code_to_color[
+                country_to_country_code[relevant_countries[idx]]
+            ],
+            edgecolor="black",
+        )
+    return fig, ax
 
 
 def _get_generator_order(generators: pd.DataFrame) -> list:
@@ -51,11 +178,6 @@ def _get_generator_order(generators: pd.DataFrame) -> list:
         generator
         for generator in GENERATOR_ORDER
         if generator in generators["carrier"].unique()
-    ]
-    order += [
-        generator
-        for generator in generators["carrier"].unique()
-        if generator not in order
     ]
     return order
 
@@ -82,17 +204,7 @@ def plot_buses_and_lines(buses, lines, savefolder=None):
     # Create a GeoDataFrame for the lines
     gdf_lines = gpd.GeoDataFrame(lines, geometry=line_geometries, crs="EPSG:4326")
 
-    # Load the Iberian map shapefile
-    world = gpd.read_file(
-        r"c:\\Users\\tinus\\OneDrive\\Dokumenter\\0 Master\\code\\specialization_project\\market_clearing_quick\\data\\countries\\ne_110m_admin_0_countries.shp"
-    )
-    spain = world[world["NAME"] == "Spain"]
-    portugal = world[world["NAME"] == "Portugal"]
-
-    # Plot the map and initialize the figure
-    fig, ax = plt.subplots(figsize=(10, 10))
-    spain.plot(ax=ax, color="gainsboro", edgecolor="black")
-    portugal.plot(ax=ax, color="darkgrey", edgecolor="black")
+    fig, ax = plot_background(buses)
 
     # Plot buses and lines
     gdf_buses.plot(
@@ -162,21 +274,10 @@ def plot_battery_cases(
     geometry_buses = gpd.points_from_xy(nodes["x"], nodes["y"])
     gdf_buses = gpd.GeoDataFrame(nodes, geometry=geometry_buses, crs="EPSG:4326")
 
-    # Load the Iberian map shapefile
-    world = gpd.read_file(
-        r"c:\\Users\\tinus\\OneDrive\\Dokumenter\\0 Master\\code\\specialization_project\\market_clearing_quick\\data\\countries\\ne_110m_admin_0_countries.shp"
-    )
-    spain = world[world["NAME"] == "Spain"]
-    portugal = world[world["NAME"] == "Portugal"]
-
+    fig, ax = plot_background(nodes)
     # Define colors for the three sets
     battery_colors = ["red", "blue", "green"]
     battery_labels = ["Exogenous Battery", "5 Batteries", "All Batteries"]
-
-    # Plot the map and initialize the figure
-    fig, ax = plt.subplots(figsize=(10, 10))
-    spain.plot(ax=ax, color="gainsboro", edgecolor="black")
-    portugal.plot(ax=ax, color="darkgrey", edgecolor="black")
 
     # Plot the batteries in different colors for each set
     counter = 0
@@ -275,16 +376,7 @@ def plot_sized_generators_and_lines(
             print(f"Excluded line with missing bus coordinates: {row}")
 
     # Load the Iberian map shapefile
-    world = gpd.read_file(
-        r"c:\\Users\\tinus\\OneDrive\\Dokumenter\\0 Master\\code\\specialization_project\\market_clearing_quick\\data\\countries\\ne_110m_admin_0_countries.shp"
-    )
-    spain = world[world["NAME"] == "Spain"]
-    portugal = world[world["NAME"] == "Portugal"]
-
-    # Plot the map and initialize the figure
-    fig, ax = plt.subplots(figsize=(10, 10))
-    spain.plot(ax=ax, color="gainsboro", edgecolor="black")
-    portugal.plot(ax=ax, color="darkgrey", edgecolor="black")
+    fig, ax = plot_background(buses)
 
     # Create and plot the LineCollection for transmission lines
     lc = LineCollection(lines, colors="red", linewidths=line_widths, zorder=15)
@@ -456,17 +548,7 @@ def plot_sized_generators(
             point1 = (bus_coords[row["bus1"]]["x"], bus_coords[row["bus1"]]["y"])
             lines.append([point0, point1])
 
-    # Load the Iberian map shapefile
-    world = gpd.read_file(
-        r"c:\\Users\\tinus\\OneDrive\\Dokumenter\\0 Master\\code\\specialization_project\\market_clearing_quick\\data\\countries\\ne_110m_admin_0_countries.shp"
-    )
-    spain = world[world["NAME"] == "Spain"]
-    portugal = world[world["NAME"] == "Portugal"]
-
-    # Plot the map and initialize the figure
-    fig, ax = plt.subplots(figsize=(10, 10))
-    spain.plot(ax=ax, color="gainsboro", edgecolor="black")
-    portugal.plot(ax=ax, color="darkgrey", edgecolor="black")
+    fig, ax = plot_background(buses)
 
     # Plot buses
     gdf_buses.plot(ax=ax, color="black", marker="o", markersize=10, zorder=20)
@@ -656,17 +738,7 @@ def plot_sized_branches(buses: pd.DataFrame, branches: pd.DataFrame, savefolder=
         else:
             print(f"Excluded line with missing bus coordinates: {row}")
 
-    # Load the Iberian map shapefile
-    world = gpd.read_file(
-        r"c:\\Users\\tinus\\OneDrive\\Dokumenter\\0 Master\\code\\specialization_project\\market_clearing_quick\\data\\countries\\ne_110m_admin_0_countries.shp"
-    )
-    spain = world[world["NAME"] == "Spain"]
-    portugal = world[world["NAME"] == "Portugal"]
-
-    # Plot the map and initialize the figure
-    fig, ax = plt.subplots(figsize=(10, 10))
-    spain.plot(ax=ax, color="gainsboro", edgecolor="black")
-    portugal.plot(ax=ax, color="darkgrey", edgecolor="black")
+    fig, ax = plot_background(buses)
 
     # Create and plot the LineCollection for transmission lines
     lc = LineCollection(lines, colors="red", linewidths=line_widths, zorder=15)
@@ -787,17 +859,7 @@ def plot_sized_lines_with_extensions(
         else:
             print(f"Excluded line with missing bus coordinates: {row}")
 
-    # Load the Iberian map shapefile
-    world = gpd.read_file(
-        r"c:\\Users\\tinus\\OneDrive\\Dokumenter\\0 Master\\code\\specialization_project\\market_clearing_quick\\data\\countries\\ne_110m_admin_0_countries.shp"
-    )
-    spain = world[world["NAME"] == "Spain"]
-    portugal = world[world["NAME"] == "Portugal"]
-
-    # Plot the map and initialize the figure
-    fig, ax = plt.subplots(figsize=(10, 10))
-    spain.plot(ax=ax, color="gainsboro", edgecolor="black")
-    portugal.plot(ax=ax, color="darkgrey", edgecolor="black")
+    fig, ax = plot_background(buses)
 
     # Create and plot the LineCollection for transmission lines
     lc = LineCollection(lines, colors="red", linewidths=line_widths, zorder=15)
@@ -861,11 +923,23 @@ def plot_sized_lines_with_extensions(
         fig.savefig(savepath, bbox_inches="tight")
 
 
-def plot_installed_capacity_bar_chart(generators: pd.DataFrame, savefolder=None):
+def plot_installed_capacity_bar_chart(
+    nodes: pd.DataFrame, generators: pd.DataFrame, savefolder=None
+):
     # Add a 'city' column to the generators DataFrame based on the 'bus' mapping
     generators = generators.copy()
-    generators["city"] = generators["bus"].map(node_to_city)
+    generators[["x", "y"]] = nodes.loc[generators["bus"], ["x", "y"]].values
+    generators["city_or_country"] = nodes.loc[generators["bus"], "country"].values
 
+    # Create a mask for rows where (x, y) exists in the dictionary
+    mask = generators.apply(
+        lambda row: (row["x"], row["y"]) in coordinates_to_city_or_country, axis=1
+    )
+
+    # Overwrite only the matching rows
+    generators.loc[mask, "city_or_country"] = generators.loc[mask].apply(
+        lambda row: coordinates_to_city_or_country[(row["x"], row["y"])], axis=1
+    )
     # Convert p_nom from MW to GW
     generators["p_nom_gw"] = generators["p_nom"] / 1000
 
@@ -884,10 +958,10 @@ def plot_installed_capacity_bar_chart(generators: pd.DataFrame, savefolder=None)
 
     # Group by city and carrier, summing the installed capacity (p_nom_gw)
     city_generator_capacity = (
-        generators.groupby(["city", "carrier"])["p_nom_gw"].sum().unstack(fill_value=0)
+        generators.groupby(["city_or_country", "carrier"])["p_nom_gw"]
+        .sum()
+        .unstack(fill_value=0)
     )
-
-    # Reorder the columns based on the specified generator order
     city_generator_capacity = city_generator_capacity[generator_order]
 
     # Plot the stacked bar chart
@@ -902,14 +976,18 @@ def plot_installed_capacity_bar_chart(generators: pd.DataFrame, savefolder=None)
     # Customize the plot appearance
     plt.ylabel("Installed Capacity (GW)", fontsize=20)
     plt.xticks(rotation=45, fontsize=18)
+    if len(city_generator_capacity) > 15:
+        plt.xticks(rotation=45, fontsize=12)
     plt.yticks(fontsize=16)
+    ncol = len(generator_order) // 2
+    ncol = ncol if ncol > 1 else 1
     plt.legend(
         [carrier_nice_names[carrier] for carrier in city_generator_capacity.columns],
         loc="upper center",
         fontsize=18,
         framealpha=1,
         bbox_to_anchor=(0.5, -0.16),
-        ncol=len(generator_order),
+        ncol=ncol,
     )
     plt.tight_layout()
     print("Generators by city and type installed capacity (nominal) in GW")
@@ -922,7 +1000,10 @@ def plot_installed_capacity_bar_chart(generators: pd.DataFrame, savefolder=None)
 
 
 def plot_effective_capacity_generators_bar_chart(
-    generators: pd.DataFrame, capacity_factors: pd.DataFrame, savefolder=None
+    nodes: pd.DataFrame,
+    generators: pd.DataFrame,
+    capacity_factors: pd.DataFrame,
+    savefolder=None,
 ):
     generators = generators.copy()
     generators["capacity_factor"] = np.zeros(generators.shape[0])
@@ -940,8 +1021,19 @@ def plot_effective_capacity_generators_bar_chart(
         generators.groupby("carrier")["effective_capacity"].sum()
         / generators.groupby("carrier")["p_nom"].sum()
     )
-    # Add a 'city' column to the generators DataFrame based on the 'bus' mapping
-    generators["city"] = generators["bus"].map(node_to_city)
+
+    generators[["x", "y"]] = nodes.loc[generators["bus"], ["x", "y"]].values
+    generators["city_or_country"] = nodes.loc[generators["bus"], "country"].values
+
+    # Create a mask for rows where (x, y) exists in the dictionary
+    mask = generators.apply(
+        lambda row: (row["x"], row["y"]) in coordinates_to_city_or_country, axis=1
+    )
+
+    # Overwrite only the matching rows
+    generators.loc[mask, "city_or_country"] = generators.loc[mask].apply(
+        lambda row: coordinates_to_city_or_country[(row["x"], row["y"])], axis=1
+    )
 
     # Convert effective_capacity from MW to GW
     generators["effective_capacity_gw"] = generators["effective_capacity"] / 1000
@@ -961,7 +1053,7 @@ def plot_effective_capacity_generators_bar_chart(
 
     # Group by city and carrier, summing the effective capacity (effective_capacity_gw)
     city_generator_effective_capacity = (
-        generators.groupby(["city", "carrier"])["effective_capacity_gw"]
+        generators.groupby(["city_or_country", "carrier"])["effective_capacity_gw"]
         .sum()
         .unstack(fill_value=0)
     )
@@ -985,8 +1077,11 @@ def plot_effective_capacity_generators_bar_chart(
 
     # Customize the plot appearance
     plt.ylabel("Effective Capacity (GW)", fontsize=20)
-    plt.xticks(rotation=45, fontsize=18)
+    if len(city_generator_effective_capacity) > 15:
+        plt.xticks(rotation=45, fontsize=12)
     plt.yticks(fontsize=16)
+    ncol = len(generator_order) // 2
+    ncol = ncol if ncol > 1 else 1
     plt.legend(
         [
             carrier_nice_names[carrier]
@@ -996,7 +1091,7 @@ def plot_effective_capacity_generators_bar_chart(
         fontsize=18,
         framealpha=1,
         bbox_to_anchor=(0.5, -0.16),
-        ncol=len(generator_order),
+        ncol=ncol,
     )
     plt.tight_layout()
     print("Generators by city and type effective capacity in GW")
@@ -1018,18 +1113,6 @@ def plot_demand_network_hourly(
     # Calculate the average daily demand for each area
     average_hourly_demand = hourly_demand.mean()
 
-    # Load the Iberian map shapefile
-    world = gpd.read_file(
-        r"c:\Users\tinus\OneDrive\Dokumenter\0 Master\code\specialization_project\market_clearing_quick\data\countries\ne_110m_admin_0_countries.shp"
-    )
-    spain = world[world["NAME"] == "Spain"]
-    portugal = world[world["NAME"] == "Portugal"]
-
-    # Plot the map and initialize the figure
-    fig, ax = plt.subplots(figsize=(10, 10))
-    spain.plot(ax=ax, color="gainsboro", edgecolor="black")
-    portugal.plot(ax=ax, color="darkgrey", edgecolor="black")
-
     # Create a GeoDataFrame for plotting
     buses = nodes
     buses["average_demand"] = (
@@ -1037,6 +1120,8 @@ def plot_demand_network_hourly(
     )
     geometry_buses = gpd.points_from_xy(buses["x"], buses["y"])
     gdf_buses = gpd.GeoDataFrame(buses, geometry=geometry_buses, crs="EPSG:4326")
+
+    fig, ax = plot_background(buses)
 
     # Plot buses with size and color based on average demand, without automatic legend
     gdf_buses.plot(
@@ -1059,17 +1144,18 @@ def plot_demand_network_hourly(
         lon = buses.loc[node, "x"]
         y_offset = 0.3
         lat = buses.loc[node, "y"] + y_offset
-        city = node_to_city[node]
-        plt.text(
-            lon,
-            lat,
-            city,
-            fontsize=12,
-            ha="center",
-            va="center",
-            weight="bold",
-            color="black",
-        )
+        if node in node_to_city:
+            city = node_to_city[node]
+            plt.text(
+                lon,
+                lat,
+                city,
+                fontsize=12,
+                ha="center",
+                va="center",
+                weight="bold",
+                color="black",
+            )
 
     # Customize the plot
     plt.xlabel("Longitude")
@@ -1170,17 +1256,7 @@ def plot_base_network_with_lineIDs_and_city_text(
         else:
             print(f"Excluded line with missing bus coordinates: {row}")
 
-    # Load the Iberian map shapefile
-    world = gpd.read_file(
-        r"c:\\Users\\tinus\\OneDrive\\Dokumenter\\0 Master\\code\\specialization_project\\market_clearing_quick\\data\\countries\\ne_110m_admin_0_countries.shp"
-    )
-    spain = world[world["NAME"] == "Spain"]
-    portugal = world[world["NAME"] == "Portugal"]
-
-    # Plot the map and initialize the figure
-    fig, ax = plt.subplots(figsize=(10, 10))
-    spain.plot(ax=ax, color="gainsboro", edgecolor="black")
-    portugal.plot(ax=ax, color="darkgrey", edgecolor="black")
+    fig, ax = plot_background(buses)
 
     # Create and plot the LineCollection for transmission lines
     lc = LineCollection(lines, colors="red", linewidths=line_widths, zorder=15)
@@ -1268,7 +1344,7 @@ def plot_base_network_with_lineIDs_and_city_text(
 def get_closest_node_to_city(city: str, nodes: pd.DataFrame) -> str:
     """Find the node closest to the specified city."""
     # Get the coordinates of the specified city
-    city_coords = city_to_coordinates[city]
+    city_coords = city_or_country_to_coordinates[city]
 
     return get_closest_node_to_coordinates(city_coords, nodes)
 
@@ -1341,8 +1417,11 @@ def plot_average_hourly_demand_each_month_at_node(
         title="Month", loc="upper left", fontsize=12, title_fontsize=14
     )  # Adjust legend position and font sizes
     plt.grid(True, linestyle="--", alpha=0.5)
-
-    print(f"Average hourly load for {node_to_city[node]} aka {node}:")
+    if node in node_to_city:
+        city_name = node_to_city[node]
+    else:
+        city_name = "Unknown"
+    print(f"Average hourly load for {city_name} aka {node}:")
 
     if savefolder:
         savepath = os.path.join(
@@ -1467,12 +1546,6 @@ def plot_demand_network_daily(
         hourly_demand.mean() * 24 / 1e3
     )  # Average daily demand in GWh
 
-    # Load the map of Iberia (Spain and Portugal)
-    world = gpd.read_file(
-        r"c:\\Users\\tinus\\OneDrive\\Dokumenter\\0 Master\\code\\specialization_project\\market_clearing_quick\\data\\countries\\ne_110m_admin_0_countries.shp"
-    )
-    iberia = world[(world["NAME"] == "Spain") | (world["NAME"] == "Portugal")]
-
     # Create a GeoDataFrame for plotting
     buses = nodes.copy()
     buses["average_demand"] = (
@@ -1480,10 +1553,7 @@ def plot_demand_network_daily(
     )
     geometry_buses = gpd.points_from_xy(buses["x"], buses["y"])
     gdf_buses = gpd.GeoDataFrame(buses, geometry=geometry_buses, crs="EPSG:4326")
-
-    # Plot the map of Iberia with demand represented by node size and color
-    fig, ax = plt.subplots(figsize=(10, 10))
-    iberia.plot(ax=ax, color="lightgrey", edgecolor="black")  # Plot Iberian map
+    fig, ax = plot_background(buses)
 
     # Add text labels for major cities
     for node, city in node_to_city.items():
@@ -1614,19 +1684,26 @@ def plot_aggregated_average_hourly_demand_with_stds(
 
 
 def plot_normalized_hourly_load_by_country(
-    hourly_demand: pd.DataFrame, savefolder: str = None
+    buses: pd.DataFrame, hourly_demand: pd.DataFrame, savefolder: str = None
 ) -> None:
     # Filter Spain (ES) and Portugal (PT) columns
     spain_columns = [col for col in hourly_demand.columns if col.startswith("ES")]
     portugal_columns = [col for col in hourly_demand.columns if col.startswith("PT")]
-
+    country_codes = buses["country"].unique()
+    country_columns = {
+        country_code: [
+            col for col in hourly_demand.columns if col.startswith(country_code)
+        ]
+        for country_code in country_codes
+    }
     # Calculate the total load for Spain and Portugal for each timestamp
-    spain_load = hourly_demand[spain_columns].sum(axis=1)
-    portugal_load = hourly_demand[portugal_columns].sum(axis=1)
-
+    country_load = {
+        country_code: hourly_demand[columns].sum(axis=1)
+        for country_code, columns in country_columns.items()
+    }
+    country_load
     # Create a DataFrame with the total load for Spain and Portugal
-    total_load = pd.DataFrame({"Spain": spain_load, "Portugal": portugal_load})
-
+    total_load = pd.DataFrame(country_load)
     # Group by the hour of the day and calculate the average load
     average_hourly_load = total_load.groupby(total_load.index.hour).mean()
 
@@ -1637,26 +1714,20 @@ def plot_normalized_hourly_load_by_country(
 
     # Plot the normalized average hourly load for Spain and Portugal
     plt.figure(figsize=(12, 6))
-
-    plt.plot(
-        normalized_hourly_load.index,
-        normalized_hourly_load["Spain"],
-        label="Spain",
-        linewidth=2,
-    )
-    plt.plot(
-        normalized_hourly_load.index,
-        normalized_hourly_load["Portugal"],
-        label="Portugal",
-        linewidth=2,
-    )
+    for country in normalized_hourly_load.columns:
+        plt.plot(
+            normalized_hourly_load.index,
+            normalized_hourly_load[country],
+            label=country,
+            linewidth=2,
+        )
 
     # Customize the plot
     plt.xlabel("Hour of Day", fontsize=16)
     plt.ylabel("Normalized Load", fontsize=16)
     plt.xticks(range(0, 24), fontsize=14)  # x-axis only from 0 to 23
     plt.yticks(fontsize=14)  # Increase y-axis font size
-    print("Normalized Average Hourly Load for Spain and Portugal")
+    print("Normalized Average Hourly Load for per country")
     plt.legend(fontsize=16)
     plt.grid(True, linestyle="--", alpha=0.5)
 
@@ -1932,17 +2003,19 @@ def cake_battery_usage_per_battery_per_month(
             if shared_patches is None:
                 shared_patches = wedges
 
-        # Add a shared legend
-        fig.legend(
-            shared_patches,
-            labels=all_labels,
-            title="Batteries",
-            title_fontsize=16,
-            loc="lower center",
-            fontsize=16,
-            ncol=len(all_labels) // 2 + 1,
-            bbox_to_anchor=(0.5, -0.05),
-        )
+                # Add a shared legend
+                ncol = len(all_labels) // 2 + 1
+                ncol = 1 if ncol == 0 else ncol
+                fig.legend(
+                    shared_patches,
+                    labels=all_labels,
+                    title="Batteries",
+                    title_fontsize=16,
+                    loc="lower center",
+                    fontsize=16,
+                    ncol=ncol,
+                    bbox_to_anchor=(0.5, -0.05),
+                )
 
         # Adjust layout
         plt.tight_layout(rect=[0, 0, 1, 0.95])  # Leave space for legend
@@ -1963,29 +2036,28 @@ def plot_correlation_matrix_carrier_by_carrier(
 
     # Extract unique carrier types from the column names
     carrier_types = set(col.split()[-1] for col in capacity_factors.columns)
-
     # Loop through each carrier type and compute the correlation matrix
     for carrier in carrier_types:
         # Filter columns that contain the current carrier type
         carrier_columns = [
             col for col in capacity_factors.columns if col.endswith(carrier)
         ]
-
-        if carrier in ["oil", "CCGT", "coal", "OCGT"]:
+        if carrier in ["oil", "CCGT", "coal", "OCGT", "lignite", "nuclear", "biomass"]:
             continue
 
         # Check if there are any columns for this carrier
         if carrier_columns:
-            # Create a mapping from node to city + carrier type for renaming
-            renamed_columns = {
-                col: f"{node_to_city[' '.join(col.split()[:2])]} {carrier}"
-                for col in carrier_columns
-            }
+            carrier_df = capacity_factors[carrier_columns]
+            node_names = [" ".join(col.split()[:]) for col in carrier_columns]
+            if all(node in node_to_city for node in node_names):
+                # Create a mapping from node to city + carrier type for renaming
+                renamed_columns = {
+                    col: f"{node_to_city[' '.join(col.split()[:2])]} {carrier}"
+                    for col in carrier_columns
+                }
 
-            # Rename the columns in the DataFrame for the current carrier
-            carrier_df = capacity_factors[carrier_columns].rename(
-                columns=renamed_columns
-            )
+                # Rename the columns in the DataFrame for the current carrier
+                carrier_df = carrier_df.rename(columns=renamed_columns)
 
             # Compute the correlation matrix for the current carrier
             carrier_corr_matrix = carrier_df.corr()
@@ -2634,23 +2706,7 @@ def plot_congestion_network(
 
             print(f"Excluded line with missing bus coordinates: {row}")
 
-    # Load the Iberian map shapefile
-
-    world = gpd.read_file(
-        r"c:\\Users\\tinus\\OneDrive\\Dokumenter\\0 Master\\code\\specialization_project\\market_clearing_quick\\data\\countries\\ne_110m_admin_0_countries.shp"
-    )
-
-    spain = world[world["NAME"] == "Spain"]
-
-    portugal = world[world["NAME"] == "Portugal"]
-
-    # Plot the map and initialize the figure
-
-    fig, ax = plt.subplots(figsize=(10, 10))
-
-    spain.plot(ax=ax, color="gainsboro", edgecolor="black")
-
-    portugal.plot(ax=ax, color="darkgrey", edgecolor="black")
+    fig, ax = plot_background(buses)
 
     # Create and plot the LineCollection for transmission lines
 

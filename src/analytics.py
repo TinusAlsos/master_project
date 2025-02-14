@@ -84,7 +84,7 @@ def run_analytics_on_input_data(
         nodes, hourly_demand, savefolder=demand_output_folder
     )
     plotting.plot_normalized_hourly_load_by_country(
-        hourly_demand, savefolder=demand_output_folder
+        nodes, hourly_demand, savefolder=demand_output_folder
     )
     plotting.plot_aggregated_average_hourly_demand_with_stds(
         hourly_demand, savefolder=demand_output_folder
@@ -100,14 +100,16 @@ def run_analytics_on_input_data(
     plotting.plot_average_hourly_demand_each_season_aggragated(
         hourly_demand, savefolder=demand_output_folder
     )
+    ### Generators Tables
     plotting.get_generators_overview_table(generators, savefolder=table_savefolder)
     plotting.get_generators_cost_and_emissions_table(
         generators, savefolder=table_savefolder
     )
     ### Generators Plots
     plotting.plot_sized_generators(nodes, branches, generators, savefolder=savefolder)
-    plotting.plot_installed_capacity_bar_chart(generators, savefolder=savefolder)
+    plotting.plot_installed_capacity_bar_chart(nodes, generators, savefolder=savefolder)
     plotting.plot_effective_capacity_generators_bar_chart(
+        nodes,
         generators,
         capacity_factors,
         savefolder=savefolder,
@@ -883,6 +885,7 @@ def analyze_run(
         generators, generation, capacity_factors, model_config, tables_folder
     )
     plotting.plot_effective_capacity_generators_bar_chart(
+        nodes=nodes,
         generators=generators,
         capacity_factors=capacity_factors,
         savefolder=figures_folder,
@@ -979,12 +982,12 @@ def analyze_run(
 
 
 if __name__ == "__main__":
-    # data_folder_name = "elec_s_37_ES_PT"
-    # run_analytics_on_input_data(data_folder_name)
+    data_folder_name = "elec_s_37_all"
+    run_analytics_on_input_data(data_folder_name)
 
-    model_config_test_path = r"C:\Users\tinus\OneDrive\Dokumenter\0 Master\code\master_project\runs\single_runs\GTSEP_v0-test small-Feb11_Tue_h10\model_info\config.yaml"
-    import yaml
+    # model_config_test_path = r"C:\Users\tinus\OneDrive\Dokumenter\0 Master\code\master_project\runs\single_runs\GTSEP_v0-test small-Feb11_Tue_h10\model_info\config.yaml"
+    # import yaml
 
-    model_config = yaml.safe_load(open(model_config_test_path))
-    # print(model_config)
-    analyze_run(model_config)
+    # model_config = yaml.safe_load(open(model_config_test_path))
+    # # print(model_config)
+    # analyze_run(model_config)
