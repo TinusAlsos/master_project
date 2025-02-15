@@ -152,7 +152,7 @@ def load_csv_files_from_folder(data_folder_path: str) -> dict[str, pd.DataFrame]
             f"{data_folder_path} not found (should be the path to a folder containing processed data in csv files)"
         )
     data = {}
-    for file in os.listdir(data_folder_path):
+    for file in sorted(os.listdir(data_folder_path)):
         if file.endswith(".csv"):
             file_path = os.path.join(data_folder_path, file)
             file_name = file.split(".")[0]
