@@ -1,0 +1,7 @@
+data_folder_name: elec_s_37_ES_PT
+query: "not (x > 2 and y < 40)"
+model_name: "GTSEP_v0"
+carriers:
+- CCGT
+- solar
+- onwind

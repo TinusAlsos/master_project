@@ -30,6 +30,7 @@ generator_columns:
 - p_nom
 - marginal_cost
 - capital_cost
+id: null
 line_columns:
 - bus0
 - bus1

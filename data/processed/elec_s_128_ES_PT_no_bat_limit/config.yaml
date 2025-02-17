@@ -1,0 +1,41 @@
+battery_config: no_limit
+branches_max_loss: 0.02
+bus_columns:
+- x
+- y
+- country
+carrier_columns:
+- co2_emissions
+- color
+- nice_name
+carriers:
+- CCGT
+- coal
+- solar
+- onwind
+- offwind-ac
+- ror
+- hydro
+components:
+- buses
+- carriers
+- lines
+- generators
+countries:
+- ES
+- PT
+generator_columns:
+- bus
+- carrier
+- p_nom
+- marginal_cost
+- capital_cost
+id: no_bat_limit
+line_columns:
+- bus0
+- bus1
+- s_nom
+- capital_cost
+- length
+network_name: elec_s_128
+query: not (x > 2 and y < 40)
