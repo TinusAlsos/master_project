@@ -388,6 +388,15 @@ def preprocess_batteries(
     battery_charging.index = pd.to_datetime(battery_charging.index)
     battery_discharging.index = pd.to_datetime(battery_discharging.index)
     battery_soc.index = pd.to_datetime(battery_soc.index)
+    # Make battery_build consistent, whether it consists of binary decision variables or capacity.
+    if battery_build.isin([0, 1]).all().all():
+        batteries["new_power_capacity"] = batteries["P_discharge_max"] * battery_build.loc[batteries.index.values, "value"]
+        batteries["new_energy_capacity"] = batteries["new_power_capacity"] * batteries["hour_capacity"]
+    else:
+        batteries["new_power_capacity"] = battery_build.loc[batteries.index.values, "value"]
+        batteries["new_energy_capacity"] = batteries["new_power_capacity"] * batteries["hour_capacity"]
+        battery_build["value"] = (battery_build["value"] != 0).astype(int)
+
 
 
 def check_line_errors(branches: pd.DataFrame, power_flow: pd.DataFrame) -> None:
@@ -562,12 +571,8 @@ def table_macro_results(
     total_capacity_built = branches["new_capacity"].sum()
     num_batteries_built = batteries_build.sum().values[0]
     num_potential_batteries = len(batteries.loc[batteries["exists"] == 0])
-    battery_energy_capacity_built = batteries.loc[
-        batteries_build[batteries_build["value"] == 1].index.values, "SOC_max"
-    ].sum()
-    battery_power_capacity_built = batteries.loc[
-        batteries_build[batteries_build["value"] == 1].index.values, "P_discharge_max"
-    ].sum()
+    battery_energy_capacity_built = batteries["new_energy_capacity"].sum()
+    battery_power_capacity_built = batteries["new_power_capacity"].sum()
 
     data_macro = {
         "Objective Value (Billion Euro)": objective_value / 1e9,
@@ -755,7 +760,7 @@ def table_cost_breakdown(
     battery_build_cost = (
         batteries.loc[
             batteries_build[batteries_build["value"] == 1].index.values,
-            "annualized_cost",
+            "capital_cost",
         ]
         * batteries.loc[
             batteries_build[batteries_build["value"] == 1].index.values, "SOC_max"
@@ -879,6 +884,9 @@ def analyze_run(
     )
     generators = preprocess_generators(generators, generator_build, generator_capacity)
     batteries["exists"] = 0
+    preprocess_batteries(
+        batteries, battery_build, battery_charging, battery_discharging, battery_soc
+    )
     # endregion
 
     tables_generators_overview(
@@ -895,6 +903,7 @@ def analyze_run(
         nodes,
         branches[branches["exists"] == 1],
         generators[(generators["new"] == 1) & (generators["exists"] == 1)],
+        savefolder=figures_folder,
     )
     plotting.plot_monthly_production(generators, generation, savefolder=figures_folder)
 
@@ -907,10 +916,6 @@ def analyze_run(
     )
 
     branches_complete_analysis(nodes, branches, power_flow, tables_folder)
-
-    preprocess_batteries(
-        batteries, battery_build, battery_charging, battery_discharging, battery_soc
-    )
 
     plotting.plot_battery_average_hourly_soc_per_battery(
         battery_soc=battery_soc, savefolder=batteries_folder
@@ -948,6 +953,7 @@ def analyze_run(
         battery_build,
         load_shedding,
         curtailment,
+        savefolder=tables_folder,
     )
 
     generators_df_summary = table_generators_production_breakdown(

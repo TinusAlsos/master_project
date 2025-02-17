@@ -20,5 +20,5 @@ def run_batches(
 
 
 if __name__ == "__main__":
-    model_config_names = ["small", "small_2"]
+    model_config_names = ["small_v0", "small_v1"]
     run_batches(model_config_names)

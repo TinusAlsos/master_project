@@ -1,4 +1,4 @@
-battery_config: no_limit
+battery_config: null
 branches_max_loss: 0.02
 bus_columns:
 - x
@@ -10,8 +10,12 @@ carrier_columns:
 - nice_name
 carriers:
 - CCGT
+- coal
 - solar
 - onwind
+- offwind-ac
+- ror
+- hydro
 components:
 - buses
 - carriers

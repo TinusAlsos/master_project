@@ -17,3 +17,4 @@ daily_leakage: 0.001    # Daily leakage rate (in fraction of the current soc)
 efficiency_charge: 0.98        # Charging efficiency
 efficiency_discharge: 0.97     # Discharging efficiency
 
+

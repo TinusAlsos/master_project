@@ -138,7 +138,7 @@ def load_battery_config_by_name(path_or_name: str = "") -> dict:
     """
     if not path_or_name:
         print("No battery configuration file provided. Using base configuration.")
-        path_or_name = os.path.join(BATTERY_CONFIG_FOLDER, "base_config")
+        path_or_name = os.path.join(BATTERY_CONFIG_FOLDER, "base_config.yaml")
     
     if os.path.exists(path_or_name):
         config_path = path_or_name

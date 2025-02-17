@@ -123,4 +123,4 @@ if __name__ == "__main__":
         help="The preprocessing config name.",
     )
     args = parser.parse_args()
-    run_preprocessing(args.name)
+    run(args.name)

@@ -278,7 +278,7 @@ def generate_batteries(
 
     batteries = pd.DataFrame(
         [battery] * len(data["buses"]), index=data["buses"].index + " bat"
-    ).rename_axis("Battery")
+    ).rename_axis("battery")
     # Add the bus (node) as the first column
     batteries["node"] = [
         " ".join(name.split(" ")[:-1]) for name in batteries.index.values
@@ -353,6 +353,8 @@ def run_preprocessing(config: dict | str = "") -> None:
         if config["countries"]
         else config["network_name"] + "_all"
     )
+    if config["id"]:
+        identifier  += "_" + config["id"]
     output_folder = os.path.join(SAVE_FOLDER, identifier)
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)

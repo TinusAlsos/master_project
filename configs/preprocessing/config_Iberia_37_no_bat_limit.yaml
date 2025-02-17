@@ -1,0 +1,7 @@
+countries:
+- ES
+- PT
+query: "not (x > 2 and y < 40)"
+network_name: elec_s_37
+id: no_bat_limit
+battery_config: no_limit

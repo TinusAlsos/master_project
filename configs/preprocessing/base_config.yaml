@@ -38,3 +38,4 @@ branches_max_loss: 0.02 # Maximum loss in branches (fraction)
 network_name: elec_s_128
 query: 
 battery_config:       # Name of config file in batteries to use
+id: #Adds to the title to distinguish between different runs
