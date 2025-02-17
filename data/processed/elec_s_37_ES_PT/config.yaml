@@ -1,4 +1,4 @@
-battery_config: null
+battery_config: no_limit
 branches_max_loss: 0.02
 bus_columns:
 - x

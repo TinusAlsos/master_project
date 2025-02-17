@@ -257,12 +257,17 @@ def generate_batteries(
     crf = calculate_crf(battery_template["lifetime"], battery_template["discount_rate"])
     annualized_cost = crf * battery_template["investment_cost_permwh"]
     leakage_rate_per_hour = 1 - math.pow(1 - battery_template["daily_leakage"], 1 / 24)
+    cdrate = battery_template["cdrate"]
+    P_discharge_max = battery_template["P_discharge_max"]
+    P_charge_max = P_discharge_max * cdrate
     battery = {
         "MC": battery_template["marginal_cost"],
-        "annualized_cost": annualized_cost,
-        "P_discharge_max": battery_template["P_discharge_max"],
+        "capital_cost": annualized_cost,
+        "hour_capacity": battery_template["hour_capacity"],
+        "cdrate": cdrate,
+        "P_discharge_max": P_discharge_max,
         "P_discharge_min": battery_template["P_discharge_min"],
-        "P_charge_max": battery_template["P_charge_max"],
+        "P_charge_max": P_charge_max,
         "P_charge_min": battery_template["P_charge_min"],
         "SOC_max": battery_template["SOC_max"],
         "SOC_min": battery_template["SOC_min"],

@@ -1,0 +1,7 @@
+network_name: elec_s_37
+query: "not (x > 2 and y < 40)"
+carriers:
+- CCGT
+- solar
+- onwind
+battery_config: no_limit

@@ -4,3 +4,4 @@ carriers:
 - CCGT
 - solar
 - onwind
+battery_config: no_limit

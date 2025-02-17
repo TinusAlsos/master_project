@@ -132,16 +132,22 @@ def calculate_crf(lifetime, discount_rate):
     )
 
 
-def load_battery_config_by_name(config_name: str = "") -> dict:
+def load_battery_config_by_name(path_or_name: str = "") -> dict:
     """
     Loads a battery configuration file by name and returns it as a dictionary.
     """
-
-    if not config_name:
+    if not path_or_name:
         print("No battery configuration file provided. Using base configuration.")
-        config_name = "base_config"
-    # Construct the path to the configuration file
-    config_path = os.path.join(BATTERY_CONFIG_FOLDER, f"{config_name}.yaml")
+        path_or_name = os.path.join(BATTERY_CONFIG_FOLDER, "base_config")
+    
+    if os.path.exists(path_or_name):
+        config_path = path_or_name
+    else:
+        if not path_or_name.endswith(".yaml"):
+            path_or_name += ".yaml"
+        if not path_or_name.startswith("config"):
+            path_or_name = f"config_{path_or_name}"
+        config_path = os.path.join(BATTERY_CONFIG_FOLDER, path_or_name)
 
     return load_config(config_path)
 

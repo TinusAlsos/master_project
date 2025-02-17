@@ -4,6 +4,7 @@ from gurobipy import GRB
 from time import time
 import os
 import yaml
+import argparse
 from src.analytics import analyze_run
 from src.utils import load_model_config
 from src.preprocessing import run_preprocessing
@@ -101,6 +102,25 @@ def create_run_id(model_config: dict) -> str:
     return run_id
 
 
+# if __name__ == "__main__":
+#     model_config_name = "small"
+#     run(model_config_name)
+
 if __name__ == "__main__":
-    model_config_name = "small"
-    run(model_config_name)
+    parser = argparse.ArgumentParser(
+        description="Run the model with inputs model_config_name and preprocessing_config_name."
+    )
+    parser.add_argument(
+        "--name",
+        type=str,
+        default="",
+        help="The model config name.",
+    )
+    parser.add_argument(
+        "--preprocessing",
+        type=str,
+        default="",
+        help="The preprocessing config name.",
+    )
+    args = parser.parse_args()
+    run_preprocessing(args.name)
