@@ -144,9 +144,11 @@ def _filter_out_overseas(world: gpd.GeoDataFrame, countries: str) -> gpd.GeoData
 
 
 def plot_background(nodes: pd.DataFrame) -> plt.Figure:
-    world = gpd.read_file(
-        r"c:\\Users\\tinus\\OneDrive\\Dokumenter\\0 Master\\code\\specialization_project\\market_clearing_quick\\data\\countries\\ne_110m_admin_0_countries.shp"
-    )
+    world_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),"..", "data", "countries", "ne_110m_admin_0_countries.shp")
+    # world = gpd.read_file(
+    #     r"c:\\Users\\tinus\\OneDrive\\Dokumenter\\0 Master\\code\\specialization_project\\market_clearing_quick\\data\\countries\\ne_110m_admin_0_countries.shp"
+    # )
+    world = gpd.read_file(world_path)
 
     # Filter out overseas territories
     COUNTIRES_TO_FILTER_TO_MAINLAND = ["France", "Norway"]
