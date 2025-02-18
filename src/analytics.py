@@ -757,15 +757,7 @@ def table_cost_breakdown(
     model_config: dict,
     savefolder: str = "",
 ) -> None:
-    battery_build_cost = (
-        batteries.loc[
-            batteries_build[batteries_build["value"] == 1].index.values,
-            "capital_cost",
-        ]
-        * batteries.loc[
-            batteries_build[batteries_build["value"] == 1].index.values, "SOC_max"
-        ]
-    ).sum()
+    battery_build_cost = (batteries["new_energy_capacity"] * batteries["capital_cost"]).sum()
 
     load_shedding_cost = load_shedding.sum().sum() * float(model_config["VOLL"])
     curtailment_cost = curtailment.sum().sum() * model_config["CC"]

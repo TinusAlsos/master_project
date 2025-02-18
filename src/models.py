@@ -962,7 +962,7 @@ def GTSEP_v2(config: dict) -> gp.Model:
     time_indexes
     T = hourly_demand.index.to_list()
     W = time_indexes["week"].unique().tolist()
-    def w(t):
+    def week(t):
         return time_indexes.loc[t, "week"]
     
 
@@ -1057,17 +1057,23 @@ def GTSEP_v2(config: dict) -> gp.Model:
     # 3a. Generator output limits (old generators)
     for i in G_old:
         p_max = generators.loc[i, "p_nom"]
+        for w in W:
+            model.addConstr(p_i_w[i, w] <= p_max)
+            # lower bound is 0 by default
         for t in T:
             capacity_factor = capacity_factors.loc[t, i]
-            model.addConstr(g[i, t] <= p_max * capacity_factor)
+            model.addConstr(g[i, t] == p_i_w[i, week(t)] * capacity_factor)
             # Lower bound is 0 by default
 
     # 3b. Generator output limits (new generators)
     for i in G_new:
+        for w in W:
+            p_i_w[i, w] <= x[i] * p_i_max[i]
+            # Lower bound is 0 by default
         for t in T:
             original_generator_id = " ".join(i.split(" ")[:-1])
             capacity_factor = capacity_factors.loc[t, original_generator_id]
-            model.addConstr(g[i, t] <= x[i] * p_i_max[i] * capacity_factor)
+            model.addConstr(g[i, t] == p_i_w[i,w] * capacity_factor)
             # Lower bound is 0 by default
 
     # 3c. New generator capacity limits
@@ -1143,7 +1149,7 @@ def GTSEP_v2(config: dict) -> gp.Model:
         model.addConstr(soc[s, T[0]] == batteries.loc[s, "SOC_min"] * soc_s_max[s])
 
     # Optimize the model
-    model.setParam("MIPGap", 0.001)
+    model.setParam("MIPGap", MIPGap)
 
     build_end_time = time()
 
@@ -1282,7 +1288,8 @@ def GTSEP_v2(config: dict) -> gp.Model:
 
 
 MODEL_REGISTRY = {"GTSEP_v0": GTSEP_v0,
-                  "GTSEP_v1": GTSEP_v1}
+                  "GTSEP_v1": GTSEP_v1,
+                  "GTSEP_v2": GTSEP_v2}
 
 
 def get_model(config: dict) -> gp.Model:
