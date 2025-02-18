@@ -1,0 +1,17 @@
+name: project
+channels:
+  - gurobi
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.12.6
+  - pandas
+  - yaml
+  - gurobi
+  - seaborn
+  - geopandas
+  - shapely
+  - pandas
+  - matplotlib
+  - pypsa
+  - pip
