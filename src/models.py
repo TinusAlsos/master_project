@@ -872,7 +872,6 @@ def GTSEP_v1(config: dict) -> gp.Model:
     )
 # endregion
 
-
 #region GTSEP_v2
 def GTSEP_v2(config: dict) -> gp.Model:
     """GTSEP model from the specialization project. Modeling battery investments as continous variables."""
@@ -1113,7 +1112,7 @@ def GTSEP_v2(config: dict) -> gp.Model:
     # 6b. Battery charging limits, new batteries
     for s in S_new:
         for t in T:
-            model.addConstr(g_ch[s, t] >= 0)
+            # model.addConstr(g_ch[s, t] >= 0)
             model.addConstr(g_ch[s, t] <= soc_s_max[s] / (batteries.loc[s, "hour_capacity"] * batteries.loc[s, "cdrate"]))
 
     # 7a. Battery discharging limits, old batteries
@@ -1125,7 +1124,7 @@ def GTSEP_v2(config: dict) -> gp.Model:
     # 7b. Battery discharging limits, new batteries
     for s in S_new:
         for t in T:
-            model.addConstr(g_dis[s, t] >= 0)
+            # model.addConstr(g_dis[s, t] >= 0)
             model.addConstr(g_dis[s, t] <= soc_s_max[s] / (batteries.loc[s, "hour_capacity"]))
 
     # 8. State of charge limits
@@ -1276,6 +1275,8 @@ def GTSEP_v2(config: dict) -> gp.Model:
     branch_capacity_df.to_csv(
         os.path.join(decision_variables_folder, "branch_capacity.csv"), index=False
     )
+
+    
 
     # endregion
 

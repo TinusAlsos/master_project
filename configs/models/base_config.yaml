@@ -1,6 +1,6 @@
 data_folder_name: elec_s_128_ES_PT
 model_name: 
-model_id: "No name"
+model_id:
 MIPGap: 0.01
 # Parameters
 VOLL: 6350        # Value of Lost Load [€/MWh]

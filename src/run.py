@@ -28,7 +28,7 @@ def save_model(model, model_config):
 def run(
     model_config_name: str = "",
     preprocessing_config_name: str = "",
-    batch_number: bool = False,
+    batch_number: bool = False, batch_folder_name = None
 ):
     if preprocessing_config_name:
         preprocessing_config = run_preprocessing(preprocessing_config_name)
@@ -46,6 +46,9 @@ def run(
             os.makedirs(base_folder)
     else:
         base_folder = os.path.join(RUNS_FOLDER, "batch_runs")
+        if not os.path.exists(base_folder):
+            os.makedirs(base_folder)
+        base_folder = os.path.join(base_folder, batch_folder_name)
         if not os.path.exists(base_folder):
             os.makedirs(base_folder)
     run_id = create_run_id(model_config)
@@ -73,6 +76,7 @@ def run(
         "Number of Variables": model.NumVars,
         "Number of Constraints": model.NumConstrs,
         "Number of Nonzeros": model.NumNZs,
+        "Number of Quadratic Constraints": model.NumQConstrs,
         "Model Status": model.Status,
     }
 
@@ -98,7 +102,10 @@ def create_run_id(model_config: dict) -> str:
     model_id = model_config["model_id"]
     now = datetime.now()
     formatted = now.strftime("%b%d_%a_h%H")
-    run_id = f"{model_name}-{model_id}-{formatted}"
+    if not model_id:
+        run_id = f"{model_name}-{formatted}"
+    else:
+        run_id = f"{model_name}-{model_id}-{formatted}"
     return run_id
 
 
