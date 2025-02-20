@@ -207,17 +207,17 @@ def GTSEP_v0(config: dict) -> gp.Model:
             for i in G
             for t in T
         )
-        + gp.quicksum(
-            batteries.loc[s, "MC"] * g_dis[s, t] * batteries.loc[s, "eta_discharge"]
-            for s in S
-            for t in T
-        )
+        # + gp.quicksum(
+        #     batteries.loc[s, "MC"] * g_dis[s, t] * batteries.loc[s, "eta_discharge"]
+        #     for s in S
+        #     for t in T
+        # )
         + gp.quicksum(VOLL * sh[n, t] for n in N for t in T)
         + gp.quicksum(CC * c[i, t] for i in G for t in T)
         + gp.quicksum(generators.loc[i, "capital_cost"] * p_i_max[i] for i in G_new)
         + gp.quicksum(branches.loc[b, "capital_cost"] * p_b_max[b] for b in B_new)
         + gp.quicksum(
-            batteries.loc[s, "capital_cost"] * batteries.loc[s, "SOC_max"] * z[s]
+            batteries.loc[s, "capital_cost"] * batteries.loc[s, "P_discharge_max"] * batteries.loc[s, "hour_capacity"] * z[s]
             for s in S_new
         )
     )
@@ -290,11 +290,11 @@ def GTSEP_v0(config: dict) -> gp.Model:
         model.addConstr(p_b_max[b] >= y[b] * p_min_new_branch)
         model.addConstr(p_b_max[b] <= y[b] * p_max_new_branch)
 
-    # 5. Emission restrictions
-    model.addConstr(
-        gp.quicksum(g[i, t] * generators.loc[i, "co2_emissions"] for i in G for t in T)
-        <= E_limit
-    )
+    # # 5. Emission restrictions
+    # model.addConstr(
+    #     gp.quicksum(g[i, t] * generators.loc[i, "co2_emissions"] for i in G for t in T)
+    #     <= E_limit
+    # )
 
     # 6a. Battery charging limits, old batteries
     for s in S_old:
@@ -601,11 +601,11 @@ def GTSEP_v1(config: dict) -> gp.Model:
             for i in G
             for t in T
         )
-        + gp.quicksum(
-            batteries.loc[s, "MC"] * g_dis[s, t] * batteries.loc[s, "eta_discharge"]
-            for s in S
-            for t in T
-        )
+        # + gp.quicksum(
+        #     batteries.loc[s, "MC"] * g_dis[s, t] * batteries.loc[s, "eta_discharge"]
+        #     for s in S
+        #     for t in T
+        # )
         + gp.quicksum(VOLL * sh[n, t] for n in N for t in T)
         + gp.quicksum(CC * c[i, t] for i in G for t in T)
         + gp.quicksum(generators.loc[i, "capital_cost"] * p_i_max[i] for i in G_new)
@@ -684,11 +684,11 @@ def GTSEP_v1(config: dict) -> gp.Model:
         model.addConstr(p_b_max[b] >= y[b] * p_min_new_branch)
         model.addConstr(p_b_max[b] <= y[b] * p_max_new_branch)
 
-    # 5. Emission restrictions
-    model.addConstr(
-        gp.quicksum(g[i, t] * generators.loc[i, "co2_emissions"] for i in G for t in T)
-        <= E_limit
-    )
+    # # 5. Emission restrictions
+    # model.addConstr(
+    #     gp.quicksum(g[i, t] * generators.loc[i, "co2_emissions"] for i in G for t in T)
+    #     <= E_limit
+    # )
 
     # 6a. Battery charging limits, old batteries
     for s in S_old:
@@ -1008,11 +1008,11 @@ def GTSEP_v2(config: dict) -> gp.Model:
             for i in G
             for t in T
         )
-        + gp.quicksum(
-            batteries.loc[s, "MC"] * g_dis[s, t] * batteries.loc[s, "eta_discharge"]
-            for s in S
-            for t in T
-        )
+        # + gp.quicksum(
+        #     batteries.loc[s, "MC"] * g_dis[s, t] * batteries.loc[s, "eta_discharge"]
+        #     for s in S
+        #     for t in T
+        # )
         + gp.quicksum(VOLL * sh[n, t] for n in N for t in T)
         + gp.quicksum(CC * c[i, t] for i in G for t in T)
         + gp.quicksum(generators.loc[i, "capital_cost"] * p_i_max[i] for i in G_new)
@@ -1097,11 +1097,11 @@ def GTSEP_v2(config: dict) -> gp.Model:
         model.addConstr(p_b_max[b] >= y[b] * p_min_new_branch)
         model.addConstr(p_b_max[b] <= y[b] * p_max_new_branch)
 
-    # 5. Emission restrictions
-    model.addConstr(
-        gp.quicksum(g[i, t] * generators.loc[i, "co2_emissions"] for i in G for t in T)
-        <= E_limit
-    )
+    # # 5. Emission restrictions
+    # model.addConstr(
+    #     gp.quicksum(g[i, t] * generators.loc[i, "co2_emissions"] for i in G for t in T)
+    #     <= E_limit
+    # )
 
     # 6a. Battery charging limits, old batteries
     for s in S_old:

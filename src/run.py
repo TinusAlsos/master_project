@@ -76,6 +76,8 @@ def run(
         "Number of Variables": model.NumVars,
         "Number of Constraints": model.NumConstrs,
         "Number of Nonzeros": model.NumNZs,
+        "Number of Integer Variables": model.NumIntVars,  # integer variables (includes both integer and binary)
+        "Number of Binary Variables": model.NumBinVars,    # binary variables specifically
         "Number of Quadratic Constraints": model.NumQConstrs,
         "Model Status": model.Status,
     }
