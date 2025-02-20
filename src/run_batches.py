@@ -34,5 +34,6 @@ def run_batches(
 
 
 if __name__ == "__main__":
-    model_config_names = ["128_v0", "128_v1"]
-    run_batches(model_config_names)
+    model_config_names = ["128_v0", "128_v1", "128_v2"]
+    batch_folder_name = "128-v0-v1-v2"
+    run_batches(model_config_names, batch_folder_name=batch_folder_name)

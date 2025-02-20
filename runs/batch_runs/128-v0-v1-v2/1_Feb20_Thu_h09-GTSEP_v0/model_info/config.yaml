@@ -1,0 +1,19 @@
+CC: 100
+CO2_price: 85
+E_limit: .inf
+MIPGap: 0.01
+MS: 0.1
+VOLL: 6350
+carriers:
+- CCGT
+- solar
+- onwind
+data_folder_name: elec_s_128_ES_PT
+expansion_factor: 0.2
+model_id: null
+model_name: GTSEP_v0
+p_max_new_branch: 5000
+p_min_new_branch: 100
+query: not (x > 2 and y < 40)
+run_id: Feb20_Thu_h10-GTSEP_v0
+save_folder: /cluster/home/tinusfa/master_project/runs/single_runs/Feb20_Thu_h10-GTSEP_v0
