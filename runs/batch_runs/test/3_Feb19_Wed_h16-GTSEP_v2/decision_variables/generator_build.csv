@@ -1,0 +1,12 @@
+generator,value
+ES1 0 CCGT new,0.0
+ES1 0 coal new,0.0
+ES1 0 offwind-ac new,0.0
+ES1 0 onwind new,0.0
+ES1 0 ror new,0.0
+ES1 0 solar new,0.0
+PT1 0 CCGT new,0.0
+PT1 0 offwind-ac new,0.0
+PT1 0 onwind new,0.0
+PT1 0 ror new,0.0
+PT1 0 solar new,0.0

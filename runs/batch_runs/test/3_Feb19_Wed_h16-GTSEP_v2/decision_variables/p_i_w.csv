@@ -1,0 +1,1167 @@
+generator,week,value
+ES1 0 CCGT,1,2527.0652846450057
+ES1 0 CCGT,2,11451.724890060497
+ES1 0 CCGT,3,0.0
+ES1 0 CCGT,4,0.0
+ES1 0 CCGT,5,0.0
+ES1 0 CCGT,6,0.0
+ES1 0 CCGT,7,0.0
+ES1 0 CCGT,8,5297.475687526967
+ES1 0 CCGT,9,0.0
+ES1 0 CCGT,10,0.0
+ES1 0 CCGT,11,0.0
+ES1 0 CCGT,12,0.0
+ES1 0 CCGT,13,0.0
+ES1 0 CCGT,14,0.0
+ES1 0 CCGT,15,0.0
+ES1 0 CCGT,16,0.0
+ES1 0 CCGT,17,0.0
+ES1 0 CCGT,18,0.0
+ES1 0 CCGT,19,0.0
+ES1 0 CCGT,20,0.0
+ES1 0 CCGT,21,0.0
+ES1 0 CCGT,22,0.0
+ES1 0 CCGT,23,0.0
+ES1 0 CCGT,24,0.0
+ES1 0 CCGT,25,0.0
+ES1 0 CCGT,26,0.0
+ES1 0 CCGT,27,0.0
+ES1 0 CCGT,28,0.0
+ES1 0 CCGT,29,0.0
+ES1 0 CCGT,30,321.1452338347086
+ES1 0 CCGT,31,0.0
+ES1 0 CCGT,32,0.0
+ES1 0 CCGT,33,0.0
+ES1 0 CCGT,34,0.0
+ES1 0 CCGT,35,0.0
+ES1 0 CCGT,36,2400.0163383471368
+ES1 0 CCGT,37,0.0
+ES1 0 CCGT,38,0.0
+ES1 0 CCGT,39,7155.501404004262
+ES1 0 CCGT,40,0.0
+ES1 0 CCGT,41,0.0
+ES1 0 CCGT,42,5386.016260653775
+ES1 0 CCGT,43,0.0
+ES1 0 CCGT,44,0.0
+ES1 0 CCGT,45,0.0
+ES1 0 CCGT,46,0.0
+ES1 0 CCGT,47,0.0
+ES1 0 CCGT,48,0.0
+ES1 0 CCGT,49,7823.252712074402
+ES1 0 CCGT,50,12176.198839679137
+ES1 0 CCGT,51,13809.924091612169
+ES1 0 CCGT,52,0.0
+ES1 0 CCGT,53,0.0
+ES1 0 coal,1,4739.393482733913
+ES1 0 coal,2,4739.393482733913
+ES1 0 coal,3,0.0
+ES1 0 coal,4,0.0
+ES1 0 coal,5,0.0
+ES1 0 coal,6,0.0
+ES1 0 coal,7,3969.4587105879077
+ES1 0 coal,8,4739.393482733913
+ES1 0 coal,9,0.0
+ES1 0 coal,10,0.0
+ES1 0 coal,11,0.0
+ES1 0 coal,12,0.0
+ES1 0 coal,13,0.0
+ES1 0 coal,14,0.0
+ES1 0 coal,15,0.0
+ES1 0 coal,16,0.0
+ES1 0 coal,17,0.0
+ES1 0 coal,18,0.0
+ES1 0 coal,19,0.0
+ES1 0 coal,20,0.0
+ES1 0 coal,21,0.0
+ES1 0 coal,22,0.0
+ES1 0 coal,23,0.0
+ES1 0 coal,24,0.0
+ES1 0 coal,25,0.0
+ES1 0 coal,26,0.0
+ES1 0 coal,27,421.50609353216134
+ES1 0 coal,28,4421.292696133208
+ES1 0 coal,29,4274.049001678217
+ES1 0 coal,30,4739.393482733913
+ES1 0 coal,31,0.0
+ES1 0 coal,32,3852.2585693966334
+ES1 0 coal,33,0.0
+ES1 0 coal,34,4293.1915829275285
+ES1 0 coal,35,45.579855644256284
+ES1 0 coal,36,4739.393482733913
+ES1 0 coal,37,0.0
+ES1 0 coal,38,2755.6336895846416
+ES1 0 coal,39,4739.393482733913
+ES1 0 coal,40,3003.866529547741
+ES1 0 coal,41,3569.771259713601
+ES1 0 coal,42,4739.393482733913
+ES1 0 coal,43,0.0
+ES1 0 coal,44,564.0813487757986
+ES1 0 coal,45,0.0
+ES1 0 coal,46,0.0
+ES1 0 coal,47,0.0
+ES1 0 coal,48,4180.937071530601
+ES1 0 coal,49,4739.393482733913
+ES1 0 coal,50,4739.393482733913
+ES1 0 coal,51,4739.393482733913
+ES1 0 coal,52,0.0
+ES1 0 coal,53,0.0
+ES1 0 offwind-ac,1,9274.463485690856
+ES1 0 offwind-ac,2,9274.463485690856
+ES1 0 offwind-ac,3,8930.246252602328
+ES1 0 offwind-ac,4,0.0
+ES1 0 offwind-ac,5,9274.463485690856
+ES1 0 offwind-ac,6,9274.463485690858
+ES1 0 offwind-ac,7,0.0
+ES1 0 offwind-ac,8,0.0
+ES1 0 offwind-ac,9,9274.463485690856
+ES1 0 offwind-ac,10,9274.463485690854
+ES1 0 offwind-ac,11,0.0
+ES1 0 offwind-ac,12,5942.781735610896
+ES1 0 offwind-ac,13,0.0
+ES1 0 offwind-ac,14,0.0
+ES1 0 offwind-ac,15,0.0
+ES1 0 offwind-ac,16,0.0
+ES1 0 offwind-ac,17,0.0
+ES1 0 offwind-ac,18,0.0
+ES1 0 offwind-ac,19,9274.463485690856
+ES1 0 offwind-ac,20,0.0
+ES1 0 offwind-ac,21,0.0
+ES1 0 offwind-ac,22,0.0
+ES1 0 offwind-ac,23,9274.463485690856
+ES1 0 offwind-ac,24,9274.463485690856
+ES1 0 offwind-ac,25,0.0
+ES1 0 offwind-ac,26,0.0
+ES1 0 offwind-ac,27,1904.9449050366281
+ES1 0 offwind-ac,28,9274.463485690854
+ES1 0 offwind-ac,29,9274.463485690856
+ES1 0 offwind-ac,30,0.0
+ES1 0 offwind-ac,31,9274.463485690856
+ES1 0 offwind-ac,32,0.0
+ES1 0 offwind-ac,33,9274.463485690856
+ES1 0 offwind-ac,34,9274.463485690856
+ES1 0 offwind-ac,35,9274.463485690856
+ES1 0 offwind-ac,36,9274.463485690856
+ES1 0 offwind-ac,37,9274.463485690858
+ES1 0 offwind-ac,38,9274.463485690856
+ES1 0 offwind-ac,39,745.7715895021934
+ES1 0 offwind-ac,40,9274.463485690856
+ES1 0 offwind-ac,41,9274.463485690856
+ES1 0 offwind-ac,42,9274.463485690856
+ES1 0 offwind-ac,43,0.0
+ES1 0 offwind-ac,44,9274.463485690854
+ES1 0 offwind-ac,45,9274.463485690856
+ES1 0 offwind-ac,46,9274.463485690856
+ES1 0 offwind-ac,47,9274.463485690856
+ES1 0 offwind-ac,48,9274.463485690856
+ES1 0 offwind-ac,49,9274.463485690854
+ES1 0 offwind-ac,50,790.988559977936
+ES1 0 offwind-ac,51,0.0
+ES1 0 offwind-ac,52,0.0
+ES1 0 offwind-ac,53,0.0
+ES1 0 onwind,1,26825.862669404865
+ES1 0 onwind,2,6475.883199622123
+ES1 0 onwind,3,26825.862669404865
+ES1 0 onwind,4,0.0
+ES1 0 onwind,5,0.0
+ES1 0 onwind,6,0.0
+ES1 0 onwind,7,0.0
+ES1 0 onwind,8,0.0
+ES1 0 onwind,9,26825.862669404865
+ES1 0 onwind,10,0.0
+ES1 0 onwind,11,0.0
+ES1 0 onwind,12,5863.072301861821
+ES1 0 onwind,13,0.0
+ES1 0 onwind,14,0.0
+ES1 0 onwind,15,0.0
+ES1 0 onwind,16,0.0
+ES1 0 onwind,17,0.0
+ES1 0 onwind,18,0.0
+ES1 0 onwind,19,26825.86266940486
+ES1 0 onwind,20,0.0
+ES1 0 onwind,21,15922.675379262588
+ES1 0 onwind,22,0.0
+ES1 0 onwind,23,26825.862669404865
+ES1 0 onwind,24,26825.86266940487
+ES1 0 onwind,25,0.0
+ES1 0 onwind,26,4146.90358876642
+ES1 0 onwind,27,26825.86266940487
+ES1 0 onwind,28,26825.86266940487
+ES1 0 onwind,29,26825.86266940486
+ES1 0 onwind,30,19773.041492932673
+ES1 0 onwind,31,26825.86266940486
+ES1 0 onwind,32,26825.86266940486
+ES1 0 onwind,33,26825.862669404865
+ES1 0 onwind,34,26825.86266940487
+ES1 0 onwind,35,26825.862669404865
+ES1 0 onwind,36,26825.86266940486
+ES1 0 onwind,37,26825.862669404865
+ES1 0 onwind,38,26825.86266940486
+ES1 0 onwind,39,0.0
+ES1 0 onwind,40,26825.86266940486
+ES1 0 onwind,41,26825.86266940487
+ES1 0 onwind,42,5036.388927090532
+ES1 0 onwind,43,18845.915137937594
+ES1 0 onwind,44,26825.862669404865
+ES1 0 onwind,45,17022.963125355098
+ES1 0 onwind,46,26825.862669404865
+ES1 0 onwind,47,26825.862669404865
+ES1 0 onwind,48,26825.862669404865
+ES1 0 onwind,49,26825.862669404865
+ES1 0 onwind,50,26825.862669404865
+ES1 0 onwind,51,0.0
+ES1 0 onwind,52,0.0
+ES1 0 onwind,53,0.0
+ES1 0 ror,1,147.00824749999998
+ES1 0 ror,2,147.0082475
+ES1 0 ror,3,0.0
+ES1 0 ror,4,0.0
+ES1 0 ror,5,147.0082475
+ES1 0 ror,6,147.00824749999998
+ES1 0 ror,7,147.00824749999998
+ES1 0 ror,8,147.00824749999998
+ES1 0 ror,9,147.00824749999998
+ES1 0 ror,10,0.0
+ES1 0 ror,11,0.0
+ES1 0 ror,12,147.00824749999998
+ES1 0 ror,13,0.0
+ES1 0 ror,14,0.0
+ES1 0 ror,15,0.0
+ES1 0 ror,16,0.0
+ES1 0 ror,17,0.0
+ES1 0 ror,18,147.00824749999998
+ES1 0 ror,19,147.00824749999995
+ES1 0 ror,20,147.00824749999998
+ES1 0 ror,21,147.00824749999995
+ES1 0 ror,22,0.0
+ES1 0 ror,23,147.00824749999998
+ES1 0 ror,24,147.00824749999998
+ES1 0 ror,25,0.0
+ES1 0 ror,26,0.0
+ES1 0 ror,27,147.00824749999998
+ES1 0 ror,28,147.00824749999998
+ES1 0 ror,29,147.00824749999998
+ES1 0 ror,30,147.0082475
+ES1 0 ror,31,147.0082475
+ES1 0 ror,32,147.00824749999998
+ES1 0 ror,33,147.00824749999998
+ES1 0 ror,34,147.00824749999998
+ES1 0 ror,35,147.0082475
+ES1 0 ror,36,147.00824749999998
+ES1 0 ror,37,147.00824749999998
+ES1 0 ror,38,147.00824749999998
+ES1 0 ror,39,147.00824749999998
+ES1 0 ror,40,147.0082475
+ES1 0 ror,41,147.00824749999998
+ES1 0 ror,42,147.00824749999998
+ES1 0 ror,43,0.0
+ES1 0 ror,44,147.0082475
+ES1 0 ror,45,147.00824749999998
+ES1 0 ror,46,147.00824749999998
+ES1 0 ror,47,147.00824749999998
+ES1 0 ror,48,147.00824749999995
+ES1 0 ror,49,147.00824749999998
+ES1 0 ror,50,147.00824749999998
+ES1 0 ror,51,147.0082475
+ES1 0 ror,52,0.0
+ES1 0 ror,53,0.0
+ES1 0 solar,1,11681.579273038671
+ES1 0 solar,2,11681.579273038667
+ES1 0 solar,3,7195.547966605454
+ES1 0 solar,4,0.0
+ES1 0 solar,5,11681.57927303867
+ES1 0 solar,6,0.0
+ES1 0 solar,7,11681.579273038667
+ES1 0 solar,8,0.0
+ES1 0 solar,9,9100.615369217585
+ES1 0 solar,10,0.0
+ES1 0 solar,11,0.0
+ES1 0 solar,12,0.0
+ES1 0 solar,13,0.0
+ES1 0 solar,14,0.0
+ES1 0 solar,15,0.0
+ES1 0 solar,16,0.0
+ES1 0 solar,17,0.0
+ES1 0 solar,18,0.0
+ES1 0 solar,19,11681.579273038667
+ES1 0 solar,20,0.0
+ES1 0 solar,21,0.0
+ES1 0 solar,22,0.0
+ES1 0 solar,23,11681.579273038667
+ES1 0 solar,24,0.0
+ES1 0 solar,25,0.0
+ES1 0 solar,26,0.0
+ES1 0 solar,27,1989.486846866177
+ES1 0 solar,28,11681.579273038666
+ES1 0 solar,29,11681.579273038666
+ES1 0 solar,30,11681.579273038667
+ES1 0 solar,31,11681.579273038666
+ES1 0 solar,32,11681.579273038666
+ES1 0 solar,33,11681.579273038667
+ES1 0 solar,34,9124.014849320234
+ES1 0 solar,35,11681.579273038667
+ES1 0 solar,36,6489.636041400936
+ES1 0 solar,37,11681.579273038667
+ES1 0 solar,38,9839.336336393435
+ES1 0 solar,39,11681.57927303867
+ES1 0 solar,40,11681.579273038666
+ES1 0 solar,41,11681.579273038667
+ES1 0 solar,42,11681.579273038667
+ES1 0 solar,43,0.0
+ES1 0 solar,44,7581.7011050289175
+ES1 0 solar,45,11681.579273038666
+ES1 0 solar,46,6640.321166542034
+ES1 0 solar,47,10879.828941543907
+ES1 0 solar,48,0.0
+ES1 0 solar,49,11681.579273038666
+ES1 0 solar,50,0.0
+ES1 0 solar,51,0.0
+ES1 0 solar,52,11681.57927303867
+ES1 0 solar,53,0.0
+PT1 0 CCGT,1,4145.0
+PT1 0 CCGT,2,4145.0
+PT1 0 CCGT,3,0.0
+PT1 0 CCGT,4,0.0
+PT1 0 CCGT,5,2437.498302362507
+PT1 0 CCGT,6,2252.371974466731
+PT1 0 CCGT,7,4145.0
+PT1 0 CCGT,8,4145.0
+PT1 0 CCGT,9,4060.35132629382
+PT1 0 CCGT,10,0.0
+PT1 0 CCGT,11,0.0
+PT1 0 CCGT,12,0.0
+PT1 0 CCGT,13,0.0
+PT1 0 CCGT,14,0.0
+PT1 0 CCGT,15,0.0
+PT1 0 CCGT,16,0.0
+PT1 0 CCGT,17,0.0
+PT1 0 CCGT,18,0.0
+PT1 0 CCGT,19,841.4306984558661
+PT1 0 CCGT,20,0.0
+PT1 0 CCGT,21,0.0
+PT1 0 CCGT,22,0.0
+PT1 0 CCGT,23,1688.3926701844034
+PT1 0 CCGT,24,0.0
+PT1 0 CCGT,25,0.0
+PT1 0 CCGT,26,0.0
+PT1 0 CCGT,27,4145.0
+PT1 0 CCGT,28,4145.0
+PT1 0 CCGT,29,4145.0
+PT1 0 CCGT,30,4145.0
+PT1 0 CCGT,31,2190.4714762330404
+PT1 0 CCGT,32,4145.0
+PT1 0 CCGT,33,2420.376172700553
+PT1 0 CCGT,34,4145.0
+PT1 0 CCGT,35,4145.0
+PT1 0 CCGT,36,4145.0
+PT1 0 CCGT,37,3925.9960234097434
+PT1 0 CCGT,38,4145.0
+PT1 0 CCGT,39,4145.0
+PT1 0 CCGT,40,4145.0
+PT1 0 CCGT,41,4145.0
+PT1 0 CCGT,42,4145.0
+PT1 0 CCGT,43,0.0
+PT1 0 CCGT,44,4145.0
+PT1 0 CCGT,45,2787.5610791039294
+PT1 0 CCGT,46,0.0
+PT1 0 CCGT,47,3774.022486473711
+PT1 0 CCGT,48,4145.0
+PT1 0 CCGT,49,4145.0
+PT1 0 CCGT,50,4145.0
+PT1 0 CCGT,51,4145.0
+PT1 0 CCGT,52,3951.1044734248435
+PT1 0 CCGT,53,0.0
+PT1 0 offwind-ac,1,4133.084722193325
+PT1 0 offwind-ac,2,0.0
+PT1 0 offwind-ac,3,0.0
+PT1 0 offwind-ac,4,0.0
+PT1 0 offwind-ac,5,0.0
+PT1 0 offwind-ac,6,4460.188736142809
+PT1 0 offwind-ac,7,0.0
+PT1 0 offwind-ac,8,0.0
+PT1 0 offwind-ac,9,4460.188736142811
+PT1 0 offwind-ac,10,0.0
+PT1 0 offwind-ac,11,0.0
+PT1 0 offwind-ac,12,1838.0979282822277
+PT1 0 offwind-ac,13,0.0
+PT1 0 offwind-ac,14,0.0
+PT1 0 offwind-ac,15,0.0
+PT1 0 offwind-ac,16,0.0
+PT1 0 offwind-ac,17,0.0
+PT1 0 offwind-ac,18,0.0
+PT1 0 offwind-ac,19,0.0
+PT1 0 offwind-ac,20,0.0
+PT1 0 offwind-ac,21,4460.18873614281
+PT1 0 offwind-ac,22,0.0
+PT1 0 offwind-ac,23,4460.18873614281
+PT1 0 offwind-ac,24,4460.18873614281
+PT1 0 offwind-ac,25,2011.5251219559912
+PT1 0 offwind-ac,26,0.0
+PT1 0 offwind-ac,27,4460.18873614281
+PT1 0 offwind-ac,28,4460.18873614281
+PT1 0 offwind-ac,29,4460.188736142809
+PT1 0 offwind-ac,30,4460.18873614281
+PT1 0 offwind-ac,31,4460.188736142811
+PT1 0 offwind-ac,32,4460.18873614281
+PT1 0 offwind-ac,33,4460.18873614281
+PT1 0 offwind-ac,34,4460.188736142811
+PT1 0 offwind-ac,35,4460.18873614281
+PT1 0 offwind-ac,36,4460.188736142811
+PT1 0 offwind-ac,37,4460.188736142809
+PT1 0 offwind-ac,38,4460.18873614281
+PT1 0 offwind-ac,39,0.0
+PT1 0 offwind-ac,40,4460.18873614281
+PT1 0 offwind-ac,41,4460.18873614281
+PT1 0 offwind-ac,42,4460.18873614281
+PT1 0 offwind-ac,43,4460.188736142811
+PT1 0 offwind-ac,44,1150.1078903331888
+PT1 0 offwind-ac,45,0.0
+PT1 0 offwind-ac,46,4460.18873614281
+PT1 0 offwind-ac,47,4460.188736142811
+PT1 0 offwind-ac,48,4460.18873614281
+PT1 0 offwind-ac,49,0.0
+PT1 0 offwind-ac,50,0.0
+PT1 0 offwind-ac,51,0.0
+PT1 0 offwind-ac,52,4460.188736142809
+PT1 0 offwind-ac,53,0.0
+PT1 0 onwind,1,0.0
+PT1 0 onwind,2,0.0
+PT1 0 onwind,3,0.0
+PT1 0 onwind,4,0.0
+PT1 0 onwind,5,0.0
+PT1 0 onwind,6,60.46641340700373
+PT1 0 onwind,7,0.0
+PT1 0 onwind,8,0.0
+PT1 0 onwind,9,5213.64067531843
+PT1 0 onwind,10,3081.0999018147686
+PT1 0 onwind,11,0.0
+PT1 0 onwind,12,0.0
+PT1 0 onwind,13,0.0
+PT1 0 onwind,14,0.0
+PT1 0 onwind,15,0.0
+PT1 0 onwind,16,0.0
+PT1 0 onwind,17,0.0
+PT1 0 onwind,18,0.0
+PT1 0 onwind,19,0.0
+PT1 0 onwind,20,0.0
+PT1 0 onwind,21,5213.640675318431
+PT1 0 onwind,22,729.3226385754625
+PT1 0 onwind,23,5213.64067531843
+PT1 0 onwind,24,5213.640675318432
+PT1 0 onwind,25,0.0
+PT1 0 onwind,26,0.0
+PT1 0 onwind,27,5213.640675318431
+PT1 0 onwind,28,5213.640675318431
+PT1 0 onwind,29,5213.64067531843
+PT1 0 onwind,30,5213.640675318432
+PT1 0 onwind,31,5213.640675318431
+PT1 0 onwind,32,5213.64067531843
+PT1 0 onwind,33,5213.640675318431
+PT1 0 onwind,34,5213.640675318431
+PT1 0 onwind,35,5213.640675318431
+PT1 0 onwind,36,5213.64067531843
+PT1 0 onwind,37,5213.640675318432
+PT1 0 onwind,38,5213.640675318431
+PT1 0 onwind,39,0.0
+PT1 0 onwind,40,5213.64067531843
+PT1 0 onwind,41,5213.640675318432
+PT1 0 onwind,42,0.0
+PT1 0 onwind,43,5213.64067531843
+PT1 0 onwind,44,0.0
+PT1 0 onwind,45,0.0
+PT1 0 onwind,46,5213.640675318431
+PT1 0 onwind,47,0.0
+PT1 0 onwind,48,5213.640675318432
+PT1 0 onwind,49,5213.640675318431
+PT1 0 onwind,50,0.0
+PT1 0 onwind,51,0.0
+PT1 0 onwind,52,2675.663874374502
+PT1 0 onwind,53,0.0
+PT1 0 ror,1,2638.5
+PT1 0 ror,2,2638.5000000000005
+PT1 0 ror,3,0.0
+PT1 0 ror,4,0.0
+PT1 0 ror,5,2638.4999999999995
+PT1 0 ror,6,2638.5
+PT1 0 ror,7,2638.5
+PT1 0 ror,8,2638.5
+PT1 0 ror,9,2638.4999999999995
+PT1 0 ror,10,0.0
+PT1 0 ror,11,984.8988806496458
+PT1 0 ror,12,2638.4999999999995
+PT1 0 ror,13,0.0
+PT1 0 ror,14,0.0
+PT1 0 ror,15,0.0
+PT1 0 ror,16,35.558415288310165
+PT1 0 ror,17,0.0
+PT1 0 ror,18,2638.4999999999995
+PT1 0 ror,19,2638.5
+PT1 0 ror,20,2638.5
+PT1 0 ror,21,2638.5
+PT1 0 ror,22,0.0
+PT1 0 ror,23,2638.5
+PT1 0 ror,24,2638.5
+PT1 0 ror,25,0.0
+PT1 0 ror,26,0.0
+PT1 0 ror,27,2638.5
+PT1 0 ror,28,2638.5
+PT1 0 ror,29,2638.5
+PT1 0 ror,30,2638.5
+PT1 0 ror,31,2638.4999999999995
+PT1 0 ror,32,2638.4999999999995
+PT1 0 ror,33,2638.5000000000005
+PT1 0 ror,34,2638.4999999999995
+PT1 0 ror,35,2638.4999999999995
+PT1 0 ror,36,2638.5
+PT1 0 ror,37,2638.5000000000005
+PT1 0 ror,38,2638.5
+PT1 0 ror,39,555.75534266596
+PT1 0 ror,40,2638.5
+PT1 0 ror,41,1955.5539961808547
+PT1 0 ror,42,2638.5
+PT1 0 ror,43,0.0
+PT1 0 ror,44,0.0
+PT1 0 ror,45,2638.5
+PT1 0 ror,46,2638.5
+PT1 0 ror,47,2638.4999999999995
+PT1 0 ror,48,2638.4999999999995
+PT1 0 ror,49,2638.4999999999995
+PT1 0 ror,50,2638.5
+PT1 0 ror,51,2638.5
+PT1 0 ror,52,0.0
+PT1 0 ror,53,2375.9485885487466
+PT1 0 solar,1,1025.44
+PT1 0 solar,2,1025.44
+PT1 0 solar,3,1025.44
+PT1 0 solar,4,0.0
+PT1 0 solar,5,1025.44
+PT1 0 solar,6,0.0
+PT1 0 solar,7,48.924797501588856
+PT1 0 solar,8,0.0
+PT1 0 solar,9,1025.44
+PT1 0 solar,10,0.0
+PT1 0 solar,11,0.0
+PT1 0 solar,12,0.0
+PT1 0 solar,13,0.0
+PT1 0 solar,14,0.0
+PT1 0 solar,15,0.0
+PT1 0 solar,16,0.0
+PT1 0 solar,17,0.0
+PT1 0 solar,18,0.0
+PT1 0 solar,19,0.0
+PT1 0 solar,20,0.0
+PT1 0 solar,21,0.0
+PT1 0 solar,22,0.0
+PT1 0 solar,23,81.00548350884098
+PT1 0 solar,24,0.0
+PT1 0 solar,25,0.0
+PT1 0 solar,26,0.0
+PT1 0 solar,27,1025.44
+PT1 0 solar,28,1025.44
+PT1 0 solar,29,1025.44
+PT1 0 solar,30,1025.44
+PT1 0 solar,31,1025.44
+PT1 0 solar,32,1025.44
+PT1 0 solar,33,1025.44
+PT1 0 solar,34,1025.4399999999998
+PT1 0 solar,35,1025.44
+PT1 0 solar,36,0.0
+PT1 0 solar,37,1025.44
+PT1 0 solar,38,0.0
+PT1 0 solar,39,1025.44
+PT1 0 solar,40,1025.44
+PT1 0 solar,41,1025.44
+PT1 0 solar,42,1025.44
+PT1 0 solar,43,0.0
+PT1 0 solar,44,1025.44
+PT1 0 solar,45,0.0
+PT1 0 solar,46,1025.44
+PT1 0 solar,47,0.0
+PT1 0 solar,48,0.0
+PT1 0 solar,49,1025.44
+PT1 0 solar,50,0.0
+PT1 0 solar,51,0.0
+PT1 0 solar,52,1025.44
+PT1 0 solar,53,0.0
+ES1 0 CCGT new,1,0.0
+ES1 0 CCGT new,2,0.0
+ES1 0 CCGT new,3,0.0
+ES1 0 CCGT new,4,0.0
+ES1 0 CCGT new,5,0.0
+ES1 0 CCGT new,6,0.0
+ES1 0 CCGT new,7,0.0
+ES1 0 CCGT new,8,0.0
+ES1 0 CCGT new,9,0.0
+ES1 0 CCGT new,10,0.0
+ES1 0 CCGT new,11,0.0
+ES1 0 CCGT new,12,0.0
+ES1 0 CCGT new,13,0.0
+ES1 0 CCGT new,14,0.0
+ES1 0 CCGT new,15,0.0
+ES1 0 CCGT new,16,0.0
+ES1 0 CCGT new,17,0.0
+ES1 0 CCGT new,18,0.0
+ES1 0 CCGT new,19,0.0
+ES1 0 CCGT new,20,0.0
+ES1 0 CCGT new,21,0.0
+ES1 0 CCGT new,22,0.0
+ES1 0 CCGT new,23,0.0
+ES1 0 CCGT new,24,0.0
+ES1 0 CCGT new,25,0.0
+ES1 0 CCGT new,26,0.0
+ES1 0 CCGT new,27,0.0
+ES1 0 CCGT new,28,0.0
+ES1 0 CCGT new,29,0.0
+ES1 0 CCGT new,30,0.0
+ES1 0 CCGT new,31,0.0
+ES1 0 CCGT new,32,0.0
+ES1 0 CCGT new,33,0.0
+ES1 0 CCGT new,34,0.0
+ES1 0 CCGT new,35,0.0
+ES1 0 CCGT new,36,0.0
+ES1 0 CCGT new,37,0.0
+ES1 0 CCGT new,38,0.0
+ES1 0 CCGT new,39,0.0
+ES1 0 CCGT new,40,0.0
+ES1 0 CCGT new,41,0.0
+ES1 0 CCGT new,42,0.0
+ES1 0 CCGT new,43,0.0
+ES1 0 CCGT new,44,0.0
+ES1 0 CCGT new,45,0.0
+ES1 0 CCGT new,46,0.0
+ES1 0 CCGT new,47,0.0
+ES1 0 CCGT new,48,0.0
+ES1 0 CCGT new,49,0.0
+ES1 0 CCGT new,50,0.0
+ES1 0 CCGT new,51,0.0
+ES1 0 CCGT new,52,0.0
+ES1 0 CCGT new,53,0.0
+ES1 0 coal new,1,0.0
+ES1 0 coal new,2,0.0
+ES1 0 coal new,3,0.0
+ES1 0 coal new,4,0.0
+ES1 0 coal new,5,0.0
+ES1 0 coal new,6,0.0
+ES1 0 coal new,7,0.0
+ES1 0 coal new,8,0.0
+ES1 0 coal new,9,0.0
+ES1 0 coal new,10,0.0
+ES1 0 coal new,11,0.0
+ES1 0 coal new,12,0.0
+ES1 0 coal new,13,0.0
+ES1 0 coal new,14,0.0
+ES1 0 coal new,15,0.0
+ES1 0 coal new,16,0.0
+ES1 0 coal new,17,0.0
+ES1 0 coal new,18,0.0
+ES1 0 coal new,19,0.0
+ES1 0 coal new,20,0.0
+ES1 0 coal new,21,0.0
+ES1 0 coal new,22,0.0
+ES1 0 coal new,23,0.0
+ES1 0 coal new,24,0.0
+ES1 0 coal new,25,0.0
+ES1 0 coal new,26,0.0
+ES1 0 coal new,27,0.0
+ES1 0 coal new,28,0.0
+ES1 0 coal new,29,0.0
+ES1 0 coal new,30,0.0
+ES1 0 coal new,31,0.0
+ES1 0 coal new,32,0.0
+ES1 0 coal new,33,0.0
+ES1 0 coal new,34,0.0
+ES1 0 coal new,35,0.0
+ES1 0 coal new,36,0.0
+ES1 0 coal new,37,0.0
+ES1 0 coal new,38,0.0
+ES1 0 coal new,39,0.0
+ES1 0 coal new,40,0.0
+ES1 0 coal new,41,0.0
+ES1 0 coal new,42,0.0
+ES1 0 coal new,43,0.0
+ES1 0 coal new,44,0.0
+ES1 0 coal new,45,0.0
+ES1 0 coal new,46,0.0
+ES1 0 coal new,47,0.0
+ES1 0 coal new,48,0.0
+ES1 0 coal new,49,0.0
+ES1 0 coal new,50,0.0
+ES1 0 coal new,51,0.0
+ES1 0 coal new,52,0.0
+ES1 0 coal new,53,0.0
+ES1 0 offwind-ac new,1,0.0
+ES1 0 offwind-ac new,2,0.0
+ES1 0 offwind-ac new,3,0.0
+ES1 0 offwind-ac new,4,0.0
+ES1 0 offwind-ac new,5,0.0
+ES1 0 offwind-ac new,6,0.0
+ES1 0 offwind-ac new,7,0.0
+ES1 0 offwind-ac new,8,0.0
+ES1 0 offwind-ac new,9,0.0
+ES1 0 offwind-ac new,10,0.0
+ES1 0 offwind-ac new,11,0.0
+ES1 0 offwind-ac new,12,0.0
+ES1 0 offwind-ac new,13,0.0
+ES1 0 offwind-ac new,14,0.0
+ES1 0 offwind-ac new,15,0.0
+ES1 0 offwind-ac new,16,0.0
+ES1 0 offwind-ac new,17,0.0
+ES1 0 offwind-ac new,18,0.0
+ES1 0 offwind-ac new,19,0.0
+ES1 0 offwind-ac new,20,0.0
+ES1 0 offwind-ac new,21,0.0
+ES1 0 offwind-ac new,22,0.0
+ES1 0 offwind-ac new,23,0.0
+ES1 0 offwind-ac new,24,0.0
+ES1 0 offwind-ac new,25,0.0
+ES1 0 offwind-ac new,26,0.0
+ES1 0 offwind-ac new,27,0.0
+ES1 0 offwind-ac new,28,0.0
+ES1 0 offwind-ac new,29,0.0
+ES1 0 offwind-ac new,30,0.0
+ES1 0 offwind-ac new,31,0.0
+ES1 0 offwind-ac new,32,0.0
+ES1 0 offwind-ac new,33,0.0
+ES1 0 offwind-ac new,34,0.0
+ES1 0 offwind-ac new,35,0.0
+ES1 0 offwind-ac new,36,0.0
+ES1 0 offwind-ac new,37,0.0
+ES1 0 offwind-ac new,38,0.0
+ES1 0 offwind-ac new,39,0.0
+ES1 0 offwind-ac new,40,0.0
+ES1 0 offwind-ac new,41,0.0
+ES1 0 offwind-ac new,42,0.0
+ES1 0 offwind-ac new,43,0.0
+ES1 0 offwind-ac new,44,0.0
+ES1 0 offwind-ac new,45,0.0
+ES1 0 offwind-ac new,46,0.0
+ES1 0 offwind-ac new,47,0.0
+ES1 0 offwind-ac new,48,0.0
+ES1 0 offwind-ac new,49,0.0
+ES1 0 offwind-ac new,50,0.0
+ES1 0 offwind-ac new,51,0.0
+ES1 0 offwind-ac new,52,0.0
+ES1 0 offwind-ac new,53,22645.592024952577
+ES1 0 onwind new,1,0.0
+ES1 0 onwind new,2,0.0
+ES1 0 onwind new,3,0.0
+ES1 0 onwind new,4,0.0
+ES1 0 onwind new,5,0.0
+ES1 0 onwind new,6,0.0
+ES1 0 onwind new,7,0.0
+ES1 0 onwind new,8,0.0
+ES1 0 onwind new,9,0.0
+ES1 0 onwind new,10,0.0
+ES1 0 onwind new,11,0.0
+ES1 0 onwind new,12,0.0
+ES1 0 onwind new,13,0.0
+ES1 0 onwind new,14,0.0
+ES1 0 onwind new,15,0.0
+ES1 0 onwind new,16,0.0
+ES1 0 onwind new,17,0.0
+ES1 0 onwind new,18,0.0
+ES1 0 onwind new,19,0.0
+ES1 0 onwind new,20,0.0
+ES1 0 onwind new,21,0.0
+ES1 0 onwind new,22,0.0
+ES1 0 onwind new,23,0.0
+ES1 0 onwind new,24,0.0
+ES1 0 onwind new,25,0.0
+ES1 0 onwind new,26,0.0
+ES1 0 onwind new,27,0.0
+ES1 0 onwind new,28,0.0
+ES1 0 onwind new,29,0.0
+ES1 0 onwind new,30,0.0
+ES1 0 onwind new,31,0.0
+ES1 0 onwind new,32,0.0
+ES1 0 onwind new,33,0.0
+ES1 0 onwind new,34,0.0
+ES1 0 onwind new,35,0.0
+ES1 0 onwind new,36,0.0
+ES1 0 onwind new,37,0.0
+ES1 0 onwind new,38,0.0
+ES1 0 onwind new,39,0.0
+ES1 0 onwind new,40,0.0
+ES1 0 onwind new,41,0.0
+ES1 0 onwind new,42,0.0
+ES1 0 onwind new,43,0.0
+ES1 0 onwind new,44,0.0
+ES1 0 onwind new,45,0.0
+ES1 0 onwind new,46,0.0
+ES1 0 onwind new,47,0.0
+ES1 0 onwind new,48,0.0
+ES1 0 onwind new,49,0.0
+ES1 0 onwind new,50,0.0
+ES1 0 onwind new,51,0.0
+ES1 0 onwind new,52,0.0
+ES1 0 onwind new,53,0.0
+ES1 0 ror new,1,0.0
+ES1 0 ror new,2,0.0
+ES1 0 ror new,3,0.0
+ES1 0 ror new,4,0.0
+ES1 0 ror new,5,0.0
+ES1 0 ror new,6,0.0
+ES1 0 ror new,7,0.0
+ES1 0 ror new,8,0.0
+ES1 0 ror new,9,0.0
+ES1 0 ror new,10,0.0
+ES1 0 ror new,11,0.0
+ES1 0 ror new,12,0.0
+ES1 0 ror new,13,0.0
+ES1 0 ror new,14,0.0
+ES1 0 ror new,15,0.0
+ES1 0 ror new,16,0.0
+ES1 0 ror new,17,0.0
+ES1 0 ror new,18,0.0
+ES1 0 ror new,19,0.0
+ES1 0 ror new,20,0.0
+ES1 0 ror new,21,0.0
+ES1 0 ror new,22,0.0
+ES1 0 ror new,23,0.0
+ES1 0 ror new,24,0.0
+ES1 0 ror new,25,0.0
+ES1 0 ror new,26,0.0
+ES1 0 ror new,27,0.0
+ES1 0 ror new,28,0.0
+ES1 0 ror new,29,0.0
+ES1 0 ror new,30,0.0
+ES1 0 ror new,31,0.0
+ES1 0 ror new,32,0.0
+ES1 0 ror new,33,0.0
+ES1 0 ror new,34,0.0
+ES1 0 ror new,35,0.0
+ES1 0 ror new,36,0.0
+ES1 0 ror new,37,0.0
+ES1 0 ror new,38,0.0
+ES1 0 ror new,39,0.0
+ES1 0 ror new,40,0.0
+ES1 0 ror new,41,0.0
+ES1 0 ror new,42,0.0
+ES1 0 ror new,43,0.0
+ES1 0 ror new,44,0.0
+ES1 0 ror new,45,0.0
+ES1 0 ror new,46,0.0
+ES1 0 ror new,47,0.0
+ES1 0 ror new,48,0.0
+ES1 0 ror new,49,0.0
+ES1 0 ror new,50,0.0
+ES1 0 ror new,51,0.0
+ES1 0 ror new,52,0.0
+ES1 0 ror new,53,35666.929359418304
+ES1 0 solar new,1,0.0
+ES1 0 solar new,2,0.0
+ES1 0 solar new,3,0.0
+ES1 0 solar new,4,0.0
+ES1 0 solar new,5,0.0
+ES1 0 solar new,6,0.0
+ES1 0 solar new,7,0.0
+ES1 0 solar new,8,0.0
+ES1 0 solar new,9,0.0
+ES1 0 solar new,10,0.0
+ES1 0 solar new,11,0.0
+ES1 0 solar new,12,0.0
+ES1 0 solar new,13,0.0
+ES1 0 solar new,14,0.0
+ES1 0 solar new,15,0.0
+ES1 0 solar new,16,0.0
+ES1 0 solar new,17,0.0
+ES1 0 solar new,18,0.0
+ES1 0 solar new,19,0.0
+ES1 0 solar new,20,0.0
+ES1 0 solar new,21,0.0
+ES1 0 solar new,22,0.0
+ES1 0 solar new,23,0.0
+ES1 0 solar new,24,0.0
+ES1 0 solar new,25,0.0
+ES1 0 solar new,26,0.0
+ES1 0 solar new,27,0.0
+ES1 0 solar new,28,0.0
+ES1 0 solar new,29,0.0
+ES1 0 solar new,30,0.0
+ES1 0 solar new,31,0.0
+ES1 0 solar new,32,0.0
+ES1 0 solar new,33,0.0
+ES1 0 solar new,34,0.0
+ES1 0 solar new,35,0.0
+ES1 0 solar new,36,0.0
+ES1 0 solar new,37,0.0
+ES1 0 solar new,38,0.0
+ES1 0 solar new,39,0.0
+ES1 0 solar new,40,0.0
+ES1 0 solar new,41,0.0
+ES1 0 solar new,42,0.0
+ES1 0 solar new,43,0.0
+ES1 0 solar new,44,0.0
+ES1 0 solar new,45,0.0
+ES1 0 solar new,46,0.0
+ES1 0 solar new,47,0.0
+ES1 0 solar new,48,0.0
+ES1 0 solar new,49,0.0
+ES1 0 solar new,50,0.0
+ES1 0 solar new,51,0.0
+ES1 0 solar new,52,0.0
+ES1 0 solar new,53,55024.863588286134
+PT1 0 CCGT new,1,0.0
+PT1 0 CCGT new,2,0.0
+PT1 0 CCGT new,3,0.0
+PT1 0 CCGT new,4,0.0
+PT1 0 CCGT new,5,0.0
+PT1 0 CCGT new,6,0.0
+PT1 0 CCGT new,7,0.0
+PT1 0 CCGT new,8,0.0
+PT1 0 CCGT new,9,0.0
+PT1 0 CCGT new,10,0.0
+PT1 0 CCGT new,11,0.0
+PT1 0 CCGT new,12,0.0
+PT1 0 CCGT new,13,0.0
+PT1 0 CCGT new,14,0.0
+PT1 0 CCGT new,15,0.0
+PT1 0 CCGT new,16,0.0
+PT1 0 CCGT new,17,0.0
+PT1 0 CCGT new,18,0.0
+PT1 0 CCGT new,19,0.0
+PT1 0 CCGT new,20,0.0
+PT1 0 CCGT new,21,0.0
+PT1 0 CCGT new,22,0.0
+PT1 0 CCGT new,23,0.0
+PT1 0 CCGT new,24,0.0
+PT1 0 CCGT new,25,0.0
+PT1 0 CCGT new,26,0.0
+PT1 0 CCGT new,27,0.0
+PT1 0 CCGT new,28,0.0
+PT1 0 CCGT new,29,0.0
+PT1 0 CCGT new,30,0.0
+PT1 0 CCGT new,31,0.0
+PT1 0 CCGT new,32,0.0
+PT1 0 CCGT new,33,0.0
+PT1 0 CCGT new,34,0.0
+PT1 0 CCGT new,35,0.0
+PT1 0 CCGT new,36,0.0
+PT1 0 CCGT new,37,0.0
+PT1 0 CCGT new,38,0.0
+PT1 0 CCGT new,39,0.0
+PT1 0 CCGT new,40,0.0
+PT1 0 CCGT new,41,0.0
+PT1 0 CCGT new,42,0.0
+PT1 0 CCGT new,43,0.0
+PT1 0 CCGT new,44,0.0
+PT1 0 CCGT new,45,0.0
+PT1 0 CCGT new,46,0.0
+PT1 0 CCGT new,47,0.0
+PT1 0 CCGT new,48,0.0
+PT1 0 CCGT new,49,0.0
+PT1 0 CCGT new,50,0.0
+PT1 0 CCGT new,51,0.0
+PT1 0 CCGT new,52,0.0
+PT1 0 CCGT new,53,0.0
+PT1 0 offwind-ac new,1,0.0
+PT1 0 offwind-ac new,2,0.0
+PT1 0 offwind-ac new,3,0.0
+PT1 0 offwind-ac new,4,0.0
+PT1 0 offwind-ac new,5,0.0
+PT1 0 offwind-ac new,6,0.0
+PT1 0 offwind-ac new,7,0.0
+PT1 0 offwind-ac new,8,0.0
+PT1 0 offwind-ac new,9,0.0
+PT1 0 offwind-ac new,10,0.0
+PT1 0 offwind-ac new,11,0.0
+PT1 0 offwind-ac new,12,0.0
+PT1 0 offwind-ac new,13,0.0
+PT1 0 offwind-ac new,14,0.0
+PT1 0 offwind-ac new,15,0.0
+PT1 0 offwind-ac new,16,0.0
+PT1 0 offwind-ac new,17,0.0
+PT1 0 offwind-ac new,18,0.0
+PT1 0 offwind-ac new,19,0.0
+PT1 0 offwind-ac new,20,0.0
+PT1 0 offwind-ac new,21,0.0
+PT1 0 offwind-ac new,22,0.0
+PT1 0 offwind-ac new,23,0.0
+PT1 0 offwind-ac new,24,0.0
+PT1 0 offwind-ac new,25,0.0
+PT1 0 offwind-ac new,26,0.0
+PT1 0 offwind-ac new,27,0.0
+PT1 0 offwind-ac new,28,0.0
+PT1 0 offwind-ac new,29,0.0
+PT1 0 offwind-ac new,30,0.0
+PT1 0 offwind-ac new,31,0.0
+PT1 0 offwind-ac new,32,0.0
+PT1 0 offwind-ac new,33,0.0
+PT1 0 offwind-ac new,34,0.0
+PT1 0 offwind-ac new,35,0.0
+PT1 0 offwind-ac new,36,0.0
+PT1 0 offwind-ac new,37,0.0
+PT1 0 offwind-ac new,38,0.0
+PT1 0 offwind-ac new,39,0.0
+PT1 0 offwind-ac new,40,0.0
+PT1 0 offwind-ac new,41,0.0
+PT1 0 offwind-ac new,42,0.0
+PT1 0 offwind-ac new,43,0.0
+PT1 0 offwind-ac new,44,0.0
+PT1 0 offwind-ac new,45,0.0
+PT1 0 offwind-ac new,46,0.0
+PT1 0 offwind-ac new,47,0.0
+PT1 0 offwind-ac new,48,0.0
+PT1 0 offwind-ac new,49,0.0
+PT1 0 offwind-ac new,50,0.0
+PT1 0 offwind-ac new,51,0.0
+PT1 0 offwind-ac new,52,0.0
+PT1 0 offwind-ac new,53,8135.342201504904
+PT1 0 onwind new,1,0.0
+PT1 0 onwind new,2,0.0
+PT1 0 onwind new,3,0.0
+PT1 0 onwind new,4,0.0
+PT1 0 onwind new,5,0.0
+PT1 0 onwind new,6,0.0
+PT1 0 onwind new,7,0.0
+PT1 0 onwind new,8,0.0
+PT1 0 onwind new,9,0.0
+PT1 0 onwind new,10,0.0
+PT1 0 onwind new,11,0.0
+PT1 0 onwind new,12,0.0
+PT1 0 onwind new,13,0.0
+PT1 0 onwind new,14,0.0
+PT1 0 onwind new,15,0.0
+PT1 0 onwind new,16,0.0
+PT1 0 onwind new,17,0.0
+PT1 0 onwind new,18,0.0
+PT1 0 onwind new,19,0.0
+PT1 0 onwind new,20,0.0
+PT1 0 onwind new,21,0.0
+PT1 0 onwind new,22,0.0
+PT1 0 onwind new,23,0.0
+PT1 0 onwind new,24,0.0
+PT1 0 onwind new,25,0.0
+PT1 0 onwind new,26,0.0
+PT1 0 onwind new,27,0.0
+PT1 0 onwind new,28,0.0
+PT1 0 onwind new,29,0.0
+PT1 0 onwind new,30,0.0
+PT1 0 onwind new,31,0.0
+PT1 0 onwind new,32,0.0
+PT1 0 onwind new,33,0.0
+PT1 0 onwind new,34,0.0
+PT1 0 onwind new,35,0.0
+PT1 0 onwind new,36,0.0
+PT1 0 onwind new,37,0.0
+PT1 0 onwind new,38,0.0
+PT1 0 onwind new,39,0.0
+PT1 0 onwind new,40,0.0
+PT1 0 onwind new,41,0.0
+PT1 0 onwind new,42,0.0
+PT1 0 onwind new,43,0.0
+PT1 0 onwind new,44,0.0
+PT1 0 onwind new,45,0.0
+PT1 0 onwind new,46,0.0
+PT1 0 onwind new,47,0.0
+PT1 0 onwind new,48,0.0
+PT1 0 onwind new,49,0.0
+PT1 0 onwind new,50,0.0
+PT1 0 onwind new,51,0.0
+PT1 0 onwind new,52,0.0
+PT1 0 onwind new,53,0.0
+PT1 0 ror new,1,0.0
+PT1 0 ror new,2,0.0
+PT1 0 ror new,3,0.0
+PT1 0 ror new,4,0.0
+PT1 0 ror new,5,0.0
+PT1 0 ror new,6,0.0
+PT1 0 ror new,7,0.0
+PT1 0 ror new,8,0.0
+PT1 0 ror new,9,0.0
+PT1 0 ror new,10,0.0
+PT1 0 ror new,11,0.0
+PT1 0 ror new,12,0.0
+PT1 0 ror new,13,0.0
+PT1 0 ror new,14,0.0
+PT1 0 ror new,15,0.0
+PT1 0 ror new,16,0.0
+PT1 0 ror new,17,0.0
+PT1 0 ror new,18,0.0
+PT1 0 ror new,19,0.0
+PT1 0 ror new,20,0.0
+PT1 0 ror new,21,0.0
+PT1 0 ror new,22,0.0
+PT1 0 ror new,23,0.0
+PT1 0 ror new,24,0.0
+PT1 0 ror new,25,0.0
+PT1 0 ror new,26,0.0
+PT1 0 ror new,27,0.0
+PT1 0 ror new,28,0.0
+PT1 0 ror new,29,0.0
+PT1 0 ror new,30,0.0
+PT1 0 ror new,31,0.0
+PT1 0 ror new,32,0.0
+PT1 0 ror new,33,0.0
+PT1 0 ror new,34,0.0
+PT1 0 ror new,35,0.0
+PT1 0 ror new,36,0.0
+PT1 0 ror new,37,0.0
+PT1 0 ror new,38,0.0
+PT1 0 ror new,39,0.0
+PT1 0 ror new,40,0.0
+PT1 0 ror new,41,0.0
+PT1 0 ror new,42,0.0
+PT1 0 ror new,43,0.0
+PT1 0 ror new,44,0.0
+PT1 0 ror new,45,0.0
+PT1 0 ror new,46,0.0
+PT1 0 ror new,47,0.0
+PT1 0 ror new,48,0.0
+PT1 0 ror new,49,0.0
+PT1 0 ror new,50,0.0
+PT1 0 ror new,51,0.0
+PT1 0 ror new,52,0.0
+PT1 0 ror new,53,0.0
+PT1 0 solar new,1,0.0
+PT1 0 solar new,2,0.0
+PT1 0 solar new,3,0.0
+PT1 0 solar new,4,0.0
+PT1 0 solar new,5,0.0
+PT1 0 solar new,6,0.0
+PT1 0 solar new,7,0.0
+PT1 0 solar new,8,0.0
+PT1 0 solar new,9,0.0
+PT1 0 solar new,10,0.0
+PT1 0 solar new,11,0.0
+PT1 0 solar new,12,0.0
+PT1 0 solar new,13,0.0
+PT1 0 solar new,14,0.0
+PT1 0 solar new,15,0.0
+PT1 0 solar new,16,0.0
+PT1 0 solar new,17,0.0
+PT1 0 solar new,18,0.0
+PT1 0 solar new,19,0.0
+PT1 0 solar new,20,0.0
+PT1 0 solar new,21,0.0
+PT1 0 solar new,22,0.0
+PT1 0 solar new,23,0.0
+PT1 0 solar new,24,0.0
+PT1 0 solar new,25,0.0
+PT1 0 solar new,26,0.0
+PT1 0 solar new,27,0.0
+PT1 0 solar new,28,0.0
+PT1 0 solar new,29,0.0
+PT1 0 solar new,30,0.0
+PT1 0 solar new,31,0.0
+PT1 0 solar new,32,0.0
+PT1 0 solar new,33,0.0
+PT1 0 solar new,34,0.0
+PT1 0 solar new,35,0.0
+PT1 0 solar new,36,0.0
+PT1 0 solar new,37,0.0
+PT1 0 solar new,38,0.0
+PT1 0 solar new,39,0.0
+PT1 0 solar new,40,0.0
+PT1 0 solar new,41,0.0
+PT1 0 solar new,42,0.0
+PT1 0 solar new,43,0.0
+PT1 0 solar new,44,0.0
+PT1 0 solar new,45,0.0
+PT1 0 solar new,46,0.0
+PT1 0 solar new,47,0.0
+PT1 0 solar new,48,0.0
+PT1 0 solar new,49,0.0
+PT1 0 solar new,50,0.0
+PT1 0 solar new,51,0.0
+PT1 0 solar new,52,0.0
+PT1 0 solar new,53,5450.628064102309

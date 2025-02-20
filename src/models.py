@@ -341,7 +341,7 @@ def GTSEP_v0(config: dict) -> gp.Model:
         model.addConstr(soc[s, T[0]] == batteries.loc[s, "SOC_min"])
 
     # Optimize the model
-    model.setParam("MIPGap", 0.001)
+    model.setParam("MIPGap", MIPGap)
 
     build_end_time = time()
 
@@ -735,7 +735,7 @@ def GTSEP_v1(config: dict) -> gp.Model:
         model.addConstr(soc[s, T[0]] == batteries.loc[s, "SOC_min"] * soc_s_max[s])
 
     # Optimize the model
-    model.setParam("MIPGap", 0.001)
+    model.setParam("MIPGap", MIPGap)
 
     build_end_time = time()
 
@@ -1067,7 +1067,7 @@ def GTSEP_v2(config: dict) -> gp.Model:
     # 3b. Generator output limits (new generators)
     for i in G_new:
         for w in W:
-            p_i_w[i, w] <= x[i] * p_i_max[i]
+            model.addConstr(p_i_w[i, w] <= x[i] * p_i_max[i])
             # Lower bound is 0 by default
         for t in T:
             original_generator_id = " ".join(i.split(" ")[:-1])
@@ -1274,6 +1274,13 @@ def GTSEP_v2(config: dict) -> gp.Model:
     branch_capacity_df = pd.DataFrame(branch_capacity_data, columns=["branch", "value"])
     branch_capacity_df.to_csv(
         os.path.join(decision_variables_folder, "branch_capacity.csv"), index=False
+    )
+
+    # Save generator capacities
+    p_i_w = [(i, w, p_i_w[i, w].X) for i in G for w in W]
+    p_i_w_df = pd.DataFrame(p_i_w, columns=["generator", "week", "value"])
+    p_i_w_df.to_csv(
+        os.path.join(decision_variables_folder, "p_i_w.csv"), index=False
     )
 
     

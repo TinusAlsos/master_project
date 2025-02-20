@@ -103,9 +103,9 @@ def create_run_id(model_config: dict) -> str:
     now = datetime.now()
     formatted = now.strftime("%b%d_%a_h%H")
     if not model_id:
-        run_id = f"{model_name}-{formatted}"
+        run_id = f"{formatted}-{model_name}"
     else:
-        run_id = f"{model_name}-{model_id}-{formatted}"
+        run_id = f"{formatted}-{model_name}-{model_id}"
     return run_id
 
 

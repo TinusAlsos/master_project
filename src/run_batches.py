@@ -5,7 +5,7 @@ import datetime
 
 def generate_batch_folder_name(model_config_names: list[str]) -> str:
     """Generates a unique batch folder name based on timestamp and model names."""
-    now = datetime.now()
+    now = datetime.datetime.now()
     timestamp = now.strftime("%b%d:%a:h%H")
     model_summary = "-".join(model_config_names)[:50]  # Keep it readable, truncate if long
     hash_suffix = hashlib.sha1("".join(model_config_names).encode()).hexdigest()[:6]  # Short hash

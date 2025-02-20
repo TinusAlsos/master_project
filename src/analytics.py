@@ -401,8 +401,10 @@ def preprocess_batteries(
 
 def check_line_errors(branches: pd.DataFrame, power_flow: pd.DataFrame) -> None:
     # Make sure power flow is + if branch doesn't exist
+    epsilon = 1e-6
     for branch in branches[branches["exists"] == 0].index:
-        if power_flow[branch].abs().sum() != 0:
+        if power_flow[branch].abs().sum() > epsilon or (power_flow[branch].abs() 
+        .sum()) * (-1) < epsilon:
             print(f"WARNING: Branch {branch} has power flow when it doesn't exist")
     errors = 0
     num_lines_with_errors = 0
