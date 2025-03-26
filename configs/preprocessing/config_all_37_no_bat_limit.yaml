@@ -1,0 +1,7 @@
+countries:
+network_name: elec_s_37
+query:
+carriers:
+branches_max_loss: 0.05
+id: no_bat_limit
+battery_config: no_bat_limit
