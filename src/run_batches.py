@@ -3,16 +3,25 @@ from src.run import run
 from tqdm import tqdm
 import datetime
 
+
 def generate_batch_folder_name(model_config_names: list[str]) -> str:
     """Generates a unique batch folder name based on timestamp and model names."""
     now = datetime.datetime.now()
     timestamp = now.strftime("%b%d:%a:h%H")
-    model_summary = "-".join(model_config_names)[:50]  # Keep it readable, truncate if long
-    hash_suffix = hashlib.sha1("".join(model_config_names).encode()).hexdigest()[:6]  # Short hash
+    model_summary = "-".join(model_config_names)[
+        :50
+    ]  # Keep it readable, truncate if long
+    hash_suffix = hashlib.sha1("".join(model_config_names).encode()).hexdigest()[
+        :6
+    ]  # Short hash
     return f"batch_{timestamp}_{len(model_config_names)}models_{hash_suffix}"
 
+
 def run_batches(
-    model_config_names: list[str], preprocessing_config_names: list[str] = [], batch_folder_name = None
+    model_config_names: list[str],
+    preprocessing_config_names: list[str] = [],
+    batch_folder_name=None,
+    no_run_analysis=True,
 ):
     if batch_folder_name is None:
         batch_folder_name = generate_batch_folder_name(model_config_names)
@@ -30,10 +39,16 @@ def run_batches(
         else:
             preprocessing_config_name = ""
         print(f"@@@@ Batch number {idx+1}: {model_config_name} @@@@")
-        run(model_config_name, preprocessing_config_name, idx + 1, batch_folder_name)
+        run(
+            model_config_name,
+            preprocessing_config_name,
+            idx + 1,
+            batch_folder_name,
+            no_run_analysis,
+        )
 
 
 if __name__ == "__main__":
-    model_config_names = ["128_v0", "128_v1", "128_v2"]
-    batch_folder_name = "128-v0-v1-v2"
+    model_config_names = ["37_v0", "37_v1", "37_v2", "37_v3"]
+    batch_folder_name = "37-v0-v1-v2-v3"
     run_batches(model_config_names, batch_folder_name=batch_folder_name)
