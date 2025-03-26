@@ -11,3 +11,4 @@ p_max_new_branch: 5000  # Maximum capacity of new branches [MW]
 p_min_new_branch: 100   # Minimum capacity of new branches [MW]
 expansion_factor: 0.2   # Expansion factor: existing generator capacity can be expanded by this fraction
 MS: 0.1               # Maximum shed at each node
+years:

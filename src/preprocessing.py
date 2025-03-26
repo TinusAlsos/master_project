@@ -1,7 +1,7 @@
 """
 preprocessing.py
 
-Reads in data from the PyPSA2023 data and extracts and preprocesses the data for the optimization model to use. 
+Reads in data from the PyPSA2023 data and extracts and preprocesses the data for the optimization model to use.
 
 """
 
@@ -354,7 +354,7 @@ def run_preprocessing(config: dict | str = "") -> None:
         else config["network_name"] + "_all"
     )
     if config["id"]:
-        identifier  += "_" + config["id"]
+        identifier += "_" + config["id"]
     output_folder = os.path.join(SAVE_FOLDER, identifier)
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)

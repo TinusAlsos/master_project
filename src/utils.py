@@ -139,7 +139,7 @@ def load_battery_config_by_name(path_or_name: str = "") -> dict:
     if not path_or_name:
         print("No battery configuration file provided. Using base configuration.")
         path_or_name = os.path.join(BATTERY_CONFIG_FOLDER, "base_config.yaml")
-    
+
     if os.path.exists(path_or_name):
         config_path = path_or_name
     else:
@@ -165,6 +165,63 @@ def load_csv_files_from_folder(data_folder_path: str) -> dict[str, pd.DataFrame]
             data[file_name] = pd.read_csv(file_path, index_col=0)
             if file_name in ["hourly_demand", "capacity_factors"]:
                 data[file_name].index = pd.to_datetime(data[file_name].index)
+    return data
+
+
+def load_csv_files_from_folder_multi(data_folder_path: str) -> dict[str, pd.DataFrame]:
+    if not os.path.exists(data_folder_path):
+        raise FileNotFoundError(
+            f"{data_folder_path} not found (should be the path to a folder containing processed data in csv files)"
+        )
+    data = {}
+    for file in os.listdir(data_folder_path):
+        if file.endswith(".csv"):
+            file_path = os.path.join(data_folder_path, file)
+            file_name = file.split(".")[0]
+            if file_name in [
+                "generator_capacity",
+                "battery_capacity",
+                "branch_capacity",
+            ]:
+                data[file_name] = pd.read_csv(file_path, index_col=0)
+            else:
+                data[file_name] = pd.read_csv(file_path, index_col=["year", "hour"])
+
+    return data
+
+
+def load_multi_year_csv_files_from_folder(
+    years: list[int], data_folder_path: str
+) -> dict[str, pd.DataFrame]:
+    """temporary quick fix for multi-year data loading. I use the same data as for a single year, but I just post-process the dataframes to be in a multi-year format. All data is the same accross all years, so results are relatively meaningless."""
+    if not os.path.exists(data_folder_path):
+        raise FileNotFoundError(
+            f"{data_folder_path} not found (should be the path to a folder containing processed data in csv files)"
+        )
+    data = {}
+    for file in os.listdir(data_folder_path):
+        if file.endswith(".csv"):
+            file_path = os.path.join(data_folder_path, file)
+            file_name = file.split(".")[0]
+            df = pd.read_csv(file_path, index_col=0)
+            if file_name in ["hourly_demand", "capacity_factors"]:
+                df.index = range(len(df))
+                df.index.name = "hour"
+            new_dfs = []
+            demand_multiplier = 1
+            if file_name == "nodes":
+                data[file_name] = df
+                continue
+            for year in years:
+                temp_df = df.copy()
+                if file_name == "hourly_demand":
+                    temp_df = temp_df * demand_multiplier
+                    demand_multiplier += 1
+                temp_df.index = pd.MultiIndex.from_product(
+                    [[year], temp_df.index], names=["year", temp_df.index.name]
+                )
+                new_dfs.append(temp_df)
+            data[file_name] = pd.concat(new_dfs)
     return data
 
 

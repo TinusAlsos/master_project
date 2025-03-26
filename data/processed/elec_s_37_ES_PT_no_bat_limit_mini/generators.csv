@@ -1,0 +1,5 @@
+generator,bus,carrier,p_nom,marginal_cost,capital_cost,co2_emissions,color,nice_name
+ES1 0 CCGT,ES1 0,CCGT,26305.331999999995,40.77238042153069,99027.72929315244,0.2,#b20101,Combined-Cycle Gas
+ES1 0 onwind,ES1 0,onwind,26825.862669404865,0.015,96085.88801996633,0.0,#235ebc,Onshore Wind
+PT1 0 CCGT,PT1 0,CCGT,4145.0,38.87669736560293,99027.72929315244,0.2,#b20101,Combined-Cycle Gas
+PT1 0 onwind,PT1 0,onwind,5213.640675318431,0.015,96085.8880199663,0.0,#235ebc,Onshore Wind

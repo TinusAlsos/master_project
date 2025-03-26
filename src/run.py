@@ -28,7 +28,9 @@ def save_model(model, model_config):
 def run(
     model_config_name: str = "",
     preprocessing_config_name: str = "",
-    batch_number: bool = False, batch_folder_name = None
+    batch_number: bool = False,
+    batch_folder_name=None,
+    no_run_analysis: bool = False,
 ):
     if preprocessing_config_name:
         preprocessing_config = run_preprocessing(preprocessing_config_name)
@@ -77,7 +79,7 @@ def run(
         "Number of Constraints": model.NumConstrs,
         "Number of Nonzeros": model.NumNZs,
         "Number of Integer Variables": model.NumIntVars,  # integer variables (includes both integer and binary)
-        "Number of Binary Variables": model.NumBinVars,    # binary variables specifically
+        "Number of Binary Variables": model.NumBinVars,  # binary variables specifically
         "Number of Quadratic Constraints": model.NumQConstrs,
         "Model Status": model.Status,
     }
@@ -91,8 +93,9 @@ def run(
     # Save model
     save_model(model, model_config)
 
-    print("end")
-    analyze_run(model_config)
+    print("Model saved")
+    if not no_run_analysis:
+        analyze_run(model_config)
 
 
 def create_run_id(model_config: dict) -> str:
@@ -131,5 +134,14 @@ if __name__ == "__main__":
         default="",
         help="The preprocessing config name.",
     )
+    parser.add_argument(
+        "--no_run_analysis",
+        default="",
+        help="Run analysis (keep empty to run analysis, input anything to not run analysis.).",
+    )
     args = parser.parse_args()
-    run(args.name)
+    run(
+        model_config_name=args.name,
+        preprocessing_config_name=args.preprocessing,
+        no_run_analysis=args.no_run_analysis,
+    )
