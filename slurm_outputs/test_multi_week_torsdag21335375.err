@@ -1,0 +1,17 @@
+Processing Models:   0%|          | 0/4 [00:00<?, ?model/s]/cluster/home/tinusfa/master_project/src/models.py:51: PerformanceWarning: indexing past lexsort depth may impact performance.
+  branches = branches.loc[y0,]
+/cluster/home/tinusfa/master_project/src/models.py:52: PerformanceWarning: indexing past lexsort depth may impact performance.
+  generators = generators.loc[y0,]
+Processing Models:  25%|██▌       | 1/4 [00:08<00:24,  8.27s/model]/cluster/home/tinusfa/master_project/src/models.py:51: PerformanceWarning: indexing past lexsort depth may impact performance.
+  branches = branches.loc[y0,]
+/cluster/home/tinusfa/master_project/src/models.py:52: PerformanceWarning: indexing past lexsort depth may impact performance.
+  generators = generators.loc[y0,]
+Processing Models:  50%|█████     | 2/4 [00:49<00:55, 27.81s/model]/cluster/home/tinusfa/master_project/src/models.py:51: PerformanceWarning: indexing past lexsort depth may impact performance.
+  branches = branches.loc[y0,]
+/cluster/home/tinusfa/master_project/src/models.py:52: PerformanceWarning: indexing past lexsort depth may impact performance.
+  generators = generators.loc[y0,]
+Processing Models:  75%|███████▌  | 3/4 [02:13<00:53, 53.36s/model]/cluster/home/tinusfa/master_project/src/models.py:51: PerformanceWarning: indexing past lexsort depth may impact performance.
+  branches = branches.loc[y0,]
+/cluster/home/tinusfa/master_project/src/models.py:52: PerformanceWarning: indexing past lexsort depth may impact performance.
+  generators = generators.loc[y0,]
+Processing Models: 100%|██████████| 4/4 [07:51<00:00, 165.69s/model]Processing Models: 100%|██████████| 4/4 [07:51<00:00, 117.86s/model]
