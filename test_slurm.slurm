@@ -20,6 +20,6 @@ echo "Name of job: $SLURM_JOB_NAME"
 echo "ID of job: $SLURM_JOB_ID"
 echo "The job was run on these nodes: $SLURM_JOB_NODELIST"
 
-python run_tests
+python -m src.run_tests
 
 echo "Job finished at $(date)"
