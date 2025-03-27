@@ -20,6 +20,22 @@ echo "Name of job: $SLURM_JOB_NAME"
 echo "ID of job: $SLURM_JOB_ID"
 echo "The job was run on these nodes: $SLURM_JOB_NODELIST"
 
+
+module load Anaconda3/2024.02-1
+
+conda activate project
+
+export GRB_WLSACCESSID="a1398bc9-8320-4b99-91fc-29b07ff4e4f7"
+export GRB_WLSSECRET="87c9d38e-3a81-40a9-8d23-fa6fd14a0645"
+export GRB_LICENSE_FILE="/cluster/home/tinusfa/master_project/gurobi.lic"
+
+
+
+export GRB_WLSACCESSID="a1398bc9-8320-4b99-91fc-29b07ff4e4f7" >> ~/.bashrc
+export GRB_WLSSECRET="87c9d38e-3a81-40a9-8d23-fa6fd14a0645" >> ~/.bashrc
+export GRB_LICENSE_FILE="/cluster/home/tinusfa/master_project/gurobi.lic" >> ~/.bashrc
+source ~/.bashrc
+
 python -m src.run_tests
 
 echo "Job finished at $(date)"
