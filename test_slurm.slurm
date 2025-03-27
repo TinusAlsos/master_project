@@ -8,7 +8,7 @@
 #SBATCH --cpus-per-task=1 # 4 CPU cores               
 #SBATCH --nodes=1
 #SBATCH --output=slurm_outputs/%x%j.txt      # Specifying 'stdout'
-#SBATCH --error=test_tinus.err        # Specifying 'stderr'
+#SBATCH --error=slurm_outputs/%x%j.err        # Specifying 'stderr'
 
 #SBATCH --mail-user=tinusfa@stud.ntnu.no
 #SBATCH --mail-type=ALL
@@ -21,3 +21,5 @@ echo "ID of job: $SLURM_JOB_ID"
 echo "The job was run on these nodes: $SLURM_JOB_NODELIST"
 
 python run_tests
+
+echo "Job finished at $(date)"
