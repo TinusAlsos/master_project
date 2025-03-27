@@ -49,6 +49,6 @@ def run_batches(
 
 
 if __name__ == "__main__":
-    model_config_names = ["37_v0", "37_v1", "37_v2", "37_v3"]
-    batch_folder_name = "37-v0-v1-v2-v3"
+    model_config_names = ["37_v1_multi_mini", "37_v1_multi", "37_v1_multi_all", "128_v1_multi"]
+    batch_folder_name = "v1test-mini-37Iberia-37all-128Iberia"
     run_batches(model_config_names, batch_folder_name=batch_folder_name)
