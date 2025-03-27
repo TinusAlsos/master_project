@@ -1,11 +1,11 @@
 #!/bin/sh
 #SBATCH --account=share-iv-mtp       # E.g. "ie-idi" if you belong to IDI
 #SBATCH --job-name=test_multi_week_torsdag
-#SBATCH --time=0-00:15:00         # format: D-HH:MM:SS
+#SBATCH --time=0-20:00:00         # format: D-HH:MM:SS
 
 #SBATCH --partition=CPUQ          # Asking for a GPU
-#SBATCH --mem=5G       # Asking for 64GB RAM
-#SBATCH --cpus-per-task=1 # 4 CPU cores               
+#SBATCH --mem=128G       # Asking for 64GB RAM
+#SBATCH --cpus-per-task=2 # 4 CPU cores               
 #SBATCH --nodes=1
 #SBATCH --output=slurm_outputs/%x%j.txt      # Specifying 'stdout'
 #SBATCH --error=slurm_outputs/%x%j.err        # Specifying 'stderr'
