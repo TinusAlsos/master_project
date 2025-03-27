@@ -1,6 +1,7 @@
 #!/bin/sh
+JOBNAME = test2
 #SBATCH --account=share-iv-mtp       # E.g. "ie-idi" if you belong to IDI
-#SBATCH --job-name=test_job
+#SBATCH --job-name=JOBNAME
 #SBATCH --time=0-00:15:00         # format: D-HH:MM:SS
 
 #SBATCH --partition=CPUQ          # Asking for a GPU
@@ -15,6 +16,7 @@
 
 WORKDIR=${SLURM_SUBMIT_DIR}
 cd ${WORKDIR}
+echo "Running $JOBNAME"
 echo "Running from this directory: $SLURM_SUBMIT_DIR"
 echo "Name of job: $SLURM_JOB_NAME"
 echo "ID of job: $SLURM_JOB_ID"
