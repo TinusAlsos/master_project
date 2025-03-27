@@ -1,6 +1,6 @@
 #!/bin/sh
 #SBATCH --account=share-iv-mtp       # E.g. "ie-idi" if you belong to IDI
-#SBATCH --job-name=test_tinus
+#SBATCH --job-name=test_multi_week_torsdag
 #SBATCH --time=0-00:15:00         # format: D-HH:MM:SS
 
 #SBATCH --partition=CPUQ          # Asking for a GPU
@@ -36,6 +36,12 @@ export GRB_WLSSECRET="87c9d38e-3a81-40a9-8d23-fa6fd14a0645" >> ~/.bashrc
 export GRB_LICENSE_FILE="/cluster/home/tinusfa/master_project/gurobi.lic" >> ~/.bashrc
 source ~/.bashrc
 
-python -m src.run_tests
+python -m src.run_batches -m 37_v1a_multi_weeks_small 37_v1a_multi_weeks 128_v1a_multi_weeks_small 128_v1a_multi_weeks -b test_multi_week_torsdag
 
 echo "Job finished at $(date)"
+
+echo "Pushing to git"
+
+git add .
+git commit -m "results from test_multi_week_torsdag"
+git push
