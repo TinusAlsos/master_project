@@ -1,3 +1,4 @@
+import argparse
 import hashlib
 from src.run import run
 from tqdm import tqdm
@@ -49,6 +50,42 @@ def run_batches(
 
 
 if __name__ == "__main__":
-    model_config_names = ["37_v1_multi_mini", "37_v1_multi", "37_v1_multi_all", "128_v1_multi"]
-    batch_folder_name = "v1test-mini-37Iberia-37all-128Iberia"
-    run_batches(model_config_names, batch_folder_name=batch_folder_name)
+    parser = argparse.ArgumentParser(description="Run batch simulations.")
+    parser.add_argument(
+        "-m",
+        "--model-config-names",
+        nargs="+",
+        required=True,
+        help="List of model configuration names.",
+    )
+    parser.add_argument(
+        "-b",
+        "--batch-folder-name",
+        type=str,
+        required=True,
+        help="Name of the batch folder.",
+    )
+
+    parser.add_argument(
+        "-p",
+        "--preprocessing-config-names",
+        nargs="+",
+        default=[],
+        help="List of preprocessing configuration names.",
+    )
+
+    parser.add_argument(
+        "--run-analysis", action="store_false", help="Flag to skip run analysis."
+    )
+
+    args = parser.parse_args()
+    print(args.run_analysis)
+
+    print(f"Running batches for: {args.model_config_names}")
+    print(f"Saving results to: {args.batch_folder_name}")
+    run_batches(
+        model_config_names=args.model_config_names,
+        batch_folder_name=args.batch_folder_name,
+        preprocessing_config_names=args.preprocessing_config_names,
+        no_run_analysis=args.run_analysis,
+    )

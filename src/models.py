@@ -6,6 +6,7 @@ from src.utils import (
     load_csv_files_from_folder,
     load_model_config,
     load_multi_year_csv_files_from_folder,
+    load_multi_year_csv_files_with_week_from_folder,
 )
 import os
 
@@ -1440,6 +1441,581 @@ def GTSEP_v1_multi(config: dict) -> gp.Model:
 # endregion
 
 
+# region GTSEP_v1_multi
+
+
+def GTSEP_v1a_multi(config: dict) -> gp.Model:
+    """GTSEP_v1 model but with multiple time periods considered. Uses clustering"""
+    # region Model setup and running
+    must_have_keys = [
+        "data_folder_name",
+        "VOLL",
+        "CC",
+        "CO2_price",
+        "E_limit",
+        "p_max_new_branch",
+        "p_min_new_branch",
+        "expansion_factor",
+        "MS",
+        "model_name",
+        "MIPGap",
+        "years",
+        "discount_rate",
+        "representative_period_unit",
+        "representative_periods",
+    ]
+    for key in must_have_keys:
+        if key not in config:
+            raise KeyError(
+                f"Required key '{key}' not found in config. \nRequired keys: {must_have_keys}\nConfig keys: {config.keys()}"
+            )
+
+    data_folder_name = config["data_folder_name"]
+    VOLL = config["VOLL"]
+    CC = config["CC"]
+    CO2_price = config["CO2_price"]
+    E_limit = config["E_limit"]
+    p_max_new_branch = config["p_max_new_branch"]
+    p_min_new_branch = config["p_min_new_branch"]
+    expansion_factor = config["expansion_factor"]
+    MS = config["MS"]
+    model_name = config["model_name"]
+    MIPGap = config["MIPGap"]
+    years = config["years"]
+    r = config["discount_rate"]
+    representative_period_unit = config["representative_period_unit"]
+    weeks = config["representative_periods"]
+    if not representative_period_unit == "week":
+        raise ValueError(
+            "Only 'week' is supported as representative_period_unit as of now."
+        )
+
+    if not years:
+        raise ValueError("Years must be provided for a multi-year model.")
+
+    # Load data
+    data_folder_path = os.path.join(PROCESSED_DATA_FOLDER, data_folder_name)
+    input_data = load_multi_year_csv_files_with_week_from_folder(
+        years, weeks, data_folder_path
+    )
+    batteries = input_data["batteries"]
+    branches = input_data["branches"]
+    capacity_factors = input_data["capacity_factors"]
+    generators = input_data["generators"]
+    generator_costs = input_data["generator_costs"]
+    hourly_demand = input_data["hourly_demand"]
+    nodes = input_data["nodes"]
+
+    # Data processing
+    # Create new branches
+    # Add a new column 'exists' to the original branches dataframe and set it to 1
+    branches["exists"] = 1
+    # Create a copy of the dataframe for the "new" branches
+    branches_new = branches.copy()
+    # Update the index by appending " new" to the original index
+    branches_new.index = branches_new.index.set_levels(
+        branches_new.index.levels[1].astype(str) + " new", level="line"
+    )
+    # Set the 'exists' column to 0 for the new branches
+    branches_new["exists"] = 0
+    # Concatenate the original dataframe and the new dataframe
+    branches = pd.concat([branches, branches_new])
+    # Add a new column 'exists' to the original dataframe and set it to 1
+    generators["exists"] = 1
+    # Create a copy of the dataframe for the "new" generators
+    generators_new = generators.copy()
+    # Update the index by appending " new" to the original index
+    generators_new.index = generators_new.index.set_levels(
+        generators_new.index.levels[1].astype(str) + " new", level="generator"
+    )
+    # Set the 'exists' column to 0 for the new generators
+    generators_new["exists"] = 0
+    # Concatenate the original dataframe and the new dataframe
+    generators = pd.concat([generators, generators_new])
+    batteries["exists"] = 0
+
+    # Create sets
+    N = nodes.index.to_list()
+    G_old = (
+        generators[generators["exists"] == 1]
+        .index.get_level_values("generator")
+        .unique()
+        .to_list()
+    )
+    G_new = (
+        generators[generators["exists"] == 0]
+        .index.get_level_values("generator")
+        .unique()
+        .to_list()
+    )
+    G = generators.index.get_level_values("generator").unique().to_list()
+    B_old = (
+        branches[branches["exists"] == 1]
+        .index.get_level_values("line")
+        .unique()
+        .to_list()
+    )
+    B_new = (
+        branches[branches["exists"] == 0]
+        .index.get_level_values("line")
+        .unique()
+        .to_list()
+    )
+    B = branches.index.get_level_values("line").unique().to_list()
+    S_new = (
+        batteries[batteries["exists"] == 0]
+        .index.get_level_values("battery")
+        .unique()
+        .to_list()
+    )
+    S_old = (
+        batteries[batteries["exists"] == 1]
+        .index.get_level_values("battery")
+        .unique()
+        .to_list()
+    )
+    S = batteries.index.get_level_values("battery").unique().to_list()
+    Y = hourly_demand.index.get_level_values("year").unique().to_list()
+    W = weeks
+    T = (
+        hourly_demand[hourly_demand.index.get_level_values("week").isin(weeks)]
+        .index.get_level_values("hour")
+        .unique()
+        .to_list()
+    )
+
+    if not all(
+        len(T)
+        == len(
+            hourly_demand[
+                (hourly_demand.index.get_level_values("week") == w)
+                & (hourly_demand.index.get_level_values("year") == y)
+            ]
+        )
+        for w in W
+        for y in Y
+    ):
+        raise ValueError(f"All weeks must have the same number of hours.")
+
+    week_weights = {w: 1 / len(W) * 8760 / len(T) for w in W}
+
+    # Create mappings
+    (
+        branches_out_of_node,
+        branches_into_node,
+        batteries_at_node,
+        generators_at_node,
+    ) = _create_mappings(nodes, branches, generators, batteries)
+
+    # create Yy mapping, accessed as Yy[y] and returns a list of years up to and including y from Y
+    Yy = {y: [x for x in Y if x <= y] for y in Y}
+
+    build_start_time = time()
+    # Create model
+    model_name = model_name if model_name else "GTSEP_v0"
+    model = gp.Model(model_name)
+
+    # Decision variables (with representative weeks)
+    g = model.addVars(G, Y, W, T, name="g", lb=0)  # Power generation dispatch
+    f = model.addVars(
+        B, Y, W, T, name="f", lb=-GRB.INFINITY, ub=GRB.INFINITY
+    )  # Power flow
+    sh = model.addVars(N, Y, W, T, name="sh", lb=0)  # Load shedding
+    c = model.addVars(G, Y, W, T, name="c", lb=0)  # Curtailment
+    g_ch = model.addVars(S, Y, W, T, name="g_ch", lb=0)  # Battery charging
+    g_dis = model.addVars(S, Y, W, T, name="g_dis", lb=0)  # Battery discharging
+    soc = model.addVars(S, Y, W, T, name="soc", lb=0)  # State of charge
+
+    # Investment variables remain unchanged (no weekly dependency)
+    soc_s_max = model.addVars(
+        S_new, Y, name="soc_s_max", lb=0
+    )  # Max SOC for new batteries
+    p_i_max = model.addVars(
+        G_new, Y, name="p_i_max", lb=0
+    )  # Max capacity of new generators
+    p_b_max = model.addVars(
+        B_new, Y, name="p_b_max", lb=0
+    )  # Max capacity of new branches
+
+    # Cumulative capacity helper variables (unchanged)
+    p_i_cum_max = model.addVars(G_new, Y, name="p_i_cum_max", lb=0)
+    for i in G_new:
+        for y in Y:
+            model.addConstr(
+                p_i_cum_max[i, y]
+                == gp.quicksum(p_i_max[i, y_marked] for y_marked in Yy[y])
+            )
+
+    p_b_cum_max = model.addVars(B_new, Y, name="p_b_cum_max", lb=0)
+    for b in B_new:
+        for y in Y:
+            model.addConstr(
+                p_b_cum_max[b, y]
+                == gp.quicksum(p_b_max[b, y_marked] for y_marked in Yy[y])
+            )
+
+    soc_s_cum_max = model.addVars(S_new, Y, name="soc_s_cum_max", lb=0)
+    for s in S_new:
+        for y in Y:
+            model.addConstr(
+                soc_s_cum_max[s, y]
+                == gp.quicksum(soc_s_max[s, y_marked] for y_marked in Yy[y])
+            )
+
+    objective = 0.0
+    for y in Y:
+        OC = gp.quicksum(
+            week_weights[w]
+            * (
+                gp.quicksum(
+                    (
+                        generators.loc[(y, i), "marginal_cost"]
+                        + generators.loc[(y, i), "co2_emissions"] * CO2_price
+                    )
+                    * g[i, y, w, t]
+                    for i in G
+                    for t in T
+                )
+                + gp.quicksum(VOLL * sh[n, y, w, t] for n in N for t in T)
+                + gp.quicksum(CC * c[i, y, w, t] for i in G for t in T)
+            )
+            for w in W
+        )
+        AIC = (
+            gp.quicksum(
+                generators.loc[(y, i), "capital_cost"] * p_i_max[i, y] for i in G_new
+            )
+            + gp.quicksum(
+                branches.loc[(y, b), "capital_cost"] * p_b_max[b, y] for b in B_new
+            )
+            + gp.quicksum(
+                batteries.loc[(y, s), "capital_cost"] * soc_s_max[s, y] for s in S_new
+            )
+        )
+        objective += (1 / ((1 + r) ** (y - Y[0]))) * (OC + AIC)
+
+    objective = objective / len(Y)
+    model.setObjective(objective, GRB.MINIMIZE)
+
+    # Constraints
+    # 1. Power balance
+    for n in N:
+        for y in Y:
+            for w in W:
+                for t in T:
+                    model.addConstr(
+                        gp.quicksum(
+                            g[i, y, w, t] - c[i, y, w, t] for i in generators_at_node[n]
+                        )
+                        + gp.quicksum(
+                            f[b, y, w, t] * (1 - branches.loc[(y, b), "loss_factor"])
+                            for b in branches_into_node[n]
+                        )
+                        - gp.quicksum(f[b, y, w, t] for b in branches_out_of_node[n])
+                        - gp.quicksum(
+                            g_ch[s, y, w, t]
+                            - batteries.loc[(y, s), "eta_discharge"] * g_dis[s, y, w, t]
+                            for s in batteries_at_node[n]
+                        )
+                        + sh[n, y, w, t]
+                        == hourly_demand.loc[(y, w, t), n]
+                    )
+
+    # 2a. Load shedding limits
+    for n in N:
+        for y in Y:
+            for w in W:
+                for t in T:
+                    model.addConstr(
+                        sh[n, y, w, t] <= MS * hourly_demand.loc[(y, w, t), n]
+                    )
+
+    # 2b. Curtailment limits
+    for i in G:
+        for y in Y:
+            for w in W:
+                for t in T:
+                    model.addConstr(c[i, y, w, t] <= g[i, y, w, t])
+
+    # 3a. Generator output limits (old generators)
+    for i in G_old:
+        for y in Y:
+            p_max = generators.loc[(y, i), "p_nom"]
+            for w in W:
+                for t in T:
+                    capacity_factor = capacity_factors.loc[(y, w, t), i]
+                    model.addConstr(g[i, y, w, t] <= p_max * capacity_factor)
+
+    # 3b. Generator output limits (new generators)
+    for i in G_new:
+        for y in Y:
+            original_generator_id = " ".join(i.split(" ")[:-1])
+            for w in W:
+                for t in T:
+                    capacity_factor = capacity_factors.loc[
+                        (y, w, t), original_generator_id
+                    ]
+                    model.addConstr(
+                        g[i, y, w, t] <= capacity_factor * p_i_cum_max[i, y]
+                    )
+
+    # 3c. New generator capacity limits
+    for i in G_new:
+        for y in Y:
+            p_max = generators.loc[(y, i), "p_nom"]
+            model.addConstr(p_i_max[i, y] <= expansion_factor * p_max)
+
+    # 4a. Branch flow limits (old branches)
+    for b in B_old:
+        for y in Y:
+            for w in W:
+                for t in T:
+                    model.addConstr(f[b, y, w, t] >= -branches.loc[(y, b), "p_max"])
+                    model.addConstr(f[b, y, w, t] <= branches.loc[(y, b), "p_max"])
+
+    # 4b. Branch flow limits (new branches)
+    for b in B_new:
+        for y in Y:
+            for w in W:
+                for t in T:
+                    model.addConstr(f[b, y, w, t] >= -p_b_cum_max[b, y])
+                    model.addConstr(f[b, y, w, t] <= p_b_cum_max[b, y])
+
+    # 4c. New branch capacity limits
+    for b in B_new:
+        for y in Y:
+            model.addConstr(p_b_max[b, y] <= p_max_new_branch)
+
+    # # 5. Emission restrictions
+    # model.addConstr(
+    #     gp.quicksum(
+    #         g[i, y, w, t] * generators.loc[(y, i), "co2_emissions"]
+    #         for i in G
+    #         for y in Y
+    #         for w in W
+    #         for t in T
+    #     )
+    #     <= E_limit
+    # )
+
+    # 6a. Battery charging limits, old batteries
+    for s in S_old:
+        for y in Y:
+            for w in W:
+                for t in T:
+                    model.addConstr(
+                        g_ch[s, y, w, t] >= batteries.loc[(y, s), "P_charge_min"]
+                    )
+                    model.addConstr(
+                        g_ch[s, y, w, t] <= batteries.loc[(y, s), "P_charge_max"]
+                    )
+
+    # 6b. Battery charging limits, new batteries
+    for s in S_new:
+        for y in Y:
+            for w in W:
+                for t in T:
+                    model.addConstr(
+                        g_ch[s, y, w, t]
+                        <= soc_s_cum_max[s, y]
+                        / (
+                            batteries.loc[(y, s), "hour_capacity"]
+                            * batteries.loc[(y, s), "cdrate"]
+                        )
+                    )
+
+    # 7a. Battery discharging limits, old batteries
+    for s in S_old:
+        for y in Y:
+            for w in W:
+                for t in T:
+                    model.addConstr(
+                        g_dis[s, y, w, t] >= batteries.loc[(y, s), "P_discharge_min"]
+                    )
+                    model.addConstr(
+                        g_dis[s, y, w, t] <= batteries.loc[(y, s), "P_discharge_max"]
+                    )
+
+    # 7b. Battery discharging limits, new batteries
+    for s in S_new:
+        for y in Y:
+            for w in W:
+                for t in T:
+                    model.addConstr(
+                        g_dis[s, y, w, t]
+                        <= soc_s_cum_max[s, y] / batteries.loc[(y, s), "hour_capacity"]
+                    )
+
+    # 8. State of charge limits
+    for s in S:
+        for y in Y:
+            for w in W:
+                for t in T:
+                    model.addConstr(
+                        soc[s, y, w, t]
+                        >= batteries.loc[(y, s), "SOC_min"] * soc_s_max[s, y]
+                    )
+                    model.addConstr(
+                        soc[s, y, w, t]
+                        <= batteries.loc[(y, s), "SOC_max"] * soc_s_max[s, y]
+                    )
+
+    # 9. Battery state of charge dynamics
+    for s in S:
+        for y in Y:
+            for w in W:
+                for t in T[1:]:  # Exclude time t=0
+                    model.addConstr(
+                        soc[s, y, w, t]
+                        == soc[s, y, w, t - 1]
+                        + batteries.loc[(y, s), "eta_charge"] * g_ch[s, y, w, t]
+                        - g_dis[s, y, w, t] / batteries.loc[(y, s), "eta_discharge"]
+                    )
+
+    # 10a. Initial and final state of charge constraints
+    for s in S:
+        for y in Y:
+            for w in W:
+                model.addConstr(
+                    soc[s, y, w, T[0]]
+                    == batteries.loc[(y, s), "SOC_min"] * soc_s_max[s, y]
+                )
+                model.addConstr(
+                    soc[s, y, w, T[-1]]
+                    == batteries.loc[(y, s), "SOC_min"] * soc_s_max[s, y]
+                )
+
+    # Optimize the model
+    model.setParam("MIPGap", MIPGap)
+    model.setParam("BarConvTol", MIPGap)
+    model.setParam("BarHomogeneous", 1)
+
+    build_end_time = time()
+
+    print(f"Model built in {build_end_time - build_start_time} seconds.")
+    model_optimize_start_time = time()
+    model.optimize()
+    model_optimize_end_time = time()
+    # endregion
+
+    # region Post-processing and saving results
+    save_folder = config.get("save_folder", "")
+    decision_variables_folder = os.path.join(save_folder, "decision_variables")
+    os.makedirs(decision_variables_folder, exist_ok=True)
+
+    # Save generation
+    generation_data = [
+        (y, w, t, i, g[i, y, w, t].X) for i in G for y in Y for w in W for t in T
+    ]
+    generation_df = pd.DataFrame(
+        generation_data, columns=["year", "week", "hour", "generator", "value"]
+    )
+    generation_df.to_csv(
+        os.path.join(decision_variables_folder, "generation.csv"), index=False
+    )
+
+    # Save power flow
+    power_flow_data = [
+        (y, w, t, b, f[b, y, w, t].X) for b in B for y in Y for w in W for t in T
+    ]
+    power_flow_df = pd.DataFrame(
+        power_flow_data, columns=["year", "week", "hour", "branch", "value"]
+    )
+    power_flow_df.to_csv(
+        os.path.join(decision_variables_folder, "power_flow.csv"), index=False
+    )
+
+    # Save load shedding
+    load_shedding_data = [
+        (y, w, t, n, sh[n, y, w, t].X) for n in N for y in Y for w in W for t in T
+    ]
+    load_shedding_df = pd.DataFrame(
+        load_shedding_data, columns=["year", "week", "hour", "node", "value"]
+    )
+    load_shedding_df.to_csv(
+        os.path.join(decision_variables_folder, "load_shedding.csv"), index=False
+    )
+
+    # Save curtailment
+    curtailment_data = [
+        (y, w, t, i, c[i, y, w, t].X) for i in G for y in Y for w in W for t in T
+    ]
+    curtailment_df = pd.DataFrame(
+        curtailment_data, columns=["year", "week", "hour", "generator", "value"]
+    )
+    curtailment_df.to_csv(
+        os.path.join(decision_variables_folder, "curtailment.csv"), index=False
+    )
+
+    # Save battery charging
+    battery_charging_data = [
+        (y, w, t, s, g_ch[s, y, w, t].X) for s in S for y in Y for w in W for t in T
+    ]
+    battery_charging_df = pd.DataFrame(
+        battery_charging_data, columns=["year", "week", "hour", "battery", "value"]
+    )
+    battery_charging_df.to_csv(
+        os.path.join(decision_variables_folder, "battery_charging.csv"), index=False
+    )
+
+    # Save battery discharging
+    battery_discharging_data = [
+        (y, w, t, s, g_dis[s, y, w, t].X) for s in S for y in Y for w in W for t in T
+    ]
+    battery_discharging_df = pd.DataFrame(
+        battery_discharging_data, columns=["year", "week", "hour", "battery", "value"]
+    )
+    battery_discharging_df.to_csv(
+        os.path.join(decision_variables_folder, "battery_discharging.csv"), index=False
+    )
+
+    # Save battery state of charge
+    battery_soc_data = [
+        (y, w, t, s, soc[s, y, w, t].X) for s in S for y in Y for w in W for t in T
+    ]
+    battery_soc_df = pd.DataFrame(
+        battery_soc_data, columns=["year", "week", "hour", "battery", "value"]
+    )
+    battery_soc_df.to_csv(
+        os.path.join(decision_variables_folder, "battery_soc.csv"), index=False
+    )
+
+    # Save battery build
+    battery_capacity_data = [(y, s, soc_s_max[s, y].X) for s in S_new for y in Y]
+    battery_capacity_df = pd.DataFrame(
+        battery_capacity_data, columns=["year", "battery", "value"]
+    )
+    battery_capacity_df.to_csv(
+        os.path.join(decision_variables_folder, "battery_capacity.csv"), index=False
+    )
+
+    # Save generator capacities
+    generator_capacity_data = [(y, i, p_i_max[i, y].X) for i in G_new for y in Y]
+    generator_capacity_df = pd.DataFrame(
+        generator_capacity_data, columns=["year", "generator", "value"]
+    )
+    generator_capacity_df.to_csv(
+        os.path.join(decision_variables_folder, "generator_capacity.csv"), index=False
+    )
+
+    # Save branch capacities
+    branch_capacity_data = [(y, b, p_b_max[b, y].X) for b in B_new for y in Y]
+    branch_capacity_df = pd.DataFrame(
+        branch_capacity_data, columns=["year", "branch", "value"]
+    )
+    branch_capacity_df.to_csv(
+        os.path.join(decision_variables_folder, "branch_capacity.csv"), index=False
+    )
+
+    # endregion
+
+    return (
+        model,
+        build_end_time - build_start_time,
+        model_optimize_end_time - model_optimize_start_time,
+    )
+
+
 # region GTSEP_v2
 def GTSEP_v2(config: dict) -> gp.Model:
     """GTSEP model from the specialization project. Modeling battery investments as continous variables."""
@@ -1869,7 +2445,7 @@ def GTSEP_v2(config: dict) -> gp.Model:
 # endregion
 
 
-# region GTSEP_v1
+# region GTSEP_v3
 def GTSEP_v3(config: dict) -> gp.Model:
     """GTSEP model from the specialization project. Modeling battery investments as continous variables (unconstrained investments in batteries)."""
     # region Model setup and running
@@ -2260,6 +2836,7 @@ MODEL_REGISTRY = {
     "GTSEP_v2": GTSEP_v2,
     "GTSEP_v3": GTSEP_v3,
     "GTSEP_v1_multi": GTSEP_v1_multi,
+    "GTSEP_v1a_multi": GTSEP_v1a_multi,
 }
 
 

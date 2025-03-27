@@ -23,6 +23,7 @@ def save_model(model, model_config):
     model.write(solution_save_path)
     with open(config_dump_save_path, "w") as file:
         yaml.dump(model_config, file)
+    print(f"Model saved to: {save_folder}")
 
 
 def run(
@@ -93,7 +94,6 @@ def run(
     # Save model
     save_model(model, model_config)
 
-    print("Model saved")
     if not no_run_analysis:
         analyze_run(model_config)
 

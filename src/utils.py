@@ -225,5 +225,95 @@ def load_multi_year_csv_files_from_folder(
     return data
 
 
+def load_multi_year_csv_files_with_week_from_folder(
+    years: list[int], weeks, data_folder_path: str
+) -> dict[str, pd.DataFrame]:
+    """temporary quick fix for multi-year data loading. I use the same data as for a single year, but I just post-process the dataframes to be in a multi-year format. All data is the same accross all years, so results are relatively meaningless."""
+    if not os.path.exists(data_folder_path):
+        raise FileNotFoundError(
+            f"{data_folder_path} not found (should be the path to a folder containing processed data in csv files)"
+        )
+    data = {}
+    for file in os.listdir(data_folder_path):
+        if file.endswith(".csv"):
+            file_path = os.path.join(data_folder_path, file)
+            file_name = file.split(".")[0]
+            if file_name in ["hourly_demand", "capacity_factors"]:
+                df = pd.read_csv(file_path, index_col=0, parse_dates=True)
+                df["week"] = df.index.isocalendar().week
+                df["month"] = df.index.month
+                df["hour"] = df.index.hour
+                hours = df["hour"].unique()
+            else:
+                df = pd.read_csv(file_path, index_col=0)
+            new_dfs = []
+            demand_multiplier = 1
+            if file_name == "nodes":
+                data[file_name] = df
+                continue
+            for year in years:
+                temp_df = df.copy()
+                if file_name == "hourly_demand":
+                    temp_df = temp_df * demand_multiplier
+                    demand_multiplier += 1
+                if file_name in ["hourly_demand", "capacity_factors"]:
+                    iso_info = temp_df.index.to_series().dt.isocalendar()
+                    temp_df["hour_in_week"] = temp_df.groupby(
+                        [temp_df.index.year, iso_info.week]
+                    ).cumcount()
+                    temp_df.index = pd.MultiIndex.from_arrays(
+                        [
+                            df.index.year * 0 + year,
+                            df.index.isocalendar().week,
+                            temp_df["hour_in_week"],
+                        ],
+                        names=["year", "week", "hour"],
+                    )
+                    temp_df.drop(columns="hour_in_week", inplace=True)
+                else:
+                    temp_df.index = pd.MultiIndex.from_product(
+                        [[year], temp_df.index], names=["year", temp_df.index.name]
+                    )
+                new_dfs.append(temp_df)
+            data[file_name] = pd.concat(new_dfs)
+    return data
+
+
+def subset_by_weeks(df, year, weeks):
+    """
+    Returns a subset of the dataframe for specific ISO weeks of a given year.
+
+    Args:
+        df (pd.DataFrame): DataFrame with a DateTimeIndex.
+        year (int): The year to filter by.
+        weeks (list or set): A collection of ISO week numbers to include.
+
+    Returns:
+        pd.DataFrame: DataFrame subset for the specified weeks.
+    """
+    # Create a mask that filters by year and if the week number is in the provided weeks list
+    week_mask = (df.index.year == year) & (
+        df.index.to_series().dt.isocalendar().week.isin(weeks)
+    )
+    return df[week_mask]
+
+
+def subset_by_months(df, year, months):
+    """
+    Returns a subset of the dataframe for specific months of a given year.
+
+    Args:
+        df (pd.DataFrame): DataFrame with a DateTimeIndex.
+        year (int): The year to filter by.
+        months (list or set): A collection of month numbers (1-12) to include.
+
+    Returns:
+        pd.DataFrame: DataFrame subset for the specified months.
+    """
+    # Create a mask that filters by year and if the month is in the provided months list
+    month_mask = (df.index.year == year) & (df.index.month.isin(months))
+    return df[month_mask]
+
+
 if __name__ == "__main__":
     print(CONFIG_FOLDER)
