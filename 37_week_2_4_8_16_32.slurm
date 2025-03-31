@@ -1,6 +1,6 @@
 #!/bin/sh
 #SBATCH --account=share-iv-mtp       # E.g. "ie-idi" if you belong to IDI
-#SBATCH --job-name=37_2_4_8_16_32_monday"
+#SBATCH --job-name=37_2_4_8_16_32_monday
 #SBATCH --time=0-5:00:00         # format: D-HH:MM:SS
 
 #SBATCH --partition=CPUQ          # Asking for a GPU
