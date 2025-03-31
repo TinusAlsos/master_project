@@ -9,6 +9,7 @@ from src.utils import (
     load_multi_year_csv_files_with_week_from_folder,
 )
 import os
+TIMELIMIT = 60 * 60 * 6  # 6 hours
 
 PROCESSED_DATA_FOLDER = os.path.join(
     os.path.dirname(os.path.dirname(__file__)), "data", "processed"
@@ -367,6 +368,7 @@ def GTSEP_v0(config: dict) -> gp.Model:
 
     # Optimize the model
     model.setParam("MIPGap", MIPGap)
+    model.setParam("Timelimit", TIMELIMIT)
     model.setParam("BarConvTol", MIPGap)
 
     build_end_time = time()
@@ -770,6 +772,7 @@ def GTSEP_v1(config: dict) -> gp.Model:
 
     # Optimize the model
     model.setParam("MIPGap", MIPGap)
+    model.setParam("Timelimit", TIMELIMIT)
     model.setParam("BarConvTol", MIPGap)
 
     build_end_time = time()
@@ -1291,6 +1294,7 @@ def GTSEP_v1_multi(config: dict) -> gp.Model:
 
     # Optimize the model
     model.setParam("MIPGap", MIPGap)
+    model.setParam("Timelimit", TIMELIMIT)
     model.setParam("BarConvTol", MIPGap)
     model.setParam("BarHomogeneous", 1)
 
@@ -1887,6 +1891,7 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
 
     # Optimize the model
     model.setParam("MIPGap", MIPGap)
+    model.setParam("Timelimit", TIMELIMIT)
     model.setParam("BarConvTol", MIPGap)
     model.setParam("BarHomogeneous", 1)
 
@@ -2300,6 +2305,7 @@ def GTSEP_v2(config: dict) -> gp.Model:
 
     # Optimize the model
     model.setParam("MIPGap", MIPGap)
+    model.setParam("Timelimit", TIMELIMIT)
     model.setParam("BarConvTol", MIPGap)
 
     build_end_time = time()
@@ -2704,6 +2710,7 @@ def GTSEP_v3(config: dict) -> gp.Model:
 
     # Optimize the model
     model.setParam("MIPGap", MIPGap)
+    model.setParam("Timelimit", TIMELIMIT)
     model.setParam("BarConvTol", MIPGap)
 
     build_end_time = time()

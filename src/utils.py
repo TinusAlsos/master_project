@@ -1,6 +1,7 @@
 """
 This module contains utility functions that are used in the project."""
 
+import copy
 import os
 from typing import Any
 import yaml
@@ -150,6 +151,54 @@ def load_battery_config_by_name(path_or_name: str = "") -> dict:
         config_path = os.path.join(BATTERY_CONFIG_FOLDER, path_or_name)
 
     return load_config(config_path)
+
+
+import os
+import yaml
+import copy
+
+
+def copy_and_modify_config(
+    config_name_or_path, overwrite_dict, new_filename=None, suffix="_modified"
+):
+    # Handle full path or construct from name
+    if os.path.exists(config_name_or_path):
+        config_path = config_name_or_path
+    else:
+        if not config_name_or_path.startswith("config"):
+            config_name_or_path = f"config_{config_name_or_path}"
+        if not config_name_or_path.endswith(".yaml"):
+            config_name_or_path += ".yaml"
+        config_path = os.path.join(MODELS_CONFIG_FOLDER, config_name_or_path)
+
+    assert os.path.exists(config_path), f"Config file not found at: {config_path}"
+
+    # Load the original config
+    with open(config_path, "r") as f:
+        config = yaml.safe_load(f)
+
+    # Apply overwrites
+    new_config = copy.deepcopy(config)
+    for key, value in overwrite_dict.items():
+        new_config[key] = value
+
+    # Determine output path
+    config_dir = os.path.dirname(config_path)
+    config_base = os.path.basename(config_path)
+    config_stem, config_ext = os.path.splitext(config_base)
+
+    if new_filename:
+        new_path = os.path.join(config_dir, new_filename)
+    else:
+        new_filename = f"{config_stem}{suffix}{config_ext}"
+        new_path = os.path.join(config_dir, new_filename)
+
+    # Save new config
+    with open(new_path, "w") as f:
+        yaml.dump(new_config, f, sort_keys=False)
+
+    print(f"New config saved to: {new_path}")
+    return new_path
 
 
 def load_csv_files_from_folder(data_folder_path: str) -> dict[str, pd.DataFrame]:
