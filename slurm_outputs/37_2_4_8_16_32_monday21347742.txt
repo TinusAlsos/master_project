@@ -4,3 +4,7 @@ ID of job: 21347742
 The job was run on these nodes: idun-04-05
 Job finished at Mon 31 Mar 13:55:58 CEST 2025
 Pushing to git
+[main 8ebd6ef] results from 37_2_4_8_16_32_monday
+ 2 files changed, 12 insertions(+)
+ create mode 100644 slurm_outputs/37_2_4_8_16_32_monday21347742.err
+ create mode 100644 slurm_outputs/37_2_4_8_16_32_monday21347742.txt
