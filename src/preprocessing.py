@@ -364,6 +364,14 @@ def run_preprocessing(config: dict | str = "") -> None:
     data["lines"]["loss_factor"] = (
         max_loss * data["lines"]["length"] / data["lines"]["length"].max()
     )
+    # Make generators and lines suitable for expansion
+    data["generators"]["extendable"] = True
+    data["lines"]["extendable"] = True
+    data["generators"]["extension_potential"] = 0.0
+    data["lines"]["extension_potential"] = 0.0
+    data["generators"]["extended_by"] = 0.0
+    data["lines"]["extended_by"] = 0.0
+
     for name, df in data.items():
         if name in config["components"] or not config["components"]:
             df = df.rename_axis(df.index.name.lower())
