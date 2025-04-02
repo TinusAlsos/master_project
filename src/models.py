@@ -50,9 +50,9 @@ def _create_mappings(
     """
     if "year" in batteries.index.names:
         y0 = branches.index.unique(level="year")[0]
-        branches = branches.loc[y0,]
-        generators = generators.loc[y0,]
-        batteries = batteries.loc[y0,]
+        branches = branches.loc[y0, :]
+        generators = generators.loc[y0, :]
+        batteries = batteries.loc[y0, :]
 
     N = nodes.index.to_list()
     B = branches.index.to_list()
@@ -1446,9 +1446,6 @@ def GTSEP_v1_multi(config: dict) -> gp.Model:
 # endregion
 
 
-# region GTSEP_v1_multi
-
-
 def GTSEP_v1a_multi(config: dict) -> gp.Model:
     """GTSEP_v1 model but with multiple time periods considered. Uses clustering"""
     # region Model setup and running
@@ -1511,82 +1508,59 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
     hourly_demand = input_data["hourly_demand"]
     nodes = input_data["nodes"]
 
-    # Data processing
-    # Create new branches
-    # Add a new column 'exists' to the original branches dataframe and set it to 1
-    branches["exists"] = 1
-    # Create a copy of the dataframe for the "new" branches
-    branches_new = branches.copy()
-    # Update the index by appending " new" to the original index
-    branches_new.index = branches_new.index.set_levels(
-        branches_new.index.levels[1].astype(str) + " new", level="line"
+    # Set extenstion potential for branches and generators
+    branches["extension_potential"] = (
+        branches["p_max"] * branches["extendable"] * expansion_factor
     )
-    # Set the 'exists' column to 0 for the new branches
-    branches_new["exists"] = 0
-    # Concatenate the original dataframe and the new dataframe
-    branches = pd.concat([branches, branches_new])
-    # Add a new column 'exists' to the original dataframe and set it to 1
-    generators["exists"] = 1
-    # Create a copy of the dataframe for the "new" generators
-    generators_new = generators.copy()
-    # Update the index by appending " new" to the original index
-    generators_new.index = generators_new.index.set_levels(
-        generators_new.index.levels[1].astype(str) + " new", level="generator"
+    generators["extension_potential"] = (
+        generators["p_nom"] * generators["extendable"] * expansion_factor
     )
-    # Set the 'exists' column to 0 for the new generators
-    generators_new["exists"] = 0
-    # Concatenate the original dataframe and the new dataframe
-    generators = pd.concat([generators, generators_new])
-    batteries["exists"] = 0
+
+    print(f"Generators:\n{generators}")
+    print(f"Branches:\n{branches}")
 
     # Create sets
     N = nodes.index.to_list()
     G_old = (
-        generators[generators["exists"] == 1]
+        generators[generators["extendable"] == False]
         .index.get_level_values("generator")
         .unique()
-        .to_list()
+        .tolist()
     )
     G_new = (
-        generators[generators["exists"] == 0]
+        generators[generators["extendable"] == True]
         .index.get_level_values("generator")
         .unique()
-        .to_list()
+        .tolist()
     )
-    G = generators.index.get_level_values("generator").unique().to_list()
+    G = generators.index.get_level_values("generator").unique().tolist()
+
     B_old = (
-        branches[branches["exists"] == 1]
+        branches[branches["extendable"] == False]
         .index.get_level_values("line")
         .unique()
-        .to_list()
+        .tolist()
     )
     B_new = (
-        branches[branches["exists"] == 0]
+        branches[branches["extendable"] == True]
         .index.get_level_values("line")
         .unique()
-        .to_list()
+        .tolist()
     )
-    B = branches.index.get_level_values("line").unique().to_list()
-    S_new = (
-        batteries[batteries["exists"] == 0]
-        .index.get_level_values("battery")
-        .unique()
-        .to_list()
-    )
-    S_old = (
-        batteries[batteries["exists"] == 1]
-        .index.get_level_values("battery")
-        .unique()
-        .to_list()
-    )
-    S = batteries.index.get_level_values("battery").unique().to_list()
-    Y = hourly_demand.index.get_level_values("year").unique().to_list()
+    B = branches.index.get_level_values("line").unique().tolist()
+
+    S = batteries.index.get_level_values("battery").unique().tolist()
+    S_new = S  # Assuming all batteries are new investments
+    S_old = []  # Assuming no old batteries
+
+    N = nodes.index.tolist()
+    Y = hourly_demand.index.get_level_values("year").unique().tolist()
     W = weeks
     T = (
         hourly_demand[hourly_demand.index.get_level_values("week").isin(weeks)]
         .index.get_level_values("hour")
         .unique()
-        .to_list()
+        .tolist()
     )
 
     if not all(
@@ -1752,14 +1726,12 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
                     model.addConstr(g[i, y, w, t] <= p_max * capacity_factor)
 
     # 3b. Generator output limits (new generators)
+    # New generators (simplified, no special parsing)
     for i in G_new:
         for y in Y:
-            original_generator_id = " ".join(i.split(" ")[:-1])
             for w in W:
                 for t in T:
-                    capacity_factor = capacity_factors.loc[
-                        (y, w, t), original_generator_id
-                    ]
+                    capacity_factor = capacity_factors.loc[(y, w, t), i]
                     model.addConstr(
                         g[i, y, w, t] <= capacity_factor * p_i_cum_max[i, y]
                     )
@@ -1767,8 +1739,8 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
     # 3c. New generator capacity limits
     for i in G_new:
         for y in Y:
-            p_max = generators.loc[(y, i), "p_nom"]
-            model.addConstr(p_i_max[i, y] <= expansion_factor * p_max)
+            extension_limit = generators.loc[(y, i), "extension_potential"]
+            model.addConstr(p_i_max[i, y] <= extension_limit)
 
     # 4a. Branch flow limits (old branches)
     for b in B_old:
@@ -1789,7 +1761,8 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
     # 4c. New branch capacity limits
     for b in B_new:
         for y in Y:
-            model.addConstr(p_b_max[b, y] <= p_max_new_branch)
+            extension_limit = branches.loc[(y, b), "extension_potential"]
+            model.addConstr(p_b_max[b, y] <= extension_limit)
 
     # # 5. Emission restrictions
     # model.addConstr(
