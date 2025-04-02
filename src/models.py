@@ -9,6 +9,7 @@ from src.utils import (
     load_multi_year_csv_files_with_week_from_folder,
 )
 import os
+
 TIMELIMIT = 60 * 60 * 6  # 6 hours
 
 PROCESSED_DATA_FOLDER = os.path.join(
@@ -1129,7 +1130,7 @@ def GTSEP_v1_multi(config: dict) -> gp.Model:
                 batteries.loc[(y, s), "capital_cost"] * soc_s_max[s, y] for s in S_new
             )
         )
-        objective += 1 / ((1 + r) ** (y - Y[0])) * (OC + AIC)
+        objective += OC + AIC
     objective = objective / len(Y)
     model.setObjective(objective, GRB.MINIMIZE)
 
@@ -1696,7 +1697,7 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
                 batteries.loc[(y, s), "capital_cost"] * soc_s_max[s, y] for s in S_new
             )
         )
-        objective += (1 / ((1 + r) ** (y - Y[0]))) * (OC + AIC)
+        objective += OC + AIC
 
     objective = objective / len(Y)
     model.setObjective(objective, GRB.MINIMIZE)
