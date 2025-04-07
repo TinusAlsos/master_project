@@ -1509,9 +1509,7 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
     nodes = input_data["nodes"]
 
     # Set extenstion potential for branches and generators
-    branches["extension_potential"] = (
-        branches["p_max"] * branches["extendable"] * expansion_factor
-    )
+    branches["extension_potential"] = p_max_new_branch * branches["extendable"]
     generators["extension_potential"] = (
         generators["p_nom"] * generators["extendable"] * expansion_factor
     )
