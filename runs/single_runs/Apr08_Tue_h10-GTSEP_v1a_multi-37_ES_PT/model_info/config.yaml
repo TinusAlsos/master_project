@@ -22,8 +22,8 @@ representative_period_unit: week
 representative_periods:
 - 21
 - 42
-run_id: Apr02_Wed_h14-GTSEP_v1a_multi-37_ES_PT
-save_folder: C:\Users\tinus\OneDrive\Dokumenter\0 Master\code\master_project\runs\single_runs\Apr02_Wed_h14-GTSEP_v1a_multi-37_ES_PT
+run_id: Apr08_Tue_h10-GTSEP_v1a_multi-37_ES_PT
+save_folder: C:\Users\tinus\OneDrive\Dokumenter\0 Master\code\master_project\runs\single_runs\Apr08_Tue_h10-GTSEP_v1a_multi-37_ES_PT
 years:
 - 2025
 - 2035

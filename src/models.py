@@ -1519,12 +1519,6 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
 
     # Create sets
     N = nodes.index.to_list()
-    G_old = (
-        generators[generators["extendable"] == False]
-        .index.get_level_values("generator")
-        .unique()
-        .tolist()
-    )
     G_new = (
         generators[generators["extendable"] == True]
         .index.get_level_values("generator")
@@ -1532,13 +1526,8 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
         .tolist()
     )
     G = generators.index.get_level_values("generator").unique().tolist()
+    G_old = G
 
-    B_old = (
-        branches[branches["extendable"] == False]
-        .index.get_level_values("line")
-        .unique()
-        .tolist()
-    )
     B_new = (
         branches[branches["extendable"] == True]
         .index.get_level_values("line")
@@ -1546,6 +1535,7 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
         .tolist()
     )
     B = branches.index.get_level_values("line").unique().tolist()
+    B_old = B
 
     S = batteries.index.get_level_values("battery").unique().tolist()
     S_new = S  # Assuming all batteries are new investments
@@ -1560,6 +1550,18 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
         .unique()
         .tolist()
     )
+
+    # Print all indexes
+    print(f"Nodes: {N}")
+    print(f"Generators: {G}")
+    print(f"Generators (old): {G_old}")
+    print(f"Generators (new): {G_new}")
+    print(f"Branches: {B}")
+    print(f"Branches (old): {B_old}")
+    print(f"Branches (new): {B_new}")
+    print(f"Batteries: {S}")
+    print(f"Batteries (old): {S_old}")
+    print(f"Batteries (new): {S_new}")
 
     if not all(
         len(T)
@@ -1597,6 +1599,11 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
     f = model.addVars(
         B, Y, W, T, name="f", lb=-GRB.INFINITY, ub=GRB.INFINITY
     )  # Power flow
+    # Dispatch from capacity extensions
+    g_new = model.addVars(G_new, Y, W, T, name="g_new", lb=0)
+    f_new = model.addVars(
+        B_new, Y, W, T, name="f_new", lb=-GRB.INFINITY, ub=GRB.INFINITY
+    )
     sh = model.addVars(N, Y, W, T, name="sh", lb=0)  # Load shedding
     c = model.addVars(G, Y, W, T, name="c", lb=0)  # Curtailment
     g_ch = model.addVars(S, Y, W, T, name="g_ch", lb=0)  # Battery charging
@@ -1649,7 +1656,7 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
                         generators.loc[(y, i), "marginal_cost"]
                         + generators.loc[(y, i), "co2_emissions"] * CO2_price
                     )
-                    * g[i, y, w, t]
+                    * (g[i, y, w, t] + (g_new[i, y, w, t] if i in G_new else 0))
                     for i in G
                     for t in T
                 )
@@ -1682,13 +1689,20 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
                 for t in T:
                     model.addConstr(
                         gp.quicksum(
-                            g[i, y, w, t] - c[i, y, w, t] for i in generators_at_node[n]
+                            g[i, y, w, t]
+                            - c[i, y, w, t]
+                            + (g_new[i, y, w, t] if i in G_new else 0)
+                            for i in generators_at_node[n]
                         )
                         + gp.quicksum(
-                            f[b, y, w, t] * (1 - branches.loc[(y, b), "loss_factor"])
+                            (f[b, y, w, t] + (f_new[b, y, w, t] if b in B_new else 0))
+                            * (1 - branches.loc[(y, b), "loss_factor"])
                             for b in branches_into_node[n]
                         )
-                        - gp.quicksum(f[b, y, w, t] for b in branches_out_of_node[n])
+                        - gp.quicksum(
+                            f[b, y, w, t] + (f_new[b, y, w, t] if b in B_new else 0)
+                            for b in branches_out_of_node[n]
+                        )
                         - gp.quicksum(
                             g_ch[s, y, w, t]
                             - batteries.loc[(y, s), "eta_discharge"] * g_dis[s, y, w, t]
@@ -1731,7 +1745,7 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
                 for t in T:
                     capacity_factor = capacity_factors.loc[(y, w, t), i]
                     model.addConstr(
-                        g[i, y, w, t] <= capacity_factor * p_i_cum_max[i, y]
+                        g_new[i, y, w, t] <= capacity_factor * p_i_cum_max[i, y]
                     )
 
     # 3c. New generator capacity limits
@@ -1753,8 +1767,8 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
         for y in Y:
             for w in W:
                 for t in T:
-                    model.addConstr(f[b, y, w, t] >= -p_b_cum_max[b, y])
-                    model.addConstr(f[b, y, w, t] <= p_b_cum_max[b, y])
+                    model.addConstr(f_new[b, y, w, t] >= -p_b_cum_max[b, y])
+                    model.addConstr(f_new[b, y, w, t] <= p_b_cum_max[b, y])
 
     # 4c. New branch capacity limits
     for b in B_new:
@@ -1882,8 +1896,13 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
 
     # Save generation
     generation_data = [
-        (y, w, t, i, g[i, y, w, t].X) for i in G for y in Y for w in W for t in T
+        (y, w, t, i, g[i, y, w, t].X + (g_new[i, y, w, t].X if i in G_new else 0))
+        for i in G
+        for y in Y
+        for w in W
+        for t in T
     ]
+
     generation_df = pd.DataFrame(
         generation_data, columns=["year", "week", "hour", "generator", "value"]
     )
@@ -1893,8 +1912,13 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
 
     # Save power flow
     power_flow_data = [
-        (y, w, t, b, f[b, y, w, t].X) for b in B for y in Y for w in W for t in T
+        (y, w, t, b, f[b, y, w, t].X + (f_new[b, y, w, t].X if b in B_new else 0))
+        for b in B
+        for y in Y
+        for w in W
+        for t in T
     ]
+
     power_flow_df = pd.DataFrame(
         power_flow_data, columns=["year", "week", "hour", "branch", "value"]
     )
