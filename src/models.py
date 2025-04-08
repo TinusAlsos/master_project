@@ -1506,6 +1506,7 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
     generators = input_data["generators"]
     generator_costs = input_data["generator_costs"]
     hourly_demand = input_data["hourly_demand"]
+    print(hourly_demand.head())
     nodes = input_data["nodes"]
 
     # Set extenstion potential for branches and generators
@@ -1513,9 +1514,6 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
     generators["extension_potential"] = (
         generators["p_nom"] * generators["extendable"] * expansion_factor
     )
-
-    print(f"Generators:\n{generators}")
-    print(f"Branches:\n{branches}")
 
     # Create sets
     N = nodes.index.to_list()
@@ -1550,18 +1548,6 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
         .unique()
         .tolist()
     )
-
-    # Print all indexes
-    print(f"Nodes: {N}")
-    print(f"Generators: {G}")
-    print(f"Generators (old): {G_old}")
-    print(f"Generators (new): {G_new}")
-    print(f"Branches: {B}")
-    print(f"Branches (old): {B_old}")
-    print(f"Branches (new): {B_new}")
-    print(f"Batteries: {S}")
-    print(f"Batteries (old): {S_old}")
-    print(f"Batteries (new): {S_new}")
 
     if not all(
         len(T)
@@ -1681,7 +1667,6 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
     objective = objective / len(Y)
     model.setObjective(objective, GRB.MINIMIZE)
 
-    # Constraints
     # 1. Power balance
     for n in N:
         for y in Y:
@@ -1709,7 +1694,8 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
                             for s in batteries_at_node[n]
                         )
                         + sh[n, y, w, t]
-                        == hourly_demand.loc[(y, w, t), n]
+                        == hourly_demand.loc[(y, w, t), n],
+                        name=f"C_power_balance[{n},{y},{w},{t}]",
                     )
 
     # 2a. Load shedding limits
@@ -1718,7 +1704,8 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
             for w in W:
                 for t in T:
                     model.addConstr(
-                        sh[n, y, w, t] <= MS * hourly_demand.loc[(y, w, t), n]
+                        sh[n, y, w, t] <= MS * hourly_demand.loc[(y, w, t), n],
+                        name=f"C_load_shedding_limit[{n},{y},{w},{t}]",
                     )
 
     # 2b. Curtailment limits
@@ -1726,67 +1713,91 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
         for y in Y:
             for w in W:
                 for t in T:
-                    model.addConstr(c[i, y, w, t] <= g[i, y, w, t])
+                    model.addConstr(
+                        c[i, y, w, t] <= g[i, y, w, t],
+                        name=f"C_curtailment_limit[{i},{y},{w},{t}]",
+                    )
 
-    # 3a. Generator output limits (old generators)
+    # 3a. Generator output limits (old)
     for i in G_old:
         for y in Y:
             p_max = generators.loc[(y, i), "p_nom"]
             for w in W:
                 for t in T:
                     capacity_factor = capacity_factors.loc[(y, w, t), i]
-                    model.addConstr(g[i, y, w, t] <= p_max * capacity_factor)
+                    model.addConstr(
+                        g[i, y, w, t] <= p_max * capacity_factor,
+                        name=f"C_gen_output_old[{i},{y},{w},{t}]",
+                    )
 
-    # 3b. Generator output limits (new generators)
-    # New generators (simplified, no special parsing)
+    # 3b. Generator output limits (new)
     for i in G_new:
         for y in Y:
             for w in W:
                 for t in T:
                     capacity_factor = capacity_factors.loc[(y, w, t), i]
                     model.addConstr(
-                        g_new[i, y, w, t] <= capacity_factor * p_i_cum_max[i, y]
+                        g_new[i, y, w, t] <= capacity_factor * p_i_cum_max[i, y],
+                        name=f"C_gen_output_new[{i},{y},{w},{t}]",
                     )
 
-    # 3c. New generator capacity limits
+    # 3c. Generator capacity extension limits
     for i in G_new:
         for y in Y:
             extension_limit = generators.loc[(y, i), "extension_potential"]
-            model.addConstr(p_i_max[i, y] <= extension_limit)
+            model.addConstr(
+                p_i_max[i, y] <= extension_limit, name=f"C_gen_extension_limit[{i},{y}]"
+            )
 
-    # 4a. Branch flow limits (old branches)
+    # 4a. Branch flow limits (old)
     for b in B_old:
         for y in Y:
             for w in W:
                 for t in T:
-                    model.addConstr(f[b, y, w, t] >= -branches.loc[(y, b), "p_max"])
-                    model.addConstr(f[b, y, w, t] <= branches.loc[(y, b), "p_max"])
+                    model.addConstr(
+                        f[b, y, w, t] >= -branches.loc[(y, b), "p_max"],
+                        name=f"C_branch_old_min[{b},{y},{w},{t}]",
+                    )
+                    model.addConstr(
+                        f[b, y, w, t] <= branches.loc[(y, b), "p_max"],
+                        name=f"C_branch_old_max[{b},{y},{w},{t}]",
+                    )
 
-    # 4b. Branch flow limits (new branches)
+    # 4b. Branch flow limits (new)
     for b in B_new:
         for y in Y:
             for w in W:
                 for t in T:
-                    model.addConstr(f_new[b, y, w, t] >= -p_b_cum_max[b, y])
-                    model.addConstr(f_new[b, y, w, t] <= p_b_cum_max[b, y])
+                    model.addConstr(
+                        f_new[b, y, w, t] >= -p_b_cum_max[b, y],
+                        name=f"C_branch_new_min[{b},{y},{w},{t}]",
+                    )
+                    model.addConstr(
+                        f_new[b, y, w, t] <= p_b_cum_max[b, y],
+                        name=f"C_branch_new_max[{b},{y},{w},{t}]",
+                    )
 
     # 4c. New branch capacity limits
     for b in B_new:
         for y in Y:
             extension_limit = branches.loc[(y, b), "extension_potential"]
-            model.addConstr(p_b_max[b, y] <= extension_limit)
+            model.addConstr(
+                p_b_max[b, y] <= extension_limit,
+                name=f"C_branch_extension_limit[{b},{y}]",
+            )
 
-    # # 5. Emission restrictions
-    # model.addConstr(
-    #     gp.quicksum(
-    #         g[i, y, w, t] * generators.loc[(y, i), "co2_emissions"]
-    #         for i in G
-    #         for y in Y
-    #         for w in W
-    #         for t in T
-    #     )
-    #     <= E_limit
-    # )
+    # 5. Emission restrictions
+    model.addConstr(
+        gp.quicksum(
+            g[i, y, w, t] * generators.loc[(y, i), "co2_emissions"]
+            for i in G
+            for y in Y
+            for w in W
+            for t in T
+        )
+        <= E_limit,
+        name="C_emission_limit",
+    )
 
     # 6a. Battery charging limits, old batteries
     for s in S_old:
@@ -1794,10 +1805,12 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
             for w in W:
                 for t in T:
                     model.addConstr(
-                        g_ch[s, y, w, t] >= batteries.loc[(y, s), "P_charge_min"]
+                        g_ch[s, y, w, t] >= batteries.loc[(y, s), "P_charge_min"],
+                        name=f"C_batt_charge_old_min[{s},{y},{w},{t}]",
                     )
                     model.addConstr(
-                        g_ch[s, y, w, t] <= batteries.loc[(y, s), "P_charge_max"]
+                        g_ch[s, y, w, t] <= batteries.loc[(y, s), "P_charge_max"],
+                        name=f"C_batt_charge_old_max[{s},{y},{w},{t}]",
                     )
 
     # 6b. Battery charging limits, new batteries
@@ -1811,7 +1824,8 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
                         / (
                             batteries.loc[(y, s), "hour_capacity"]
                             * batteries.loc[(y, s), "cdrate"]
-                        )
+                        ),
+                        name=f"C_batt_charge_new_max[{s},{y},{w},{t}]",
                     )
 
     # 7a. Battery discharging limits, old batteries
@@ -1820,10 +1834,12 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
             for w in W:
                 for t in T:
                     model.addConstr(
-                        g_dis[s, y, w, t] >= batteries.loc[(y, s), "P_discharge_min"]
+                        g_dis[s, y, w, t] >= batteries.loc[(y, s), "P_discharge_min"],
+                        name=f"C_batt_discharge_old_min[{s},{y},{w},{t}]",
                     )
                     model.addConstr(
-                        g_dis[s, y, w, t] <= batteries.loc[(y, s), "P_discharge_max"]
+                        g_dis[s, y, w, t] <= batteries.loc[(y, s), "P_discharge_max"],
+                        name=f"C_batt_discharge_old_max[{s},{y},{w},{t}]",
                     )
 
     # 7b. Battery discharging limits, new batteries
@@ -1833,7 +1849,8 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
                 for t in T:
                     model.addConstr(
                         g_dis[s, y, w, t]
-                        <= soc_s_cum_max[s, y] / batteries.loc[(y, s), "hour_capacity"]
+                        <= soc_s_cum_max[s, y] / batteries.loc[(y, s), "hour_capacity"],
+                        name=f"C_batt_discharge_new_max[{s},{y},{w},{t}]",
                     )
 
     # 8. State of charge limits
@@ -1843,11 +1860,13 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
                 for t in T:
                     model.addConstr(
                         soc[s, y, w, t]
-                        >= batteries.loc[(y, s), "SOC_min"] * soc_s_max[s, y]
+                        >= batteries.loc[(y, s), "SOC_min"] * soc_s_max[s, y],
+                        name=f"C_soc_min[{s},{y},{w},{t}]",
                     )
                     model.addConstr(
                         soc[s, y, w, t]
-                        <= batteries.loc[(y, s), "SOC_max"] * soc_s_max[s, y]
+                        <= batteries.loc[(y, s), "SOC_max"] * soc_s_max[s, y],
+                        name=f"C_soc_max[{s},{y},{w},{t}]",
                     )
 
     # 9. Battery state of charge dynamics
@@ -1859,20 +1878,23 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
                         soc[s, y, w, t]
                         == soc[s, y, w, t - 1]
                         + batteries.loc[(y, s), "eta_charge"] * g_ch[s, y, w, t]
-                        - g_dis[s, y, w, t] / batteries.loc[(y, s), "eta_discharge"]
+                        - g_dis[s, y, w, t] / batteries.loc[(y, s), "eta_discharge"],
+                        name=f"C_soc_dynamics[{s},{y},{w},{t}]",
                     )
 
-    # 10a. Initial and final state of charge constraints
+    # 10. Initial and final SOC
     for s in S:
         for y in Y:
             for w in W:
                 model.addConstr(
                     soc[s, y, w, T[0]]
-                    == batteries.loc[(y, s), "SOC_min"] * soc_s_max[s, y]
+                    == batteries.loc[(y, s), "SOC_min"] * soc_s_max[s, y],
+                    name=f"C_soc_init[{s},{y},{w}]",
                 )
                 model.addConstr(
                     soc[s, y, w, T[-1]]
-                    == batteries.loc[(y, s), "SOC_min"] * soc_s_max[s, y]
+                    == batteries.loc[(y, s), "SOC_min"] * soc_s_max[s, y],
+                    name=f"C_soc_final[{s},{y},{w}]",
                 )
 
     # Optimize the model
@@ -1880,6 +1902,7 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
     model.setParam("Timelimit", TIMELIMIT)
     model.setParam("BarConvTol", MIPGap)
     model.setParam("BarHomogeneous", 1)
+    # model.setParam("DualReductions", 1)
 
     build_end_time = time()
 
@@ -1893,6 +1916,8 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
     save_folder = config.get("save_folder", "")
     decision_variables_folder = os.path.join(save_folder, "decision_variables")
     os.makedirs(decision_variables_folder, exist_ok=True)
+    dual_variables_folder = os.path.join(save_folder, "dual_variables")
+    os.makedirs(dual_variables_folder, exist_ok=True)
 
     # Save generation
     generation_data = [
@@ -2007,6 +2032,90 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
     branch_capacity_df.to_csv(
         os.path.join(decision_variables_folder, "branch_capacity.csv"), index=False
     )
+
+    # Duals
+    # Save dual variables for constraints
+    # Save dual variables
+    # 1. Power balance duals (LMPs / shadow prices)
+    power_balance_duals = [
+        (y, w, t, n, model.getConstrByName(f"C_power_balance[{n},{y},{w},{t}]").Pi)
+        for n in N
+        for y in Y
+        for w in W
+        for t in T
+    ]
+    power_balance_duals_df = pd.DataFrame(
+        power_balance_duals, columns=["year", "week", "hour", "node", "dual_value"]
+    )
+    power_balance_duals_df.to_csv(
+        os.path.join(dual_variables_folder, "power_balance_duals.csv"), index=False
+    )
+
+    # 2. Load shedding limit duals
+    load_shedding_duals = [
+        (
+            y,
+            w,
+            t,
+            n,
+            model.getConstrByName(f"C_load_shedding_limit[{n},{y},{w},{t}]").Pi,
+        )
+        for n in N
+        for y in Y
+        for w in W
+        for t in T
+    ]
+    load_shedding_duals_df = pd.DataFrame(
+        load_shedding_duals, columns=["year", "week", "hour", "node", "dual_value"]
+    )
+    load_shedding_duals_df.to_csv(
+        os.path.join(dual_variables_folder, "load_shedding_duals.csv"), index=False
+    )
+
+    # 3. Generator output limits (old)
+    gen_old_output_duals = [
+        (y, w, t, i, model.getConstrByName(f"C_gen_output_old[{i},{y},{w},{t}]").Pi)
+        for i in G_old
+        for y in Y
+        for w in W
+        for t in T
+    ]
+    gen_old_output_duals_df = pd.DataFrame(
+        gen_old_output_duals,
+        columns=["year", "week", "hour", "generator", "dual_value"],
+    )
+    gen_old_output_duals_df.to_csv(
+        os.path.join(dual_variables_folder, "gen_output_old_duals.csv"), index=False
+    )
+
+    # 4. Generator output limits (new)
+    gen_new_output_duals = [
+        (y, w, t, i, model.getConstrByName(f"C_gen_output_new[{i},{y},{w},{t}]").Pi)
+        for i in G_new
+        for y in Y
+        for w in W
+        for t in T
+    ]
+    gen_new_output_duals_df = pd.DataFrame(
+        gen_new_output_duals,
+        columns=["year", "week", "hour", "generator", "dual_value"],
+    )
+    gen_new_output_duals_df.to_csv(
+        os.path.join(dual_variables_folder, "gen_output_new_duals.csv"), index=False
+    )
+
+    # 5. Emissions constraint dual (single value)
+    try:
+        emissions_dual = model.getConstrByName("C_emission_limit").Pi
+        emissions_dual_df = pd.DataFrame(
+            [("all", "all", "all", "total", emissions_dual)],
+            columns=["year", "week", "hour", "scope", "dual_value"],
+        )
+        emissions_dual_df.to_csv(
+            os.path.join(dual_variables_folder, "emissions_dual.csv"), index=False
+        )
+    except gp.GurobiError:
+        print("Warning: Emission limit constraint not active or missing.")
 
     # endregion
 
