@@ -1506,7 +1506,6 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
     generators = input_data["generators"]
     generator_costs = input_data["generator_costs"]
     hourly_demand = input_data["hourly_demand"]
-    print(hourly_demand.head())
     nodes = input_data["nodes"]
 
     # Set extenstion potential for branches and generators
@@ -2116,6 +2115,120 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
         )
     except gp.GurobiError:
         print("Warning: Emission limit constraint not active or missing.")
+
+    # 6a. Battery charging limits (old)
+    for bound in ["min", "max"]:
+        charging_duals = [
+            (
+                y,
+                w,
+                t,
+                s,
+                model.getConstrByName(f"C_batt_charge_old_{bound}[{s},{y},{w},{t}]").Pi,
+            )
+            for s in S_old
+            for y in Y
+            for w in W
+            for t in T
+        ]
+        df = pd.DataFrame(
+            charging_duals, columns=["year", "week", "hour", "battery", "dual_value"]
+        )
+        df.to_csv(
+            os.path.join(
+                dual_variables_folder, f"battery_charge_old_{bound}_duals.csv"
+            ),
+            index=False,
+        )
+
+    # 6b. Battery charging limits (new)
+    charging_new_duals = [
+        (
+            y,
+            w,
+            t,
+            s,
+            model.getConstrByName(f"C_batt_charge_new_max[{s},{y},{w},{t}]").Pi,
+        )
+        for s in S_new
+        for y in Y
+        for w in W
+        for t in T
+    ]
+    pd.DataFrame(
+        charging_new_duals, columns=["year", "week", "hour", "battery", "dual_value"]
+    ).to_csv(
+        os.path.join(dual_variables_folder, "battery_charge_new_max_duals.csv"),
+        index=False,
+    )
+
+    # 7a. Battery discharging limits (old)
+    for bound in ["min", "max"]:
+        discharging_duals = [
+            (
+                y,
+                w,
+                t,
+                s,
+                model.getConstrByName(
+                    f"C_batt_discharge_old_{bound}[{s},{y},{w},{t}]"
+                ).Pi,
+            )
+            for s in S_old
+            for y in Y
+            for w in W
+            for t in T
+        ]
+        df = pd.DataFrame(
+            discharging_duals, columns=["year", "week", "hour", "battery", "dual_value"]
+        )
+        df.to_csv(
+            os.path.join(
+                dual_variables_folder, f"battery_discharge_old_{bound}_duals.csv"
+            ),
+            index=False,
+        )
+
+    # 7b. Battery discharging limits (new)
+    discharging_new_duals = [
+        (
+            y,
+            w,
+            t,
+            s,
+            model.getConstrByName(f"C_batt_discharge_new_max[{s},{y},{w},{t}]").Pi,
+        )
+        for s in S_new
+        for y in Y
+        for w in W
+        for t in T
+    ]
+    pd.DataFrame(
+        discharging_new_duals, columns=["year", "week", "hour", "battery", "dual_value"]
+    ).to_csv(
+        os.path.join(dual_variables_folder, "battery_discharge_new_max_duals.csv"),
+        index=False,
+    )
+
+    # 3c. Generator extension limits
+    gen_ext_duals = [
+        (y, i, model.getConstrByName(f"C_gen_extension_limit[{i},{y}]").Pi)
+        for i in G_new
+        for y in Y
+    ]
+    pd.DataFrame(gen_ext_duals, columns=["year", "generator", "dual_value"]).to_csv(
+        os.path.join(dual_variables_folder, "gen_extension_duals.csv"), index=False
+    )
+
+    # 4c. Branch extension limits
+    branch_ext_duals = [
+        (y, b, model.getConstrByName(f"C_branch_extension_limit[{b},{y}]").Pi)
+        for b in B_new
+        for y in Y
+    ]
+    pd.DataFrame(branch_ext_duals, columns=["year", "branch", "dual_value"]).to_csv(
+        os.path.join(dual_variables_folder, "branch_extension_duals.csv"), index=False
+    )
 
     # endregion
 

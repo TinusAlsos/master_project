@@ -239,6 +239,45 @@ def load_csv_files_from_folder_multi(data_folder_path: str) -> dict[str, pd.Data
     return data
 
 
+def load_csv_files_from_folder_multi_weeks(
+    data_folder_path: str,
+) -> dict[str, pd.DataFrame]:
+    if not os.path.exists(data_folder_path):
+        raise FileNotFoundError(
+            f"{data_folder_path} not found (should be the path to a folder containing processed data in csv files)"
+        )
+
+    data = {}
+
+    for file in os.listdir(data_folder_path):
+        if not file.endswith(".csv"):
+            continue
+
+        file_path = os.path.join(data_folder_path, file)
+        file_name = file.split(".")[0]
+
+        df = pd.read_csv(file_path)
+
+        if file_name in [
+            "generator_capacity",
+            "battery_capacity",
+            "branch_capacity",
+            "branch_extension_duals",
+            "gen_extension_duals",
+        ]:
+            # Assume first column after 'year' is the ID (generator, battery, line, etc.)
+            index_cols = ["year", df.columns[1]]
+            df.set_index(index_cols, inplace=True)
+        else:
+            # Assume time-dependent dataframes have year, week, hour, and some index (node, generator, etc.)
+            index_cols = ["year", "week", "hour", df.columns[3]]
+            df.set_index(index_cols, inplace=True)
+
+        data[file_name] = df
+
+    return data
+
+
 def load_multi_year_csv_files_from_folder(
     years: list[int], data_folder_path: str
 ) -> dict[str, pd.DataFrame]:
@@ -319,6 +358,7 @@ def load_multi_year_csv_files_with_week_from_folder(
                         names=["year", "week", "hour"],
                     )
                     temp_df.drop(columns="hour_in_week", inplace=True)
+                    temp_df.drop(columns=["week", "month", "hour"], inplace=True)
                 else:
                     temp_df.index = pd.MultiIndex.from_product(
                         [[year], temp_df.index], names=["year", temp_df.index.name]
