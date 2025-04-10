@@ -1131,7 +1131,6 @@ def GTSEP_v1_multi(config: dict) -> gp.Model:
             )
         )
         objective += OC + AIC
-    objective = objective / len(Y)
     model.setObjective(objective, GRB.MINIMIZE)
 
     # Constraints
@@ -1663,7 +1662,6 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
         )
         objective += OC + AIC
 
-    objective = objective / len(Y)
     model.setObjective(objective, GRB.MINIMIZE)
 
     # 1. Power balance
