@@ -2125,6 +2125,56 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
         os.path.join(dual_variables_folder, "gen_output_new_duals.csv"), index=False
     )
 
+    # 6. Branch flow limit duals (old)
+    branch_old_duals = []
+    for b in B_old:
+        for y in Y:
+            for w in W:
+                for t in T:
+                    dual_min = (
+                        model.getConstrByName(f"C_branch_old_min[{b},{y},{w},{t}]").Pi
+                        / week_weights[w]
+                    )
+                    dual_max = (
+                        model.getConstrByName(f"C_branch_old_max[{b},{y},{w},{t}]").Pi
+                        / week_weights[w]
+                    )
+                    branch_old_duals.append((y, w, t, b, "min", dual_min))
+                    branch_old_duals.append((y, w, t, b, "max", dual_max))
+
+    branch_old_duals_df = pd.DataFrame(
+        branch_old_duals,
+        columns=["year", "week", "hour", "branch", "bound", "dual_value"],
+    )
+    branch_old_duals_df.to_csv(
+        os.path.join(dual_variables_folder, "branch_flow_old_duals.csv"), index=False
+    )
+
+    # 7. Branch flow limit duals (new)
+    branch_new_duals = []
+    for b in B_new:
+        for y in Y:
+            for w in W:
+                for t in T:
+                    dual_min = (
+                        model.getConstrByName(f"C_branch_new_min[{b},{y},{w},{t}]").Pi
+                        / week_weights[w]
+                    )
+                    dual_max = (
+                        model.getConstrByName(f"C_branch_new_max[{b},{y},{w},{t}]").Pi
+                        / week_weights[w]
+                    )
+                    branch_new_duals.append((y, w, t, b, "min", dual_min))
+                    branch_new_duals.append((y, w, t, b, "max", dual_max))
+
+    branch_new_duals_df = pd.DataFrame(
+        branch_new_duals,
+        columns=["year", "week", "hour", "branch", "bound", "dual_value"],
+    )
+    branch_new_duals_df.to_csv(
+        os.path.join(dual_variables_folder, "branch_flow_new_duals.csv"), index=False
+    )
+
     # 5. Emissions constraint dual (single value)
     try:
         emissions_dual = model.getConstrByName("C_emission_limit").Pi
