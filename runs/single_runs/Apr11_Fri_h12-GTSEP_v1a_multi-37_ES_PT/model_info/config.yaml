@@ -22,8 +22,8 @@ representative_period_unit: week
 representative_periods:
 - 21
 - 42
-run_id: Apr10_Thu_h10-GTSEP_v1a_multi-37_ES_PT
-save_folder: C:\Users\tinus\OneDrive\Dokumenter\0 Master\code\master_project\runs\single_runs\Apr10_Thu_h10-GTSEP_v1a_multi-37_ES_PT
+run_id: Apr11_Fri_h12-GTSEP_v1a_multi-37_ES_PT
+save_folder: C:\Users\tinus\OneDrive\Dokumenter\0 Master\code\master_project\runs\single_runs\Apr11_Fri_h12-GTSEP_v1a_multi-37_ES_PT
 week_weights:
   21: 26.071428571428573
   42: 26.071428571428573

@@ -1786,7 +1786,9 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
     # 5. Emission restrictions
     model.addConstr(
         gp.quicksum(
-            g[i, y, w, t] * generators.loc[(y, i), "co2_emissions"]
+            week_weights[w]
+            * (g[i, y, w, t] + g_new[i, y, w, t])
+            * generators.loc[(y, i), "co2_emissions"]
             for i in G
             for y in Y
             for w in W
@@ -2035,7 +2037,14 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
     # Save dual variables
     # 1. Power balance duals (LMPs / shadow prices)
     power_balance_duals = [
-        (y, w, t, n, model.getConstrByName(f"C_power_balance[{n},{y},{w},{t}]").Pi)
+        (
+            y,
+            w,
+            t,
+            n,
+            model.getConstrByName(f"C_power_balance[{n},{y},{w},{t}]").Pi
+            / week_weights[w],
+        )
         for n in N
         for y in Y
         for w in W
@@ -2055,7 +2064,8 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
             w,
             t,
             n,
-            model.getConstrByName(f"C_load_shedding_limit[{n},{y},{w},{t}]").Pi,
+            model.getConstrByName(f"C_load_shedding_limit[{n},{y},{w},{t}]").Pi
+            / week_weights[w],
         )
         for n in N
         for y in Y
@@ -2071,7 +2081,14 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
 
     # 3. Generator output limits (old)
     gen_old_output_duals = [
-        (y, w, t, i, model.getConstrByName(f"C_gen_output_old[{i},{y},{w},{t}]").Pi)
+        (
+            y,
+            w,
+            t,
+            i,
+            model.getConstrByName(f"C_gen_output_old[{i},{y},{w},{t}]").Pi
+            / week_weights[w],
+        )
         for i in G_old
         for y in Y
         for w in W
@@ -2087,7 +2104,14 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
 
     # 4. Generator output limits (new)
     gen_new_output_duals = [
-        (y, w, t, i, model.getConstrByName(f"C_gen_output_new[{i},{y},{w},{t}]").Pi)
+        (
+            y,
+            w,
+            t,
+            i,
+            model.getConstrByName(f"C_gen_output_new[{i},{y},{w},{t}]").Pi
+            / week_weights[w],
+        )
         for i in G_new
         for y in Y
         for w in W
@@ -2122,7 +2146,8 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
                 w,
                 t,
                 s,
-                model.getConstrByName(f"C_batt_charge_old_{bound}[{s},{y},{w},{t}]").Pi,
+                model.getConstrByName(f"C_batt_charge_old_{bound}[{s},{y},{w},{t}]").Pi
+                / week_weights[w],
             )
             for s in S_old
             for y in Y
@@ -2146,7 +2171,8 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
             w,
             t,
             s,
-            model.getConstrByName(f"C_batt_charge_new_max[{s},{y},{w},{t}]").Pi,
+            model.getConstrByName(f"C_batt_charge_new_max[{s},{y},{w},{t}]").Pi
+            / week_weights[w],
         )
         for s in S_new
         for y in Y
@@ -2170,7 +2196,8 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
                 s,
                 model.getConstrByName(
                     f"C_batt_discharge_old_{bound}[{s},{y},{w},{t}]"
-                ).Pi,
+                ).Pi
+                / week_weights[w],
             )
             for s in S_old
             for y in Y
@@ -2194,7 +2221,8 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
             w,
             t,
             s,
-            model.getConstrByName(f"C_batt_discharge_new_max[{s},{y},{w},{t}]").Pi,
+            model.getConstrByName(f"C_batt_discharge_new_max[{s},{y},{w},{t}]").Pi
+            / week_weights[w],
         )
         for s in S_new
         for y in Y
@@ -2234,6 +2262,7 @@ def GTSEP_v1a_multi(config: dict) -> gp.Model:
         model,
         build_end_time - build_start_time,
         model_optimize_end_time - model_optimize_start_time,
+        week_weights,
     )
 
 

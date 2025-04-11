@@ -1,12 +1,17 @@
+import re
 import pandas as pd
 import gurobipy as gp
-from gurobipy import GRB
+from gurobipy import GRB, tupledict
 from time import time
 import os
 import yaml
 import argparse
 from src.analytics import analyze_run
-from src.utils import load_model_config
+from src.utils import (
+    load_csv_files_from_folder_multi_weeks,
+    load_model_config,
+    load_multi_year_csv_files_with_week_from_folder,
+)
 from src.preprocessing import run_preprocessing
 from src.models import get_model
 
@@ -26,12 +31,149 @@ def save_model(model, model_config):
     print(f"Model saved to: {save_folder}")
 
 
+def rerun_co2(model, model_config):
+    # calculate CO2 emissions from previous run
+    save_folder = model_config["save_folder"]
+    data_folder_name = model_config["data_folder_name"]
+    data_folder = os.path.join(
+        os.path.dirname(__file__), "..", "data", "processed", data_folder_name
+    )
+    print(f"Data folder: {data_folder}")
+    years = model_config["years"]
+    weeks = model_config["representative_periods"]
+    week_weights = model_config["week_weights"]
+    decision_variables_folder = os.path.join(save_folder, "decision_variables")
+
+    input_data = load_multi_year_csv_files_with_week_from_folder(
+        years, weeks, data_folder
+    )
+    generators = input_data["generators"]
+    decision_variables = load_csv_files_from_folder_multi_weeks(
+        decision_variables_folder
+    )
+    generation = decision_variables["generation"]
+    # print(f"Generation head: {generation.head()}")
+    # # print(f"Model.getVars(): {model.getVars()}")
+
+    # print("--------------------")
+    # print("----------------")
+
+    g_vars = {}
+    g_new_vars = {}
+
+    for var in model.getVars():
+        match = re.match(r"g\[(.+)\]", var.VarName)
+        match_new = re.match(r"g_new\[(.+)\]", var.VarName)
+        if match:
+            indices = tuple(s.strip() for s in match.group(1).split(","))
+            g_vars[indices] = var
+        if match_new:
+            indices = tuple(s.strip() for s in match_new.group(1).split(","))
+            g_new_vars[indices] = var
+    # print(g_vars)
+
+    # print("@@@@@@@@@")
+    # print("@@@@@@@@@")
+    # print(f"g_vars index: {g_vars.keys()}")
+    # print(f"Type g_vars: {type(g_vars)}")
+
+    co2_emissions = 0
+    for i, y, w, h in g_vars.keys():
+        y = int(y)
+        w = int(w)
+        h = int(h)
+        produced = generation.loc[(y, w, h, i), "value"]
+        emission_rate = generators.loc[(y, i), "co2_emissions"]
+        co2_emission = produced * emission_rate
+        weighted_co2_emission = co2_emission * week_weights[w]
+        co2_emissions += weighted_co2_emission
+    print(f"CO2 emissions: {co2_emissions / 1e6} Million tons")
+    print(f"CO2 cost: {co2_emissions * model_config['CO2_price'] / 1e6} Million $")
+
+    new_co2_limit = co2_emissions - 100
+    print(f"Setting new co2 limit: {new_co2_limit}")
+
+    def extract_vars(model, base_name):
+        var_dict = {}
+        for var in model.getVars():
+            match = re.match(rf"{base_name}\[(.+)\]", var.VarName)
+            if match:
+                indices = tuple(
+                    int(x) if x.strip().isdigit() else x.strip()
+                    for x in match.group(1).split(",")
+                )
+                var_dict[indices] = var
+        return tupledict(var_dict)
+
+    # Usage
+    g = extract_vars(model, "g")
+    g_new = extract_vars(model, "g_new")
+
+    # print(f"Type g: {type(g)}")
+    # print(f"g index: {g.keys()}")
+
+    print(f"Old objective: {model.ObjVal / 1e9} Billion $")
+    # Overwrite old emission constraints with new one
+    constr = model.getConstrByName("C_emission_limit")
+    if constr is not None:
+        model.remove(constr)
+        model.update()
+        print("Removed old emission constraint")
+        model.addConstr(
+            gp.quicksum(
+                week_weights[int(w)]
+                * (g[i, int(y), int(w), int(t)] + g_new[i, int(y), int(w), int(t)])
+                * generators.loc[(int(y), i), "co2_emissions"]
+                for (i, y, w, t) in g.keys()
+            )
+            <= new_co2_limit,
+            name="C_emission_limit",
+        )
+
+    else:
+        print("No emission constraint found")
+
+    model.optimize()
+    if model.Status != GRB.OPTIMAL:
+        print("Model is not optimal. Exiting...")
+        return
+    else:
+
+        print(f"New objective: {model.ObjVal / 1e9} Billion $")
+
+        total_emissions = sum(
+            week_weights[int(w)]
+            * (g[i, int(y), int(w), int(t)].X + g_new[i, int(y), int(w), int(t)].X)
+            * generators.loc[(int(y), i), "co2_emissions"]
+            for (i, y, w, t) in g.keys()
+        )
+        print(f"Total CO2 emissions: {total_emissions / 1e6:.2f} million tons")
+        emission_dual = model.getConstrByName("C_emission_limit").Pi
+        print(f"Emission dual: {emission_dual}")
+
+    # Overwrite dual for emissions constraint
+    dual_variables_folder = os.path.join(save_folder, "dual_variables")
+    # 5. Emissions constraint dual (single value)
+    try:
+        emissions_dual = model.getConstrByName("C_emission_limit").Pi
+        emissions_dual_df = pd.DataFrame(
+            [("all", "all", "all", "total", emissions_dual)],
+            columns=["year", "week", "hour", "scope", "dual_value"],
+        )
+        emissions_dual_df.to_csv(
+            os.path.join(dual_variables_folder, "emissions_dual.csv"), index=False
+        )
+    except gp.GurobiError:
+        print("Warning: Emission limit constraint not active or missing.")
+
+
 def run(
     model_config_name: str = "",
     preprocessing_config_name: str = "",
     batch_number: bool = False,
     batch_folder_name=None,
     no_run_analysis: bool = False,
+    co2_rerun: bool = False,
 ):
     if preprocessing_config_name:
         preprocessing_config = run_preprocessing(preprocessing_config_name)
@@ -62,7 +204,17 @@ def run(
     model_config["save_folder"] = save_folder
     if not os.path.exists(save_folder):
         os.makedirs(save_folder)
-    model, model_build_time, model_run_time = get_model(model_config)
+    model_output = get_model(model_config)
+    if len(model_output) == 3:
+        model, model_build_time, model_run_time = model_output
+    elif len(model_output) == 4:
+        model, model_build_time, model_run_time, week_weights = model_output
+    else:
+        raise ValueError(
+            "Model output is not in the expected format. Model output is {}.".format(
+                model_output
+            )
+        )
 
     model_info_save_folder = os.path.join(save_folder, "model_info")
     if not os.path.exists(model_info_save_folder):
@@ -91,8 +243,13 @@ def run(
         os.path.join(model_info_save_folder, "model_info.csv"), index=False
     )
 
+    if "week_weights" in locals():
+        model_config["week_weights"] = week_weights
     # Save model
     save_model(model, model_config)
+
+    if co2_rerun:
+        rerun_co2(model, model_config)
 
     if not no_run_analysis:
         analyze_run(model_config)
@@ -139,9 +296,19 @@ if __name__ == "__main__":
         default="",
         help="Run analysis (keep empty to run analysis, input anything to not run analysis.).",
     )
+
+    # This flag will be False if specified, True otherwise
+    parser.add_argument(
+        "--co2-rerun",
+        dest="co2_rerun",
+        action="store_true",
+        help="Enable the feature (default is disabled)",
+    )
+
     args = parser.parse_args()
     run(
         model_config_name=args.name,
         preprocessing_config_name=args.preprocessing,
         no_run_analysis=args.no_run_analysis,
+        co2_rerun=args.co2_rerun,
     )
