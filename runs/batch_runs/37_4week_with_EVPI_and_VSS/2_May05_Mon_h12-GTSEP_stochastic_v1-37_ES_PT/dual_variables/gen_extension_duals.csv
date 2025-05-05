@@ -11,7 +11,7 @@ year,generator,dual_value
 2030,ES1 0 offwind-ac,0.0
 2040,ES1 0 offwind-ac,0.0
 2050,ES1 0 offwind-ac,0.0
-2025,ES1 0 onwind,-24658.386007611898
+2025,ES1 0 onwind,-24658.386007611905
 2030,ES1 0 onwind,0.0
 2040,ES1 0 onwind,0.0
 2050,ES1 0 onwind,0.0
@@ -27,7 +27,7 @@ year,generator,dual_value
 2030,PT1 0 CCGT,0.0
 2040,PT1 0 CCGT,0.0
 2050,PT1 0 CCGT,0.0
-2025,PT1 0 offwind-ac,-822.2592594769449
+2025,PT1 0 offwind-ac,-822.2592594769594
 2030,PT1 0 offwind-ac,0.0
 2040,PT1 0 offwind-ac,0.0
 2050,PT1 0 offwind-ac,0.0
@@ -35,11 +35,11 @@ year,generator,dual_value
 2030,PT1 0 onwind,0.0
 2040,PT1 0 onwind,0.0
 2050,PT1 0 onwind,0.0
-2025,PT1 0 ror,-19271.910682706788
+2025,PT1 0 ror,-19271.910682706875
 2030,PT1 0 ror,0.0
 2040,PT1 0 ror,0.0
 2050,PT1 0 ror,0.0
-2025,PT1 0 solar,-26766.02841397759
-2030,PT1 0 solar,-9035.455747523116
+2025,PT1 0 solar,-26766.0284139776
+2030,PT1 0 solar,-9035.455747523127
 2040,PT1 0 solar,0.0
 2050,PT1 0 solar,0.0

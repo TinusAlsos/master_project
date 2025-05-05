@@ -23,7 +23,7 @@ representative_periods:
 - 21
 - 42
 run_id: May05_Mon_h12-GTSEP_stochastic_v1-128_ES_PT
-save_folder: C:\Users\tinus\OneDrive\Dokumenter\0 Master\code\master_project\runs\single_runs\May05_Mon_h12-GTSEP_stochastic_v1-128_ES_PT
+save_folder: /cluster/home/tinusfa/master_project/runs/single_runs/May05_Mon_h12-GTSEP_stochastic_v1-128_ES_PT
 scenario_file: null
 week_weights:
   21: 26.071428571428573

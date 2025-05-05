@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/cluster/home/tinusfa/master_project/src/run.py", line 309, in <module>
+    run(
+  File "/cluster/home/tinusfa/master_project/src/run.py", line 255, in run
+    analyze_run(model_config)
+  File "/cluster/home/tinusfa/master_project/src/analytics.py", line 862, in analyze_run
+    battery_build = data["battery_build"]
+                    ~~~~^^^^^^^^^^^^^^^^^
+KeyError: 'battery_build'

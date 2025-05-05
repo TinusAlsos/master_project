@@ -4,7 +4,7 @@
 #SBATCH --time=0-20:00:00         # format: D-HH:MM:SS
 
 #SBATCH --partition=CPUQ          # Asking for a GPU
-#SBATCH --mem=128G       # Asking for 128 RAM
+#SBATCH --mem=16G       # Asking for 128 RAM
 #SBATCH --cpus-per-task=2 # 4 CPU cores               
 #SBATCH --nodes=1
 #SBATCH --output=slurm/slurm_outputs/%x%j.txt      # Specifying 'stdout'
