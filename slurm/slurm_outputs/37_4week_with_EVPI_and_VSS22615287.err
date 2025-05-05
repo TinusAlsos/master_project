@@ -1,16 +1,0 @@
-Processing Models:   0%|          | 0/8 [00:00<?, ?model/s]Processing Models:  12%|█▎        | 1/8 [02:23<16:42, 143.22s/model]Processing Models:  25%|██▌       | 2/8 [03:23<09:27, 94.52s/model] Processing Models:  38%|███▊      | 3/8 [04:26<06:40, 80.07s/model]Processing Models:  50%|█████     | 4/8 [05:32<04:57, 74.41s/model]Processing Models:  62%|██████▎   | 5/8 [06:44<03:40, 73.60s/model]Processing Models:  75%|███████▌  | 6/8 [07:44<02:17, 68.88s/model]Processing Models:  88%|████████▊ | 7/8 [08:28<01:00, 60.90s/model]Processing Models:  88%|████████▊ | 7/8 [08:28<01:12, 72.66s/model]
-Traceback (most recent call last):
-  File "<frozen runpy>", line 198, in _run_module_as_main
-  File "<frozen runpy>", line 88, in _run_code
-  File "/cluster/home/tinusfa/master_project/src/run_batches.py", line 86, in <module>
-    run_batches(
-  File "/cluster/home/tinusfa/master_project/src/run_batches.py", line 43, in run_batches
-    run(
-  File "/cluster/home/tinusfa/master_project/src/run.py", line 185, in run
-    model_config = load_model_config(model_config_name)
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/cluster/home/tinusfa/master_project/src/utils.py", line 88, in load_model_config
-    raise FileNotFoundError(f"Model configuration file not found: {config_path}")
-FileNotFoundError: Model configuration file not found: /cluster/home/tinusfa/master_project/configs/models/config_37_sv1_4_weeks_MEAN.yaml
-To github.com:TinusAlsos/master_project.git
-   5c9ec39..75f8967  main -> main

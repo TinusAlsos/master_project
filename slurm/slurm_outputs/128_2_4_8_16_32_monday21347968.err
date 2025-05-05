@@ -1,21 +1,0 @@
-Processing Models:   0%|          | 0/5 [00:00<?, ?model/s]/cluster/home/tinusfa/master_project/src/models.py:52: PerformanceWarning: indexing past lexsort depth may impact performance.
-  branches = branches.loc[y0,]
-/cluster/home/tinusfa/master_project/src/models.py:53: PerformanceWarning: indexing past lexsort depth may impact performance.
-  generators = generators.loc[y0,]
-Processing Models:  20%|██        | 1/5 [01:18<05:13, 78.43s/model]/cluster/home/tinusfa/master_project/src/models.py:52: PerformanceWarning: indexing past lexsort depth may impact performance.
-  branches = branches.loc[y0,]
-/cluster/home/tinusfa/master_project/src/models.py:53: PerformanceWarning: indexing past lexsort depth may impact performance.
-  generators = generators.loc[y0,]
-Processing Models:  40%|████      | 2/5 [03:57<06:17, 125.70s/model]/cluster/home/tinusfa/master_project/src/models.py:52: PerformanceWarning: indexing past lexsort depth may impact performance.
-  branches = branches.loc[y0,]
-/cluster/home/tinusfa/master_project/src/models.py:53: PerformanceWarning: indexing past lexsort depth may impact performance.
-  generators = generators.loc[y0,]
-Processing Models:  60%|██████    | 3/5 [13:57<11:24, 342.23s/model]/cluster/home/tinusfa/master_project/src/models.py:52: PerformanceWarning: indexing past lexsort depth may impact performance.
-  branches = branches.loc[y0,]
-/cluster/home/tinusfa/master_project/src/models.py:53: PerformanceWarning: indexing past lexsort depth may impact performance.
-  generators = generators.loc[y0,]
-Processing Models:  80%|████████  | 4/5 [37:18<12:40, 760.43s/model]/cluster/home/tinusfa/master_project/src/models.py:52: PerformanceWarning: indexing past lexsort depth may impact performance.
-  branches = branches.loc[y0,]
-/cluster/home/tinusfa/master_project/src/models.py:53: PerformanceWarning: indexing past lexsort depth may impact performance.
-  generators = generators.loc[y0,]
-Processing Models: 100%|██████████| 5/5 [2:25:28<00:00, 2826.47s/model]Processing Models: 100%|██████████| 5/5 [2:25:28<00:00, 1745.70s/model]

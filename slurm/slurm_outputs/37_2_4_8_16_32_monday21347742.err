@@ -1,8 +1,0 @@
-usage: run_batches.py [-h] -m MODEL_CONFIG_NAMES [MODEL_CONFIG_NAMES ...] -b
-                      BATCH_FOLDER_NAME
-                      [-p PREPROCESSING_CONFIG_NAMES [PREPROCESSING_CONFIG_NAMES ...]]
-                      [--run-analysis]
-run_batches.py: error: the following arguments are required: -b/--batch-folder-name
-/var/slurm_spool/job21347742/slurm_script: line 40: -b: command not found
-To github.com:TinusAlsos/master_project.git
-   0f1f3b4..8ebd6ef  main -> main

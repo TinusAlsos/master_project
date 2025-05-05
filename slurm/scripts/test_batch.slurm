@@ -36,7 +36,7 @@ export GRB_WLSSECRET="87c9d38e-3a81-40a9-8d23-fa6fd14a0645" >> ~/.bashrc
 export GRB_LICENSE_FILE="/cluster/home/tinusfa/master_project/gurobi.lic" >> ~/.bashrc
 source ~/.bashrc
 
-python -m src.run_batches -m 37_sv1_4_weeks 37_sv1_4_weeks_EVPI_1 37_sv1_4_weeks_EVPI_2 37_sv1_4_weeks_EVPI_3 37_sv1_4_weeks_EVPI_4 37_sv1_4_weeks_EVPI_5 37_sv1_4_weeks_EVPI_6 37_sv1_4_weeks_MEAN -b 37_4week_with_EVPI_and_VSS
+python -m src.run_batches -m 37_sv1_4_weeks 37_sv1_4_weeks_EVPI_1 37_sv1_4_weeks_EVPI_2 37_sv1_4_weeks_EVPI_3 37_sv1_4_weeks_EVPI_4 37_sv1_4_weeks_EVPI_5 37_sv1_4_weeks_EVPI_6 37_sv1_4_weeks_mean -b 37_4week_with_EVPI_and_VSS
 
 echo "Job finished at $(date)"
 
