@@ -1,0 +1,102 @@
+Running from this directory: /cluster/home/tinusfa/master_project
+Name of job: single_128_2_week
+ID of job: 22615281
+The job was run on these nodes: idun-03-21
+No preprocessing config provided. Skipping preprocessing...
+Path_or_name: 128_sv1_2_weeks
+Configuration loaded from /cluster/home/tinusfa/master_project/configs/models/config_128_sv1_2_weeks.yaml
+{'data_folder_name': 'elec_s_128_ES_PT_no_bat_limit', 'model_name': 'GTSEP_stochastic_v1', 'model_id': '128_ES_PT', 'MIPGap': 0.01, 'VOLL': 6350, 'CC': 100, 'CO2_price': 85, 'E_limit': inf, 'p_max_new_branch': 5000, 'p_min_new_branch': 100, 'expansion_factor': 2.0, 'MS': 0.1, 'years': [2025, 2030, 2040, 2050], 'clustering_unit': None, 'clustering_periods': None, 'scenario_file': None, 'query': 'not (x > 2 and y < 40)', 'carriers': ['CCGT', 'solar', 'onwind'], 'discount_rate': 0.07, 'representative_period_unit': 'week', 'representative_periods': [21, 42]}
+Set parameter WLSAccessID
+Set parameter WLSSecret
+Set parameter LicenseID to value 2622400
+Academic license 2622400 - for non-commercial use only - registered to ti___@stud.ntnu.no
+Set parameter MIPGap to value 0.01
+Set parameter TimeLimit to value 21600
+Set parameter BarConvTol to value 0.01
+Set parameter BarHomogeneous to value 1
+Model built in 75.27491450309753 seconds.
+Gurobi Optimizer version 12.0.1 build v12.0.1rc0 (linux64 - "Rocky Linux 9.4 (Blue Onyx)")
+
+CPU model: Intel(R) Xeon(R) Gold 6348 CPU @ 2.60GHz, instruction set [SSE2|AVX|AVX2|AVX512]
+Thread count: 56 physical cores, 56 logical processors, using up to 32 threads
+
+Non-default parameters:
+TimeLimit  21600
+MIPGap  0.01
+BarConvTol  0.01
+BarHomogeneous  1
+
+Academic license 2622400 - for non-commercial use only - registered to ti___@stud.ntnu.no
+Optimize a model with 720482 rows, 948168 columns and 1936011 nonzeros
+Model fingerprint: 0x2e04d99f
+Coefficient statistics:
+  Matrix range     [8e-06, 9e+00]
+  Objective range  [9e-02, 3e+05]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [6e-03, 1e+100]
+Warning: Model contains large rhs
+         Consider reformulating model or setting NumericFocus parameter
+         to avoid numerical issues.
+Presolve removed 441752 rows and 585099 columns
+Presolve time: 2.37s
+Presolved: 278730 rows, 363069 columns, 1216196 nonzeros
+
+Concurrent LP optimizer: primal simplex, dual simplex, and barrier
+Showing barrier log only...
+
+Ordering time: 4.56s
+
+Barrier statistics:
+ Dense cols : 335
+ AA' NZ     : 1.483e+06
+ Factor NZ  : 8.756e+06 (roughly 300 MB of memory)
+ Factor Ops : 2.967e+09 (less than 1 second per iteration)
+ Threads    : 30
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   1.74526790e+14 -1.15282088e+16  7.86e+05 2.56e+04  1.86e+11    12s
+   1   1.37037462e+14 -9.87893150e+15  6.20e+05 7.52e+05  1.30e+11    17s
+   2   1.10017180e+14 -8.37893853e+15  4.92e+05 3.43e+05  9.20e+10    23s
+   3   8.80610359e+13 -6.82158936e+15  3.85e+05 1.38e+05  6.44e+10    30s
+   4   6.13187055e+13 -2.66635292e+15  2.66e+05 5.36e+04  2.38e+10    37s
+   5   3.45624546e+13 -1.07789443e+15  1.48e+05 2.11e+04  7.57e+09    42s
+   6   1.85001575e+13 -2.88985053e+14  7.85e+04 5.78e+03  1.89e+09    49s
+   7   6.12956102e+12 -6.11404583e+13  2.61e+04 1.18e+03  2.82e+08    57s
+   8   2.03288807e+12 -1.80995268e+13  7.95e+03 3.98e+02  5.40e+07    64s
+   9   1.09888848e+12 -8.27898946e+12  3.88e+03 1.66e+02  2.01e+07    71s
+  10   8.98072189e+11 -4.28615602e+12  3.04e+03 1.17e+02  1.07e+07    76s
+  11   6.94099057e+11 -2.50416211e+12  2.25e+03 2.29e+02  6.13e+06    81s
+  12   5.77814002e+11 -1.63024754e+12  1.83e+03 1.09e+02  3.98e+06    87s
+  13   4.71923257e+11 -7.13232381e+11  1.46e+03 3.74e+02  2.02e+06    93s
+  14   3.39636358e+11 -4.65718239e+11  1.05e+03 1.89e+02  1.28e+06   102s
+  15   2.71687697e+11 -2.93622320e+11  8.31e+02 1.76e+02  8.54e+05   110s
+  16   2.36802836e+11 -1.62063886e+11  7.20e+02 1.24e+02  5.76e+05   119s
+  17   1.67625072e+11 -1.19140020e+11  4.94e+02 1.08e+02  3.94e+05   129s
+  18   1.41702287e+11 -4.99710648e+10  4.07e+02 5.92e+01  2.54e+05   138s
+  19   1.20401684e+11 -3.06387535e+10  3.36e+02 4.25e+01  1.95e+05   147s
+  20   9.82777526e+10 -7.65313359e+09  2.61e+02 2.26e+01  1.32e+05   157s
+  21   8.59299674e+10 -2.36368644e+09  2.18e+02 1.86e+01  1.08e+05   166s
+  22   7.37726784e+10  3.61703490e+09  1.77e+02 1.73e+01  8.44e+04   175s
+  23   6.84588773e+10  7.35606983e+09  1.58e+02 1.71e+01  7.27e+04   185s
+  24   5.64834624e+10  1.19533538e+10  1.16e+02 1.61e+01  5.21e+04   194s
+  25   5.01838401e+10  1.44690051e+10  9.28e+01 1.45e+01  4.14e+04   204s
+  26   4.44541049e+10  1.77952331e+10  7.13e+01 9.66e+00  3.05e+04   213s
+  27   3.93459619e+10  2.08866378e+10  5.16e+01 5.05e+00  2.09e+04   222s
+  28   3.52991812e+10  2.29140470e+10  3.56e+01 3.05e+00  1.39e+04   231s
+  29   3.31450467e+10  2.38581311e+10  2.68e+01 1.91e+00  1.03e+04   241s
+  30   3.18912847e+10  2.49316763e+10  2.13e+01 1.23e+00  7.71e+03   250s
+  31   3.10280291e+10  2.53323007e+10  1.78e+01 7.54e-01  6.30e+03   259s
+  32   3.01202612e+10  2.57575632e+10  1.40e+01 6.43e-01  4.81e+03   268s
+  33   2.95572325e+10  2.58523993e+10  1.16e+01 4.93e-01  4.09e+03   278s
+  34   2.92030391e+10  2.59956953e+10  1.01e+01 4.96e-01  3.53e+03   286s
+  35   2.86629231e+10  2.62976712e+10  7.74e+00 3.74e-01  2.60e+03   296s
+  36   2.82653964e+10  2.64702980e+10  6.01e+00 9.02e-01  1.97e+03   306s
+  37   2.80773426e+10  2.66091115e+10  5.19e+00 6.74e-01  1.61e+03   321s
+  38   2.77460465e+10  2.66773471e+10  3.76e+00 6.67e-01  1.17e+03   336s
+  39   2.75464804e+10  2.67104459e+10  2.88e+00 4.88e-01  9.17e+02   354s
+  40   2.74289777e+10  2.67322698e+10  2.36e+00 4.26e-01  7.65e+02   368s
+  41   2.73246594e+10  2.67801451e+10  1.90e+00 8.80e-01  5.98e+02   382s
+  42   2.72363085e+10  2.67981529e+10  1.51e+00 7.92e-01  4.82e+02   397s
+  43   2.71648442e+10  2.68257744e+10  1.19e+00 4.52e-01  3.73e+02   408s
+  44   2.71190775e+10  2.68428508e+10  9.90e-01 3.46e-01  3.04e+02   424s

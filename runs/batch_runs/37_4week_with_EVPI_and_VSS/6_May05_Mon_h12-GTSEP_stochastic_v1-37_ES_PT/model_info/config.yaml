@@ -1,0 +1,39 @@
+CC: 100
+CO2_price: 85
+E_limit: .inf
+MIPGap: 0.01
+MS: 0.1
+VOLL: 6350
+carriers:
+- CCGT
+- solar
+- onwind
+clustering_periods: null
+clustering_unit: null
+data_folder_name: elec_s_37_ES_PT_no_bat_limit
+discount_rate: 0.07
+expansion_factor: 2.0
+model_id: 37_ES_PT
+model_name: GTSEP_stochastic_v1
+p_max_new_branch: 5000
+p_min_new_branch: 100
+query: not (x > 2 and y < 40)
+representative_period_unit: week
+representative_periods:
+- 11
+- 21
+- 42
+- 52
+run_id: 6_May05_Mon_h12-GTSEP_stochastic_v1-37_ES_PT
+save_folder: /cluster/home/tinusfa/master_project/runs/batch_runs/37_4week_with_EVPI_and_VSS/6_May05_Mon_h12-GTSEP_stochastic_v1-37_ES_PT
+scenario_file: EVPI_5
+week_weights:
+  11: 13.035714285714286
+  21: 13.035714285714286
+  42: 13.035714285714286
+  52: 13.035714285714286
+years:
+- 2025
+- 2030
+- 2040
+- 2050
