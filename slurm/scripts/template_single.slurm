@@ -1,14 +1,14 @@
 #!/bin/sh
 #SBATCH --account=share-iv-mtp       # E.g. "ie-idi" if you belong to IDI
-#SBATCH --job-name=128_2_4_8_16_32_monday
-#SBATCH --time=0-5:00:00         # format: D-HH:MM:SS
+#SBATCH --job-name=run_name
+#SBATCH --time=0-20:00:00         # format: D-HH:MM:SS
 
 #SBATCH --partition=CPUQ          # Asking for a GPU
-#SBATCH --mem=128G       # Asking for 64GB RAM
-#SBATCH --cpus-per-task=4 # 4 CPU cores               
+#SBATCH --mem=128G       # Asking for 128 RAM
+#SBATCH --cpus-per-task=2 # 4 CPU cores               
 #SBATCH --nodes=1
-#SBATCH --output=slurm_outputs/%x%j.txt      # Specifying 'stdout'
-#SBATCH --error=slurm_outputs/%x%j.err        # Specifying 'stderr'
+#SBATCH --output=slurm/slurm_outputs/%x%j.txt      # Specifying 'stdout'
+#SBATCH --error=slurm/slurm_outputs/%x%j.err        # Specifying 'stderr'
 
 #SBATCH --mail-user=tinusfa@stud.ntnu.no
 #SBATCH --mail-type=ALL
@@ -36,12 +36,12 @@ export GRB_WLSSECRET="87c9d38e-3a81-40a9-8d23-fa6fd14a0645" >> ~/.bashrc
 export GRB_LICENSE_FILE="/cluster/home/tinusfa/master_project/gurobi.lic" >> ~/.bashrc
 source ~/.bashrc
 
-python -m src.run_batches -m 128_v1a_multi_weeks_2 128_v1a_multi_weeks_4 128_v1a_multi_weeks_8 128_v1a_multi_weeks_16 128_v1a_multi_weeks_32 -b 128_2_4_8_16_32_monday
+python -m src.run --name config_file_name --no_run_analysis NORUN
 
 echo "Job finished at $(date)"
 
 echo "Pushing to git"
 
 git add .
-git commit -m "results from 128_2_4_8_16_32_monday"
+git commit -m "results from run_name"
 git push

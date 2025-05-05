@@ -1,14 +1,14 @@
 #!/bin/sh
 #SBATCH --account=share-iv-mtp       # E.g. "ie-idi" if you belong to IDI
-#SBATCH --job-name=test_multi_week_torsdag
+#SBATCH --job-name=37_4week_with_EVPI_and_VSS
 #SBATCH --time=0-20:00:00         # format: D-HH:MM:SS
 
 #SBATCH --partition=CPUQ          # Asking for a GPU
-#SBATCH --mem=128G       # Asking for 64GB RAM
+#SBATCH --mem=128G       # Asking for 128 RAM
 #SBATCH --cpus-per-task=2 # 4 CPU cores               
 #SBATCH --nodes=1
-#SBATCH --output=slurm_outputs/%x%j.txt      # Specifying 'stdout'
-#SBATCH --error=slurm_outputs/%x%j.err        # Specifying 'stderr'
+#SBATCH --output=slurm/slurm_outputs/%x%j.txt      # Specifying 'stdout'
+#SBATCH --error=slurm/slurm_outputs/%x%j.err        # Specifying 'stderr'
 
 #SBATCH --mail-user=tinusfa@stud.ntnu.no
 #SBATCH --mail-type=ALL
@@ -36,12 +36,12 @@ export GRB_WLSSECRET="87c9d38e-3a81-40a9-8d23-fa6fd14a0645" >> ~/.bashrc
 export GRB_LICENSE_FILE="/cluster/home/tinusfa/master_project/gurobi.lic" >> ~/.bashrc
 source ~/.bashrc
 
-python -m src.run_batches -m 37_v1a_multi_weeks_small 37_v1a_multi_weeks 128_v1a_multi_weeks_small 128_v1a_multi_weeks -b test_multi_week_torsdag
+python -m src.run_batches -m 37_sv1_4_weeks 37_sv1_4_weeks_EVPI_1 37_sv1_4_weeks_EVPI_2 37_sv1_4_weeks_EVPI_3 37_sv1_4_weeks_EVPI_4 37_sv1_4_weeks_EVPI_5 37_sv1_4_weeks_EVPI_6 37_sv1_4_weeks_MEAN -b 37_4week_with_EVPI_and_VSS
 
 echo "Job finished at $(date)"
 
 echo "Pushing to git"
 
 git add .
-git commit -m "results from test_multi_week_torsdag"
+git commit -m "results from 37_4week_with_EVPI_and_VSS"
 git push
