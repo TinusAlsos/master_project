@@ -14,3 +14,4 @@ MS: 0.1               # Maximum shed at each node
 years:
 clustering_unit: 
 clustering_periods:
+scenario_file:

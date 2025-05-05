@@ -12,6 +12,7 @@ CONFIG_FOLDER = os.path.join(os.path.dirname(os.path.dirname(__file__)), "config
 MODELS_CONFIG_FOLDER = os.path.join(CONFIG_FOLDER, "models")
 PREPROCESSING_CONFIG_FOLDER = os.path.join(CONFIG_FOLDER, "preprocessing")
 BATTERY_CONFIG_FOLDER = os.path.join(PREPROCESSING_CONFIG_FOLDER, "battery")
+DATA_FOLDER = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data")
 
 
 def deep_update(source: dict[str, Any], overrides: dict[str, Any]) -> dict[str, Any]:
@@ -341,6 +342,87 @@ def load_multi_year_csv_files_with_week_from_folder(
                 continue
             for year in years:
                 temp_df = df.copy()
+                if file_name in ["hourly_demand", "capacity_factors"]:
+                    iso_info = temp_df.index.to_series().dt.isocalendar()
+                    temp_df["hour_in_week"] = temp_df.groupby(
+                        [temp_df.index.year, iso_info.week]
+                    ).cumcount()
+                    temp_df.index = pd.MultiIndex.from_arrays(
+                        [
+                            df.index.year * 0 + year,
+                            df.index.isocalendar().week,
+                            temp_df["hour_in_week"],
+                        ],
+                        names=["year", "week", "hour"],
+                    )
+                    temp_df.drop(columns="hour_in_week", inplace=True)
+                    temp_df.drop(columns=["week", "month", "hour"], inplace=True)
+                else:
+                    temp_df.index = pd.MultiIndex.from_product(
+                        [[year], temp_df.index], names=["year", temp_df.index.name]
+                    )
+                new_dfs.append(temp_df)
+            data[file_name] = pd.concat(new_dfs)
+    return data
+
+
+def load_hourly_demand(data_folder_path: str) -> pd.DataFrame:
+    """Load the hourly demand data from the specified folder."""
+    if not os.path.exists(data_folder_path):
+        raise FileNotFoundError(
+            f"{data_folder_path} not found (should be the path to a folder containing processed data in csv files)"
+        )
+    file_path = os.path.join(data_folder_path, "hourly_demand.csv")
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"hourly_demand.csv not found in {data_folder_path}")
+    df = pd.read_csv(file_path, index_col=0, parse_dates=True)
+    df["week"] = df.index.isocalendar().week
+    df["month"] = df.index.month
+    df["hour"] = df.index.hour
+    hours = df["hour"].unique()
+    iso_info = df.index.to_series().dt.isocalendar()
+    df["hour_in_week"] = df.groupby([iso_info.week]).cumcount()
+    df.index = pd.MultiIndex.from_arrays(
+        [
+            df.index.isocalendar().week,
+            df["hour_in_week"],
+        ],
+        names=["week", "hour"],
+    )
+    df.drop(columns="hour_in_week", inplace=True)
+    df.drop(columns=["week", "month", "hour"], inplace=True)
+
+    return df
+
+
+def load_multi_year_csv_files_with_week_from_folder_with_demand_scaling(
+    years: list[int], weeks, data_folder_path: str
+) -> dict[str, pd.DataFrame]:
+    """temporary quick fix for multi-year data loading. I use the same data as for a single year, but I just post-process the dataframes to be in a multi-year format. All data is the same accross all years, so results are relatively meaningless."""
+    if not os.path.exists(data_folder_path):
+        raise FileNotFoundError(
+            f"{data_folder_path} not found (should be the path to a folder containing processed data in csv files)"
+        )
+    data = {}
+    for file in os.listdir(data_folder_path):
+        if file.endswith(".csv"):
+            file_path = os.path.join(data_folder_path, file)
+            file_name = file.split(".")[0]
+            if file_name in ["hourly_demand", "capacity_factors"]:
+                df = pd.read_csv(file_path, index_col=0, parse_dates=True)
+                df["week"] = df.index.isocalendar().week
+                df["month"] = df.index.month
+                df["hour"] = df.index.hour
+                hours = df["hour"].unique()
+            else:
+                df = pd.read_csv(file_path, index_col=0)
+            new_dfs = []
+            demand_multiplier = 1
+            if file_name == "nodes":
+                data[file_name] = df
+                continue
+            for year in years:
+                temp_df = df.copy()
                 if file_name == "hourly_demand":
                     temp_df = temp_df * demand_multiplier
                     demand_multiplier += 1
@@ -404,5 +486,21 @@ def subset_by_months(df, year, months):
     return df[month_mask]
 
 
+def load_scenario_multiplier(scenario_file_name: str = "") -> pd.DataFrame:
+    """
+    Loads the scenario multiplier file given its scenario_file_name
+    and returns it as a DataFrame.
+    """
+    base_name = "base_scenarios"
+    scenario_multipliers_folder = os.path.join(DATA_FOLDER, "scenario_multipliers")
+    if not scenario_file_name:
+        scenario_file_name = base_name
+    path = os.path.join(scenario_multipliers_folder, f"{scenario_file_name}.csv")
+    if not os.path.exists(path):
+        raise FileNotFoundError(f"Scenario multiplier file not found: {path}")
+    df = pd.read_csv(path, index_col=0)
+    return df
+
+
 if __name__ == "__main__":
-    print(CONFIG_FOLDER)
+    df = load_scenario_multiplier()
