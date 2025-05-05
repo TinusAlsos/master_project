@@ -992,3 +992,5 @@ No preprocessing config provided. Skipping preprocessing...
 Path_or_name: 37_sv1_4_weeks_MEAN
 Job finished at Mon  5 May 12:08:00 CEST 2025
 Pushing to git
+[main 75f8967] results from 37_4week_with_EVPI_and_VSS
+ 6 files changed, 368 insertions(+), 2 deletions(-)
