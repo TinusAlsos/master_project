@@ -235,6 +235,41 @@ def load_csv_files_from_folder_multi(data_folder_path: str) -> dict[str, pd.Data
     return data
 
 
+def load_csv_files_from_folder_with_scenarios(
+    data_folder_path: str,
+) -> dict[str, pd.DataFrame]:
+    """For model stochastic v1"""
+    data = {}
+    for file in os.listdir(data_folder_path):
+        if not file.endswith(".csv"):
+            continue
+        file_path = os.path.join(data_folder_path, file)
+        file_name = file.split(".")[0]
+
+        df = pd.read_csv(file_path)
+        if "value" in df.columns:
+            value_name = "value"
+        elif "dual_value" in df.columns:
+            value_name = "dual_value"
+        else:
+            raise ValueError(
+                "No value or dual_value column found in the dataframe. This is unexpected."
+            )
+        if "scenario" in df.columns:
+            if file_name == "emissions_duals":
+                base_index_cols = ["scenario", "year"]
+            else:
+                base_index_cols = ["scenario", "year", "week", "hour"]
+        else:
+            base_index_cols = ["year"]
+        unique_index_cols = df.columns.difference(base_index_cols).tolist()
+        unique_index_cols.remove(value_name)
+        index_cols = unique_index_cols + base_index_cols
+        df.set_index(index_cols, inplace=True)
+        data[file_name] = df
+    return data
+
+
 def load_csv_files_from_folder_multi_weeks(
     data_folder_path: str,
 ) -> dict[str, pd.DataFrame]:

@@ -2381,6 +2381,7 @@ def GTSEP_stochastic_v1(config: dict) -> gp.Model:
     generators = input_data["generators"]
     generator_costs = input_data["generator_costs"]
     nodes = input_data["nodes"]
+
     hourly_demand = input_data["hourly_demand"]
     scenario_multiplier = load_scenario_multiplier(scenario_file)
     # Check that years in scenario_multiplier match the years in the data
