@@ -2373,7 +2373,7 @@ def GTSEP_stochastic_v1(config: dict) -> gp.Model:
     # Load data
     data_folder_path = os.path.join(PROCESSED_DATA_FOLDER, data_folder_name)
     input_data = load_multi_year_csv_files_with_week_from_folder(
-        years, weeks, data_folder_path
+        years, data_folder_path
     )
     batteries = input_data["batteries"]
     branches = input_data["branches"]
@@ -2381,8 +2381,7 @@ def GTSEP_stochastic_v1(config: dict) -> gp.Model:
     generators = input_data["generators"]
     generator_costs = input_data["generator_costs"]
     nodes = input_data["nodes"]
-    hourly_demand = load_hourly_demand(data_folder_path)
-    # Scenario handling
+    hourly_demand = input_data["hourly_demand"]
     scenario_multiplier = load_scenario_multiplier(scenario_file)
     # Check that years in scenario_multiplier match the years in the data
     scenario_years = scenario_multiplier.index.values.tolist()

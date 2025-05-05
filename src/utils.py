@@ -154,11 +154,6 @@ def load_battery_config_by_name(path_or_name: str = "") -> dict:
     return load_config(config_path)
 
 
-import os
-import yaml
-import copy
-
-
 def copy_and_modify_config(
     config_name_or_path, overwrite_dict, new_filename=None, suffix="_modified"
 ):
@@ -315,7 +310,7 @@ def load_multi_year_csv_files_from_folder(
 
 
 def load_multi_year_csv_files_with_week_from_folder(
-    years: list[int], weeks, data_folder_path: str
+    years: list[int], data_folder_path: str
 ) -> dict[str, pd.DataFrame]:
     """temporary quick fix for multi-year data loading. I use the same data as for a single year, but I just post-process the dataframes to be in a multi-year format. All data is the same accross all years, so results are relatively meaningless."""
     if not os.path.exists(data_folder_path):
@@ -336,7 +331,6 @@ def load_multi_year_csv_files_with_week_from_folder(
             else:
                 df = pd.read_csv(file_path, index_col=0)
             new_dfs = []
-            demand_multiplier = 1
             if file_name == "nodes":
                 data[file_name] = df
                 continue
@@ -363,6 +357,8 @@ def load_multi_year_csv_files_with_week_from_folder(
                     )
                 new_dfs.append(temp_df)
             data[file_name] = pd.concat(new_dfs)
+    hourly_demand = load_hourly_demand(data_folder_path)
+    data["hourly_demand"] = hourly_demand
     return data
 
 
