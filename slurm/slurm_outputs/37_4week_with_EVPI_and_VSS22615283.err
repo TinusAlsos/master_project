@@ -12,3 +12,5 @@ Traceback (most recent call last):
   File "/cluster/home/tinusfa/master_project/src/utils.py", line 88, in load_model_config
     raise FileNotFoundError(f"Model configuration file not found: {config_path}")
 FileNotFoundError: Model configuration file not found: /cluster/home/tinusfa/master_project/configs/models/config_37_sv1_4_weeks_MEAN.yaml
+To github.com:TinusAlsos/master_project.git
+   ebde9a0..5c9ec39  main -> main
