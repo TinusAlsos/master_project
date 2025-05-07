@@ -2,6 +2,7 @@
 This module contains utility functions that are used in the project."""
 
 import copy
+import json
 import os
 from typing import Any
 import yaml
@@ -479,6 +480,29 @@ def load_multi_year_csv_files_with_week_from_folder_with_demand_scaling(
                 new_dfs.append(temp_df)
             data[file_name] = pd.concat(new_dfs)
     return data
+
+
+def read_jsons_from_dir(input_dir: str):
+    """
+    Reads all JSON files from a directory into a dictionary.
+
+    Args:
+        input_dir (str): Path to the directory containing JSON files.
+
+    Returns:
+        dict: A dictionary where keys are filenames (without .json)
+              and values are the contents of the JSON files.
+    """
+    json_dict = {}
+
+    for filename in os.listdir(input_dir):
+        if filename.endswith(".json"):
+            file_path = os.path.join(input_dir, filename)
+            with open(file_path, "r", encoding="utf-8") as f:
+                key = os.path.splitext(filename)[0]
+                json_dict[key] = json.load(f)
+
+    return json_dict
 
 
 def subset_by_weeks(df, year, weeks):

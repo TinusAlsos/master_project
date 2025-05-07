@@ -144,7 +144,13 @@ def _filter_out_overseas(world: gpd.GeoDataFrame, countries: str) -> gpd.GeoData
 
 
 def plot_background(nodes: pd.DataFrame) -> plt.Figure:
-    world_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),"..", "data", "countries", "ne_110m_admin_0_countries.shp")
+    world_path = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)),
+        "..",
+        "data",
+        "countries",
+        "ne_110m_admin_0_countries.shp",
+    )
     world = gpd.read_file(world_path)
 
     # Filter out overseas territories
@@ -365,7 +371,7 @@ def plot_sized_generators_and_lines(
             lines.append([point0, point1])
 
             # Normalize p_max between min_line_width and max_line_width
-            divide_by = (max_capacity - min_capacity) * (
+            divide_by = (max_capacity - min_capacity) / (
                 max_line_width - min_line_width
             )
             divide_by = divide_by if divide_by != 0 else 1
@@ -728,7 +734,7 @@ def plot_sized_branches(buses: pd.DataFrame, branches: pd.DataFrame, savefolder=
             lines.append([point0, point1])
 
             # Normalize p_max between min_line_width and max_line_width
-            divide_by = (max_capacity - min_capacity) * (
+            divide_by = (max_capacity - min_capacity) / (
                 max_line_width - min_line_width
             )
             divide_by = divide_by if divide_by != 0 else 1
@@ -792,6 +798,97 @@ def plot_sized_branches(buses: pd.DataFrame, branches: pd.DataFrame, savefolder=
         fig.savefig(savepath, bbox_inches="tight")
 
 
+def plot_sized_branches_with_year(
+    buses: pd.DataFrame, branches: pd.DataFrame, year: int, savefolder=None
+):
+    """Plots the base network with buses and transmission lines, without generators."""
+
+    # Convert buses DataFrame to a GeoDataFrame
+    geometry_buses = gpd.points_from_xy(buses["x"], buses["y"])
+    gdf_buses = gpd.GeoDataFrame(buses, geometry=geometry_buses, crs="EPSG:4326")
+
+    # Create a dictionary to map bus IDs to their coordinates for easy access
+    bus_coords = gdf_buses[["x", "y"]].to_dict("index")
+
+    # Generate list of line segments for LineCollection based on bus coordinates
+    lines = []
+    line_widths = []
+    max_capacity = branches["p_max"].max()
+    min_capacity = branches["p_max"].min()
+    min_line_width = 1
+    max_line_width = 5
+
+    for _, row in branches.iterrows():
+        if row["bus0"] in bus_coords and row["bus1"] in bus_coords:
+            point0 = (bus_coords[row["bus0"]]["x"], bus_coords[row["bus0"]]["y"])
+            point1 = (bus_coords[row["bus1"]]["x"], bus_coords[row["bus1"]]["y"])
+            lines.append([point0, point1])
+
+            # Normalize p_max between min_line_width and max_line_width
+            divide_by = (max_capacity - min_capacity) / (
+                max_line_width - min_line_width
+            )
+            divide_by = divide_by if divide_by != 0 else 1
+            linewidth = min_line_width + (row["p_max"] - min_capacity) / divide_by
+            line_widths.append(linewidth)
+        else:
+            print(f"Excluded line with missing bus coordinates: {row}")
+
+    fig, ax = plot_background(buses)
+
+    # Create and plot the LineCollection for transmission lines
+    lc = LineCollection(lines, colors="red", linewidths=line_widths, zorder=15)
+    ax.add_collection(lc)
+
+    # Plot buses
+    gdf_buses.plot(
+        ax=ax, color="black", marker="o", markersize=50, zorder=20
+    )  # No legend entry for buses
+
+    # Create legend entries for line capacities
+    max_capacity_label = f"{max_capacity:.0f} MW"
+    min_capacity_label = f"{min_capacity:.0f} MW"
+
+    # Custom legend items for max and min capacities
+    max_line = mlines.Line2D(
+        [], [], color="red", linewidth=max_line_width, label=max_capacity_label
+    )
+    min_line = mlines.Line2D(
+        [], [], color="red", linewidth=min_line_width, label=min_capacity_label
+    )
+    bus_legend = mlines.Line2D(
+        [],
+        [],
+        color="black",
+        marker="o",
+        linestyle="None",
+        markersize=10,
+        label="Bus",
+    )
+
+    # Combine all legend elements into one legend and place in the lower right
+    legend_elements = [max_line, min_line, bus_legend]
+    combined_legend = ax.legend(
+        handles=legend_elements,
+        loc="lower right",
+        fontsize=12,
+    )
+    ax.add_artist(combined_legend)
+
+    # Customize the plot
+    plt.xlabel("Longitude")
+    plt.ylabel("Latitude")
+    ax.set_axis_off()
+    plt.grid(True)
+    plt.show()
+
+    print("Plotting grid with new branches in year", year)
+
+    if savefolder:
+        savepath = os.path.join(savefolder, f"grid_new_branches_{year}.png")
+        fig.savefig(savepath, bbox_inches="tight")
+
+
 def plot_sized_lines_with_extensions(
     buses, branches, new_capacity=5000, savefolder=None, divider=48
 ):
@@ -811,7 +908,7 @@ def plot_sized_lines_with_extensions(
     min_capacity = branches["p_max"].min()
     min_line_width = 1
     max_line_width = 5
-    divide_by = (max_capacity - min_capacity) * (max_line_width - min_line_width)
+    divide_by = (max_capacity - min_capacity) / (max_line_width - min_line_width)
     divide_by = divide_by if divide_by != 0 else 1
     new_line_width = min_line_width + new_capacity / divide_by
     new_lines = []
@@ -822,12 +919,6 @@ def plot_sized_lines_with_extensions(
             point0 = (bus_coords[row["bus0"]]["x"], bus_coords[row["bus0"]]["y"])
             point1 = (bus_coords[row["bus1"]]["x"], bus_coords[row["bus1"]]["y"])
             lines.append([point0, point1])
-
-            # Normalize p_max between min_line_width and max_line_width
-            divide_by = (max_capacity - min_capacity) * (
-                max_line_width - min_line_width
-            )
-            divide_by = divide_by if divide_by != 0 else 1
             linewidth = min_line_width + (row["p_max"] - min_capacity) / divide_by
             line_widths.append(linewidth)
 
@@ -1246,7 +1337,7 @@ def plot_base_network_with_lineIDs_and_city_text(
             )  # Store offset midpoint and line number
 
             # Normalize p_max between min_line_width and max_line_width
-            divide_by = (max_capacity - min_capacity) * (
+            divide_by = (max_capacity - min_capacity) / (
                 max_line_width - min_line_width
             )
             divide_by = divide_by if divide_by != 0 else 1
@@ -2691,7 +2782,7 @@ def plot_congestion_network(
                 )  # Store offset midpoint and line number
 
             # Normalize p_max between min_line_width and max_line_width
-            divide_by = (branches["p_max"].max() - branches["p_max"].min()) * (
+            divide_by = (branches["p_max"].max() - branches["p_max"].min()) / (
                 max_line_width - min_line_width
             )
             divide_by = 1 if divide_by == 0 else divide_by
