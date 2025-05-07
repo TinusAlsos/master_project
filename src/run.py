@@ -6,7 +6,7 @@ from time import time
 import os
 import yaml
 import argparse
-from src.analytics import analyze_run
+from src.analytics import analyze_run_stochastic
 from src.utils import (
     load_csv_files_from_folder_multi_weeks,
     load_model_config,
@@ -252,7 +252,7 @@ def run(
         rerun_co2(model, model_config)
 
     if not no_run_analysis:
-        analyze_run(model_config)
+        analyze_run_stochastic(model_config)
 
 
 def create_run_id(model_config: dict) -> str:
@@ -293,8 +293,8 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--no_run_analysis",
-        default="",
-        help="Run analysis (keep empty to run analysis, input anything to not run analysis.).",
+        action="store_false",
+        help="Keep empty to run analysis, use the tag to not run the analysis.",
     )
 
     # This flag will be False if specified, True otherwise

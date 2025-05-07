@@ -1,4 +1,4 @@
-""" This module contains functions for running automated analytics on the data in different stages of the pipeline. """
+"""This module contains functions for running automated analytics on the data in different stages of the pipeline."""
 
 import os
 
@@ -11,6 +11,24 @@ import gurobipy as gp
 
 DATA_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data")
 PROCESSED_DATA_FOLDER = os.path.join(DATA_FOLDER, "processed")
+# Color mapping for scenarios (reuse for other plots)
+scenario_colors = {
+    "NT": "#1f77b4",
+    "GA": "#ff7f0e",
+    "DE": "#2ca02c",
+    "Average": "#7f7f7f",
+}
+
+# Define a consistent color palette for cost categories
+category_colors = {
+    "Invest Gen": "#b20000",  # dark red
+    "Invest Bat": "#0072b2",  # blue
+    "Invest Tx": "#009e73",  # green
+    "Prod Cost": "#f0e442",  # yellow
+    "CO₂ Cost": "#d55e00",  # orange
+    "Load Shedding Cost": "#cc79a7",  # magenta
+    "Curtailment Cost": "#56b4e9",  # light blue
+}
 
 
 def run_analytics_on_input_data(
@@ -390,21 +408,31 @@ def preprocess_batteries(
     battery_soc.index = pd.to_datetime(battery_soc.index)
     # Make battery_build consistent, whether it consists of binary decision variables or capacity.
     if battery_build.isin([0, 1]).all().all():
-        batteries["new_power_capacity"] = batteries["P_discharge_max"] * battery_build.loc[batteries.index.values, "value"]
-        batteries["new_energy_capacity"] = batteries["new_power_capacity"] * batteries["hour_capacity"]
+        batteries["new_power_capacity"] = (
+            batteries["P_discharge_max"]
+            * battery_build.loc[batteries.index.values, "value"]
+        )
+        batteries["new_energy_capacity"] = (
+            batteries["new_power_capacity"] * batteries["hour_capacity"]
+        )
     else:
-        batteries["new_power_capacity"] = battery_build.loc[batteries.index.values, "value"]
-        batteries["new_energy_capacity"] = batteries["new_power_capacity"] * batteries["hour_capacity"]
+        batteries["new_power_capacity"] = battery_build.loc[
+            batteries.index.values, "value"
+        ]
+        batteries["new_energy_capacity"] = (
+            batteries["new_power_capacity"] * batteries["hour_capacity"]
+        )
         battery_build["value"] = (battery_build["value"] != 0).astype(int)
-
 
 
 def check_line_errors(branches: pd.DataFrame, power_flow: pd.DataFrame) -> None:
     # Make sure power flow is + if branch doesn't exist
     epsilon = 1e-6
     for branch in branches[branches["exists"] == 0].index:
-        if power_flow[branch].abs().sum() > epsilon or (power_flow[branch].abs() 
-        .sum()) * (-1) < epsilon:
+        if (
+            power_flow[branch].abs().sum() > epsilon
+            or (power_flow[branch].abs().sum()) * (-1) < epsilon
+        ):
             print(f"WARNING: Branch {branch} has power flow when it doesn't exist")
     errors = 0
     num_lines_with_errors = 0
@@ -759,7 +787,9 @@ def table_cost_breakdown(
     model_config: dict,
     savefolder: str = "",
 ) -> None:
-    battery_build_cost = (batteries["new_energy_capacity"] * batteries["capital_cost"]).sum()
+    battery_build_cost = (
+        batteries["new_energy_capacity"] * batteries["capital_cost"]
+    ).sum()
 
     load_shedding_cost = load_shedding.sum().sum() * float(model_config["VOLL"])
     curtailment_cost = curtailment.sum().sum() * model_config["CC"]
@@ -979,6 +1009,3047 @@ def analyze_run(
         f"Post Optimization Analysis completed for model_id: {model_config['model_id']}, model: {model_config["model_name"]}, run_id: {model_config["run_id"]}. \n Results saved in {results_folder}"
     )
     print(30 * "-")
+
+
+### Below are functions tailored for stochastic runs ###
+
+import yaml
+
+
+def add_capacity_and_cumulative_metrics(
+    generators_df, generator_capacity_df, capacity_col="value"
+):
+    """
+    Merge new capacity values, drop 'extended_by', and add cumulative metrics.
+
+    Parameters
+    ----------
+    generators_df : pd.DataFrame
+        DataFrame indexed by (year, generator), containing columns including
+        'extension_potential' and 'extended_by'.
+    generator_capacity_df : pd.DataFrame
+        DataFrame indexed by (generator, year) with a column (named by capacity_col)
+        of new capacity values.
+    capacity_col : str, optional
+        Name of the column in generator_capacity_df holding the new capacity values
+        (default 'value').
+
+    Returns
+    -------
+    pd.DataFrame
+        DataFrame indexed by (year, generator) containing:
+        - all original columns except 'extended_by'
+        - 'new_capacity' (from generator_capacity_df)
+        - 'cum_new_capacity' (running total of new_capacity per generator)
+        - 'cum_extension_potential' (running total of extension_potential per generator)
+    """
+    # 1. Reset indices to expose 'year' and 'generator' as columns
+    gen = generators_df.reset_index()
+    cap = generator_capacity_df.reset_index()
+
+    # 2. Rename the capacity output column to 'new_capacity'
+    cap = cap.rename(columns={capacity_col: "new_capacity"})
+
+    # 3. Merge new_capacity into the generators table
+    merged = gen.merge(
+        cap[["year", "generator", "new_capacity"]], on=["year", "generator"], how="left"
+    )
+
+    # 4. Drop the old 'extended_by' column
+    merged = merged.drop(columns=["extended_by"], errors="ignore")
+
+    # 5. Compute cumulative metrics per generator in chronological order
+    merged = merged.sort_values(["generator", "year"])
+    # cumulative new capacity
+    merged["cum_new_capacity"] = merged.groupby("generator")["new_capacity"].cumsum()
+    # cumulative extension potential
+    merged["cum_extension_potential"] = merged.groupby("generator")[
+        "extension_potential"
+    ].cumsum()
+
+    # 6. Restore the MultiIndex
+    merged = merged.set_index(["year", "generator"])
+
+    merged["total_capacity"] = merged["p_nom"] + merged["cum_new_capacity"]
+
+    return merged
+
+
+def plot_capacity_investment_by_carrier(
+    generators: pd.DataFrame, savefolder: str | None = None
+) -> None:
+    """
+    Plot a stacked bar chart of new capacity investments per year by generation technology.
+
+    Parameters
+    ----------
+    generators : pd.DataFrame
+        DataFrame indexed by (year, generator) with columns:
+        - new_capacity
+        - carrier
+        - nice_name
+        - color
+    savefolder : str or None, optional
+        Directory to save the figure. If None, the figure is not saved. Default is None.
+    """
+    # Prepare the data: aggregate new_capacity by year & carrier
+    temp = generators.reset_index()
+    agg = (
+        temp.groupby(["year", "carrier"])["new_capacity"]
+        .sum()
+        .unstack("carrier")
+        .fillna(0)
+    )
+
+    # Build mappings for labels and colors from the original DataFrame
+    meta = (
+        temp[["carrier", "nice_name", "color"]]
+        .drop_duplicates("carrier")
+        .set_index("carrier")
+    )
+    labels = [meta.loc[c, "nice_name"] for c in agg.columns]
+    colors = [meta.loc[c, "color"] for c in agg.columns]
+
+    # Plot
+    fig, ax = plt.subplots()
+    agg.plot(kind="bar", stacked=True, ax=ax, color=colors)
+
+    ax.set_xlabel("Year")
+    ax.set_ylabel("New Capacity (MW)")
+    ax.legend(labels, title="Technology")
+
+    plt.tight_layout()
+
+    # Save if requested
+    if savefolder:
+        savepath = os.path.join(savefolder, "capacity_investment_by_technology.png")
+        fig.savefig(savepath, bbox_inches="tight")
+
+    # Print title line instead of setting it on the plot
+    print("Annual Capacity Investments by Technology")
+
+    plt.show()
+
+
+def plot_capacity_spending_by_carrier(
+    generators: pd.DataFrame, savefolder: str | None = None
+) -> None:
+    """
+    Plot a stacked bar chart of annual capital expenditure on new capacity by generation technology,
+    with the y-axis in billions of euros.
+
+    Parameters
+    ----------
+    generators : pd.DataFrame
+        DataFrame indexed by (year, generator) with columns:
+        - new_capacity
+        - capital_cost
+        - carrier
+        - nice_name
+        - color
+    savefolder : str or None, optional
+        Directory to save the figure. If None, the figure is not saved. Default is None.
+    """
+    # Prepare the data: compute spending = new_capacity * capital_cost (in billions)
+    temp = generators.reset_index()
+    temp["investment_cost"] = temp["new_capacity"] * temp["capital_cost"] / 1e9
+
+    # Aggregate by year & carrier
+    agg = (
+        temp.groupby(["year", "carrier"])["investment_cost"]
+        .sum()
+        .unstack("carrier")
+        .fillna(0)
+    )
+
+    # Build mappings for labels and colors
+    meta = (
+        temp[["carrier", "nice_name", "color"]]
+        .drop_duplicates("carrier")
+        .set_index("carrier")
+    )
+    labels = [meta.loc[c, "nice_name"] for c in agg.columns]
+    colors = [meta.loc[c, "color"] for c in agg.columns]
+
+    # Plot
+    fig, ax = plt.subplots()
+    agg.plot(kind="bar", stacked=True, ax=ax, color=colors)
+
+    ax.set_xlabel("Year")
+    ax.set_ylabel("Capital Expenditure (billion €)")
+    ax.legend(labels, title="Technology")
+
+    plt.tight_layout()
+
+    # Save if requested
+    if savefolder:
+        savepath = os.path.join(savefolder, "capacity_spending_by_technology.png")
+        fig.savefig(savepath, bbox_inches="tight")
+
+    # Print title line
+    print("Annual Capital Expenditure by Technology")
+
+    plt.show()
+
+
+def plot_total_capacity_growth(
+    generators: pd.DataFrame, savefolder: str | None = None
+) -> None:
+    """
+    Plot the growth in total installed capacity over time.
+
+    For each year:
+    - 'existing_capacity' is the initial p_nom plus all new_capacity built in prior periods.
+    - 'new_capacity' is the capacity added in that year.
+
+    Y-axis is in GW. Legend labels are made reader-friendly. Uses a new color palette.
+    """
+    temp = generators.reset_index()
+    years = sorted(temp["year"].unique())
+    first_year = years[0]
+
+    # Initial capacity (MW) at first year
+    init = temp[temp["year"] == first_year].set_index("generator")["p_nom"]
+
+    # Compute cumulative new capacity
+    temp = temp.sort_values(["generator", "year"])
+    temp["cum_new_capacity"] = temp.groupby("generator")["new_capacity"].cumsum()
+    temp["existing_capacity"] = init.reindex(temp["generator"]).values + (
+        temp["cum_new_capacity"] - temp["new_capacity"]
+    )
+
+    # Aggregate and convert to GW
+    agg = temp.groupby("year")[["existing_capacity", "new_capacity"]].sum().loc[years]
+    agg_gw = agg / 1e3
+
+    fig, ax = plt.subplots()
+    agg_gw.plot(
+        kind="bar",
+        stacked=True,
+        ax=ax,
+        color=["#1b9e77", "#d95f02"],  # new palette: green & orange
+    )
+
+    ax.set_xlabel("Year")
+    ax.set_ylabel("Capacity (GW)")
+    ax.legend(["Existing Capacity", "New Capacity"], title="")
+
+    plt.tight_layout()
+
+    if savefolder:
+        savepath = os.path.join(savefolder, "total_capacity_growth.png")
+        fig.savefig(savepath, bbox_inches="tight")
+
+    print("Growth in Total Installed Capacity")
+    plt.show()
+
+
+def plot_extension_vs_potential_by_carrier(
+    generators: pd.DataFrame, savefolder: str | None = None
+) -> None:
+    """
+    Single-figure bar chart of extension potential vs actual new capacity by technology and year,
+    with values in GW.
+
+    For each year, two sets of stacked bars (Actual vs Potential), colored by carrier.
+    Potential bars are drawn with alpha=0.5.
+
+    Parameters
+    ----------
+    generators : pd.DataFrame
+        DataFrame indexed by (year, generator) with columns:
+        - new_capacity
+        - extension_potential
+        - carrier
+        - nice_name
+        - color
+    savefolder : str or None, optional
+        Directory to save the figure. If None, the figure is not saved. Default is None.
+    """
+    temp = generators.reset_index()
+    agg = (
+        temp.groupby(["year", "carrier"])
+        .agg(
+            extension_potential=("extension_potential", "sum"),
+            new_capacity=("new_capacity", "sum"),
+        )
+        .reset_index()
+    )
+
+    # Pivot and convert to GW
+    potential_df = (
+        agg.pivot(index="year", columns="carrier", values="extension_potential").fillna(
+            0
+        )
+        / 1e3
+    )
+    actual_df = (
+        agg.pivot(index="year", columns="carrier", values="new_capacity").fillna(0)
+        / 1e3
+    )
+    years = potential_df.index.tolist()
+    carriers = potential_df.columns.tolist()
+
+    meta = (
+        temp[["carrier", "nice_name", "color"]]
+        .drop_duplicates("carrier")
+        .set_index("carrier")
+    )
+
+    positions = np.arange(len(years))
+    width = 0.4
+    bottom_act = np.zeros(len(years))
+    bottom_pot = np.zeros(len(years))
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+    for carrier in carriers:
+        color = meta.loc[carrier, "color"]
+        nice = meta.loc[carrier, "nice_name"]
+        act_vals = actual_df[carrier].reindex(years).values
+        pot_vals = potential_df[carrier].reindex(years).values
+
+        ax.bar(
+            positions - width / 2,
+            act_vals,
+            width,
+            bottom=bottom_act,
+            color=color,
+            label=nice,
+        )
+        ax.bar(
+            positions + width / 2,
+            pot_vals,
+            width,
+            bottom=bottom_pot,
+            color=color,
+            alpha=0.5,
+        )
+
+        bottom_act += act_vals
+        bottom_pot += pot_vals
+
+    ax.set_xticks(positions)
+    ax.set_xticklabels([str(y) for y in years])
+    ax.set_xlabel("Year")
+    ax.set_ylabel("Capacity (GW)")
+
+    # Expand right margin for legends
+    fig.subplots_adjust(right=0.85)
+
+    from matplotlib.patches import Patch
+
+    # Technology legend
+    tech_handles = [Patch(facecolor=meta.loc[c, "color"]) for c in carriers]
+    tech_labels = [meta.loc[c, "nice_name"] for c in carriers]
+    leg1 = ax.legend(
+        tech_handles,
+        tech_labels,
+        title="Technology",
+        bbox_to_anchor=(0.88, 1),
+        loc="upper left",
+        borderaxespad=0.0,
+        framealpha=1.0,
+    )
+    ax.add_artist(leg1)
+
+    # Bar type legend
+    type_handles = [
+        Patch(facecolor="gray", alpha=1),
+        Patch(facecolor="gray", alpha=0.5),
+    ]
+    type_labels = ["Actual", "Potential"]
+    ax.legend(
+        type_handles,
+        type_labels,
+        title="Bar Type",
+        bbox_to_anchor=(1.02, 0.66),
+        loc="upper left",
+        borderaxespad=0.0,
+        fontsize="small",
+    )
+
+    print("Extension Potential vs Actual New Capacity by Technology")
+    plt.show()
+
+    if savefolder:
+        savepath = os.path.join(savefolder, "extension_vs_actual_by_technology.png")
+        fig.savefig(savepath, bbox_inches="tight")
+
+
+def create_energy_production_by_carrier_table(
+    generation: pd.DataFrame,
+    generators: pd.DataFrame,
+    scenarios: dict,
+    scenario_probabilities: dict,
+    week_weights: dict,
+    savefolder: str = None,
+) -> None:
+    """
+    Create a table of annual energy production by carrier, both unweighted and weighted by scenario probabilities.
+
+    Parameters
+    ----------
+    generation : pd.DataFrame
+        DataFrame indexed by (year, generator, scenario, week) with columns:
+        - value (energy produced)
+    generators : pd.DataFrame
+        DataFrame indexed by (year, generator) with columns:
+        - carrier (energy carrier type)
+    scenarios : dict
+        Dictionary mapping years to lists of scenarios.
+    scenario_probabilities : dict
+        Dictionary mapping years to lists of scenario probabilities.
+    week_weights : dict
+        Dictionary mapping weeks to weights for annualization.
+
+    Returns
+    -------
+    None
+        Displays the unweighted and weighted tables.
+    """
+    # 1) Build a small DataFrame of (year, scenario, probability)
+    scenario_data = []
+    for year_str, scen_list in scenarios.items():
+        year = int(year_str)
+        probs = scenario_probabilities[year_str]
+        for scen, prob in zip(scen_list, probs):
+            scenario_data.append({"year": year, "scenario": scen, "probability": prob})
+    prob_df = pd.DataFrame(scenario_data)
+
+    # 2) Compute weekly sums and annualize using week_weights
+    weekly = (
+        generation.groupby(["generator", "scenario", "year", "week"])["value"]
+        .sum()
+        .reset_index(name="weekly_gen")
+    )
+    weekly["weight"] = weekly["week"].astype(str).map(week_weights)
+    weekly["annual_gen"] = weekly["weekly_gen"] * weekly["weight"]
+
+    # 3) Sum to get annual generation per (generator, scenario, year)
+    annual = (
+        weekly.groupby(["generator", "scenario", "year"])["annual_gen"]
+        .sum()
+        .reset_index()
+    )
+
+    # 4) Map each generator to its carrier
+    gen2car = (
+        generators.reset_index()[["generator", "carrier"]]
+        .drop_duplicates("generator")
+        .set_index("generator")["carrier"]
+    )
+    annual["carrier"] = annual["generator"].map(gen2car)
+
+    # 5) Unweighted: mean across scenarios
+    unweighted = (
+        annual.groupby(["year", "carrier"])["annual_gen"]
+        .mean()
+        .unstack("carrier")
+        .fillna(0)
+    )
+
+    # 6) Weighted: merge probabilities and compute expected value
+    annual = annual.merge(prob_df, on=["year", "scenario"], how="left")
+    annual["weighted_gen"] = annual["annual_gen"] * annual["probability"]
+    weighted = (
+        annual.groupby(["year", "carrier"])["weighted_gen"]
+        .sum()
+        .unstack("carrier")
+        .fillna(0)
+    )
+
+    # # 7) Display
+    # print("Annual energy production by carrier (unweighted average across scenarios):")
+    # display(unweighted)
+
+    print("\nAnnual expected energy production by carrier (scenario-weighted):")
+    # display(weighted)
+    if savefolder:
+        savepath = os.path.join(savefolder, "energy_production_by_carrier_table.csv")
+        weighted.to_csv(savepath, index=True)
+
+    return weighted
+
+
+def make_annual_production_table(
+    generation: pd.DataFrame,
+    generators: pd.DataFrame,
+    scenarios: dict,
+    scenario_probabilities: dict,
+    week_weights: dict,
+    savefolder: str | None = None,
+) -> None:
+    """
+    Compute and print the annual expected energy production by carrier and scenario,
+    and optionally save it to CSV.
+
+    Parameters
+    ----------
+    generation : pd.DataFrame
+        Hourly generation with MultiIndex (generator, scenario, year, week, hour)
+        and a 'value' column in MWh.
+    generators : pd.DataFrame
+        Generator metadata with a 'carrier' column, indexed by (year, generator)
+        or containing a 'generator' column to map to carrier.
+    savefolder : str or None, optional
+        Directory to save the CSV. If None, the table is not saved.
+    """
+    # 1. Build a DataFrame of scenario probabilities
+    scenario_data = []
+    for year_str, scen_list in scenarios.items():
+        year = int(year_str)
+        probs = scenario_probabilities[year_str]
+        for scen, prob in zip(scen_list, probs):
+            scenario_data.append({"year": year, "scenario": scen, "probability": prob})
+    prob_df = pd.DataFrame(scenario_data)
+
+    # 2. Sum hourly → weekly, then annualize
+    weekly = (
+        generation.groupby(["generator", "scenario", "year", "week"])["value"]
+        .sum()
+        .reset_index(name="weekly_gen")
+    )
+    weekly["weight"] = weekly["week"].astype(str).map(week_weights)
+    weekly["annual_gen"] = weekly["weekly_gen"] * weekly["weight"]
+
+    # 3. Collapse to annual per (generator, scenario, year)
+    annual = (
+        weekly.groupby(["generator", "scenario", "year"])["annual_gen"]
+        .sum()
+        .reset_index()
+    )
+
+    # 4. Map generator → carrier
+    gen2car = (
+        generators.reset_index()[["generator", "carrier"]]
+        .drop_duplicates("generator")
+        .set_index("generator")["carrier"]
+    )
+    annual["carrier"] = annual["generator"].map(gen2car)
+
+    # 5. Merge probabilities and compute weighted generation
+    annual = annual.merge(prob_df, on=["year", "scenario"], how="left")
+    annual["expected_gen"] = annual["annual_gen"] * annual["probability"]
+
+    # 6. Pivot to get carriers as columns, for each (year, scenario)
+    table = (
+        annual.groupby(["year", "scenario", "carrier"])["expected_gen"]
+        .sum()
+        .unstack("carrier")
+        .fillna(0)
+    )
+
+    # 7. Add a Total column
+    table["Total"] = table.sum(axis=1)
+
+    # 8. Print the table
+    print("Annual expected energy production by carrier and scenario (MWh):")
+    # print(table)
+
+    # 9. Save if requested
+    if savefolder:
+        savepath = os.path.join(
+            savefolder, "annual_production_by_carrier_and_scenario.csv"
+        )
+        table.to_csv(savepath)
+    return table
+
+
+def make_weighted_annual_production_cost_by_year_table(
+    generation: pd.DataFrame,
+    generators: pd.DataFrame,
+    scenarios: dict,
+    scenario_probabilities: dict,
+    week_weights: dict,
+    carbon_price: float,
+    savefolder: str | None = None,
+) -> pd.DataFrame:
+    """
+    Compute and return the scenario-weighted annual production cost (including CO₂ emissions)
+    by technology and year.
+
+    Parameters
+    ----------
+    generation : pd.DataFrame
+        Hourly generation with MultiIndex (generator, scenario, year, week, hour)
+        and a 'value' column in MWh.
+    generators : pd.DataFrame
+        Generator metadata with columns:
+        - marginal_cost (EUR/MWh)
+        - co2_emissions (tonnes CO₂/MWh)
+        - carrier
+        indexed by (year, generator) or containing 'year' & 'generator' columns.
+    week_weights : dict[str, float]
+        Multiplier for each week to annualize generation.
+    carbon_price : float
+        Emission price in EUR per tonne CO₂.
+    savefolder : str or None, optional
+        Directory to save the CSV. If None, no file is written.
+
+    Returns
+    -------
+    pd.DataFrame
+        Indexed by year, columns are carrier types (plus 'Total'),
+        values are the scenario-weighted annual production cost including emissions (EUR).
+    """
+    # build scenario probability DataFrame
+    scenario_data = []
+    for year_str, scen_list in scenarios.items():
+        year = int(year_str)
+        probs = scenario_probabilities[year_str]
+        for scen, prob in zip(scen_list, probs):
+            scenario_data.append({"year": year, "scenario": scen, "probability": prob})
+    prob_df = pd.DataFrame(scenario_data)
+
+    # hourly → weekly sums, then annualize
+    weekly = (
+        generation.groupby(["generator", "scenario", "year", "week"])["value"]
+        .sum()
+        .reset_index(name="weekly_gen")
+    )
+    weekly["weight"] = weekly["week"].astype(str).map(week_weights)
+    weekly["annual_gen"] = weekly["weekly_gen"] * weekly["weight"]
+
+    # annual total per generator–scenario–year
+    annual = (
+        weekly.groupby(["generator", "scenario", "year"])["annual_gen"]
+        .sum()
+        .reset_index()
+    )
+
+    # attach cost & emission rates and carrier
+    meta = generators.reset_index()[
+        ["year", "generator", "marginal_cost", "co2_emissions", "carrier"]
+    ].drop_duplicates(["year", "generator"])
+    annual = annual.merge(meta, on=["year", "generator"], how="left")
+
+    # compute cost including emissions
+    annual["production_cost"] = annual["annual_gen"] * annual["marginal_cost"]
+    annual["co2_emission"] = annual["annual_gen"] * annual["co2_emissions"]
+    annual["co2_cost"] = annual["co2_emission"] * carbon_price
+    annual["total_cost"] = annual["production_cost"] + annual["co2_cost"]
+
+    # merge probabilities and compute weighted cost
+    annual = annual.merge(prob_df, on=["year", "scenario"], how="left")
+    annual["weighted_cost"] = annual["total_cost"] * annual["probability"]
+
+    # pivot to carriers by year
+    table = (
+        annual.groupby(["year", "carrier"])["weighted_cost"]
+        .sum()
+        .unstack("carrier")
+        .fillna(0)
+    )
+    table["Total"] = table.sum(axis=1)
+
+    print("Annual scenario-weighted production cost (incl. CO₂) by technology (EUR):")
+
+    if savefolder:
+        path = os.path.join(savefolder, "annual_weighted_cost_by_carrier.csv")
+        table.to_csv(path)
+
+    return table
+
+
+def make_weighted_annual_production_by_year(
+    generation: pd.DataFrame,
+    generators: pd.DataFrame,
+    scenarios: dict,
+    scenario_probabilities: dict,
+    week_weights: dict,
+    savefolder: str | None = None,
+) -> None:
+    """
+    Compute and print the annual scenario-weighted energy production by carrier (years only),
+    and optionally save it to CSV.
+
+    Parameters
+    ----------
+    generation : pd.DataFrame
+        Hourly generation with MultiIndex (generator, scenario, year, week, hour)
+        and a 'value' column in MWh.
+    generators : pd.DataFrame
+        Generator metadata with a 'carrier' column, indexed by (year, generator)
+        or containing a 'generator' column to map to carrier.
+    savefolder : str or None, optional
+        Directory to save the CSV. If None, the table is not saved.
+    """
+    # Build scenario probability lookup
+    scenario_data = []
+    for year_str, scen_list in scenarios.items():
+        year = int(year_str)
+        probs = scenario_probabilities[year_str]
+        for scen, prob in zip(scen_list, probs):
+            scenario_data.append({"year": year, "scenario": scen, "probability": prob})
+    prob_df = pd.DataFrame(scenario_data)
+
+    # Hourly → weekly sums and annualize
+    weekly = (
+        generation.groupby(["generator", "scenario", "year", "week"])["value"]
+        .sum()
+        .reset_index(name="weekly_gen")
+    )
+    weekly["weight"] = weekly["week"].astype(str).map(week_weights)
+    weekly["annual_gen"] = weekly["weekly_gen"] * weekly["weight"]
+
+    # Annual total per (generator, scenario, year)
+    annual = (
+        weekly.groupby(["generator", "scenario", "year"])["annual_gen"]
+        .sum()
+        .reset_index()
+    )
+
+    # Map generator → carrier
+    gen2car = (
+        generators.reset_index()[["generator", "carrier"]]
+        .drop_duplicates("generator")
+        .set_index("generator")["carrier"]
+    )
+    annual["carrier"] = annual["generator"].map(gen2car)
+
+    # Merge probabilities and compute weighted generation
+    annual = annual.merge(prob_df, on=["year", "scenario"], how="left")
+    annual["expected_gen"] = annual["annual_gen"] * annual["probability"]
+
+    # Pivot to carriers, index by year
+    table = (
+        annual.groupby(["year", "carrier"])["expected_gen"]
+        .sum()
+        .unstack("carrier")
+        .fillna(0)
+    )
+
+    # Add total column
+    table["Total"] = table.sum(axis=1)
+
+    # Print
+    print("Annual scenario-weighted energy production by carrier (MWh):")
+    # print(table)
+
+    # Save if requested
+    if savefolder:
+        savepath = os.path.join(savefolder, "annual_weighted_production_by_carrier.csv")
+        table.to_csv(savepath)
+    return table
+
+
+def plot_weighted_production_evolution(
+    weighted_table: pd.DataFrame,
+    generators: pd.DataFrame,
+    savefolder: str | None = None,
+) -> None:
+    """
+    Plot the evolution of scenario-weighted annual energy production by technology over years.
+
+    Parameters
+    ----------
+    weighted_table : pd.DataFrame
+        Indexed by year, columns are carrier types (and possibly 'Total'), values are expected annual generation in MWh.
+    generators : pd.DataFrame
+        Generator metadata with 'carrier', 'nice_name', and 'color' columns.
+    savefolder : str or None
+        Directory to save the figure. If None, the figure is not saved.
+    """
+    # Identify carrier columns (exclude 'Total' if present)
+    carriers = [c for c in weighted_table.columns if c != "Total"]
+
+    # Extract color and label mappings
+    meta = (
+        generators.reset_index()[["carrier", "nice_name", "color"]]
+        .drop_duplicates("carrier")
+        .set_index("carrier")
+    )
+
+    # Convert MWh → TWh
+    data_twh = weighted_table[carriers] / 1e6
+
+    # Plot stacked area
+    fig, ax = plt.subplots(figsize=(10, 6))
+    colors = [meta.loc[c, "color"] for c in carriers]
+    labels = [meta.loc[c, "nice_name"] for c in carriers]
+    ax.stackplot(
+        data_twh.index, [data_twh[c] for c in carriers], labels=labels, colors=colors
+    )
+
+    ax.set_xlabel("Year")
+    ax.set_ylabel("Annual Generation (TWh)")
+    plt.tight_layout()
+
+    # Place legend to the right
+    fig.subplots_adjust(right=0.75)
+    ax.legend(title="Technology", bbox_to_anchor=(1.02, 1), loc="upper left")
+
+    # Print title
+    print(
+        "Evolution of Annual Energy Production by Technology (averaged across scenarios)"
+    )
+
+    plt.show()
+
+    # Save if requested
+    if savefolder:
+        savepath = os.path.join(savefolder, "production_evolution_by_technology.png")
+        fig.savefig(savepath, bbox_inches="tight")
+
+
+def plot_weighted_production_cost_evolution(
+    weighted_cost_table: pd.DataFrame,
+    generators: pd.DataFrame,
+    savefolder: str | None = None,
+) -> None:
+    """
+    Plot the evolution of scenario-weighted annual production cost including CO₂ emissions
+    by technology over years, as a stacked area chart.
+
+    Parameters
+    ----------
+    weighted_cost_table : pd.DataFrame
+        Indexed by year, columns are carrier types (and possibly 'Total'),
+        values are expected annual production cost including emissions in EUR.
+    generators : pd.DataFrame
+        Generator metadata with 'carrier', 'nice_name', and 'color' columns.
+    savefolder : str or None
+        Directory to save the figure. If None, the figure is not saved.
+    """
+    # identify technology columns (drop any 'Total')
+    carriers = [c for c in weighted_cost_table.columns if c != "Total"]
+
+    # build mapping of nice_name and color
+    meta = (
+        generators.reset_index()[["carrier", "nice_name", "color"]]
+        .drop_duplicates("carrier")
+        .set_index("carrier")
+    )
+
+    # convert EUR → billion EUR
+    data_beur = weighted_cost_table[carriers] / 1e9
+
+    # plot stacked area
+    fig, ax = plt.subplots(figsize=(10, 6))
+    colors = [meta.loc[c, "color"] for c in carriers]
+    labels = [meta.loc[c, "nice_name"] for c in carriers]
+    ax.stackplot(
+        data_beur.index, [data_beur[c] for c in carriers], labels=labels, colors=colors
+    )
+
+    ax.set_xlabel("Year")
+    ax.set_ylabel("Annual Production Cost including Emissions (billion €)")
+    plt.tight_layout()
+
+    # shift legend to right
+    fig.subplots_adjust(right=0.75)
+    ax.legend(title="Technology", bbox_to_anchor=(1.02, 1), loc="upper left")
+
+    print("Evolution of Annual Production Cost including CO₂ Emissions by Technology")
+    plt.show()
+
+    if savefolder:
+        savepath = os.path.join(
+            savefolder, "production_cost_evolution_by_technology.png"
+        )
+        fig.savefig(savepath, bbox_inches="tight")
+
+
+def make_yearly_system_costs_table(
+    generation: pd.DataFrame,
+    generators: pd.DataFrame,
+    week_weights: dict[str, float],
+    carbon_price: float,
+    savefolder: str | None = None,
+) -> pd.DataFrame:
+    """
+    Compute annual system-level metrics by year and scenario:
+      - yearly production (MWh)
+      - yearly CO2 emissions (tonnes)
+      - yearly CO2 emission cost (EUR)
+      - yearly production cost (EUR)
+      - yearly production cost including emission cost (EUR)
+
+    Parameters
+    ----------
+    generation : pd.DataFrame
+        Hourly generation with MultiIndex
+        (generator, scenario, year, week, hour) and a 'value' column in MWh.
+    generators : pd.DataFrame
+        Generator metadata with columns:
+        - marginal_cost (EUR/MWh)
+        - co2_emissions (tonnes CO2/MWh)
+        indexed by (year, generator) or containing 'year' & 'generator'.
+    week_weights : dict[str, float]
+        Multipliers for each week to annualize generation.
+    carbon_price : float
+        Emission price in EUR per tonne CO2.
+    savefolder : str or None, optional
+        Directory to save the CSV. If None, no file is written.
+
+    Returns
+    -------
+    pd.DataFrame
+        Indexed by (year, scenario) with columns:
+        'production', 'co2_emission', 'co2_emission_cost',
+        'production_cost', 'production_cost_with_emission'.
+    """
+    # 1. Hourly → weekly sum
+    tmp = (
+        generation.groupby(["generator", "scenario", "year", "week"])["value"]
+        .sum()
+        .reset_index(name="weekly_gen")
+    )
+    tmp["weight"] = tmp["week"].astype(str).map(week_weights)
+    tmp["annual_gen"] = tmp["weekly_gen"] * tmp["weight"]
+
+    # 2. Sum to (generator, scenario, year)
+    annual = (
+        tmp.groupby(["generator", "scenario", "year"])["annual_gen"].sum().reset_index()
+    )
+
+    # 3. Attach marginal_cost and co2_emissions
+    meta = generators.reset_index()[
+        ["year", "generator", "marginal_cost", "co2_emissions"]
+    ].drop_duplicates(["year", "generator"])
+    annual = annual.merge(meta, on=["year", "generator"], how="left")
+
+    # 4. Compute metrics per generator‐scenario‐year
+    annual["production"] = annual["annual_gen"]
+    annual["co2_emission"] = annual["annual_gen"] * annual["co2_emissions"]
+    annual["production_cost"] = annual["annual_gen"] * annual["marginal_cost"]
+    annual["co2_emission_cost"] = annual["co2_emission"] * carbon_price
+    annual["production_cost_with_emission"] = (
+        annual["production_cost"] + annual["co2_emission_cost"]
+    )
+
+    # 5. Aggregate across generators → (year, scenario)
+    table = (
+        annual.groupby(["year", "scenario"])[
+            [
+                "production",
+                "co2_emission",
+                "co2_emission_cost",
+                "production_cost",
+                "production_cost_with_emission",
+            ]
+        ]
+        .sum()
+        .sort_index()
+    )
+
+    # 6. Print and save
+    print("Yearly system metrics by year and scenario:")
+    # print(table)
+
+    if savefolder:
+        path = os.path.join(savefolder, "yearly_system_costs_by_scenario.csv")
+        table.to_csv(path)
+
+    return table
+
+
+def plot_co2_emissions_by_scenario(
+    yearly_system_costs: pd.DataFrame, savefolder: str | None = None
+) -> None:
+    """
+    Plot CO₂ emissions by year and scenario (million tonnes) as a grouped bar chart.
+
+    Parameters
+    ----------
+    yearly_system_costs : pd.DataFrame
+        DataFrame indexed by (year, scenario) with a 'co2_emission' column (tonnes).
+    savefolder : str or None, optional
+        Directory to save the figure. If None, the figure is not saved.
+    """
+    # Pivot to have scenarios as columns, convert tonnes → million tonnes
+    co2_df = yearly_system_costs["co2_emission"].unstack("scenario") / 1e6
+
+    fig, ax = plt.subplots(figsize=(8, 6))
+    # Grouped bar chart
+    co2_df.plot(kind="bar", ax=ax, color=[scenario_colors[s] for s in co2_df.columns])
+
+    ax.set_xlabel("Year")
+    ax.set_ylabel("CO₂ Emissions (million tonnes)")
+    plt.tight_layout()
+
+    # Print title line
+    print("CO₂ Emissions by Year and Scenario")
+
+    plt.show()
+
+    if savefolder:
+        savepath = os.path.join(savefolder, "co2_emissions_by_scenario.png")
+        fig.savefig(savepath, bbox_inches="tight")
+
+
+def plot_co2_emissions_by_scenario(
+    yearly_system_costs: pd.DataFrame, savefolder: str | None = None
+) -> None:
+    """
+    Grouped bar chart of CO₂ emissions by year, scenario, and average (million tonnes).
+    """
+    # Pivot without filling zeros
+    df = yearly_system_costs["co2_emission"].unstack("scenario") / 1e6
+    # Compute average across non-NaN values
+    df["Average"] = df.mean(axis=1)
+    # Prepare for plotting (fill NaN to avoid plot errors)
+    df_plot = df.fillna(0)
+
+    fig, ax = plt.subplots(figsize=(8, 6))
+    df_plot.plot(kind="bar", ax=ax, color=[scenario_colors[s] for s in df_plot.columns])
+
+    ax.set_xlabel("Year")
+    ax.set_ylabel("CO₂ Emissions (million tonnes)")
+    plt.tight_layout()
+    print("CO₂ Emissions by Year, Scenario, and Average")
+    plt.show()
+
+    if savefolder:
+        fig.savefig(
+            os.path.join(savefolder, "co2_emissions_by_scenario_avg.png"),
+            bbox_inches="tight",
+        )
+
+
+def plot_production_by_scenario(
+    yearly_system_costs: pd.DataFrame, savefolder: str | None = None
+) -> None:
+    """
+    Grouped bar chart of annual production by year, scenario, and average (TWh).
+    """
+    df = yearly_system_costs["production"].unstack("scenario") / 1e6
+    df["Average"] = df.mean(axis=1)
+    df_plot = df.fillna(0)
+
+    fig, ax = plt.subplots(figsize=(8, 6))
+    df_plot.plot(kind="bar", ax=ax, color=[scenario_colors[s] for s in df_plot.columns])
+
+    ax.set_xlabel("Year")
+    ax.set_ylabel("Annual Production (TWh)")
+    plt.tight_layout()
+    print("Annual Production by Year, Scenario, and Average")
+    plt.show()
+
+    if savefolder:
+        fig.savefig(
+            os.path.join(savefolder, "production_by_scenario_avg.png"),
+            bbox_inches="tight",
+        )
+
+
+def plot_production_cost_by_scenario(
+    yearly_system_costs: pd.DataFrame, savefolder: str | None = None
+) -> None:
+    """
+    Grouped bar chart of production cost by year, scenario, and average (billion €).
+    """
+    df = yearly_system_costs["production_cost"].unstack("scenario") / 1e9
+    df["Average"] = df.mean(axis=1)
+    df_plot = df.fillna(0)
+
+    fig, ax = plt.subplots(figsize=(8, 6))
+    df_plot.plot(kind="bar", ax=ax, color=[scenario_colors[s] for s in df_plot.columns])
+
+    ax.set_xlabel("Year")
+    ax.set_ylabel("Production Cost (billion €)")
+    plt.tight_layout()
+    print("Production Cost by Year, Scenario, and Average")
+    plt.show()
+
+    if savefolder:
+        fig.savefig(
+            os.path.join(savefolder, "production_cost_by_scenario_avg.png"),
+            bbox_inches="tight",
+        )
+
+
+def plot_production_cost_with_emission_by_scenario(
+    yearly_system_costs: pd.DataFrame, savefolder: str | None = None
+) -> None:
+    """
+    Grouped bar chart of production cost including emissions by year, scenario, and average (billion €).
+    """
+    df = yearly_system_costs["production_cost_with_emission"].unstack("scenario") / 1e9
+    df["Average"] = df.mean(axis=1)
+    df_plot = df.fillna(0)
+
+    fig, ax = plt.subplots(figsize=(8, 6))
+    df_plot.plot(kind="bar", ax=ax, color=[scenario_colors[s] for s in df_plot.columns])
+
+    ax.set_xlabel("Year")
+    ax.set_ylabel("Production Cost w/ Emission (billion €)")
+    plt.tight_layout()
+    print("Production Cost w/ Emissions by Year, Scenario, and Average")
+    plt.show()
+
+    if savefolder:
+        fig.savefig(
+            os.path.join(
+                savefolder, "production_cost_with_emission_by_scenario_avg.png"
+            ),
+            bbox_inches="tight",
+        )
+
+
+def plot_generation_curves_by_carrier(
+    generation: pd.DataFrame,
+    generators: pd.DataFrame,
+    year: int,
+    week: int,
+    scenario: str,
+    carrier_type: str,
+    savefolder: str | None = None,
+) -> None:
+    """
+    Plot hourly generation curves for all generators of a given carrier type
+    in a specified year, week, and scenario.
+
+    Parameters
+    ----------
+    generation : pd.DataFrame
+        Hourly generation with MultiIndex
+        (generator, scenario, year, week, hour) and a 'value' column.
+    generators : pd.DataFrame
+        Generator metadata with a 'carrier' and 'color' column,
+        indexed by (year, generator) or with columns 'year' and 'generator'.
+    year : int
+        Year to plot.
+    week : int
+        Week number to plot.
+    scenario : str
+        Scenario name to plot.
+    carrier_type : str
+        Carrier (technology) whose generators to include.
+    savefolder : str or None
+        Directory to save the figure. If None, figure is not saved.
+    """
+    # find all generators of this carrier in that year
+    meta = generators.reset_index()
+    gens = meta.loc[
+        (meta["year"] == year) & (meta["carrier"] == carrier_type), "generator"
+    ].unique()
+    if len(gens) == 0:
+        print(f"No generators of carrier {carrier_type} in {year}")
+        return
+
+    # build a DataFrame of hours × generators
+    dfs = []
+    for g in gens:
+        try:
+            ser = generation.xs(
+                (g, scenario, year, week),
+                level=("generator", "scenario", "year", "week"),
+            )["value"]
+        except KeyError:
+            continue
+        dfs.append(ser.rename(g))
+    if not dfs:
+        print(
+            f"No generation data for {carrier_type} in {year}, week {week}, scenario {scenario}"
+        )
+        return
+    df = pd.concat(dfs, axis=1)
+
+    # plot
+    fig, ax = plt.subplots(figsize=(8, 4))
+    for gen in df.columns:
+        # use the color from the generators table
+        color = meta.loc[
+            (meta["year"] == year) & (meta["generator"] == gen), "color"
+        ].iloc[0]
+        ax.plot(df.index, df[gen], label=gen, color=color)
+    ax.set_xlabel("Hour")
+    ax.set_ylabel("Generation (MW)")
+    title = f"Generation curves for {carrier_type}, {year}, week {week}, scenario {scenario}"
+    print(title)
+    plt.tight_layout()
+    ax.legend(title="Generator", bbox_to_anchor=(1.02, 1), loc="upper left")
+
+    if savefolder:
+        fname = f"gen_curves_{carrier_type}_{year}_w{week}_{scenario}.png"
+        fig.savefig(os.path.join(savefolder, fname), bbox_inches="tight")
+    plt.show()
+
+
+def plot_fraction_of_max_generation_by_carrier(
+    generation: pd.DataFrame,
+    capacity_factors: pd.DataFrame,
+    generators: pd.DataFrame,
+    year: int,
+    week: int,
+    scenario: str,
+    carrier_type: str,
+    savefolder: str | None = None,
+) -> None:
+    """
+    Plot, for a given carrier type, the hourly fraction:
+      actual_generation / (total_capacity * capacity_factor)
+    in a specified year, week, and scenario.
+
+    Parameters
+    ----------
+    generation : pd.DataFrame
+        Hourly generation with MultiIndex
+        (generator, scenario, year, week, hour) and a 'value' column (MWh).
+    capacity_factors : pd.DataFrame
+        Hourly capacity factors with MultiIndex (year, week, hour)
+        and columns = generator names (values in [0,1]).
+    generators : pd.DataFrame
+        Generator table indexed by (year, generator) with columns:
+        - total_capacity (MW)
+        - color
+    year : int
+    week : int
+    scenario : str
+    carrier_type : str
+    savefolder : str | None
+    """
+    # 1) Identify all generators of this carrier in that year
+    meta = generators.reset_index()
+    gens = meta.loc[
+        (meta["year"] == year) & (meta["carrier"] == carrier_type), "generator"
+    ].unique()
+    if len(gens) == 0:
+        print(f"No generators of carrier {carrier_type} in {year}")
+        return
+
+    # 2) Slice capacity factors for this year & week
+    cf_slice = capacity_factors.xs((year, week), level=("year", "week"))
+
+    # 3) Plot each generator’s fraction curve
+    fig, ax = plt.subplots(figsize=(8, 4))
+    for g in gens:
+        # a) actual generation series
+        try:
+            gen_ser = generation.xs(
+                (g, scenario, year, week),
+                level=("generator", "scenario", "year", "week"),
+            )["value"]
+        except KeyError:
+            continue
+
+        # b) capacity‐factor series
+        if g not in cf_slice.columns:
+            continue
+        cf_ser = cf_slice[g]
+
+        # c) total installed capacity
+        total_cap = generators.loc[(year, g), "total_capacity"]
+
+        # d) theoretical max = total_capacity * cf
+        theo = total_cap * cf_ser.values
+
+        # e) fraction (guard divide‐by‐zero)
+        with np.errstate(divide="ignore", invalid="ignore"):
+            frac = gen_ser.values / theo
+
+        # f) plot
+        color = meta.loc[
+            (meta["year"] == year) & (meta["generator"] == g), "color"
+        ].iloc[0]
+        ax.plot(gen_ser.index, frac, label=g, color=color)
+
+    ax.set_xlabel("Hour")
+    ax.set_ylabel("Fraction of Theoretical Max")
+    print(
+        f"Fraction of actual vs theoretical for {carrier_type}, {year}, w{week}, {scenario}"
+    )
+    plt.tight_layout()
+    ax.legend(title="Generator", bbox_to_anchor=(1.02, 1), loc="upper left")
+
+    # 4) Save if requested
+    if savefolder:
+        fname = f"fraction_gen_{carrier_type}_{year}_w{week}_{scenario}.png"
+        fig.savefig(os.path.join(savefolder, fname), bbox_inches="tight")
+    plt.show()
+
+
+def plot_utilization_hierarchy(
+    generation: pd.DataFrame,
+    capacity_factors: pd.DataFrame,
+    generators: pd.DataFrame,
+    week_weights: dict[str, float],
+    scenarios: dict[str, list[str]],
+    savefolder: str | None = None,
+) -> None:
+    """
+    Grouped bar chart of annual utilization factor by technology, with a 3‐level x‐axis:
+      Year → Scenario → Carrier.
+
+    Utilization factor = total actual generation / total possible generation
+    (i.e. sum(actual_gen) ÷ sum(total_capacity * capacity_factor)).
+
+    Parameters
+    ----------
+    generation : pd.DataFrame
+        Hourly generation with MultiIndex (generator, scenario, year, week, hour)
+        and a 'value' column in MWh.
+    capacity_factors : pd.DataFrame
+        Hourly capacity factors with MultiIndex (year, week, hour)
+        and columns = generator names.
+    generators : pd.DataFrame
+        Generator table indexed by (year, generator) with columns:
+        - total_capacity (MW)
+        - carrier
+        - nice_name
+        - color
+    week_weights : dict[str, float]
+        Multipliers to annualize each sample week.
+    scenarios : dict[str, list[str]]
+        Mapping year→list of scenarios.
+    savefolder : str or None
+        Directory to save the figure. If None, figure is not saved.
+    """
+    # 1) Annual actual generation per generator-scenario-year
+    weekly = (
+        generation.groupby(["generator", "scenario", "year", "week"])["value"]
+        .sum()
+        .reset_index(name="weekly_gen")
+    )
+    weekly["weight"] = weekly["week"].map(lambda w: week_weights[str(w)])
+    weekly["annual_actual"] = weekly["weekly_gen"] * weekly["weight"]
+    actual = (
+        weekly.groupby(["year", "scenario", "generator"])["annual_actual"]
+        .sum()
+        .unstack("generator")
+        .fillna(0)
+    )
+
+    # 2) Annual possible generation per generator-year
+    # sum capacity_factors over hours per sample week
+    cf_weekly = capacity_factors.groupby(level=["year", "week"]).sum()
+    # build weight series, index as ints
+    weight_s = pd.Series(week_weights).rename_axis("week").astype(float)
+    weight_s.index = weight_s.index.astype(int)
+    # multiply by week weight via alignment on 'week' level
+    weighted_cf = cf_weekly.multiply(weight_s, level="week", axis=0)
+    # sum over weeks to annualize
+    annual_cf = weighted_cf.groupby(level="year").sum()
+
+    # total installed capacity per year×generator
+    cap_df = generators["total_capacity"].unstack(level="generator")
+
+    # potential generation = annual_cf * capacity
+    potential = annual_cf * cap_df
+
+    # 3) Map generator→carrier and aggregate
+    gen2car = (
+        generators.reset_index()[["generator", "carrier"]]
+        .drop_duplicates("generator")
+        .set_index("generator")["carrier"]
+    )
+    actual_car = actual.groupby(gen2car, axis=1).sum()  # (year,scenario)×carrier
+    potential_car = potential.groupby(gen2car, axis=1).sum()  # year×carrier
+
+    # 4) Compute utilization factor per (year,scenario,carrier)
+    util = actual_car.div(potential_car, level="year").stack().unstack("carrier")
+
+    # 5) Plot
+    carriers = util.columns.tolist()
+    meta = (
+        generators.reset_index()[["carrier", "nice_name", "color"]]
+        .drop_duplicates("carrier")
+        .set_index("carrier")
+    )
+    colors = [meta.loc[c, "color"] for c in carriers]
+    labels = [meta.loc[c, "nice_name"] for c in carriers]
+
+    idx = list(util.index)  # list of (year,scenario)
+    n_groups = len(idx)
+    n_car = len(carriers)
+    width = 0.8 / n_car
+    base = np.arange(n_groups)
+
+    fig, ax = plt.subplots(figsize=(12, 6))
+    for i, carrier in enumerate(carriers):
+        x = base + (i - (n_car - 1) / 2) * width
+        ax.bar(x, util[carrier].values, width=width, color=colors[i], label=labels[i])
+
+    tick_labels = [f"{yr}\n{sc}" for yr, sc in idx]
+    ax.set_xticks(base)
+    ax.set_xticklabels(tick_labels, rotation=0)
+    ax.set_xlabel("Year / Scenario")
+    ax.set_ylabel("Utilization Factor")
+
+    fig.subplots_adjust(right=0.85)
+    ax.legend(title="Technology", bbox_to_anchor=(1.02, 1), loc="upper left")
+    plt.tight_layout()
+
+    print("Annual Utilization Factor by Year, Scenario, and Carrier")
+    plt.show()
+
+    if savefolder:
+        fig.savefig(
+            os.path.join(savefolder, "utilization_hierarchy.png"), bbox_inches="tight"
+        )
+
+
+def make_system_summary_table(
+    generation: pd.DataFrame,
+    generators: pd.DataFrame,
+    week_weights: dict[str, float],
+    scenarios: dict[str, list[str]],
+    scenario_probabilities: dict[str, list[float]],
+    carbon_price: float,
+    savefolder: str | None = None,
+) -> pd.DataFrame:
+    """
+    Build a system‐level summary table by year with columns:
+      - potential_capacity                  (MW)
+      - new_capacity                        (MW added)
+      - number_possible_buildouts           (count of gens with extension_potential>0)
+      - number_actual_buildouts             (count of gens with new_capacity>0)
+      - cost_of_buildout                    (EUR)
+      - total_production                    (expected MWh)
+      - total_co2_emissions                 (expected tonnes)
+      - total_co2_emission_cost             (EUR)
+      - total_production_cost               (EUR, excl CO₂)
+      - total_production_cost_with_emission (EUR)
+      - total_cost                          (EUR; prod_cost_with_emission + buildout)
+    """
+    # --- Buildout metrics (per year) ---
+    df_gen = generators.reset_index()
+    df_gen["buildout_cost"] = df_gen["new_capacity"] * df_gen["capital_cost"]
+    build_metrics = df_gen.groupby("year").agg(
+        potential_capacity=("extension_potential", "sum"),
+        new_capacity=("new_capacity", "sum"),
+        number_possible_buildouts=("extension_potential", lambda x: (x > 0).sum()),
+        number_actual_buildouts=("new_capacity", lambda x: (x > 0).sum()),
+        cost_of_buildout=("buildout_cost", "sum"),
+    )
+
+    # --- Scenario probabilities DataFrame ---
+    scen_rows = []
+    for y_str, scen_list in scenarios.items():
+        y = int(y_str)
+        for scen, prob in zip(scen_list, scenario_probabilities[y_str]):
+            scen_rows.append({"year": y, "scenario": scen, "probability": prob})
+    prob_df = pd.DataFrame(scen_rows)
+
+    # --- Generation metrics (per gen‐scen‐year) ---
+    weekly = (
+        generation.groupby(["generator", "scenario", "year", "week"])["value"]
+        .sum()
+        .reset_index(name="weekly_gen")
+    )
+    weekly["weight"] = weekly["week"].astype(str).map(week_weights)
+    weekly["annual_gen"] = weekly["weekly_gen"] * weekly["weight"]
+    annual = (
+        weekly.groupby(["generator", "scenario", "year"])["annual_gen"]
+        .sum()
+        .reset_index()
+    )
+
+    # Merge in marginal_cost & co2_emissions
+    meta = generators.reset_index()[
+        ["year", "generator", "marginal_cost", "co2_emissions"]
+    ].drop_duplicates(["year", "generator"])
+    annual = annual.merge(meta, on=["year", "generator"], how="left")
+
+    # Compute per‐gen metrics
+    annual["production"] = annual["annual_gen"]
+    annual["co2_emission"] = annual["annual_gen"] * annual["co2_emissions"]
+    annual["production_cost"] = annual["annual_gen"] * annual["marginal_cost"]
+    annual["co2_emission_cost"] = annual["co2_emission"] * carbon_price
+    annual["production_cost_with_emission"] = (
+        annual["production_cost"] + annual["co2_emission_cost"]
+    )
+
+    # Merge probabilities, weight and collapse to year
+    annual = annual.merge(prob_df, on=["year", "scenario"], how="left")
+    for col in [
+        "production",
+        "co2_emission",
+        "co2_emission_cost",
+        "production_cost",
+        "production_cost_with_emission",
+    ]:
+        annual[f"w_{col}"] = annual[col] * annual["probability"]
+
+    gen_metrics = annual.groupby("year")[
+        [
+            f"w_{c}"
+            for c in [
+                "production",
+                "co2_emission",
+                "co2_emission_cost",
+                "production_cost",
+                "production_cost_with_emission",
+            ]
+        ]
+    ].sum()
+    gen_metrics.columns = [
+        "total_production",
+        "total_co2_emissions",
+        "total_co2_emission_cost",
+        "total_production_cost",
+        "total_production_cost_with_emission",
+    ]
+
+    # --- Combine and compute final ---
+    summary = build_metrics.join(gen_metrics)
+    summary["total_cost"] = (
+        summary["total_production_cost_with_emission"] + summary["cost_of_buildout"]
+    )
+
+    # optional save
+    if savefolder:
+        path = os.path.join(savefolder, "system_summary_by_year.csv")
+        summary.to_csv(path)
+
+    return summary
+
+
+def make_system_summary_table_by_carrier(
+    generation: pd.DataFrame,
+    generators: pd.DataFrame,
+    week_weights: dict[str, float],
+    scenarios: dict[str, list[str]],
+    scenario_probabilities: dict[str, list[float]],
+    carbon_price: float,
+    savefolder: str | None = None,
+) -> pd.DataFrame:
+    """
+    Build a system‐level summary table by year and carrier with columns:
+      - potential_capacity                  (MW)
+      - new_capacity                        (MW added)
+      - number_possible_buildouts           (count of gens with extension_potential>0)
+      - number_actual_buildouts             (count of gens with new_capacity>0)
+      - cost_of_buildout                    (EUR)
+      - total_production                    (expected MWh)
+      - total_co2_emissions                 (expected tonnes)
+      - total_co2_emission_cost             (EUR)
+      - total_production_cost               (EUR, excl CO₂)
+      - total_production_cost_with_emission (EUR)
+      - total_cost                          (EUR; production_cost_with_emission + buildout)
+    """
+    # --- Buildout metrics per year & carrier ---
+    df_gen = generators.reset_index()
+    df_gen["buildout_cost"] = df_gen["new_capacity"] * df_gen["capital_cost"]
+    build_metrics = df_gen.groupby(["year", "carrier"]).agg(
+        potential_capacity=("extension_potential", "sum"),
+        new_capacity=("new_capacity", "sum"),
+        number_possible_buildouts=("extension_potential", lambda x: (x > 0).sum()),
+        number_actual_buildouts=("new_capacity", lambda x: (x > 0).sum()),
+        cost_of_buildout=("buildout_cost", "sum"),
+    )
+
+    # --- Scenario probabilities DataFrame ---
+    scen_rows = []
+    for y_str, scen_list in scenarios.items():
+        y = int(y_str)
+        for scen, prob in zip(scen_list, scenario_probabilities[y_str]):
+            scen_rows.append({"year": y, "scenario": scen, "probability": prob})
+    prob_df = pd.DataFrame(scen_rows)
+
+    # --- Generation metrics per generator / scenario / year ---
+    weekly = (
+        generation.groupby(["generator", "scenario", "year", "week"])["value"]
+        .sum()
+        .reset_index(name="weekly_gen")
+    )
+    weekly["weight"] = weekly["week"].astype(str).map(week_weights)
+    weekly["annual_gen"] = weekly["weekly_gen"] * weekly["weight"]
+    annual = (
+        weekly.groupby(["generator", "scenario", "year"])["annual_gen"]
+        .sum()
+        .reset_index()
+    )
+
+    # attach cost & emissions rates and carrier
+    meta = generators.reset_index()[
+        ["year", "generator", "marginal_cost", "co2_emissions", "carrier"]
+    ].drop_duplicates(["year", "generator"])
+    annual = annual.merge(meta, on=["year", "generator"], how="left")
+
+    # compute per‐generator metrics
+    annual["production"] = annual["annual_gen"]
+    annual["co2_emission"] = annual["annual_gen"] * annual["co2_emissions"]
+    annual["production_cost"] = annual["annual_gen"] * annual["marginal_cost"]
+    annual["co2_emission_cost"] = annual["co2_emission"] * carbon_price
+    annual["production_cost_with_emission"] = (
+        annual["production_cost"] + annual["co2_emission_cost"]
+    )
+
+    # merge probabilities and compute weighted metrics
+    annual = annual.merge(prob_df, on=["year", "scenario"], how="left")
+    for col in [
+        "production",
+        "co2_emission",
+        "production_cost",
+        "co2_emission_cost",
+        "production_cost_with_emission",
+    ]:
+        annual[f"w_{col}"] = annual[col] * annual["probability"]
+
+    gen_metrics = annual.groupby(["year", "carrier"])[
+        [
+            f"w_{c}"
+            for c in [
+                "production",
+                "co2_emission",
+                "production_cost",
+                "co2_emission_cost",
+                "production_cost_with_emission",
+            ]
+        ]
+    ].sum()
+    gen_metrics.columns = [
+        "total_production",
+        "total_co2_emissions",
+        "total_production_cost",
+        "total_co2_emission_cost",
+        "total_production_cost_with_emission",
+    ]
+
+    # --- Combine buildout & generation metrics ---
+    summary = build_metrics.join(gen_metrics)
+    summary["total_cost"] = (
+        summary["total_production_cost_with_emission"] + summary["cost_of_buildout"]
+    )
+
+    # optional save
+    if savefolder:
+        path = os.path.join(savefolder, "system_summary_by_year_and_carrier.csv")
+        summary.to_csv(path)
+
+    return summary
+
+
+def extend_branches_table(
+    branches: pd.DataFrame, branch_capacity: pd.DataFrame
+) -> pd.DataFrame:
+    """
+    Add investment and capacity‐growth columns to the branches DataFrame.
+
+    Parameters
+    ----------
+    branches : pd.DataFrame
+        MultiIndexed by (year, line) with columns:
+        - p_max
+        - capital_cost
+        - length
+        - loss_factor
+        - extendable
+        - extension_potential
+    branch_capacity : pd.DataFrame
+        MultiIndexed by (line, year) with a 'value' column of new MW built.
+
+    Returns
+    -------
+    pd.DataFrame
+        branches with four new columns:
+        - new_capacity                (MW added in that year)
+        - cum_new_capacity            (cumulative MW added over time)
+        - cum_extension_potential     (cumulative extension potential over time)
+        - total_capacity              (existing p_max + cum_new_capacity)
+    """
+    # 1. Flatten indices for merging
+    b = branches.reset_index()  # columns: year, line, p_max, …
+    cap = branch_capacity.reset_index()  # columns: line, year, value
+
+    # 2. Rename and merge new capacity
+    cap = cap.rename(columns={"value": "new_capacity"})
+    merged = b.merge(
+        cap[["year", "line", "new_capacity"]], on=["year", "line"], how="left"
+    )
+
+    # 3. Sort for cumulative calculations
+    merged = merged.sort_values(["line", "year"])
+
+    # 4. Compute cumulative sums by line
+    merged["cum_new_capacity"] = merged.groupby("line")["new_capacity"].cumsum()
+    merged["cum_extension_potential"] = merged.groupby("line")[
+        "extension_potential"
+    ].cumsum()
+
+    # 5. Total capacity = original + cumulative additions
+    merged["total_capacity"] = merged["p_max"] + merged["cum_new_capacity"]
+
+    # 6. Restore MultiIndex
+    return merged.set_index(["year", "line"])
+
+
+def plot_branch_new_capacity(
+    branches: pd.DataFrame, savefolder: str | None = None
+) -> None:
+    """
+    Plot a bar chart of annual new branch capacity additions.
+
+    Parameters
+    ----------
+    branches : pd.DataFrame
+        DataFrame indexed by (year, line) containing a 'new_capacity' column (MW added).
+    savefolder : str or None, optional
+        Directory to save the figure. If None, the figure is not saved.
+    """
+    # Aggregate new_capacity by year
+    temp = branches.reset_index()
+    annual_new = temp.groupby("year")["new_capacity"].sum()
+
+    # Plot
+    fig, ax = plt.subplots(figsize=(8, 6))
+    ax.bar(annual_new.index.astype(str), annual_new.values)
+    ax.set_xlabel("Year")
+    ax.set_ylabel("New Capacity (MW)")
+    plt.tight_layout()
+
+    # Print title line
+    print("Annual New Branch Capacity Additions")
+    plt.show()
+
+    # Save if requested
+    if savefolder:
+        savepath = os.path.join(savefolder, "branch_new_capacity_by_year.png")
+        fig.savefig(savepath, bbox_inches="tight")
+
+
+def make_branch_buildout_summary(
+    extended_branches: pd.DataFrame, savefolder: str | None = None
+) -> pd.DataFrame:
+    """
+    Compute yearly branch buildout metrics:
+      - potential_capacity           (MW of extension_potential)
+      - new_capacity                 (MW added)
+      - number_possible_buildouts    (count of lines with extension_potential > 0)
+      - number_actual_buildouts      (count of lines with new_capacity > 0)
+      - cost_of_buildout             (EUR of new_capacity * capital_cost)
+
+    Parameters
+    ----------
+    extended_branches : pd.DataFrame
+        DataFrame indexed by (year, line) containing columns:
+        - extension_potential
+        - new_capacity
+        - capital_cost
+    savefolder : str or None, optional
+        Directory to save CSV. If None, does not save.
+
+    Returns
+    -------
+    pd.DataFrame
+        Yearly summary table with the above buildout metrics.
+    """
+    df = extended_branches.reset_index()
+    df["buildout_cost"] = df["new_capacity"] * df["capital_cost"]
+
+    summary = df.groupby("year").agg(
+        potential_capacity=("extension_potential", "sum"),
+        new_capacity=("new_capacity", "sum"),
+        number_possible_buildouts=("extension_potential", lambda x: (x > 0).sum()),
+        number_actual_buildouts=("new_capacity", lambda x: (x > 0).sum()),
+        cost_of_buildout=("buildout_cost", "sum"),
+    )
+
+    print("Branch buildout summary by year:")
+
+    if savefolder:
+        path = os.path.join(savefolder, "branch_buildout_summary_by_year.csv")
+        summary.to_csv(path)
+
+    return summary
+
+
+def make_branch_flow_metrics(
+    power_flow: pd.DataFrame,
+    extended_branches: pd.DataFrame,
+    week_weights: dict[str, float],
+    savefolder: str | None = None,
+) -> pd.DataFrame:
+    """
+    Compute per‐line, per‐scenario, per‐year utilization and congestion rates.
+
+    Utilization rate = annualized sum(|flow|) / (total_capacity * hours_per_year)
+    Congestion rate = annualized hours(|flow| > 95% * total_capacity) / hours_per_year
+
+    Parameters
+    ----------
+    power_flow : pd.DataFrame
+        MultiIndexed by (line, scenario, year, week, hour) with column 'value' (MW flow).
+    extended_branches : pd.DataFrame
+        Indexed by (year, line) with column 'total_capacity' (MW).
+    week_weights : dict[str, float]
+        Mapping week → weight to annualize one representative week.
+    savefolder : str or None
+        Directory to save CSV. If None, does not save.
+
+    Returns
+    -------
+    pd.DataFrame
+        Indexed by (line, scenario, year) with columns:
+        - utilization_rate   (fraction of capacity‐hours used)
+        - congestion_rate    (fraction of hours > 95% flow)
+    """
+    # total hours in year from sample weeks
+    hours_per_week = 168
+    total_hours = sum(week_weights.values()) * hours_per_week
+
+    # flatten power_flow
+    pf = power_flow.reset_index().rename(columns={"value": "flow"})
+    # absolute flow and week weight
+    pf["abs_flow"] = pf["flow"].abs()
+    pf["weight"] = pf["week"].astype(str).map(week_weights)
+
+    # merge in total_capacity
+    tb = extended_branches.reset_index()[["year", "line", "total_capacity"]]
+    pf = pf.merge(tb, on=["year", "line"], how="left")
+
+    # annualized absolute energy (MWh) and congested hours
+    pf["weighted_abs_energy"] = pf["abs_flow"] * pf["weight"]
+    pf["is_congested"] = pf["abs_flow"] > 0.95 * pf["total_capacity"]
+    pf["weighted_cong_hours"] = pf["is_congested"] * pf["weight"]
+
+    # aggregate
+    grp = pf.groupby(["line", "scenario", "year"]).agg(
+        abs_energy=("weighted_abs_energy", "sum"),
+        cong_hours=("weighted_cong_hours", "sum"),
+        total_capacity=("total_capacity", "first"),
+    )
+
+    # compute rates
+    grp["utilization_rate"] = grp["abs_energy"] / (grp["total_capacity"] * total_hours)
+    grp["congestion_rate"] = grp["cong_hours"] / total_hours
+
+    # keep only rates
+    result = grp[["utilization_rate", "congestion_rate"]]
+
+    # save if requested
+    if savefolder:
+        path = os.path.join(savefolder, "branch_flow_metrics.csv")
+        result.to_csv(path)
+
+    return result
+
+
+def make_aggregate_branch_flow_summary(
+    power_flow: pd.DataFrame,
+    extended_branches: pd.DataFrame,
+    week_weights: dict[str, float],
+    savefolder: str | None = None,
+) -> pd.DataFrame:
+    """
+    Compute annual, scenario‐specific system‐level flow metrics across all lines
+    with year first in the index.
+
+    Returns a DataFrame indexed by (year, scenario) with:
+      - utilization_rate
+      - congestion_rate
+    """
+    # total hours represented by sample weeks
+    hours_per_year = sum(week_weights.values()) * 168
+
+    # 1) Flatten and compute absolute flow & weights
+    pf = power_flow.reset_index().rename(columns={"value": "flow"})
+    pf["abs_flow"] = pf["flow"].abs()
+    pf["weight"] = pf["week"].astype(str).map(week_weights)
+
+    # 2) Merge in total_capacity
+    tb = extended_branches.reset_index()[
+        ["year", "line", "total_capacity"]
+    ].drop_duplicates()
+    pf = pf.merge(tb, on=["year", "line"], how="left")
+
+    # 3) Weighted metrics
+    pf["weighted_abs_energy"] = pf["abs_flow"] * pf["weight"]
+    pf["is_congested"] = pf["abs_flow"] > 0.95 * pf["total_capacity"]
+    pf["weighted_cong_hours"] = pf["is_congested"].astype(float) * pf["weight"]
+
+    # 4) Aggregate by year, scenario
+    agg = pf.groupby(["year", "scenario"]).agg(
+        abs_energy=("weighted_abs_energy", "sum"),
+        cong_hours=("weighted_cong_hours", "sum"),
+    )
+
+    # 5) Denominators per year
+    cap_sum = extended_branches.reset_index().groupby("year")["total_capacity"].sum()
+    line_counts = extended_branches.reset_index().groupby("year")["line"].nunique()
+
+    # 6) Compute rates (leveraging alignment on 'year' level)
+    agg["utilization_rate"] = agg["abs_energy"] / (cap_sum * hours_per_year)
+    agg["congestion_rate"] = agg["cong_hours"] / (line_counts * hours_per_year)
+
+    # 7) Select only the rates
+    result = agg[["utilization_rate", "congestion_rate"]]
+
+    # 8) Save if requested
+    if savefolder:
+        result.to_csv(os.path.join(savefolder, "aggregate_branch_flow_summary.csv"))
+
+    return result
+
+
+def plot_new_branches_for_years_with_investments(
+    branches: pd.DataFrame,
+    branch_capacity: pd.DataFrame,
+    nodes: pd.DataFrame,
+    savefolder: str | None = None,
+) -> None:
+    years_with_branch_investments = (
+        branch_capacity[branch_capacity["value"] > 0]
+        .index.get_level_values("year")
+        .unique()
+        .tolist()
+    )
+    if not savefolder:
+        new_branch_plots_folder = None
+    else:
+        new_branch_plots_folder = os.path.join(savefolder, "new_branch_plots")
+        os.makedirs(new_branch_plots_folder, exist_ok=True)
+    for year in years_with_branch_investments:
+        print(f"Transmission line investments in {year}:")
+        temp_branches = branches.xs(year, level="year")
+        temp_branches = temp_branches[temp_branches["new_capacity"] > 0]
+        temp_branches["p_max"] = temp_branches["new_capacity"]
+        print(temp_branches)
+        plotting.plot_sized_branches_with_year(
+            nodes, temp_branches, year, savefolder=new_branch_plots_folder
+        )
+
+
+def extend_batteries_table(
+    batteries: pd.DataFrame, battery_capacity: pd.DataFrame
+) -> pd.DataFrame:
+    """
+    Add new_capacity and total_capacity (cumulative) to the batteries DataFrame.
+
+    Parameters
+    ----------
+    batteries : pd.DataFrame
+        MultiIndexed by (year, battery) with battery parameters.
+    battery_capacity : pd.DataFrame
+        MultiIndexed by (battery, year) with a 'value' column of new MWh built.
+
+    Returns
+    -------
+    pd.DataFrame
+        batteries with two new columns:
+        - new_capacity      (MWh added in that year)
+        - cum_new_capacity  (cumulative MWh added up to that year)
+        - total_capacity    (same as cum_new_capacity, since no initial capacity)
+    """
+    # 1. Reset indices for merging
+    b = batteries.reset_index()  # exposes year, battery, params…
+    cap = battery_capacity.reset_index()  # exposes battery, year, value
+
+    # 2. Rename & merge the new capacity
+    cap = cap.rename(columns={"value": "new_capacity"})
+    merged = b.merge(
+        cap[["battery", "year", "new_capacity"]], on=["battery", "year"], how="left"
+    )
+
+    # 3. Missing years mean zero new capacity
+    merged["new_capacity"] = merged["new_capacity"].fillna(0)
+
+    # 4. Sort and compute cumulatives
+    merged = merged.sort_values(["battery", "year"])
+    merged["cum_new_capacity"] = merged.groupby("battery")["new_capacity"].cumsum()
+
+    # 5. Total capacity equals cumulative new capacity
+    merged["total_capacity"] = merged["cum_new_capacity"]
+
+    # 6. Restore the original MultiIndex
+    return merged.set_index(["year", "battery"])
+
+
+def plot_battery_investment_by_year(
+    batteries: pd.DataFrame, savefolder: str | None = None
+) -> None:
+    """
+    Plot a bar chart of annual battery capacity investments.
+
+    Parameters
+    ----------
+    batteries : pd.DataFrame
+        DataFrame indexed by (year, battery) with a 'new_capacity' column (MWh added).
+    savefolder : str or None, optional
+        Directory to save the figure. If None, the figure is not saved.
+    """
+    # Aggregate new_capacity by year
+    temp = batteries.reset_index()
+    annual_new = temp.groupby("year")["new_capacity"].sum()
+
+    # Plot
+    fig, ax = plt.subplots(figsize=(8, 6))
+    ax.bar(annual_new.index.astype(str), annual_new.values)
+    ax.set_xlabel("Year")
+    ax.set_ylabel("Battery Investment (MWh)")
+    plt.tight_layout()
+
+    # Print title line
+    print("Annual Battery Capacity Investments")
+    plt.show()
+
+    # Save if requested
+    if savefolder:
+        savepath = os.path.join(savefolder, "battery_investment_by_year.png")
+        fig.savefig(savepath, bbox_inches="tight")
+
+
+def plot_battery_investment_cost_by_year(
+    batteries: pd.DataFrame, savefolder: str | None = None
+) -> None:
+    """
+    Plot a bar chart of annual battery investment costs in million euros.
+
+    Parameters
+    ----------
+    batteries : pd.DataFrame
+        DataFrame indexed by (year, battery) with columns:
+        - new_capacity    (MWh added)
+        - capital_cost    (EUR/MWh)
+    savefolder : str or None, optional
+        Directory to save the figure. If None, the figure is not saved.
+    """
+    temp = batteries.reset_index()
+    # Calculate cost in million euros
+    temp["investment_cost_meur"] = (temp["new_capacity"] * temp["capital_cost"]) / 1e6
+    annual_cost = temp.groupby("year")["investment_cost_meur"].sum()
+
+    fig, ax = plt.subplots(figsize=(8, 6))
+    ax.bar(annual_cost.index.astype(str), annual_cost.values)
+    ax.set_xlabel("Year")
+    ax.set_ylabel("Investment Cost (million €)")
+    plt.tight_layout()
+
+    print("Annual Battery Investment Cost (million €)")
+    plt.show()
+
+    if savefolder:
+        savepath = os.path.join(savefolder, "battery_investment_cost_by_year.png")
+        fig.savefig(savepath, bbox_inches="tight")
+
+
+def make_battery_system_summary(
+    extended_batteries: pd.DataFrame,
+    battery_discharging: pd.DataFrame,
+    week_weights: dict[str, float],
+    scenarios: dict[str, list[str]],
+    scenario_probabilities: dict[str, list[float]],
+    savefolder: str | None = None,
+) -> pd.DataFrame:
+    """
+    Compute system‐level battery summary metrics by year:
+      - num_buildout       (count of batteries with new_capacity>0)
+      - capacity           (sum of total_capacity, MWh)
+      - investment_cost    (sum of new_capacity*capital_cost, EUR)
+      - cycles_per_year    (expected annual discharge / capacity)
+
+    Parameters
+    ----------
+    extended_batteries : pd.DataFrame
+        Indexed by (year, battery) with columns:
+        - new_capacity
+        - total_capacity
+        - capital_cost
+    battery_discharging : pd.DataFrame
+        MultiIndexed by (battery, scenario, year, week, hour) with 'value' = discharge MW.
+    week_weights : dict[str, float]
+        Mapping week→weight for annualization.
+    scenarios : dict[str, list[str]]
+        Mapping year→list of scenarios.
+    scenario_probabilities : dict[str, list[float]]
+        Mapping year→list of scenario probabilities.
+    savefolder : str or None
+        Directory to save CSV. If None, does not save.
+
+    Returns
+    -------
+    pd.DataFrame
+        Indexed by year with columns:
+        ['num_buildout', 'capacity', 'investment_cost', 'cycles_per_year']
+    """
+    # 1) Buildout metrics from extended_batteries
+    eb = extended_batteries.reset_index()
+    eb["build_cost"] = eb["new_capacity"] * eb["capital_cost"]
+    build_summary = eb.groupby("year").agg(
+        num_buildout=("new_capacity", lambda x: (x > 0).sum()),
+        capacity=("total_capacity", "sum"),
+        investment_cost=("build_cost", "sum"),
+    )
+
+    # 2) Compute expected annual discharge per battery-year
+    wd = (
+        battery_discharging.groupby(["battery", "scenario", "year", "week"])["value"]
+        .sum()
+        .reset_index(name="weekly_discharge")
+    )
+    wd["weight"] = wd["week"].astype(str).map(week_weights)
+    wd["annual_discharge"] = wd["weekly_discharge"] * wd["weight"]
+
+    # attach scenario probabilities
+    prob_rows = []
+    for y_str, scen_list in scenarios.items():
+        y = int(y_str)
+        for scen, prob in zip(scen_list, scenario_probabilities[y_str]):
+            prob_rows.append({"year": y, "scenario": scen, "prob": prob})
+    prob_df = pd.DataFrame(prob_rows)
+
+    wd = wd.merge(prob_df, on=["year", "scenario"], how="left")
+    wd["w_annual_discharge"] = wd["annual_discharge"] * wd["prob"]
+
+    # sum across scenarios per battery-year
+    exp_discharge = (
+        wd.groupby(["battery", "year"])["w_annual_discharge"].sum().reset_index()
+    )
+
+    # 3) Sum expected discharge across batteries per year
+    total_discharge = (
+        exp_discharge.groupby("year")["w_annual_discharge"]
+        .sum()
+        .rename("expected_discharge")
+    )
+
+    # 4) Merge into summary to compute cycles
+    summary = build_summary.join(total_discharge)
+    summary["cycles_per_year"] = summary["expected_discharge"] / summary["capacity"]
+
+    # drop intermediate
+    summary = summary.drop(columns=["expected_discharge"])
+
+    # 5) Optional save
+    if savefolder:
+        summary.to_csv(os.path.join(savefolder, "battery_system_summary_by_year.csv"))
+
+    return summary
+
+
+def plot_cycles_per_scenario_with_average(
+    battery_discharging: pd.DataFrame,
+    week_weights: dict[str, float],
+    reference_cycle_mwh: float = 400,
+    savefolder: str | None = None,
+) -> None:
+    """
+    Grouped bar chart of annual number of reference cycles by year, scenario, and average.
+
+    A “reference cycle” is defined as using `reference_cycle_mwh` MWh of discharge.
+    """
+    # 1) Flatten and annualize discharge
+    df = battery_discharging.reset_index().rename(columns={"value": "discharge"})
+    df["weight"] = df["week"].astype(str).map(week_weights)
+    df["annual_discharge"] = df["discharge"] * df["weight"]
+
+    # 2) Sum to annual discharge per battery, scenario, year
+    annual = (
+        df.groupby(["battery", "scenario", "year"])["annual_discharge"]
+        .sum()
+        .reset_index()
+    )
+    # 3) Total annual discharge by scenario & year
+    total = (
+        annual.groupby(["scenario", "year"])["annual_discharge"]
+        .sum()
+        .reset_index(name="annual_discharge")
+    )
+    # 4) Compute cycles
+    total["cycles"] = total["annual_discharge"] / reference_cycle_mwh
+
+    # 5) Pivot to have scenarios as columns, then compute average
+    cycles_df = total.pivot(index="year", columns="scenario", values="cycles")
+    cycles_df["Average"] = cycles_df.mean(axis=1, skipna=True)
+
+    # 6) Prepare for plotting (fill NaN with 0)
+    df_plot = cycles_df.fillna(0)
+
+    # 7) Plot grouped bar chart
+    fig, ax = plt.subplots(figsize=(8, 6))
+    df_plot.plot(kind="bar", ax=ax, color=[scenario_colors[s] for s in df_plot.columns])
+
+    ax.set_xlabel("Year")
+    ax.set_ylabel(f"Number of {int(reference_cycle_mwh)} MWh Cycles")
+    plt.tight_layout()
+    print(
+        f"Number of {int(reference_cycle_mwh)} MWh Cycles by Year, Scenario, and Average"
+    )
+    plt.show()
+
+    # 8) Save if requested
+    if savefolder:
+        filename = (
+            f"battery_cycles_per_{int(reference_cycle_mwh)}MWh_by_scenario_avg.png"
+        )
+        fig.savefig(os.path.join(savefolder, filename), bbox_inches="tight")
+
+
+def plot_curtailment_by_scenario(
+    curtailment: pd.DataFrame,
+    week_weights: dict[str, float],
+    savefolder: str | None = None,
+) -> None:
+    """
+    Grouped bar chart of annual curtailment by year and scenario.
+
+    Parameters
+    ----------
+    curtailment : pd.DataFrame
+        MultiIndexed by (generator, scenario, year, week, hour) with column 'value' (MWh curtailed).
+    week_weights : dict[str, float]
+        Mapping week → weight for annualization.
+    savefolder : str or None
+        Directory to save the figure. If None, the figure is not saved.
+    """
+    df = curtailment.reset_index().rename(columns={"value": "curtail"})
+    df["weight"] = df["week"].astype(str).map(week_weights)
+    df["annual_curtail"] = df["curtail"] * df["weight"]
+
+    total = df.groupby(["scenario", "year"])["annual_curtail"].sum().reset_index()
+    pivot = total.pivot(
+        index="year", columns="scenario", values="annual_curtail"
+    ).fillna(0)
+
+    fig, ax = plt.subplots(figsize=(8, 6))
+    pivot.plot(kind="bar", ax=ax, color=[scenario_colors[s] for s in pivot.columns])
+    ax.set_xlabel("Year")
+    ax.set_ylabel("Annual Curtailment (MWh)")
+    plt.tight_layout()
+    print("Annual Curtailment by Year and Scenario")
+    plt.show()
+
+    if savefolder:
+        fig.savefig(
+            os.path.join(savefolder, "curtailment_by_scenario.png"), bbox_inches="tight"
+        )
+
+
+def plot_load_shedding_by_scenario(
+    load_shedding: pd.DataFrame,
+    week_weights: dict[str, float],
+    savefolder: str | None = None,
+) -> None:
+    """
+    Grouped bar chart of annual load shedding by year and scenario.
+
+    Parameters
+    ----------
+    load_shedding : pd.DataFrame
+        MultiIndexed by (node, scenario, year, week, hour) with column 'value' (MWh shed).
+    week_weights : dict[str, float]
+        Mapping week → weight for annualization.
+    savefolder : str or None
+        Directory to save the figure. If None, the figure is not saved.
+    """
+    df = load_shedding.reset_index().rename(columns={"value": "shed"})
+    df["weight"] = df["week"].astype(str).map(week_weights)
+    df["annual_shed"] = df["shed"] * df["weight"]
+
+    total = df.groupby(["scenario", "year"])["annual_shed"].sum().reset_index()
+    pivot = total.pivot(index="year", columns="scenario", values="annual_shed").fillna(
+        0
+    )
+
+    fig, ax = plt.subplots(figsize=(8, 6))
+    pivot.plot(kind="bar", ax=ax, color=[scenario_colors[s] for s in pivot.columns])
+    ax.set_xlabel("Year")
+    ax.set_ylabel("Annual Load Shedding (MWh)")
+    plt.tight_layout()
+    print("Annual Load Shedding by Year and Scenario")
+    plt.show()
+
+    if savefolder:
+        fig.savefig(
+            os.path.join(savefolder, "load_shedding_by_scenario.png"),
+            bbox_inches="tight",
+        )
+
+
+def make_curtailment_load_shedding_cost_table(
+    curtailment: pd.DataFrame,
+    load_shedding: pd.DataFrame,
+    week_weights: dict[str, float],
+    CC: float,
+    VOLL: float,
+    savefolder: str | None = None,
+) -> pd.DataFrame:
+    """
+    Compute annual curtailment and load‐shedding and their costs by year and scenario.
+
+    Parameters
+    ----------
+    curtailment : pd.DataFrame
+        MultiIndexed by (generator, scenario, year, week, hour) with column 'value' (MWh curtailed).
+    load_shedding : pd.DataFrame
+        MultiIndexed by (node, scenario, year, week, hour) with column 'value' (MWh shed).
+    week_weights : dict[str, float]
+        Mapping week → weight for annualization.
+    CC : float
+        Curtailment cost in EUR/MWh.
+    VOLL : float
+        Value of lost load in EUR/MWh.
+    savefolder : str or None
+        Directory to save the CSV. If None, does not save.
+
+    Returns
+    -------
+    pd.DataFrame
+        Indexed by (year, scenario) with columns:
+        - load_shedding       (MWh)
+        - curtailment         (MWh)
+        - load_shedding_cost  (EUR)
+        - curtailment_cost    (EUR)
+    """
+    # 1) Annualize curtailment
+    df_c = curtailment.reset_index().rename(columns={"value": "curtailment"})
+    df_c["weight"] = df_c["week"].astype(str).map(week_weights)
+    df_c["annual_curtail"] = df_c["curtailment"] * df_c["weight"]
+    annual_c = df_c.groupby(["year", "scenario"])["annual_curtail"].sum().reset_index()
+
+    # 2) Annualize load shedding
+    df_l = load_shedding.reset_index().rename(columns={"value": "load_shed"})
+    df_l["weight"] = df_l["week"].astype(str).map(week_weights)
+    df_l["annual_shed"] = df_l["load_shed"] * df_l["weight"]
+    annual_l = df_l.groupby(["year", "scenario"])["annual_shed"].sum().reset_index()
+
+    # 3) Merge and compute costs
+    summary = annual_l.merge(annual_c, on=["year", "scenario"], how="outer").fillna(0)
+    summary["load_shedding_cost"] = summary["annual_shed"] * VOLL
+    summary["curtailment_cost"] = summary["annual_curtail"] * CC
+
+    # 4) Rename and set index
+    summary = summary.rename(
+        columns={"annual_shed": "load_shedding", "annual_curtail": "curtailment"}
+    )
+    summary = summary.set_index(["year", "scenario"])
+
+    # 5) Save if requested
+    if savefolder:
+        path = os.path.join(savefolder, "curtailment_load_shedding_costs.csv")
+        summary.to_csv(path)
+
+    return summary
+
+
+def plot_yearly_costs_stacked_avg(
+    system_summary: pd.DataFrame,
+    battery_summary: pd.DataFrame,
+    branch_summary: pd.DataFrame,
+    yearly_system_costs: pd.DataFrame,
+    curtail_shed_costs: pd.DataFrame,
+    savefolder: str | None = None,
+) -> None:
+    """
+    Stacked‐bar of annual system costs (billion €), averaged across scenarios:
+      - investments (gen, bat, tx)
+      - production cost
+      - CO₂ cost
+      - load shedding cost
+      - curtailment cost
+    """
+    # 1) Average scenario‐level costs
+    prod_cost_avg = (
+        yearly_system_costs["production_cost"].unstack("scenario").mean(axis=1) / 1e9
+    )
+    co2_cost_avg = (
+        yearly_system_costs["co2_emission_cost"].unstack("scenario").mean(axis=1) / 1e9
+    )
+    ls_cost_avg = (
+        curtail_shed_costs["load_shedding_cost"].unstack("scenario").mean(axis=1) / 1e9
+    )
+    curt_cost_avg = (
+        curtail_shed_costs["curtailment_cost"].unstack("scenario").mean(axis=1) / 1e9
+    )
+
+    # 2) Investments (already scenario‐independent), scaled to billion €
+    inv_gen = system_summary["cost_of_buildout"] / 1e9
+    inv_bat = battery_summary["investment_cost"] / 1e9
+    inv_tx = branch_summary["cost_of_buildout"] / 1e9
+
+    # 3) Assemble DataFrame
+    df = pd.DataFrame(
+        {
+            "Invest Gen": inv_gen,
+            "Invest Bat": inv_bat,
+            "Invest Tx": inv_tx,
+            "Prod Cost": prod_cost_avg,
+            "CO₂ Cost": co2_cost_avg,
+            "Load Shedding Cost": ls_cost_avg,
+            "Curtailment Cost": curt_cost_avg,
+        }
+    ).fillna(0)
+
+    # 4) Plot
+    fig, ax = plt.subplots(figsize=(10, 6))
+    df.plot(
+        kind="bar", stacked=True, ax=ax, color=[category_colors[c] for c in df.columns]
+    )
+    ax.set_xlabel("Year")
+    ax.set_ylabel("Cost (billion €)")
+    plt.tight_layout()
+    print("Annual System Costs (average across scenarios)")
+    plt.show()
+
+    if savefolder:
+        fig.savefig(
+            os.path.join(savefolder, "yearly_system_costs_avg.png"), bbox_inches="tight"
+        )
+
+
+def plot_yearly_costs_stacked_by_scenario(
+    system_summary: pd.DataFrame,
+    battery_summary: pd.DataFrame,
+    branch_summary: pd.DataFrame,
+    yearly_system_costs: pd.DataFrame,
+    curtail_shed_costs: pd.DataFrame,
+    savefolder: str | None = None,
+) -> None:
+    """
+    Stacked‐bar of annual system costs (billion €) for each scenario:
+      - investments (gen, bat, tx)
+      - production cost
+      - CO₂ cost
+      - load shedding cost
+      - curtailment cost
+    """
+    # 1) Base costs per (year,scenario), scaled to billion €
+    df = yearly_system_costs[["production_cost", "co2_emission_cost"]].copy()
+    df = df.rename(
+        columns={"production_cost": "Prod Cost", "co2_emission_cost": "CO₂ Cost"}
+    )
+    df["Prod Cost"] = df["Prod Cost"] / 1e9
+    df["CO₂ Cost"] = df["CO₂ Cost"] / 1e9
+
+    # 2) Add load shedding & curtailment cost (billion €)
+    ls = (curtail_shed_costs["load_shedding_cost"] / 1e9).rename("Load Shedding Cost")
+    ct = (curtail_shed_costs["curtailment_cost"] / 1e9).rename("Curtailment Cost")
+    df = df.join(ls).join(ct).fillna(0)
+
+    # 3) Add investments by mapping year → billion €
+    yrs = df.index.get_level_values("year")
+    df["Invest Gen"] = yrs.map(system_summary["cost_of_buildout"] / 1e9)
+    df["Invest Bat"] = yrs.map(battery_summary["investment_cost"] / 1e9)
+    df["Invest Tx"] = yrs.map(branch_summary["cost_of_buildout"] / 1e9)
+
+    # 4) Reorder columns
+    df = df[
+        [
+            "Invest Gen",
+            "Invest Bat",
+            "Invest Tx",
+            "Prod Cost",
+            "CO₂ Cost",
+            "Load Shedding Cost",
+            "Curtailment Cost",
+        ]
+    ]
+
+    # 5) Plot
+    fig, ax = plt.subplots(figsize=(12, 6))
+    df.plot(
+        kind="bar", stacked=True, ax=ax, color=[category_colors[c] for c in df.columns]
+    )
+    ax.set_xlabel("Year / Scenario")
+    ax.set_ylabel("Cost (billion €)")
+    plt.tight_layout()
+    print("Annual System Costs by Scenario")
+    plt.show()
+
+    if savefolder:
+        fig.savefig(
+            os.path.join(savefolder, "yearly_system_costs_by_scenario.png"),
+            bbox_inches="tight",
+        )
+
+
+def compute_total_system_cost(
+    system_summary: pd.DataFrame,
+    battery_summary: pd.DataFrame,
+    branch_summary: pd.DataFrame,
+    yearly_system_costs: pd.DataFrame,
+    curtail_shed_costs: pd.DataFrame,
+    scenarios: dict[str, list[str]],
+    scenario_probabilities: dict[str, list[float]],
+    savefolder: str | None = None,
+) -> pd.DataFrame:
+    """
+    Compute, for each year, the total cost as in the optimisation objective:
+      AIC_y + ∑_{ω} p_{ω,y} · OC_{ω,y},
+    where:
+      AIC_y = investment cost in generators + batteries + branches
+      OC_{ω,y} = production_cost + co2_emission_cost
+               + load_shedding_cost + curtailment_cost
+      and all are drawn from the supplied summary tables.
+
+    Returns a DataFrame indexed by year with columns:
+      - AIC           (EUR)
+      - expected_OC   (EUR)
+      - total_cost    (EUR)
+    """
+    # 1) Build annual investment cost AIC_y
+    # system_summary and branch_summary each have .cost_of_buildout,
+    # battery_summary has .investment_cost
+    battery_investment = battery_summary["investment_cost"].fillna(0)
+    AIC = (
+        system_summary["cost_of_buildout"]
+        + battery_investment
+        + branch_summary["cost_of_buildout"]
+    ).rename("AIC")
+
+    # 2) Compute OC_{ω,y} = prod + co2 + load shedding + curtailment
+    # merge the two per-(year,scenario) tables
+    oc = (
+        yearly_system_costs[["production_cost", "co2_emission_cost"]]
+        .join(curtail_shed_costs[["load_shedding_cost", "curtailment_cost"]])
+        .fillna(0)
+    )
+    oc["OC"] = (
+        oc["production_cost"]
+        + oc["co2_emission_cost"]
+        + oc["load_shedding_cost"]
+        + oc["curtailment_cost"]
+    )
+
+    # 3) Weight by scenario probabilities to get E[OC] per year
+    # build a DataFrame of probabilities
+    prob_rows = []
+    for y_str, scen_list in scenarios.items():
+        y = int(y_str)
+        for scen, p in zip(scen_list, scenario_probabilities[y_str]):
+            prob_rows.append({"year": y, "scenario": scen, "p": p})
+    prob_df = pd.DataFrame(prob_rows).set_index(["year", "scenario"])
+
+    oc = oc.join(prob_df, how="left")
+    oc["p"] = oc["p"].fillna(0)
+    oc["pOC"] = oc["OC"] * oc["p"]
+
+    exp_OC = oc.groupby(level="year")["pOC"].sum().rename("expected_OC")
+
+    # 4) Combine AIC and expected_OC
+    result = pd.concat([AIC, exp_OC], axis=1).fillna(0)
+    result["total_cost"] = result["AIC"] + result["expected_OC"]
+    if savefolder:
+        result.to_csv(os.path.join(savefolder, "total_system_cost.csv"))
+
+    # 5) Print and return
+    print("Total system cost by year:")
+
+    return result
+
+
+def make_mega_cost_table(
+    system_summary: pd.DataFrame,
+    battery_summary: pd.DataFrame,
+    branch_summary: pd.DataFrame,
+    yearly_system_costs: pd.DataFrame,
+    curtail_shed_costs: pd.DataFrame,
+    scenarios: dict[str, list[str]],
+    scenario_probabilities: dict[str, list[float]],
+    savefolder: str | None = None,
+) -> pd.DataFrame:
+    """
+    Build a “mega‐table” of key annual metrics by (year, scenario), plus a final
+    ('All','All') row that sums investments and uses probability‐weighted sums
+    of operating costs across scenarios and years.
+
+    Columns:
+      - Invest Gen
+      - Invest Bat
+      - Invest Tx
+      - Production Cost
+      - CO2 Emission Cost
+      - Load Shedding Cost
+      - Curtailment Cost
+      - Prod+CO2 Cost
+      - Total CapEx
+      - Total OpEx
+      - Total Cost
+    """
+    # --- 1) Scenario‐level data ---
+    df = yearly_system_costs[["production_cost", "co2_emission_cost"]].copy()
+    df = df.join(curtail_shed_costs[["load_shedding_cost", "curtailment_cost"]])
+    # map investments
+    yrs = df.index.get_level_values("year")
+    df["Invest Gen"] = yrs.map(system_summary["cost_of_buildout"])
+    df["Invest Bat"] = yrs.map(battery_summary["investment_cost"])
+    df["Invest Tx"] = yrs.map(branch_summary["cost_of_buildout"])
+    # rename
+    df = df.rename(
+        columns={
+            "production_cost": "Production Cost",
+            "co2_emission_cost": "CO2 Emission Cost",
+            "load_shedding_cost": "Load Shedding Cost",
+            "curtailment_cost": "Curtailment Cost",
+        }
+    )
+    # derived cols
+    df["Prod+CO2 Cost"] = df["Production Cost"] + df["CO2 Emission Cost"]
+    df["Total CapEx"] = df[["Invest Gen", "Invest Bat", "Invest Tx"]].sum(axis=1)
+    df["Total OpEx"] = df[
+        [
+            "Production Cost",
+            "CO2 Emission Cost",
+            "Load Shedding Cost",
+            "Curtailment Cost",
+        ]
+    ].sum(axis=1)
+    df["Total Cost"] = df["Total CapEx"] + df["Total OpEx"]
+    cols = [
+        "Invest Gen",
+        "Invest Bat",
+        "Invest Tx",
+        "Production Cost",
+        "CO2 Emission Cost",
+        "Load Shedding Cost",
+        "Curtailment Cost",
+        "Prod+CO2 Cost",
+        "Total CapEx",
+        "Total OpEx",
+        "Total Cost",
+    ]
+    df = df[cols]
+
+    # --- 2) Attach scenario probabilities ---
+    prob_list = []
+    for year_str, scen_list in scenarios.items():  # iterate the *names* dict
+        year = int(year_str)
+        probs = scenario_probabilities[year_str]  # these are the matching probabilities
+        for scen, p in zip(scen_list, probs):
+            prob_list.append({"year": year, "scenario": scen, "p": p})
+    prob_df = pd.DataFrame(prob_list).set_index(["year", "scenario"])
+
+    dfp = df.join(prob_df, how="left")
+
+    # --- 3) Compute 'All' row via weighted sums ---
+    # A) total investments (sum over years, scenario-independent)
+    total_inv_gen = system_summary["cost_of_buildout"].sum()
+    total_inv_bat = battery_summary["investment_cost"].sum()
+    total_inv_tx = branch_summary["cost_of_buildout"].sum()
+    # B) weighted sums of opex across (year,scenario)
+    exp_prod_cost = (dfp["Production Cost"] * dfp["p"]).sum()
+    exp_co2_cost = (dfp["CO2 Emission Cost"] * dfp["p"]).sum()
+    exp_ls_cost = (dfp["Load Shedding Cost"] * dfp["p"]).sum()
+    exp_curt_cost = (dfp["Curtailment Cost"] * dfp["p"]).sum()
+    # recompute derived
+    exp_prod_co2 = exp_prod_cost + exp_co2_cost
+    total_capex = total_inv_gen + total_inv_bat + total_inv_tx
+    total_opex = exp_prod_co2 + exp_ls_cost + exp_curt_cost
+    total_cost = total_capex + total_opex
+
+    # assemble 'All' row
+    all_metrics = {
+        "Invest Gen": total_inv_gen,
+        "Invest Bat": total_inv_bat,
+        "Invest Tx": total_inv_tx,
+        "Production Cost": exp_prod_cost,
+        "CO2 Emission Cost": exp_co2_cost,
+        "Load Shedding Cost": exp_ls_cost,
+        "Curtailment Cost": exp_curt_cost,
+        "Prod+CO2 Cost": exp_prod_co2,
+        "Total CapEx": total_capex,
+        "Total OpEx": total_opex,
+        "Total Cost": total_cost,
+    }
+    all_idx = pd.MultiIndex.from_tuples([("All", "All")], names=["year", "scenario"])
+    all_row = pd.DataFrame(all_metrics, index=all_idx)
+
+    # --- 4) Concatenate final mega table ---
+    mega = pd.concat([df, all_row], sort=False)
+
+    # drop the probability column if present
+    if "p" in mega.columns:
+        mega = mega.drop(columns=["p"])
+
+    # --- 5) Save if requested ---
+    if savefolder:
+        mega.to_csv(os.path.join(savefolder, "mega_cost_table.csv"))
+
+    return mega
+
+
+def analyze_run_stochastic(
+    model_config: dict,
+    SAVE_FIGURES: bool = True,
+    SAVE_TABLES: bool = True,
+    show_plots: bool = False,
+) -> None:
+    print(30 * "-")
+    print("Analyzing model run...")
+    print(30 * "-")
+    print(model_config)
+
+    if not show_plots:
+        original_show = plt.show
+
+        # Override plt.show with a no-op lambda.
+        plt.show = lambda: None
+
+    FOLDER = model_config["save_folder"]
+    decision_variables_folder = os.path.join(FOLDER, "decision_variables")
+    model_info_folder = os.path.join(FOLDER, "model_info")
+    dual_variables_folder = os.path.join(FOLDER, "dual_variables")
+
+    # Create folders if they don't exist
+
+    RESULTS_FOLDER = os.path.join(FOLDER, "results")
+    if not os.path.exists(RESULTS_FOLDER):
+        os.makedirs(RESULTS_FOLDER)
+    if SAVE_TABLES:
+        tables_folder = os.path.join(RESULTS_FOLDER, "tables")
+        if not os.path.exists(tables_folder):
+            os.makedirs(tables_folder)
+    else:
+        tables_folder = None
+    if SAVE_FIGURES:
+        figures_folder = os.path.join(RESULTS_FOLDER, "figures")
+        if not os.path.exists(figures_folder):
+            os.makedirs(figures_folder)
+    else:
+        figures_folder = None
+
+    ## Read data
+    model_info = pd.read_csv(os.path.join(model_info_folder, "model_info.csv"))
+    config = yaml.safe_load(open(os.path.join(model_info_folder, "config.yaml")))
+    jsons = utils.read_jsons_from_dir(model_info_folder)
+    scenarios = jsons["scenarios"]
+    scenario_probabilities = jsons["scenario_probabilities"]
+    week_weights = jsons["week_weights"]
+    data_folder_name = config["data_folder_name"]
+    VOLL = config["VOLL"]
+    CC = config["CC"]
+    CO2_price = config["CO2_price"]
+    E_limit = config["E_limit"]
+    p_max_new_branch = config["p_max_new_branch"]
+    p_min_new_branch = config["p_min_new_branch"]
+    expansion_factor = config["expansion_factor"]
+    MS = config["MS"]
+    model_name = config["model_name"]
+    MIPGap = config["MIPGap"]
+    years = config["years"]
+    r = config["discount_rate"]
+    representative_period_unit = config["representative_period_unit"]
+    weeks = config["representative_periods"]
+    scenario_file = config["scenario_file"]
+    input_data_folder = os.path.join(PROCESSED_DATA_FOLDER, config["data_folder_name"])
+    input_data = utils.load_multi_year_csv_files_with_week_from_folder(
+        years=years, data_folder_path=input_data_folder
+    )
+    scenario_multiplier = utils.load_scenario_multiplier(
+        scenario_file_name=scenario_file
+    )
+    # **Note:** The input data is such that all data is the same for all years. All the data that is year-dependent has year as index. The only exception is the demand data, which does not have copies for years.
+    dual_variables = utils.load_csv_files_from_folder_with_scenarios(
+        dual_variables_folder
+    )
+    decision_varables = utils.load_csv_files_from_folder_with_scenarios(
+        decision_variables_folder
+    )
+
+    # Put data into variables for easier access
+    # read dataframes
+    # input data
+    batteries = input_data["batteries"]
+    branches = input_data["branches"]
+    generators = input_data["generators"]
+    capacity_factors = input_data["capacity_factors"]
+    generator_costs = input_data["generator_costs"]
+    hourly_demand = input_data["hourly_demand"]
+    nodes = input_data["nodes"]
+    # decision variables
+    battery_capacity = decision_varables["battery_capacity"]
+    battery_charging = decision_varables["battery_charging"]
+    battery_discharging = decision_varables["battery_discharging"]
+    battery_soc = decision_varables["battery_soc"]
+    branch_capacity = decision_varables["branch_capacity"]
+    curtailment = decision_varables["curtailment"]
+    generation = decision_varables["generation"]
+    generator_capacity = decision_varables["generator_capacity"]
+    load_shedding = decision_varables["load_shedding"]
+    power_flow = decision_varables["power_flow"]
+    # dual variables
+    battery_charge_new_max_duals = dual_variables["battery_charge_new_max_duals"]
+    battery_charge_old_duals = dual_variables["battery_charge_old_duals"]
+    battery_discharge_new_max_duals = dual_variables["battery_discharge_new_max_duals"]
+    battery_discharge_old_duals = dual_variables["battery_discharge_old_duals"]
+    branch_extension_duals = dual_variables["branch_extension_duals"]
+    branch_flow_new_duals = dual_variables["branch_flow_new_duals"]
+    branch_flow_old_duals = dual_variables["branch_flow_old_duals"]
+    emissions_duals = dual_variables["emissions_duals"]
+    gen_extension_duals = dual_variables["gen_extension_duals"]
+    gen_output_new_duals = dual_variables["gen_output_new_duals"]
+    gen_output_old_duals = dual_variables["gen_output_old_duals"]
+    load_shedding_duals = dual_variables["load_shedding_duals"]
+    power_balance_duals = dual_variables["power_balance_duals"]
+
+    # region Generators
+    # Preprocess generators
+    generators["extension_potential"] = generators["p_nom"] * config["expansion_factor"]
+
+    generators = add_capacity_and_cumulative_metrics(generators, generator_capacity)
+
+    if SAVE_FIGURES:
+        generators_save_folder = os.path.join(figures_folder, "generators")
+        if not os.path.exists(generators_save_folder):
+            os.makedirs(generators_save_folder)
+    else:
+        generators_save_folder = None
+
+    plot_capacity_investment_by_carrier(generators, generators_save_folder)
+    plot_capacity_spending_by_carrier(generators, generators_save_folder)
+    plot_total_capacity_growth(generators, generators_save_folder)
+    plot_extension_vs_potential_by_carrier(generators, generators_save_folder)
+    production_by_carrier_table = create_energy_production_by_carrier_table(
+        generation,
+        generators,
+        scenarios,
+        scenario_probabilities,
+        week_weights,
+        savefolder=tables_folder,
+    )
+    make_annual_production_table(
+        generation,
+        generators,
+        scenarios,
+        scenario_probabilities,
+        week_weights=week_weights,
+        savefolder=tables_folder,
+    )
+    annual_cost_table = make_weighted_annual_production_cost_by_year_table(
+        generation,
+        generators,
+        scenarios,
+        scenario_probabilities,
+        week_weights,
+        carbon_price=CO2_price,
+        savefolder=tables_folder,
+    )
+    weighted_annual_production_by_year = make_weighted_annual_production_by_year(
+        generation,
+        generators,
+        scenarios,
+        scenario_probabilities,
+        week_weights=week_weights,
+        savefolder=tables_folder,
+    )
+    plot_weighted_production_evolution(
+        weighted_annual_production_by_year, generators, savefolder=figures_folder
+    )
+    plot_weighted_production_cost_evolution(
+        annual_cost_table, generators, savefolder=figures_folder
+    )
+    yearly_system_cost_table = make_yearly_system_costs_table(
+        generation, generators, week_weights, CO2_price, tables_folder
+    )
+    plot_co2_emissions_by_scenario(yearly_system_cost_table, savefolder=figures_folder)
+    plot_co2_emissions_by_scenario(yearly_system_cost_table, figures_folder)
+    plot_production_by_scenario(yearly_system_cost_table, figures_folder)
+    plot_production_cost_by_scenario(yearly_system_cost_table, figures_folder)
+    plot_production_cost_with_emission_by_scenario(
+        yearly_system_cost_table, figures_folder
+    )
+
+    # Example loop over years, weeks, scenarios, and carrier types
+    years = [int(y) for y in scenarios.keys()]
+    weeks = [int(w) for w in week_weights.keys()]
+    carriers = generators.reset_index()["carrier"].unique()
+    # if figures_folder:
+    #     generation_curves_folder = os.path.join(figures_folder, "generation_curves")
+    #     os.makedirs(generation_curves_folder, exist_ok=True)
+    # else:
+    #     generation_curves_folder = None
+
+    # for year in years:
+    #     for scenario in scenarios[str(year)]:
+    #         for week in weeks:
+    #             for carrier in carriers:
+    #                 plot_generation_curves_by_carrier(
+    #                     generation,
+    #                     generators,
+    #                     year,
+    #                     week,
+    #                     scenario,
+    #                     carrier,
+    #                     savefolder=generation_curves_folder,  # or None if you don’t want to save
+    #                 )
+
+    # years = [int(y) for y in scenarios.keys()]
+    # weeks = [int(w) for w in week_weights.keys()]
+    # carriers = generators.reset_index()["carrier"].unique()
+
+    # for year in years:
+    #     for scen in scenarios[str(year)]:
+    #         for week in weeks:
+    #             for carrier in carriers:
+    #                 plot_fraction_of_max_generation_by_carrier(
+    #                     generation,
+    #                     capacity_factors,
+    #                     generators,
+    #                     year,
+    #                     week,
+    #                     scen,
+    #                     carrier,
+    #                     savefolder=generation_curves_folder,  # or None if you don’t want to save
+    #                 )
+
+    plot_utilization_hierarchy(
+        generation,
+        capacity_factors,
+        generators,
+        week_weights,
+        scenarios,
+        figures_folder,
+    )
+
+    summary_table = make_system_summary_table(
+        generation,
+        generators,
+        week_weights,
+        scenarios,
+        scenario_probabilities,
+        CO2_price,
+        savefolder=tables_folder,
+    )
+    summary_by_carrier_table = make_system_summary_table_by_carrier(
+        generation,
+        generators,
+        week_weights,
+        scenarios,
+        scenario_probabilities,
+        CO2_price,
+        tables_folder,
+    )
+    # Preprocessing
+    if "extended_by" in branches.columns:
+        branches.drop(columns=["extended_by"], inplace=True)
+    if "branch" in branch_capacity.index.names:
+        branch_capacity = branch_capacity.rename_axis(index={"branch": "line"})
+    if "branch" in power_flow.index.names:
+        power_flow = power_flow.rename_axis(index={"branch": "line"})
+    branches["extension_potential"] = p_max_new_branch
+
+    branches = extend_branches_table(branches, branch_capacity)
+    plot_branch_new_capacity(branches, figures_folder)
+    branch_buildout_summary = make_branch_buildout_summary(branches, tables_folder)
+    branch_flow_table_per_line = make_branch_flow_metrics(
+        power_flow, branches, week_weights, savefolder=tables_folder
+    )
+    branch_flow_summary = make_aggregate_branch_flow_summary(
+        power_flow, branches, week_weights, savefolder=tables_folder
+    )
+    plot_new_branches_for_years_with_investments(
+        branches, branch_capacity, nodes, savefolder=figures_folder
+    )
+
+    if len(batteries) > 0:
+        batteries = extend_batteries_table(batteries, battery_capacity)
+        plot_battery_investment_by_year(batteries, savefolder=figures_folder)
+        plot_battery_investment_cost_by_year(batteries, savefolder=figures_folder)
+        battery_summary = make_battery_system_summary(
+            batteries,
+            battery_discharging,
+            week_weights,
+            scenarios,
+            scenario_probabilities,
+            tables_folder,
+        )
+        plot_cycles_per_scenario_with_average(
+            battery_discharging,
+            week_weights,
+            reference_cycle_mwh=400,
+            savefolder=figures_folder,
+        )
+
+    plot_curtailment_by_scenario(curtailment, week_weights, savefolder=figures_folder)
+    plot_load_shedding_by_scenario(
+        load_shedding, week_weights, savefolder=figures_folder
+    )
+    curtailment_and_load_shedding_table = make_curtailment_load_shedding_cost_table(
+        curtailment, load_shedding, week_weights, CC, VOLL, savefolder=tables_folder
+    )
+
+    system_summary = summary_table = make_system_summary_table(
+        generation,
+        generators,
+        week_weights,
+        scenarios,
+        scenario_probabilities,
+        CO2_price,
+        savefolder=tables_folder,
+    )
+    if len(batteries) > 0:
+        battery_summary = make_battery_system_summary(
+            batteries,
+            battery_discharging,
+            week_weights,
+            scenarios,
+            scenario_probabilities,
+            savefolder=tables_folder,
+        )
+    else:
+        # Dummy columns
+        columns = ["num_buildout", "capacity", "investment_cost", "cycles_per_year"]
+
+        # Create the DataFrame with NaNs
+        empty_df = pd.DataFrame(index=years, columns=columns)
+        empty_df.index.name = "year"
+        battery_summary = empty_df
+
+    branch_summary = make_branch_buildout_summary(branches, tables_folder)
+    yearly_system_cost_table = make_yearly_system_costs_table(
+        generation, generators, week_weights, CO2_price, savefolder=tables_folder
+    )
+    curtailment_and_load_shedding_table = make_curtailment_load_shedding_cost_table(
+        curtailment, load_shedding, week_weights, CC, VOLL, savefolder=tables_folder
+    )
+
+    plot_yearly_costs_stacked_avg(
+        system_summary,
+        battery_summary,
+        branch_summary,
+        yearly_system_cost_table,
+        curtailment_and_load_shedding_table,
+        savefolder=figures_folder,
+    )
+    plot_yearly_costs_stacked_by_scenario(
+        system_summary,
+        battery_summary,
+        branch_summary,
+        yearly_system_cost_table,
+        curtailment_and_load_shedding_table,
+        savefolder=figures_folder,
+    )
+    total_system_cost = compute_total_system_cost(
+        system_summary,
+        battery_summary,
+        branch_summary,
+        yearly_system_cost_table,
+        curtailment_and_load_shedding_table,
+        scenarios,
+        scenario_probabilities,
+        savefolder=tables_folder,
+    )
+    print(total_system_cost)
+    assert (
+        abs(total_system_cost["total_cost"].sum() - model_info["Objective Value"][0])
+        < 1e-3
+    ), f"Mismatch in total system cost: {total_system_cost['total_cost'].sum():,.0f} vs {model_info['Objective Value'][0]:,.0f}"
+
+    mega_table = make_mega_cost_table(
+        system_summary,
+        battery_summary,
+        branch_summary,
+        yearly_system_cost_table,
+        curtailment_and_load_shedding_table,
+        scenarios,
+        scenario_probabilities,
+        savefolder=tables_folder,
+    )
+    # End  by saving the extended generators, transmission lines, and batteries tables to and extended tables folder
+    if tables_folder:
+        # Create the extended tables folder if it doesn't exist
+        extended_tables_folder = os.path.join(tables_folder, "extended_tables")
+        os.makedirs(extended_tables_folder, exist_ok=True)
+        generators.to_csv(
+            os.path.join(extended_tables_folder, "extended_generators.csv"), index=False
+        )
+        branches.to_csv(
+            os.path.join(extended_tables_folder, "extended_branches.csv"), index=False
+        )
+        batteries.to_csv(
+            os.path.join(extended_tables_folder, "extended_batteries.csv"), index=False
+        )
+
+    if not show_plots:
+        # Restore the original show function
+        plt.show = original_show
+        print(30 * "-")
+        print(
+            f"Post Optimization Analysis completed for model_id: {model_config['model_id']}, model: {model_config["model_name"]}, run_id: {model_config["run_id"]}. \n Results saved in {RESULTS_FOLDER}"
+        )
+        print(30 * "-")
 
 
 if __name__ == "__main__":

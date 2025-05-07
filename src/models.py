@@ -55,7 +55,8 @@ def _create_mappings(
         y0 = branches.index.unique(level="year")[0]
         branches = branches.loc[y0, :]
         generators = generators.loc[y0, :]
-        batteries = batteries.loc[y0, :]
+        if len(batteries) > 0:
+            batteries = batteries.loc[y0, :]
 
     N = nodes.index.to_list()
     B = branches.index.to_list()

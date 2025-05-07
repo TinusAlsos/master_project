@@ -307,7 +307,7 @@ def config_name_to_path(config_name: str) -> str:
             return os.path.join(DATA_FOLDER, "configs", f"{config_name}.yaml")
 
 
-def run_preprocessing(config: dict | str = "") -> None:
+def run_preprocessing(config: dict | str = "", empty_batteries: bool = False) -> None:
     """Runs the preprocessing pipeline using the specified configuration.
 
     Args:
@@ -403,6 +403,8 @@ def run_preprocessing(config: dict | str = "") -> None:
 
     battery_template = load_battery_config_by_name(config["battery_config"])
     batteries = generate_batteries(data, battery_template)
+    if empty_batteries:
+        batteries = batteries[0:0]
     batteries.to_csv(os.path.join(output_folder, "batteries.csv"))
     print(f"Preprocessing completed. Data saved to {output_folder}")
 
@@ -417,5 +419,11 @@ if __name__ == "__main__":
         default="",
         help="The name of the configuration file to use for preprocessing.",
     )
+    parser.add_argument(
+        "--empty_batteries",
+        action="store_true",
+        help="Create empty batteries.",
+    )
+
     args = parser.parse_args()
-    run_preprocessing(args.name)
+    run_preprocessing(args.name, args.empty_batteries)
