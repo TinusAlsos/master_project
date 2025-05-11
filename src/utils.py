@@ -185,6 +185,10 @@ def copy_and_modify_config(
     config_stem, config_ext = os.path.splitext(config_base)
 
     if new_filename:
+        if not new_filename.endswith(".yaml"):
+            new_filename += ".yaml"
+        if not new_filename.startswith("config"):
+            new_filename = f"config_{new_filename}"
         new_path = os.path.join(config_dir, new_filename)
     else:
         new_filename = f"{config_stem}{suffix}{config_ext}"
@@ -196,6 +200,30 @@ def copy_and_modify_config(
 
     print(f"New config saved to: {new_path}")
     return new_path
+
+
+def delete_temp_files(path_or_name: str = "") -> None:
+    """
+    Deletes a configuration file by name or path.
+    """
+    if not path_or_name:
+        return
+    # Check if its a path
+    if os.path.exists(path_or_name):
+        config_path = path_or_name
+    else:
+        if not path_or_name.endswith(".yaml"):
+            path_or_name += ".yaml"
+        if not path_or_name.startswith("config"):
+            path_or_name = f"config_{path_or_name}"
+        config_path = os.path.join(MODELS_CONFIG_FOLDER, path_or_name)
+        if not os.path.exists(config_path):
+            raise FileNotFoundError(
+                f"Model configuration file not found: {config_path}, created from {path_or_name}"
+            )
+    # Delete the file
+    os.remove(config_path)
+    print(f"Deleted config file: {config_path}")
 
 
 def load_csv_files_from_folder(data_folder_path: str) -> dict[str, pd.DataFrame]:

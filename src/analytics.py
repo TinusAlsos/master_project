@@ -1978,7 +1978,7 @@ def plot_co2_emissions_by_scenario(
         fig.savefig(savepath, bbox_inches="tight")
 
 
-def plot_co2_emissions_by_scenario(
+def plot_co2_emissions_by_scenario_avg(
     yearly_system_costs: pd.DataFrame, savefolder: str | None = None
 ) -> None:
     """
@@ -3650,6 +3650,801 @@ def make_mega_cost_table(
     return mega
 
 
+def make_nodal_price_table(
+    power_balance_duals: pd.DataFrame,
+    savefolder: str | None = None,
+) -> pd.DataFrame:
+    """
+    Compute annual average locational marginal prices (LMPs) per node, scenario, and year
+    from the power_balance_duals.
+
+    Parameters
+    ----------
+    power_balance_duals : pd.DataFrame
+        MultiIndexed by (node, scenario, year, week, hour) with column 'dual_value'.
+    week_weights : dict[str, float]
+        Mapping from week (as string) to weight for annualization.
+
+    Returns
+    -------
+    pd.DataFrame
+        Indexed by (year, scenario), columns are node names, values are annual-average LMP (€/MWh).
+    """
+    df = power_balance_duals.reset_index().rename(columns={"dual_value": "LMP"})
+    # map week to weight
+    table = df.groupby(["node", "scenario", "year"])["LMP"].mean()
+    table = table.reset_index(name="LMP")
+    table = table.pivot(
+        index=["year", "scenario"], columns="node", values="LMP"
+    ).fillna(0)
+
+    print("Annual Average Locational Marginal Prices by Node")
+    if savefolder:
+        table.to_csv(os.path.join(savefolder, "nodal_price_table.csv"))
+    # Print the first few rows of the table
+
+    return table
+
+
+def plot_nodal_price_evolution_with_markers(
+    lmp_table: pd.DataFrame,
+    nodes: list[str] | None = None,
+    savefolder: str | None = None,
+) -> None:
+    """
+    Plot line chart of annual average LMPs for selected nodes,
+    with each data point marked and legend showing city names.
+
+    Parameters
+    ----------
+    lmp_table : pd.DataFrame
+        Indexed by (year, scenario), columns are node names with avg LMP.
+    nodes : list of str, optional
+        List of node names to plot. If None, plot all.
+    savefolder : str or None
+        Directory to save figure. If None, not saved.
+    """
+    if nodes is None:
+        nodes = list(lmp_table.columns)
+
+    years = lmp_table.index.get_level_values("year")
+    fig, ax = plt.subplots(figsize=(10, 6))
+
+    for node in nodes:
+        city = plotting.node_to_city.get(node, node)
+        ax.plot(years, lmp_table[node].values, marker="o", linestyle="-", label=city)
+
+    ax.set_xlabel("Year")
+    ax.set_ylabel("Annual Avg LMP (€/MWh)")
+    fig.subplots_adjust(right=0.75)
+    ax.legend(title="City", bbox_to_anchor=(1.02, 1), loc="upper left")
+    plt.tight_layout()
+    print("Annual Average Locational Marginal Prices by City (with markers)")
+    plt.show()
+
+    if savefolder:
+        fig.savefig(
+            os.path.join(savefolder, "nodal_price_evolution_markers.png"),
+            bbox_inches="tight",
+        )
+
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+def plot_nodal_price_grouped_bar(
+    lmp_table: pd.DataFrame,
+    nodes: list[str] | None = None,
+    node_to_city: dict[str, str] = None,
+    savefolder: str | None = None,
+) -> None:
+    """
+    Grouped bar chart of annual average LMPs for selected nodes,
+    with one cluster per (year, scenario).
+
+    Parameters
+    ----------
+    lmp_table : pd.DataFrame
+        Indexed by (year, scenario), columns are node names with avg LMP.
+    nodes : list of str, optional
+        List of node names to plot. If None, plot all.
+    node_to_city : dict, optional
+        Mapping from node code to city name for legend labels.
+    savefolder : str or None
+        Directory to save figure. If None, not saved.
+    """
+    if nodes is None:
+        nodes = list(lmp_table.columns)
+
+    # Prepare data
+    df = lmp_table[nodes].fillna(0)
+    idx = list(df.index)  # list of (year, scenario) tuples
+    n_groups = len(idx)
+    n_nodes = len(nodes)
+
+    # Bar positions
+    base = np.arange(n_groups)
+    width = 0.8 / n_nodes
+
+    fig, ax = plt.subplots(figsize=(12, 6))
+    for i, node in enumerate(nodes):
+        x = base + (i - (n_nodes - 1) / 2) * width
+        city_label = node_to_city.get(node, node)
+        ax.bar(x, df[node].values, width=width, label=city_label)
+
+    # X-axis labels
+    labels = [f"{year}\n{scenario}" for year, scenario in idx]
+    ax.set_xticks(base)
+    ax.set_xticklabels(labels, rotation=0)
+    ax.set_xlabel("Year / Scenario")
+    ax.set_ylabel("Annual Avg LMP (€/MWh)")
+
+    # Legend
+    fig.subplots_adjust(right=0.8)
+    ax.legend(title="City", bbox_to_anchor=(1.02, 1), loc="upper left")
+
+    plt.tight_layout()
+    print("Annual Average Locational Marginal Prices by City (grouped bar)")
+    plt.show()
+
+    if savefolder:
+        fig.savefig(
+            os.path.join(savefolder, "nodal_price_grouped_bar.png"), bbox_inches="tight"
+        )
+
+
+def compute_lmp_bucket_frequencies(
+    power_balance_duals: pd.DataFrame,
+    generators: pd.DataFrame,
+    savefolder: str | None = None,
+) -> pd.DataFrame:
+    """
+    Bucket hourly LMPs into ±10% intervals around each carrier’s mean production_cost,
+    combine onwind/offwind into 'wind', rename ror to 'non-binding',
+    merge overlapping coal & CCGT into 'thermal', create gap buckets,
+    and include an 'other' category. Returns bucket bounds and frequencies.
+    """
+    # 1) Mean production cost by carrier
+    carrier_cost = generators.reset_index().groupby("carrier")["production_cost"].mean()
+    # 2) Combine & rename carriers: merge coal+CCGT into 'thermal'
+    cost_map = {
+        "non-binding": carrier_cost["ror"],
+        "solar": carrier_cost["solar"],
+        "wind": (carrier_cost["onwind"] + carrier_cost["offwind-ac"]) / 2,
+        "thermal": None,  # placeholder
+    }
+    # compute thermal cost interval union
+    coal_c = carrier_cost["coal"]
+    ccgt_c = carrier_cost["CCGT"]
+    # lower = min(0.9*cost), upper = max(1.1*cost)
+    thermal_lower = min(coal_c, ccgt_c) * 0.9
+    thermal_upper = max(coal_c, ccgt_c) * 1.1
+    # assign a representative cost (midpoint) for sorting
+    thermal_cost = (coal_c + ccgt_c) / 2
+    cost_map["thermal"] = thermal_cost
+
+    # 3) Build intervals ±10%
+    intervals = []
+    for label, cost in cost_map.items():
+        if label == "thermal":
+            lower, upper = thermal_lower, thermal_upper
+        else:
+            if cost == 0:
+                # Avoid division by zero
+                lower, upper = -0.0001, 0.0001
+            else:
+                lower, upper = cost * 0.9, cost * 1.1
+        intervals.append({"label": label, "lower": lower, "upper": upper})
+
+    # 4) Sort by lower bound
+    intervals = sorted(intervals, key=lambda x: x["lower"])
+
+    # 5) Create gap buckets between non-overlapping intervals
+    buckets = []
+    for i, iv in enumerate(intervals):
+        buckets.append(iv)
+        if i < len(intervals) - 1:
+            next_iv = intervals[i + 1]
+            if next_iv["lower"] > iv["upper"]:
+                buckets.append(
+                    {
+                        "label": f"gap_{iv['label']}_{next_iv['label']}",
+                        "lower": iv["upper"],
+                        "upper": next_iv["lower"],
+                    }
+                )
+    # 6) Sort buckets by lower bound again
+    buckets = sorted(buckets, key=lambda x: x["lower"])
+
+    # 7) Flatten LMPs
+    df = power_balance_duals.reset_index()[["dual_value"]].rename(
+        columns={"dual_value": "LMP"}
+    )
+
+    # 8) Assign each LMP to a bucket
+    conditions = [
+        (df["LMP"] >= b["lower"]) & (df["LMP"] <= b["upper"]) for b in buckets
+    ]
+    labels = [b["label"] for b in buckets]
+    df["bucket"] = np.select(conditions, labels, default="other")
+
+    # 9) Compute frequencies
+    abs_counts = (
+        df["bucket"]
+        .value_counts()
+        .reindex(labels + ["other"], fill_value=0)
+        .astype(int)
+    )
+    total = len(df)
+    rel_perc = (abs_counts / total) * 100
+
+    # 10) Prepare bounds table
+    bounds = pd.DataFrame(buckets).set_index("label")[["lower", "upper"]]
+    bounds.index.name = "bucket"
+    bounds.loc["other"] = [np.nan, np.nan]
+
+    # 11) Combine into result
+    result = bounds.copy()
+    result["absolute"] = abs_counts
+    result["relative_percent"] = rel_perc
+
+    print("LMP Bucket Frequencies")
+    if savefolder:
+        result.to_csv(os.path.join(savefolder, "lmp_bucket_frequencies.csv"))
+
+    return result
+
+
+def plot_lmp_histogram_70plus(
+    power_balance_duals: pd.DataFrame,
+    cap: float = 70,
+    bin_width: float = 1.0,
+    savefolder: str | None = None,
+) -> None:
+    """
+    Plot histogram of LMP frequencies with bin size 1 €/MWh, capping at `cap`:
+    - Bins from floor(min LMP) to `cap` in steps of `bin_width`
+    - One extra bin labeled 'cap+' for values above `cap`
+    Prints the values and count in the `cap+` bin.
+    """
+    # Extract LMP values
+    lmp = power_balance_duals.reset_index()["dual_value"]
+
+    # Split into under/over
+    lmp_under = lmp[lmp <= cap]
+    lmp_over = lmp[lmp > cap]
+
+    # Bin edges for <= cap
+    min_val = np.floor(lmp_under.min() if not lmp_under.empty else cap)
+    bins = np.arange(min_val, cap + bin_width, bin_width)
+
+    # Histogram counts for <= cap
+    counts, edges = np.histogram(lmp_under, bins=bins)
+
+    # Plot
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.bar(
+        edges[:-1],
+        counts,
+        width=bin_width,
+        align="edge",
+        edgecolor="black",
+        label=f"≤ {cap} €/MWh",
+    )
+    # Plot the cap+ bin
+    ax.bar(
+        cap,
+        len(lmp_over),
+        width=bin_width,
+        align="edge",
+        edgecolor="black",
+        color="gray",
+        label=f"> {cap} €/MWh",
+    )
+
+    # Labels & ticks
+    xticks = list(edges[:-1]) + [cap]
+    xticklabels = [f"{int(e)}" for e in edges[:-1]] + [f"{int(cap)}+"]
+    ax.set_xticks(xticks)
+    ax.set_xticklabels(xticklabels, rotation=0)
+    ax.set_xlabel("LMP (€/MWh)")
+    ax.set_ylabel("Frequency (timesteps)")
+    ax.legend()
+    plt.tight_layout()
+    print(f"LMP ≥ {cap} €/MWh: count = {len(lmp_over)} timesteps")
+    # print("Values in ≥ cap bin:", np.sort(lmp_over.values))
+    plt.show()
+
+    # Save if requested
+    if savefolder:
+        fig.savefig(
+            os.path.join(savefolder, f"lmp_histogram_{int(cap)}plus.png"),
+            bbox_inches="tight",
+        )
+
+
+def make_lmp_frequency_table(
+    power_balance_duals: pd.DataFrame,
+    bin_width: float,
+    cap: float | None = None,
+    savefolder: str | None = None,
+) -> pd.DataFrame:
+    """
+    Create a table of LMP frequencies for custom bin width, including
+    counts per year in each bin.
+
+    Parameters
+    ----------
+    power_balance_duals : pd.DataFrame
+        MultiIndexed by (node, scenario, year, week, hour) with 'dual_value' column.
+    bin_width : float
+        Width of each bin in €/MWh.
+    cap : float or None, optional
+        If provided, values > cap go into a single 'cap+' bin.
+
+    Returns
+    -------
+    pd.DataFrame
+        Columns:
+          - lower_bound (float or 'cap+')
+          - upper_bound (float or np.inf)
+          - count        (int total)
+          - percent      (float, percent of total)
+          - count_{year} for each year
+    """
+    # Extract LMP and year series
+    df = power_balance_duals.reset_index()[["year", "dual_value"]].rename(
+        columns={"dual_value": "LMP"}
+    )
+    total = len(df)
+
+    # Determine bin edges
+    min_val = np.floor(df["LMP"].min())
+    max_val = np.ceil(df["LMP"].max()) if cap is None else cap
+    edges = np.arange(min_val, max_val + bin_width, bin_width)
+
+    # Prepare list of years
+    years = sorted(df["year"].unique())
+
+    rows = []
+    if cap is not None:
+        # Under-cap bins
+        df_under = df[df["LMP"] <= cap]
+        cats = pd.cut(df_under["LMP"], bins=edges, include_lowest=True, right=False)
+        df_under = df_under.assign(bin=cats)
+        for interval in cats.cat.categories:
+            mask = df_under["bin"] == interval
+            cnt = mask.sum()
+            pct = cnt / total * 100
+            row = {
+                "lower_bound": interval.left,
+                "upper_bound": interval.right,
+                "count": int(cnt),
+                "percent": pct,
+            }
+            # per-year counts
+            for y in years:
+                row[f"count_{y}"] = int(
+                    df_under[mask & (df_under["year"] == y)].shape[0]
+                )
+            rows.append(row)
+        # cap+ bin
+        df_over = df[df["LMP"] > cap]
+        cnt_over = len(df_over)
+        pct_over = cnt_over / total * 100
+        row = {
+            "lower_bound": cap,
+            "upper_bound": np.inf,
+            "count": int(cnt_over),
+            "percent": pct_over,
+        }
+        for y in years:
+            row[f"count_{y}"] = int(df_over[df_over["year"] == y].shape[0])
+        rows.append(row)
+    else:
+        cats = pd.cut(df["LMP"], bins=edges, include_lowest=True, right=False)
+        df = df.assign(bin=cats)
+        for interval in cats.cat.categories:
+            mask = df["bin"] == interval
+            cnt = mask.sum()
+            pct = cnt / total * 100
+            row = {
+                "lower_bound": interval.left,
+                "upper_bound": interval.right,
+                "count": int(cnt),
+                "percent": pct,
+            }
+            for y in years:
+                row[f"count_{y}"] = int(df[mask & (df["year"] == y)].shape[0])
+            rows.append(row)
+
+    # Build DataFrame
+    table = pd.DataFrame(rows)
+    if savefolder:
+        table.to_csv(os.path.join(savefolder, "lmp_frequency_table.csv"), index=False)
+    table_sorted = table.sort_values(by="count", ascending=False).reset_index(drop=True)
+    if savefolder:
+        table_sorted.to_csv(
+            os.path.join(savefolder, "lmp_frequency_table_sorted.csv"), index=False
+        )
+    return table
+
+
+def analyze_dual_interval(
+    duals: pd.DataFrame | pd.Series,
+    lower: float,
+    upper: float,
+    n_bins: int = 10,
+    savefolder: str | None = None,
+) -> pd.DataFrame:
+    """
+    Print absolute and relative counts of dual values in [lower, upper],
+    then return a table dividing that interval into n_bins sub‐intervals
+    with counts and percentages within this interval.
+
+    Parameters
+    ----------
+    duals : pd.DataFrame or pd.Series
+        If DataFrame, must have column 'dual_value'; or a Series of values.
+    lower : float
+        Lower bound of interval (inclusive).
+    upper : float
+        Upper bound of interval (inclusive).
+    n_bins : int, optional
+        Number of sub‐bins within [lower, upper] to divide.
+
+    Returns
+    -------
+    pd.DataFrame
+        Columns: lower_bound, upper_bound, count, percent (of values in [lower,upper]).
+    """
+    # Extract series of values
+    if isinstance(duals, pd.DataFrame) and "dual_value" in duals.columns:
+        vals = duals["dual_value"]
+    elif isinstance(duals, pd.Series):
+        vals = duals
+    else:
+        raise ValueError(
+            "`duals` must be DataFrame with 'dual_value' column or a Series."
+        )
+
+    total = len(vals)
+    mask = (vals >= lower) & (vals <= upper)
+    sub = vals[mask]
+    count = len(sub)
+    percent = count / total * 100
+
+    print(f"Values in interval [{lower}, {upper}]: count = {count} ({percent:.2f}%)")
+
+    # Build sub‐bins
+    edges = np.linspace(lower, upper, n_bins + 1)
+    cats = pd.cut(sub, bins=edges, include_lowest=True, right=True)
+    freq = cats.value_counts().sort_index()
+
+    rows = []
+    for interval, cnt in freq.items():
+        rows.append(
+            {
+                "lower_bound": interval.left,
+                "upper_bound": interval.right,
+                "count": int(cnt),
+                "percent_of_interval": cnt / count * 100 if count > 0 else 0,
+            }
+        )
+
+    df = pd.DataFrame(rows)
+    if savefolder:
+        df.to_csv(
+            os.path.join(savefolder, f"table_duals_{lower}-{upper}_{n_bins}.csv"),
+            index=False,
+        )
+    return pd.DataFrame(rows)
+
+
+def plot_dual_interval_histogram(
+    duals: pd.DataFrame | pd.Series,
+    lower: float,
+    upper: float,
+    n_bins: int = 10,
+    savefolder: str | None = None,
+) -> None:
+    """
+    Plot histogram of duals within [lower, upper], divided into n_bins.
+
+    Parameters
+    ----------
+    duals : pd.DataFrame or pd.Series
+        If DataFrame, must have 'dual_value' column, otherwise a Series.
+    lower : float
+        Lower bound of histogram.
+    upper : float
+        Upper bound of histogram.
+    n_bins : int, optional
+        Number of bins between lower and upper.
+    savefolder : str or None
+        Directory to save the figure. If None, not saved.
+    """
+    # Extract values
+    if isinstance(duals, pd.DataFrame) and "dual_value" in duals.columns:
+        vals = duals["dual_value"]
+    elif isinstance(duals, pd.Series):
+        vals = duals
+    else:
+        raise ValueError(
+            "`duals` must be DataFrame with 'dual_value' column or a Series."
+        )
+
+    # Filter interval
+    sub = vals[(vals >= lower) & (vals <= upper)]
+
+    # Bin edges
+    edges = np.linspace(lower, upper, n_bins + 1)
+
+    # Plot
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.hist(sub, bins=edges, edgecolor="black")
+    ax.set_xlabel("Dual value")
+    ax.set_ylabel("Frequency")
+    plt.tight_layout()
+    print(f"Histogram of duals in [{lower}, {upper}] with {n_bins} bins")
+    plt.show()
+
+    # Save if requested
+    if savefolder:
+        fname = f"dual_hist_{lower}-{upper}_{n_bins}bins.png"
+        fig.savefig(os.path.join(savefolder, fname), bbox_inches="tight")
+
+
+def plot_top_10_dual_intervals(
+    power_balance_duals: pd.DataFrame,
+    sorted_freq_table: pd.DataFrame,
+    n_bins: int = 10,
+    savefolder: str | None = None,
+) -> None:
+    """
+    Plot histograms for the top n dual intervals from the sorted frequency table.
+
+    Parameters
+    ----------
+    power_balance_duals : pd.DataFrame
+        DataFrame with dual values.
+    sorted_freq_table : pd.DataFrame
+        DataFrame with sorted frequency table.
+    n_bins : int, optional
+        Number of bins for histogram.
+    savefolder : str or None
+        Directory to save figures. If None, not saved.
+    """
+    if savefolder:
+        savefolder = os.path.join(savefolder, "dual_interval_histograms")
+        os.makedirs(savefolder, exist_ok=True)
+    # Iterate over the top n intervals
+    for idk, row in sorted_freq_table.head(10).iterrows():
+        lb = row["lower_bound"]
+        ub = row["upper_bound"]
+        print(f"Analyzing dual interval [{lb}, {ub}]")
+        plot_dual_interval_histogram(
+            power_balance_duals, lb, ub, n_bins=n_bins, savefolder=savefolder
+        )
+
+
+def create_top_10_dual_intervals_tables(
+    power_balance_duals: pd.DataFrame,
+    sorted_freq_table: pd.DataFrame,
+    n_bins: int = 10,
+    savefolder: str | None = None,
+) -> None:
+    """
+    Create tables for the top n dual intervals from the sorted frequency table.
+
+    Parameters
+    ----------
+    power_balance_duals : pd.DataFrame
+        DataFrame with dual values.
+    sorted_freq_table : pd.DataFrame
+        DataFrame with sorted frequency table.
+    n_bins : int, optional
+        Number of bins for histogram.
+    savefolder : str or None
+        Directory to save figures. If None, not saved.
+    """
+    # Iterate over the top n intervals
+    if savefolder:
+        savefolder = os.path.join(savefolder, "dual_interval_tables")
+        os.makedirs(savefolder, exist_ok=True)
+    for idk, row in sorted_freq_table.head(10).iterrows():
+        lb = row["lower_bound"]
+        ub = row["upper_bound"]
+        analyze_dual_interval(
+            power_balance_duals, lb, ub, n_bins=10, savefolder=savefolder
+        )
+
+
+def summarise_extension_status_by_carrier(
+    generators: pd.DataFrame, savfolder=None
+) -> pd.DataFrame:
+    """
+    For each year and carrier, count how many generators are
+    'not extended', 'partly extended', or 'fully extended'.
+
+    Parameters
+    ----------
+    generators : pd.DataFrame
+        Indexed by (year, generator) with columns:
+        - carrier
+        - new_capacity
+        - extension_potential
+
+    Returns
+    -------
+    pd.DataFrame
+        MultiIndexed by (year, carrier) with columns:
+        ['not extended', 'partly extended', 'fully extended']
+        containing the counts for each status.
+    """
+    df = generators.reset_index()
+
+    def _status(row):
+        nc = row["new_capacity"]
+        ep = row["extension_potential"]
+        if nc == 0:
+            return "not extended"
+        if np.isclose(nc, ep):
+            return "fully extended"
+        if nc < ep:
+            return "partly extended"
+        # cover any rounding issues
+        return "fully extended"
+
+    df["extension_status"] = df.apply(_status, axis=1)
+    summary = (
+        df.groupby(["year", "carrier", "extension_status"])
+        .size()
+        .unstack("extension_status")
+        .fillna(0)
+        .astype(int)
+    )
+    # ensure all three columns exist
+    for col in ["not extended", "partly extended", "fully extended"]:
+        if col not in summary.columns:
+            summary[col] = 0
+
+    # sort columns
+    summary = summary[["not extended", "partly extended", "fully extended"]]
+
+    print(f"Extension status by carrier")
+    if savfolder:
+        summary.to_csv(os.path.join(savfolder, "extension_status_by_carrier.csv"))
+    # Print the first few rows of the summary
+    return summary
+
+
+def summarize_dual_nonzero_counts(
+    dual_variables: dict[str, pd.DataFrame], savefolder: str | None = None
+) -> pd.DataFrame:
+    """
+    For each dual variable, count total entries and non-zero entries.
+    Optionally save the summary as CSV.
+
+    Parameters
+    ----------
+    dual_variables : dict[str, pd.DataFrame]
+        Mapping dual names → DataFrames with a 'dual_value' column.
+    savefolder : str or None
+        Directory to save the summary CSV. If None, no file is written.
+
+    Returns
+    -------
+    pd.DataFrame
+        Indexed by dual name with columns:
+        - total_duals
+        - nonzero_duals
+        - percent_nonzero
+    """
+    rows = []
+    for name, df in dual_variables.items():
+        total = df["dual_value"].size
+        nonzero = (df["dual_value"] != 0).sum()
+        pct = (nonzero / total * 100) if total > 0 else 0.0
+        rows.append(
+            {
+                "dual": name,
+                "total_duals": int(total),
+                "nonzero_duals": int(nonzero),
+                "percent_nonzero": pct,
+            }
+        )
+    summary = pd.DataFrame(rows).set_index("dual")
+
+    if savefolder:
+        path = os.path.join(savefolder, "dual_nonzero_summary.csv")
+        summary.to_csv(path)
+
+    return summary
+
+
+def summarize_duals_by_year_scenario(
+    dual_variables: dict[str, pd.DataFrame], savefolder: str | None = None
+) -> pd.DataFrame:
+    """
+    For each dual variable, and for each year and scenario (or 'All' if no scenario),
+    count total entries, non-zero entries, compute percent non-zero, and average dual value.
+
+    Returns a DataFrame indexed by (dual, year, scenario) with columns:
+      - total_duals
+      - nonzero_duals
+      - percent_nonzero
+      - average_dual
+
+    Optionally saves to “dual_year_scenario_summary.csv” in savefolder.
+    """
+    records = []
+    for name, df in dual_variables.items():
+        temp = df.reset_index()
+        if "scenario" not in temp.columns:
+            temp["scenario"] = "All"
+        if "year" not in temp.columns:
+            raise KeyError(f"{name}: missing 'year' index level")
+        grp = temp.groupby(["year", "scenario"])["dual_value"]
+        for (year, scen), series in grp:
+            total = series.size
+            nonzero = (series != 0).sum()
+            pct = nonzero / total * 100 if total > 0 else 0.0
+            avg = series.mean() if total > 0 else 0.0
+            records.append(
+                {
+                    "dual": name,
+                    "year": year,
+                    "scenario": scen,
+                    "total_duals": int(total),
+                    "nonzero_duals": int(nonzero),
+                    "percent_nonzero": pct,
+                    "average_dual": avg,
+                }
+            )
+    summary = pd.DataFrame(records).set_index(["dual", "year", "scenario"])
+    if savefolder:
+        summary.to_csv(f"{savefolder}/dual_year_scenario_summary.csv")
+    return summary
+
+
+def list_nonzero_gen_extension_duals(
+    gen_extension_duals: pd.DataFrame, savefolder: str | None = None
+) -> pd.DataFrame:
+    """
+    Identify which generators have non-zero extension duals in each year.
+
+    Parameters
+    ----------
+    gen_extension_duals : pd.DataFrame
+        MultiIndexed by (generator, year) with column 'dual_value'.
+    savefolder : str or None
+        Directory to save the results as CSV. If None, not saved.
+
+    Returns
+    -------
+    pd.DataFrame
+        Indexed by (year, generator) with column 'dual_value' for all non-zero entries.
+    """
+    # Flatten to columns
+    df = gen_extension_duals.reset_index()[["year", "generator", "dual_value"]]
+    # Filter non-zero
+    nonzero = df[df["dual_value"] != 0].copy()
+    # Sort by year, descending dual magnitude
+    nonzero["abs_dual"] = nonzero["dual_value"].abs()
+    nonzero = nonzero.sort_values(["year", "abs_dual"], ascending=[True, False])
+    nonzero = nonzero.drop(columns=["abs_dual"])
+    # Reindex
+    result = nonzero.set_index(["year", "generator"])
+    # Save if requested
+    if savefolder:
+        path = f"{savefolder}/gen_extension_nonzero_duals.csv"
+        result.to_csv(path)
+    return result
+
+
 def analyze_run_stochastic(
     model_config: dict,
     SAVE_FIGURES: bool = True,
@@ -3755,8 +4550,10 @@ def analyze_run_stochastic(
     battery_discharge_new_max_duals = dual_variables["battery_discharge_new_max_duals"]
     battery_discharge_old_duals = dual_variables["battery_discharge_old_duals"]
     branch_extension_duals = dual_variables["branch_extension_duals"]
-    branch_flow_new_duals = dual_variables["branch_flow_new_duals"]
-    branch_flow_old_duals = dual_variables["branch_flow_old_duals"]
+    branch_flow_old_duals_min = dual_variables["branch_flow_old_duals_min"]
+    branch_flow_old_duals_max = dual_variables["branch_flow_old_duals_max"]
+    branch_flow_new_duals_min = dual_variables["branch_flow_new_duals_min"]
+    branch_flow_new_duals_max = dual_variables["branch_flow_new_duals_max"]
     emissions_duals = dual_variables["emissions_duals"]
     gen_extension_duals = dual_variables["gen_extension_duals"]
     gen_output_new_duals = dual_variables["gen_output_new_duals"]
@@ -3824,7 +4621,7 @@ def analyze_run_stochastic(
         generation, generators, week_weights, CO2_price, tables_folder
     )
     plot_co2_emissions_by_scenario(yearly_system_cost_table, savefolder=figures_folder)
-    plot_co2_emissions_by_scenario(yearly_system_cost_table, figures_folder)
+    plot_co2_emissions_by_scenario_avg(yearly_system_cost_table, figures_folder)
     plot_production_by_scenario(yearly_system_cost_table, figures_folder)
     plot_production_cost_by_scenario(yearly_system_cost_table, figures_folder)
     plot_production_cost_with_emission_by_scenario(
@@ -4041,6 +4838,48 @@ def analyze_run_stochastic(
         batteries.to_csv(
             os.path.join(extended_tables_folder, "extended_batteries.csv"), index=False
         )
+
+    # region Dual Variables
+    if SAVE_FIGURES:
+        # Create the figures folder if it doesn't exist
+        duals_folder = os.path.join(RESULTS_FOLDER, "duals")
+        os.makedirs(duals_folder, exist_ok=True)
+        tables_folder = os.path.join(duals_folder, "tables")
+        figures_folder = os.path.join(duals_folder, "figures")
+        os.makedirs(tables_folder, exist_ok=True)
+        os.makedirs(figures_folder, exist_ok=True)
+
+    lmp_table = make_nodal_price_table(power_balance_duals, savefolder=tables_folder)
+    plot_nodal_price_evolution_with_markers(lmp_table, savefolder=figures_folder)
+    plot_nodal_price_grouped_bar(
+        lmp_table, node_to_city=plotting.node_to_city, savefolder=figures_folder
+    )
+    branch_extension_duals = branch_extension_duals.rename_axis(
+        index={"branch": "line"}
+    )
+    generators["production_cost"] = (
+        generators["marginal_cost"] + generators["co2_emissions"] * CO2_price
+    )
+    freqs = compute_lmp_bucket_frequencies(
+        power_balance_duals, generators, tables_folder
+    )
+    plot_lmp_histogram_70plus(
+        power_balance_duals, cap=70, bin_width=2.0, savefolder=figures_folder
+    )
+    freq_table = make_lmp_frequency_table(
+        power_balance_duals, bin_width=1.0, cap=70, savefolder=tables_folder
+    )
+    sorted_freq_table = freq_table.sort_values(by="count", ascending=False)
+    plot_top_10_dual_intervals(
+        power_balance_duals, sorted_freq_table, n_bins=10, savefolder=figures_folder
+    )
+    create_top_10_dual_intervals_tables(
+        power_balance_duals, sorted_freq_table, n_bins=10, savefolder=tables_folder
+    )
+    summary_by_carrier = summarise_extension_status_by_carrier(generators)
+    summary_table = summarize_dual_nonzero_counts(dual_variables, duals_folder)
+    summary = summarize_duals_by_year_scenario(dual_variables, savefolder=tables_folder)
+    nz = list_nonzero_gen_extension_duals(gen_extension_duals, savefolder=tables_folder)
 
     if not show_plots:
         # Restore the original show function

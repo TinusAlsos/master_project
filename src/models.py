@@ -3091,7 +3091,8 @@ def GTSEP_stochastic_v1(config: dict) -> gp.Model:
     )
 
     # --- Duals: Branch flow limits (old) ---
-    branch_old_duals = []
+    branch_old_duals_min = []
+    branch_old_duals_max = []
     for b in B_old:
         for y in Y:
             for omega in Omega_y[y]:
@@ -3109,17 +3110,28 @@ def GTSEP_stochastic_v1(config: dict) -> gp.Model:
                             ).Pi
                             / week_weights[w]
                         )
-                        branch_old_duals.append((omega, y, w, t, b, "min", dual_min))
-                        branch_old_duals.append((omega, y, w, t, b, "max", dual_max))
+                        branch_old_duals_min.append((omega, y, w, t, b, dual_min))
+                        branch_old_duals_max.append((omega, y, w, t, b, dual_max))
     pd.DataFrame(
-        branch_old_duals,
-        columns=["scenario", "year", "week", "hour", "branch", "bound", "dual_value"],
+        branch_old_duals_min,
+        columns=["scenario", "year", "week", "hour", "branch", "dual_value"],
     ).to_csv(
-        os.path.join(dual_variables_folder, "branch_flow_old_duals.csv"), index=False
+        os.path.join(dual_variables_folder, "branch_flow_old_duals_min.csv"),
+        index=False,
+    )
+
+    pd.DataFrame(
+        branch_old_duals_max,
+        columns=["scenario", "year", "week", "hour", "branch", "dual_value"],
+    ).to_csv(
+        os.path.join(dual_variables_folder, "branch_flow_old_duals_max.csv"),
+        index=False,
     )
 
     # --- Duals: Branch flow limits (new) ---
-    branch_new_duals = []
+    branch_new_duals_min = []
+    branch_new_duals_max = []
+
     for b in B_new:
         for y in Y:
             for omega in Omega_y[y]:
@@ -3137,13 +3149,22 @@ def GTSEP_stochastic_v1(config: dict) -> gp.Model:
                             ).Pi
                             / week_weights[w]
                         )
-                        branch_new_duals.append((omega, y, w, t, b, "min", dual_min))
-                        branch_new_duals.append((omega, y, w, t, b, "max", dual_max))
+                        branch_new_duals_min.append((omega, y, w, t, b, dual_min))
+                        branch_new_duals_max.append((omega, y, w, t, b, dual_max))
     pd.DataFrame(
-        branch_new_duals,
-        columns=["scenario", "year", "week", "hour", "branch", "bound", "dual_value"],
+        branch_new_duals_min,
+        columns=["scenario", "year", "week", "hour", "branch", "dual_value"],
     ).to_csv(
-        os.path.join(dual_variables_folder, "branch_flow_new_duals.csv"), index=False
+        os.path.join(dual_variables_folder, "branch_flow_new_duals_min.csv"),
+        index=False,
+    )
+
+    pd.DataFrame(
+        branch_new_duals_max,
+        columns=["scenario", "year", "week", "hour", "branch", "dual_value"],
+    ).to_csv(
+        os.path.join(dual_variables_folder, "branch_flow_new_duals_max.csv"),
+        index=False,
     )
 
     # --- Duals: Emissions constraint (single value) ---

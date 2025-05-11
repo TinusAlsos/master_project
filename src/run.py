@@ -4,8 +4,10 @@ import gurobipy as gp
 from gurobipy import GRB, tupledict
 from time import time
 import os
+import tqdm
 import yaml
 import argparse
+from src import utils
 from src.analytics import analyze_run_stochastic
 from src.utils import (
     load_csv_files_from_folder_multi_weeks,
@@ -174,6 +176,7 @@ def run(
     batch_folder_name=None,
     no_run_analysis: bool = False,
     co2_rerun: bool = False,
+    is_sub_run: bool = False,
 ):
     if preprocessing_config_name:
         preprocessing_config = run_preprocessing(preprocessing_config_name)
@@ -239,20 +242,93 @@ def run(
 
     # Convert to DataFrame for easier export
     model_info_df = pd.DataFrame([model_info])
-    model_info_df.to_csv(
-        os.path.join(model_info_save_folder, "model_info.csv"), index=False
-    )
 
     if "week_weights" in locals():
         model_config["week_weights"] = week_weights
     # Save model
-    save_model(model, model_config)
+    if not is_sub_run:
+        model_info_df.to_csv(
+            os.path.join(model_info_save_folder, "model_info.csv"), index=False
+        )
+        save_model(model, model_config)
+    else:  # this is a sub run, so we just return the model_info_df
+        return model_info_df
 
     if co2_rerun:
         rerun_co2(model, model_config)
 
     if not no_run_analysis:
         analyze_run_stochastic(model_config)
+
+    EVPI = model_config.get("EVPI", False)
+    VSS = model_config.get("VSS", False)
+    if EVPI:
+        results_folder = os.path.join(save_folder, "results")
+        if not os.path.exists(results_folder):
+            os.makedirs(results_folder)
+        # Save model info
+        EVPI_runs_folder = os.path.join(results_folder, "EVPI_runs")
+        if not os.path.exists(EVPI_runs_folder):
+            os.makedirs(EVPI_runs_folder)
+        for i in tqdm.tqdm(range(1, 7), desc="Running EVPI analysis"):
+            print(f"Running EVPI analysis for scenario {i}...")
+            scenario_file = f"EVPI_{i}"
+            overwrite_dict = {
+                "scenario_file": scenario_file,
+                "EVPI": False,
+                "VSS": False,
+            }
+            temp_file_name = f"temp_EVPI_{i}"
+            utils.copy_and_modify_config(
+                model_config_name,
+                overwrite_dict=overwrite_dict,
+                new_filename=temp_file_name,
+            )
+            no_run_analysis = True
+            is_sub_run = True
+
+            model_info_df = run(
+                model_config_name=temp_file_name,
+                no_run_analysis=no_run_analysis,
+                is_sub_run=is_sub_run,
+            )
+            model_info_df.to_csv(
+                os.path.join(EVPI_runs_folder, f"model_info_EVPI_{i}.csv"), index=False
+            )
+            utils.delete_temp_files(temp_file_name)
+    if VSS:
+        scenario_file = "mean"
+        overwrite_dict = {
+            "scenario_file": scenario_file,
+            "EVPI": False,
+            "VSS": False,
+        }
+        temp_file_name = f"temp_VSS"
+        utils.copy_and_modify_config(
+            model_config_name,
+            overwrite_dict=overwrite_dict,
+            new_filename=temp_file_name,
+        )
+        no_run_analysis = True
+        is_sub_run = True
+        model_info_df = run(
+            model_config_name=temp_file_name,
+            no_run_analysis=no_run_analysis,
+            is_sub_run=is_sub_run,
+        )
+
+        results_folder = os.path.join(save_folder, "results")
+        if not os.path.exists(results_folder):
+            os.makedirs(results_folder)
+        # Save model info
+        VSS_run_folder = os.path.join(results_folder, "VSS_run")
+        if not os.path.exists(VSS_run_folder):
+            os.makedirs(VSS_run_folder)
+
+        model_info_df.to_csv(
+            os.path.join(VSS_run_folder, f"model_info_VSS.csv"), index=False
+        )
+        utils.delete_temp_files(temp_file_name)
 
 
 def create_run_id(model_config: dict) -> str:
@@ -293,7 +369,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--no_run_analysis",
-        action="store_false",
+        action="store_true",
         help="Keep empty to run analysis, use the tag to not run the analysis.",
     )
 
