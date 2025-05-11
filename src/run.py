@@ -1,4 +1,5 @@
 import re
+import shutil
 import pandas as pd
 import gurobipy as gp
 from gurobipy import GRB, tupledict
@@ -177,6 +178,7 @@ def run(
     no_run_analysis: bool = False,
     co2_rerun: bool = False,
     is_sub_run: bool = False,
+    is_EV_problem: bool = False,
 ):
     if preprocessing_config_name:
         preprocessing_config = run_preprocessing(preprocessing_config_name)
@@ -199,12 +201,15 @@ def run(
         base_folder = os.path.join(base_folder, batch_folder_name)
         if not os.path.exists(base_folder):
             os.makedirs(base_folder)
-    run_id = create_run_id(model_config)
-    if batch_number:
-        run_id = f"{batch_number}_{run_id}"
-    save_folder = os.path.join(base_folder, run_id)
-    model_config["run_id"] = run_id
-    model_config["save_folder"] = save_folder
+    if not model_config.get("save_folder", ""):
+        run_id = create_run_id(model_config)
+        if batch_number:
+            run_id = f"{batch_number}_{run_id}"
+        save_folder = os.path.join(base_folder, run_id)
+        model_config["run_id"] = run_id
+        model_config["save_folder"] = save_folder
+    else:
+        save_folder = model_config["save_folder"]
     if not os.path.exists(save_folder):
         os.makedirs(save_folder)
     model_output = get_model(model_config)
@@ -272,9 +277,12 @@ def run(
             os.makedirs(EVPI_runs_folder)
         for i in tqdm.tqdm(range(1, 7), desc="Running EVPI analysis"):
             print(f"Running EVPI analysis for scenario {i}...")
+            # Make a folder for the new run
+            EVPI_save_folder = model_config["save_folder"] + f"_EVPI_{i}"
             scenario_file = f"EVPI_{i}"
             overwrite_dict = {
                 "scenario_file": scenario_file,
+                "save_folder": EVPI_save_folder,
                 "EVPI": False,
                 "VSS": False,
             }
@@ -295,15 +303,25 @@ def run(
             model_info_df.to_csv(
                 os.path.join(EVPI_runs_folder, f"model_info_EVPI_{i}.csv"), index=False
             )
-            utils.delete_temp_files(temp_file_name)
+            utils.delete_config_file(temp_file_name)
+            # Delet results folder
+            # Delete the EVPI folder
+            if os.path.exists(EVPI_save_folder):
+                print(f"Deleting folder: {EVPI_save_folder}")
+                shutil.rmtree(EVPI_save_folder)
+
     if VSS:
+        # Calculate EV solution
         scenario_file = "mean"
+        old_save_folder = model_config["save_folder"]
+        EV_save_folder = old_save_folder + "_EV"
         overwrite_dict = {
             "scenario_file": scenario_file,
+            "save_folder": EV_save_folder,
             "EVPI": False,
             "VSS": False,
         }
-        temp_file_name = f"temp_VSS"
+        temp_file_name = f"temp_EV"
         utils.copy_and_modify_config(
             model_config_name,
             overwrite_dict=overwrite_dict,
@@ -311,24 +329,76 @@ def run(
         )
         no_run_analysis = True
         is_sub_run = True
+        print("Running EV model...")
         model_info_df = run(
             model_config_name=temp_file_name,
             no_run_analysis=no_run_analysis,
             is_sub_run=is_sub_run,
         )
 
-        results_folder = os.path.join(save_folder, "results")
+        results_folder = os.path.join(old_save_folder, "results")
         if not os.path.exists(results_folder):
             os.makedirs(results_folder)
         # Save model info
-        VSS_run_folder = os.path.join(results_folder, "VSS_run")
-        if not os.path.exists(VSS_run_folder):
-            os.makedirs(VSS_run_folder)
+        EV_run_folder = os.path.join(results_folder, "EV_run")
+        if not os.path.exists(EV_run_folder):
+            os.makedirs(EV_run_folder)
 
         model_info_df.to_csv(
-            os.path.join(VSS_run_folder, f"model_info_VSS.csv"), index=False
+            os.path.join(EV_run_folder, f"model_info_EV.csv"), index=False
         )
-        utils.delete_temp_files(temp_file_name)
+        utils.delete_config_file(temp_file_name)
+
+        # Calculate EEV
+        investment_decsion_variables = [
+            "battery_capacity",
+            "branch_capacity",
+            "generator_capacity",
+        ]
+        investment_decision_variables_paths = {
+            decision_variable
+            + "_path": os.path.join(
+                EV_save_folder, "decision_variables", decision_variable + ".csv"
+            )
+            for decision_variable in investment_decsion_variables
+        }
+        print(
+            f"Investment decision variables paths: {investment_decision_variables_paths}"
+        )
+        EEV_save_folder = old_save_folder + "_EEV"
+        overwrite_dict.update(investment_decision_variables_paths)
+        overwrite_dict["scenario_file"] = ""
+        overwrite_dict["save_folder"] = EEV_save_folder
+        print(f"Overwrite dict for EEV: {overwrite_dict}")
+        temp_file_name = f"temp_EEV"
+        utils.copy_and_modify_config(
+            model_config_name,
+            overwrite_dict=overwrite_dict,
+            new_filename=temp_file_name,
+        )
+        print("Running EEV model...")
+        model_info_df = run(
+            model_config_name=temp_file_name,
+            no_run_analysis=no_run_analysis,
+            is_sub_run=is_sub_run,
+        )
+        # Save model info
+        EEV_run_folder = os.path.join(results_folder, "EEV_run")
+        if not os.path.exists(EEV_run_folder):
+            os.makedirs(EEV_run_folder)
+
+        model_info_df.to_csv(
+            os.path.join(EEV_run_folder, f"model_info_EEV.csv"), index=False
+        )
+        utils.delete_config_file(temp_file_name)
+
+        # Delete the EV folder and the EEV folder
+        if os.path.exists(EV_save_folder):
+            print(f"Deleting folder: {EV_save_folder}")
+            shutil.rmtree(EV_save_folder)
+        if os.path.exists(EEV_save_folder):
+            print(f"Deleting folder: {EEV_save_folder}")
+            shutil.rmtree(EEV_save_folder)
 
 
 def create_run_id(model_config: dict) -> str:

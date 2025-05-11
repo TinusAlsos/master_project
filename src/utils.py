@@ -202,7 +202,7 @@ def copy_and_modify_config(
     return new_path
 
 
-def delete_temp_files(path_or_name: str = "") -> None:
+def delete_config_file(path_or_name: str = "") -> None:
     """
     Deletes a configuration file by name or path.
     """

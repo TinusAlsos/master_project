@@ -12,6 +12,7 @@ from src.utils import (
     load_scenario_multiplier,
 )
 import os
+from IPython.display import display
 
 TIMELIMIT = 60 * 60 * 6  # 6 hours
 
@@ -2467,6 +2468,28 @@ def GTSEP_stochastic_v1(config: dict) -> gp.Model:
     # create Yy mapping, accessed as Yy[y] and returns a list of years up to and including y from Y
     Yy = {y: [yy for yy in Y if yy <= y] for y in Y}
 
+    # Handle the case where the investment decisions are predetermined
+    if (
+        config["battery_capacity_path"]
+        and config["generator_capacity_path"]
+        and config["branch_capacity_path"]
+    ):
+        # Read csv files
+        overwrite_investment_decisions = True
+        # Read and set MultiIndex for battery capacity
+        battery_capacity_df = pd.read_csv(config["battery_capacity_path"])
+        battery_capacity_df = battery_capacity_df.set_index(["year", "battery"])
+
+        # Read and set MultiIndex for generator capacity
+        generator_capacity_df = pd.read_csv(config["generator_capacity_path"])
+        generator_capacity_df = generator_capacity_df.set_index(["year", "generator"])
+
+        # Read and set MultiIndex for branch capacity
+        branch_capacity_df = pd.read_csv(config["branch_capacity_path"])
+        branch_capacity_df = branch_capacity_df.set_index(["year", "branch"])
+    else:
+        overwrite_investment_decisions = False
+
     build_start_time = time()
     # Create model
     model_name = model_name if model_name else "GTSEP_v0"
@@ -2492,6 +2515,18 @@ def GTSEP_stochastic_v1(config: dict) -> gp.Model:
     p_i_max = model.addVars(G_new, Y, name="p_i_max", lb=0)
     p_b_max = model.addVars(B_new, Y, name="p_b_max", lb=0)
     soc_s_max = model.addVars(S_new, Y, name="soc_s_max", lb=0)
+    if overwrite_investment_decisions:
+        # Set the investment variables to the values from the CSV files
+        for y in Y:
+            for s in S_new:
+                soc_s_max[s, y].lb = battery_capacity_df.loc[(y, s), "value"]
+                soc_s_max[s, y].ub = battery_capacity_df.loc[(y, s), "value"]
+            for i in G_new:
+                p_i_max[i, y].lb = generator_capacity_df.loc[(y, i), "value"]
+                p_i_max[i, y].ub = generator_capacity_df.loc[(y, i), "value"]
+            for b in B_new:
+                p_b_max[b, y].lb = branch_capacity_df.loc[(y, b), "value"]
+                p_b_max[b, y].ub = branch_capacity_df.loc[(y, b), "value"]
 
     # Cumulative capacity helper variables (unchanged)
     p_i_cum_max = model.addVars(G_new, Y, name="p_i_cum_max", lb=0)

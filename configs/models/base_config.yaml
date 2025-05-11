@@ -15,3 +15,8 @@ years:
 clustering_unit: 
 clustering_periods:
 scenario_file:
+EVPI: False
+VSS: False
+battery_capacity_path: 
+generator_capacity_path:
+branch_capacity_path:
