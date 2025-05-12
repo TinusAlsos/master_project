@@ -262,6 +262,7 @@ def run(
 
     if co2_rerun:
         rerun_co2(model, model_config)
+    model.dispose()
 
     if not no_run_analysis:
         analyze_run_stochastic(model_config)
