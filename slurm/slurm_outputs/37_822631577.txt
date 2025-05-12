@@ -313,3 +313,34 @@ Model saved to: /cluster/home/tinusfa/master_project/runs/single_runs/May12_Mon_
 Warning: environment still referenced so free is deferred (Continue to use WLS)
 Job finished at Mon 12 May 09:54:51 CEST 2025
 Pushing to git
+[idun_runs 80965d4] results from 37_8
+ 36 files changed, 349853 insertions(+), 1 deletion(-)
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT_EVPI_1/decision_variables/battery_capacity.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT_EVPI_1/decision_variables/battery_charging.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT_EVPI_1/decision_variables/battery_discharging.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT_EVPI_1/decision_variables/battery_soc.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT_EVPI_1/decision_variables/branch_capacity.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT_EVPI_1/decision_variables/curtailment.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT_EVPI_1/decision_variables/generation.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT_EVPI_1/decision_variables/generator_capacity.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT_EVPI_1/decision_variables/load_shedding.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT_EVPI_1/decision_variables/power_flow.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT_EVPI_1/dual_variables/battery_charge_new_max_duals.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT_EVPI_1/dual_variables/battery_charge_old_duals.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT_EVPI_1/dual_variables/battery_discharge_new_max_duals.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT_EVPI_1/dual_variables/battery_discharge_old_duals.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT_EVPI_1/dual_variables/branch_extension_duals.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT_EVPI_1/dual_variables/branch_flow_new_duals_max.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT_EVPI_1/dual_variables/branch_flow_new_duals_min.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT_EVPI_1/dual_variables/branch_flow_old_duals_max.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT_EVPI_1/dual_variables/branch_flow_old_duals_min.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT_EVPI_1/dual_variables/emissions_duals.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT_EVPI_1/dual_variables/gen_extension_duals.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT_EVPI_1/dual_variables/gen_output_new_duals.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT_EVPI_1/dual_variables/gen_output_old_duals.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT_EVPI_1/dual_variables/load_shedding_duals.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT_EVPI_1/dual_variables/power_balance_duals.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT_EVPI_1/model_info/config.yaml
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT_EVPI_1/model_info/scenario_probabilities.json
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT_EVPI_1/model_info/scenarios.json
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT_EVPI_1/model_info/week_weights.json
