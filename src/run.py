@@ -437,7 +437,6 @@ def run(
             for f in os.listdir(evpi_dir)
             if f.startswith("model_info_EVPI_") and f.endswith(".csv")
         ]
-        print(len(evpi_files), "EVPI files found")
         evpi_dfs = [pd.read_csv(os.path.join(evpi_dir, f)) for f in evpi_files]
         evpi_all = pd.concat(evpi_dfs, ignore_index=True)
 
