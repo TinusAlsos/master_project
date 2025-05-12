@@ -25,11 +25,17 @@ p_min_new_branch: 100
 query: not (x > 2 and y < 40)
 representative_period_unit: week
 representative_periods:
+- 11
 - 21
+- 42
+- 52
 save_folder: /cluster/home/tinusfa/master_project/runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT/VSS_runs/EV_run
 scenario_file: mean
 week_weights:
-  21: 52.142857142857146
+  11: 13.035714285714286
+  21: 13.035714285714286
+  42: 13.035714285714286
+  52: 13.035714285714286
 years:
 - 2025
 - 2030
