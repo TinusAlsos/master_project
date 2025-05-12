@@ -473,15 +473,17 @@ def create_run_id(model_config: dict) -> str:
     from datetime import datetime
 
     now = datetime.now()
-    formatted = now.strftime("%b%d:%a:h%H")
+    # Example format: May12_Sun_h14_m35_s08
+    formatted = now.strftime("%b%d_%a_h%H_m%M_s%S")
+
     model_name = model_config["model_name"]
     model_id = model_config["model_id"]
-    now = datetime.now()
-    formatted = now.strftime("%b%d_%a_h%H")
+
     if not model_id:
         run_id = f"{formatted}-{model_name}"
     else:
         run_id = f"{formatted}-{model_name}-{model_id}"
+
     return run_id
 
 
