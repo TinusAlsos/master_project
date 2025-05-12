@@ -1,0 +1,12 @@
+Running from this directory: /cluster/home/tinusfa/master_project
+Name of job: 128_8
+ID of job: 22631580
+The job was run on these nodes: idun-05-26
+No preprocessing config provided. Skipping preprocessing...
+Path_or_name: 128_sv1_8_weeks___
+Configuration loaded from /cluster/home/tinusfa/master_project/configs/models/config_128_sv1_8_weeks___.yaml
+{'data_folder_name': 'elec_s_128_ES_PT_no_bat_limit', 'model_name': 'GTSEP_stochastic_v1', 'model_id': '128_ES_PT', 'MIPGap': 0.01, 'VOLL': 6350, 'CC': 100, 'CO2_price': 85, 'E_limit': inf, 'p_max_new_branch': 5000, 'p_min_new_branch': 100, 'expansion_factor': 2.0, 'MS': 0.1, 'years': [2025, 2030, 2040, 2050], 'clustering_unit': None, 'clustering_periods': None, 'scenario_file': None, 'EVPI': True, 'VSS': True, 'battery_capacity_path': None, 'generator_capacity_path': None, 'branch_capacity_path': None, 'query': 'not (x > 2 and y < 40)', 'carriers': ['CCGT', 'solar', 'onwind'], 'discount_rate': 0.07, 'representative_period_unit': 'week', 'representative_periods': [5, 11, 16, 21, 32, 37, 42, 52]}
+Set parameter WLSAccessID
+Set parameter WLSSecret
+Set parameter LicenseID to value 2622400
+Academic license 2622400 - for non-commercial use only - registered to ti___@stud.ntnu.no
