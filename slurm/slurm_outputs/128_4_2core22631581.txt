@@ -11,3 +11,52 @@ Set parameter WLSSecret
 Set parameter LicenseID to value 2622400
 Job finished at Mon 12 May 09:32:37 CEST 2025
 Pushing to git
+[idun_runs 06c0dd2] results from 128_4_2core
+ 47 files changed, 76989 insertions(+)
+ create mode 100644 configs/models/config_temp_EVPI_1.yaml
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT/decision_variables/battery_capacity.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT/decision_variables/battery_charging.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT/decision_variables/battery_discharging.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT/decision_variables/battery_soc.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT/decision_variables/branch_capacity.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT/decision_variables/curtailment.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT/decision_variables/generation.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT/decision_variables/generator_capacity.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT/decision_variables/load_shedding.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT/decision_variables/power_flow.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT/dual_variables/battery_charge_new_max_duals.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT/dual_variables/battery_charge_old_duals.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT/dual_variables/battery_discharge_new_max_duals.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT/dual_variables/battery_discharge_old_duals.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT/dual_variables/branch_extension_duals.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT/dual_variables/branch_flow_new_duals_max.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT/dual_variables/branch_flow_new_duals_min.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT/dual_variables/branch_flow_old_duals_max.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT/dual_variables/branch_flow_old_duals_min.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT/dual_variables/emissions_duals.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT/dual_variables/gen_extension_duals.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT/dual_variables/gen_output_new_duals.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT/dual_variables/gen_output_old_duals.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT/dual_variables/load_shedding_duals.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT/dual_variables/power_balance_duals.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT/model_info/config.yaml
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT/model_info/model_info.csv
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT/model_info/scenario_probabilities.json
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT/model_info/scenarios.json
+ create mode 100644 runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT/model_info/week_weights.json
+ create mode 100644 slurm/slurm_outputs/128_222631578.err
+ create mode 100644 slurm/slurm_outputs/128_222631578.txt
+ create mode 100644 slurm/slurm_outputs/128_422631579.err
+ create mode 100644 slurm/slurm_outputs/128_422631579.txt
+ create mode 100644 slurm/slurm_outputs/128_4_2core22631581.err
+ create mode 100644 slurm/slurm_outputs/128_4_2core22631581.txt
+ create mode 100644 slurm/slurm_outputs/128_4_4core22631582.err
+ create mode 100644 slurm/slurm_outputs/128_4_4core22631582.txt
+ create mode 100644 slurm/slurm_outputs/128_822631580.err
+ create mode 100644 slurm/slurm_outputs/128_822631580.txt
+ create mode 100644 slurm/slurm_outputs/37_222631574.err
+ create mode 100644 slurm/slurm_outputs/37_222631574.txt
+ create mode 100644 slurm/slurm_outputs/37_422631575.err
+ create mode 100644 slurm/slurm_outputs/37_422631575.txt
+ create mode 100644 slurm/slurm_outputs/37_822631577.err
+ create mode 100644 slurm/slurm_outputs/37_822631577.txt
