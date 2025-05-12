@@ -1,1 +1,24 @@
-Running EVPI analysis:   0%|          | 0/6 [00:00<?, ?it/s]
+Running EVPI analysis:   0%|          | 0/6 [00:00<?, ?it/s]Running EVPI analysis:   0%|          | 0/6 [05:23<?, ?it/s]
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/cluster/home/tinusfa/master_project/src/run.py", line 522, in <module>
+    run(
+  File "/cluster/home/tinusfa/master_project/src/run.py", line 304, in run
+    model_info_df.to_csv(
+  File "/cluster/home/tinusfa/.conda/envs/project/lib/python3.12/site-packages/pandas/util/_decorators.py", line 333, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/cluster/home/tinusfa/.conda/envs/project/lib/python3.12/site-packages/pandas/core/generic.py", line 3967, in to_csv
+    return DataFrameRenderer(formatter).to_csv(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cluster/home/tinusfa/.conda/envs/project/lib/python3.12/site-packages/pandas/io/formats/format.py", line 1014, in to_csv
+    csv_formatter.save()
+  File "/cluster/home/tinusfa/.conda/envs/project/lib/python3.12/site-packages/pandas/io/formats/csvs.py", line 251, in save
+    with get_handle(
+         ^^^^^^^^^^^
+  File "/cluster/home/tinusfa/.conda/envs/project/lib/python3.12/site-packages/pandas/io/common.py", line 749, in get_handle
+    check_parent_directory(str(handle))
+  File "/cluster/home/tinusfa/.conda/envs/project/lib/python3.12/site-packages/pandas/io/common.py", line 616, in check_parent_directory
+    raise OSError(rf"Cannot save file into a non-existent directory: '{parent}'")
+OSError: Cannot save file into a non-existent directory: '/cluster/home/tinusfa/master_project/runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-37_ES_PT/results/EVPI_runs'

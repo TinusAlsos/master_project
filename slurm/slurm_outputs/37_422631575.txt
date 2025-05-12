@@ -1186,3 +1186,6 @@ Deleted config file: /cluster/home/tinusfa/master_project/configs/models/config_
 6 EVPI files found
 Job finished at Mon 12 May 09:50:03 CEST 2025
 Pushing to git
+[idun_runs ad938b8] results from 37_4
+ 80 files changed, 957367 insertions(+), 60342 deletions(-)
+ create mode 100644 configs/models/config_temp_EVPI_1.yaml
