@@ -36,7 +36,7 @@ export GRB_WLSSECRET="87c9d38e-3a81-40a9-8d23-fa6fd14a0645" >> ~/.bashrc
 export GRB_LICENSE_FILE="/cluster/home/tinusfa/master_project/gurobi.lic" >> ~/.bashrc
 source ~/.bashrc
 
-python -m src.run --name 37_sv1_2_weeks___ --no_run_analysis NORUN
+python -m src.run --name 37_sv1_2_weeks___ --no_run_analysis
 
 echo "Job finished at $(date)"
 

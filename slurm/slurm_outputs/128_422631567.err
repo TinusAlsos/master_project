@@ -1,5 +1,0 @@
-usage: run.py [-h] [--name NAME] [--preprocessing PREPROCESSING]
-              [--no_run_analysis] [--co2-rerun]
-run.py: error: unrecognized arguments: NORUN
-To github.com:TinusAlsos/master_project.git
-   d767f00..81e19d0  idun_runs -> idun_runs
