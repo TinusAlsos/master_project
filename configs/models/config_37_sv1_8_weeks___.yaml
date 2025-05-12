@@ -15,8 +15,13 @@ discount_rate: 0.07
 expansion_factor: 2.0
 representative_period_unit: week
 representative_periods:
-- 11
-- 21
-- 42
-- 52
-scenario_file: EVPI_1
+- 5  
+- 11  
+- 16  
+- 21  
+- 32  
+- 37  
+- 42  
+- 52  
+VSS: True
+EVPI: True
