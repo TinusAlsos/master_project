@@ -288,7 +288,7 @@ def run(
                 "EVPI": False,
                 "VSS": False,
             }
-            temp_file_name = f"temp_EVPI_{i}"
+            temp_file_name = f"temp_EVPI_{i}_" + utils.generate_unique_filename_id()
             utils.copy_and_modify_config(
                 model_config_name,
                 overwrite_dict=overwrite_dict,
@@ -329,7 +329,7 @@ def run(
             "EVPI": False,
             "VSS": False,
         }
-        temp_file_name = f"temp_EV"
+        temp_file_name = f"temp_EV_" + utils.generate_unique_filename_id()
         utils.copy_and_modify_config(
             model_config_name,
             overwrite_dict=overwrite_dict,
@@ -378,7 +378,7 @@ def run(
         overwrite_dict["scenario_file"] = ""
         overwrite_dict["save_folder"] = EEV_save_folder
         print(f"Overwrite dict for EEV: {overwrite_dict}")
-        temp_file_name = f"temp_EEV"
+        temp_file_name = f"temp_EEV_" + utils.generate_unique_filename_id()
         utils.copy_and_modify_config(
             model_config_name,
             overwrite_dict=overwrite_dict,
