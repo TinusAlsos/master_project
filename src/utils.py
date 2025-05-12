@@ -7,6 +7,8 @@ import os
 from typing import Any
 import yaml
 import pandas as pd
+import datetime
+import uuid
 
 
 CONFIG_FOLDER = os.path.join(os.path.dirname(os.path.dirname(__file__)), "configs")
@@ -583,6 +585,17 @@ def load_scenario_multiplier(scenario_file_name: str = "") -> pd.DataFrame:
         raise FileNotFoundError(f"Scenario multiplier file not found: {path}")
     df = pd.read_csv(path, index_col=0)
     return df
+
+
+def generate_unique_filename_id() -> str:
+    """
+    Generates a unique, filesystem-safe identifier for filenames.
+    Format: YYYYMMDD_HHMMSS_UUID4
+    Example: 20240512_145803_ab12cd34
+    """
+    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+    unique_suffix = uuid.uuid4().hex[:8]  # Shorten UUID to 8 chars
+    return f"{timestamp}_{unique_suffix}"
 
 
 if __name__ == "__main__":
