@@ -11,3 +11,11 @@ Traceback (most recent call last):
   File "/cluster/home/tinusfa/master_project/src/utils.py", line 221, in delete_config_file
     raise FileNotFoundError(
 FileNotFoundError: Model configuration file not found: /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_2.yaml, created from config_temp_EVPI_2.yaml
+To github.com:TinusAlsos/master_project.git
+ ! [rejected]        idun_runs -> idun_runs (fetch first)
+error: failed to push some refs to 'github.com:TinusAlsos/master_project.git'
+hint: Updates were rejected because the remote contains work that you do not
+hint: have locally. This is usually caused by another repository pushing to
+hint: the same ref. If you want to integrate the remote changes, use
+hint: 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.

@@ -19,5 +19,5 @@ representative_periods:
 - 42
 VSS: false
 EVPI: false
-scenario_file: EVPI_3
-save_folder: /cluster/home/tinusfa/master_project/runs/single_runs/May12_Mon_h13-GTSEP_stochastic_v1-128_ES_PT_EVPI_3
+scenario_file: EVPI_5
+save_folder: /cluster/home/tinusfa/master_project/runs/single_runs/May12_Mon_h13-GTSEP_stochastic_v1-128_ES_PT_EVPI_5
