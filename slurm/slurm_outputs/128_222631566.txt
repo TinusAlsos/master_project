@@ -1,0 +1,6 @@
+Running from this directory: /cluster/home/tinusfa/master_project
+Name of job: 128_2
+ID of job: 22631566
+The job was run on these nodes: idun-04-34
+Job finished at Mon 12 May 09:27:59 CEST 2025
+Pushing to git
