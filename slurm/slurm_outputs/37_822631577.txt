@@ -10,3 +10,67 @@ Set parameter WLSAccessID
 Set parameter WLSSecret
 Set parameter LicenseID to value 2622400
 Academic license 2622400 - for non-commercial use only - registered to ti___@stud.ntnu.no
+Set parameter MIPGap to value 0.01
+Set parameter TimeLimit to value 21600
+Set parameter BarConvTol to value 0.01
+Set parameter BarHomogeneous to value 1
+Model built in 51.60195708274841 seconds.
+Gurobi Optimizer version 12.0.1 build v12.0.1rc0 (linux64 - "Rocky Linux 9.4 (Blue Onyx)")
+
+CPU model: Intel(R) Xeon(R) Gold 6348 CPU @ 2.60GHz, instruction set [SSE2|AVX|AVX2|AVX512]
+Thread count: 56 physical cores, 56 logical processors, using up to 32 threads
+
+Non-default parameters:
+TimeLimit  21600
+MIPGap  0.01
+BarConvTol  0.01
+BarHomogeneous  1
+
+Academic license 2622400 - for non-commercial use only - registered to ti___@stud.ntnu.no
+Optimize a model with 480036 rows, 693616 columns and 1310252 nonzeros
+Model fingerprint: 0xbd652d24
+Coefficient statistics:
+  Matrix range     [8e-07, 2e+00]
+  Objective range  [2e-02, 3e+05]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [6e-03, 1e+100]
+Warning: Model contains large rhs
+         Consider reformulating model or setting NumericFocus parameter
+         to avoid numerical issues.
+Presolve removed 283282 rows and 445991 columns
+Presolve time: 0.89s
+Presolved: 196754 rows, 247625 columns, 763839 nonzeros
+
+Concurrent LP optimizer: primal simplex, dual simplex, and barrier
+Showing barrier log only...
+
+Ordering time: 0.31s
+
+Barrier statistics:
+ Dense cols : 62
+ AA' NZ     : 7.532e+05
+ Factor NZ  : 4.022e+06 (roughly 200 MB of memory)
+ Factor Ops : 8.980e+07 (less than 1 second per iteration)
+ Threads    : 30
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   4.53361683e+14 -6.62055171e+15  7.10e+06 4.94e+03  7.96e+11     4s
+   1   4.13683505e+14 -6.37555608e+15  6.48e+06 3.79e+05  6.38e+11     7s
+   2   3.05916903e+14 -6.02939619e+15  4.72e+06 1.62e+05  4.29e+11    11s
+   3   2.43553440e+14 -5.49883424e+15  3.67e+06 5.54e+04  3.08e+11    15s
+   4   8.14507468e+13 -1.22936524e+15  1.23e+06 1.40e+04  3.18e+10    20s
+   5   5.39468969e+13 -7.01380481e+14  8.21e+05 7.57e+03  1.45e+10    23s
+   6   2.97508966e+13 -3.36914407e+14  4.58e+05 9.83e+03  5.11e+09    26s
+   7   1.64194510e+13 -6.24402232e+13  2.54e+05 1.97e+04  9.26e+08    31s
+   8   3.49200371e+12 -1.53110309e+13  6.08e+04 2.15e+04  1.05e+08    36s
+   9   5.93190501e+11 -4.19090697e+12  9.75e+03 9.92e+03  1.33e+07    42s
+  10   4.97047131e+11 -2.13166938e+12  7.72e+03 4.79e+03  7.16e+06    46s
+  11   4.25258713e+11 -1.15382161e+12  6.49e+03 2.30e+03  4.20e+06    50s
+  12   3.34335399e+11 -5.43154059e+11  4.92e+03 3.02e+03  2.21e+06    54s
+  13   2.75688575e+11 -2.71689844e+11  3.98e+03 3.36e+03  1.30e+06    58s
+  14   2.27211245e+11 -2.40819178e+11  3.19e+03 5.32e+03  1.06e+06    64s
+  15   1.87302002e+11 -2.03254426e+11  2.51e+03 7.92e+03  8.41e+05    71s
+  16   1.79720893e+11 -1.61659245e+11  2.26e+03 5.02e+03  7.28e+05    79s
+  17   1.57659174e+11 -8.31415168e+10  1.92e+03 2.94e+03  4.89e+05    87s
+  18   1.32230596e+11 -6.57759799e+10  1.59e+03 7.75e+02  4.05e+05    94s

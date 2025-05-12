@@ -10,3 +10,54 @@ Set parameter WLSAccessID
 Set parameter WLSSecret
 Set parameter LicenseID to value 2622400
 Academic license 2622400 - for non-commercial use only - registered to ti___@stud.ntnu.no
+Set parameter MIPGap to value 0.01
+Set parameter TimeLimit to value 21600
+Set parameter BarConvTol to value 0.01
+Set parameter BarHomogeneous to value 1
+Model built in 94.1579818725586 seconds.
+Gurobi Optimizer version 12.0.1 build v12.0.1rc0 (linux64 - "Rocky Linux 9.4 (Blue Onyx)")
+
+CPU model: Intel(R) Xeon(R) Gold 6252 CPU @ 2.10GHz, instruction set [SSE2|AVX|AVX2|AVX512]
+Thread count: 48 physical cores, 48 logical processors, using up to 32 threads
+
+Non-default parameters:
+TimeLimit  21600
+MIPGap  0.01
+BarConvTol  0.01
+BarHomogeneous  1
+
+Academic license 2622400 - for non-commercial use only - registered to ti___@stud.ntnu.no
+Optimize a model with 720482 rows, 948168 columns and 1936011 nonzeros
+Model fingerprint: 0x2e04d99f
+Coefficient statistics:
+  Matrix range     [8e-06, 9e+00]
+  Objective range  [9e-02, 3e+05]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [6e-03, 1e+100]
+Warning: Model contains large rhs
+         Consider reformulating model or setting NumericFocus parameter
+         to avoid numerical issues.
+Presolve removed 441752 rows and 585099 columns
+Presolve time: 1.70s
+Presolved: 278730 rows, 363069 columns, 1216196 nonzeros
+
+Concurrent LP optimizer: primal simplex, dual simplex, and barrier
+Showing barrier log only...
+
+Elapsed ordering time = 5s
+Ordering time: 6.27s
+
+Barrier statistics:
+ Dense cols : 335
+ AA' NZ     : 1.483e+06
+ Factor NZ  : 8.756e+06 (roughly 300 MB of memory)
+ Factor Ops : 2.967e+09 (less than 1 second per iteration)
+ Threads    : 30
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   1.74526790e+14 -1.15282088e+16  7.86e+05 2.56e+04  1.86e+11    16s
+   1   1.37037462e+14 -9.87893150e+15  6.20e+05 7.52e+05  1.30e+11    22s
+   2   1.10017180e+14 -8.37893853e+15  4.92e+05 3.43e+05  9.20e+10    29s
+   3   8.80610359e+13 -6.82158936e+15  3.85e+05 1.38e+05  6.44e+10    39s
+   4   6.13187055e+13 -2.66635292e+15  2.66e+05 5.36e+04  2.38e+10    50s

@@ -11,3 +11,5 @@ Set parameter WLSSecret
 Set parameter LicenseID to value 2622400
 Job finished at Mon 12 May 09:32:41 CEST 2025
 Pushing to git
+[idun_runs 518f690] results from 128_4_4core
+ 6 files changed, 89 insertions(+)

@@ -16,3 +16,5 @@ Traceback (most recent call last):
   File "src/gurobipy/gurobi.pxi", line 60, in gurobipy._core.gurobi._getdefaultenv
   File "src/gurobipy/env.pxi", line 88, in gurobipy._core.Env.__init__
 gurobipy._exception.GurobiError: Too many sessions, 5 active sessions for a baseline of 2
+To github.com:TinusAlsos/master_project.git
+   06c0dd2..518f690  idun_runs -> idun_runs
