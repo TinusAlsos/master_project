@@ -12,7 +12,6 @@ from src.utils import (
     load_scenario_multiplier,
 )
 import os
-from IPython.display import display
 
 TIMELIMIT = 60 * 60 * 6  # 6 hours
 
