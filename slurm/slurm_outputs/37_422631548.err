@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/cluster/home/tinusfa/master_project/src/run.py", line 19, in <module>
+    from src.models import get_model
+  File "/cluster/home/tinusfa/master_project/src/models.py", line 15, in <module>
+    from IPython.display import display
+ModuleNotFoundError: No module named 'IPython'
