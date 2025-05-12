@@ -36,7 +36,7 @@ year,generator,value
 2040,ES1 1 onwind,0.0
 2050,ES1 1 onwind,0.0
 2025,ES1 1 solar,1995.2839615625655
-2030,ES1 1 solar,0.0
+2030,ES1 1 solar,1995.2839615625655
 2040,ES1 1 solar,0.0
 2050,ES1 1 solar,0.0
 2025,ES1 2 CCGT,0.0
@@ -71,7 +71,7 @@ year,generator,value
 2030,ES1 3 coal,0.0
 2040,ES1 3 coal,0.0
 2050,ES1 3 coal,0.0
-2025,ES1 3 offwind-ac,0.0
+2025,ES1 3 offwind-ac,1966.374433711835
 2030,ES1 3 offwind-ac,0.0
 2040,ES1 3 offwind-ac,0.0
 2050,ES1 3 offwind-ac,0.0
@@ -100,7 +100,7 @@ year,generator,value
 2040,ES1 4 onwind,7666.034391617716
 2050,ES1 4 onwind,0.0
 2025,ES1 4 solar,1288.442088498516
-2030,ES1 4 solar,70.23983100640294
+2030,ES1 4 solar,1288.442088498516
 2040,ES1 4 solar,0.0
 2050,ES1 4 solar,0.0
 2025,ES1 5 CCGT,0.0
@@ -113,7 +113,7 @@ year,generator,value
 2050,ES1 5 onwind,0.0
 2025,ES1 5 solar,4541.967873073651
 2030,ES1 5 solar,4541.967873073651
-2040,ES1 5 solar,0.0
+2040,ES1 5 solar,3791.6751787429203
 2050,ES1 5 solar,0.0
 2025,ES1 6 CCGT,0.0
 2030,ES1 6 CCGT,0.0
@@ -123,13 +123,13 @@ year,generator,value
 2030,ES1 6 offwind-ac,0.0
 2040,ES1 6 offwind-ac,0.0
 2050,ES1 6 offwind-ac,0.0
-2025,ES1 6 onwind,5238.9548339188705
+2025,ES1 6 onwind,1315.9314149797303
 2030,ES1 6 onwind,0.0
 2040,ES1 6 onwind,0.0
 2050,ES1 6 onwind,0.0
 2025,ES1 6 solar,2019.0010666100911
 2030,ES1 6 solar,2019.0010666100911
-2040,ES1 6 solar,2019.0010666100911
+2040,ES1 6 solar,0.0
 2050,ES1 6 solar,0.0
 2025,ES1 7 CCGT,0.0
 2030,ES1 7 CCGT,0.0
@@ -151,7 +151,7 @@ year,generator,value
 2030,ES1 8 offwind-ac,0.0
 2040,ES1 8 offwind-ac,0.0
 2050,ES1 8 offwind-ac,0.0
-2025,ES1 8 onwind,1484.2838921285754
+2025,ES1 8 onwind,0.0
 2030,ES1 8 onwind,0.0
 2040,ES1 8 onwind,0.0
 2050,ES1 8 onwind,0.0
@@ -183,11 +183,11 @@ year,generator,value
 2030,PT1 0 solar,754.7328023624184
 2040,PT1 0 solar,0.0
 2050,PT1 0 solar,0.0
-2025,PT1 1 CCGT,4464.906949429526
+2025,PT1 1 CCGT,4301.335483516739
 2030,PT1 1 CCGT,0.0
 2040,PT1 1 CCGT,0.0
 2050,PT1 1 CCGT,0.0
-2025,PT1 1 offwind-ac,0.0
+2025,PT1 1 offwind-ac,6808.354409797176
 2030,PT1 1 offwind-ac,0.0
 2040,PT1 1 offwind-ac,0.0
 2050,PT1 1 offwind-ac,0.0
@@ -196,7 +196,7 @@ year,generator,value
 2040,PT1 1 onwind,0.0
 2050,PT1 1 onwind,0.0
 2025,PT1 1 ror,539.2
-2030,PT1 1 ror,426.07028840335056
+2030,PT1 1 ror,0.0
 2040,PT1 1 ror,0.0
 2050,PT1 1 ror,0.0
 2025,PT1 1 solar,1296.1471976375815

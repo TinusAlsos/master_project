@@ -117,3 +117,983 @@ Iter       Primal          Dual         Primal    Dual     Compl     Time
   58   2.57013150e+10  2.52754722e+10  1.58e+00 4.23e+00  1.14e+02  3568s
   59   2.56623913e+10  2.52843148e+10  1.43e+00 3.10e+00  1.01e+02  3642s
   60   2.56304169e+10  2.52867634e+10  1.30e+00 2.84e+00  9.19e+01  3716s
+  61   2.56025642e+10  2.52900600e+10  1.18e+00 2.53e+00  8.36e+01  3785s
+  62   2.55618172e+10  2.52978295e+10  1.01e+00 1.82e+00  7.07e+01  3855s
+  63   2.55331432e+10  2.53002626e+10  8.97e-01 1.58e+00  6.24e+01  3924s
+  64   2.55006638e+10  2.53015155e+10  7.61e-01 1.46e+00  5.34e+01  3993s
+  65   2.54770032e+10  2.53038500e+10  6.63e-01 1.44e+00  4.64e+01  4058s
+  66   2.54638171e+10  2.53050755e+10  6.08e-01 1.43e+00  4.26e+01  4131s
+  67   2.54365563e+10  2.53058695e+10  4.93e-01 1.41e+00  3.51e+01  4204s
+  68   2.54225257e+10  2.53086389e+10  4.35e-01 9.28e-01  3.06e+01  4278s
+  69   2.54111509e+10  2.53096423e+10  3.87e-01 8.13e-01  2.72e+01  4355s
+  70   2.54058054e+10  2.53103985e+10  3.65e-01 7.01e-01  2.56e+01  4434s
+  71   2.53904801e+10  2.53112056e+10  3.00e-01 6.31e-01  2.13e+01  4513s
+  72   2.53842105e+10  2.53129696e+10  2.74e-01 4.71e-01  1.91e+01  4590s
+  73   2.53779561e+10  2.53133978e+10  2.48e-01 4.35e-01  1.73e+01  4667s
+  74   2.53696383e+10  2.53149443e+10  2.13e-01 3.25e-01  1.47e+01  4760s
+  75   2.53639475e+10  2.53160738e+10  1.90e-01 2.34e-01  1.29e+01  4862s
+  76   2.53580045e+10  2.53162919e+10  1.64e-01 2.17e-01  1.12e+01  4951s
+  77   2.53551293e+10  2.53167568e+10  1.52e-01 1.85e-01  1.03e+01  5044s
+  78   2.53508041e+10  2.53173669e+10  1.34e-01 1.41e-01  9.00e+00  5150s
+  79   2.53494098e+10  2.53174497e+10  1.28e-01 1.35e-01  8.60e+00  5252s
+  80   2.53482022e+10  2.53176346e+10  1.23e-01 1.22e-01  8.22e+00  5354s
+  81   2.53472669e+10  2.53177581e+10  1.19e-01 1.14e-01  7.94e+00  5451s
+  82   2.53442120e+10  2.53179940e+10  1.06e-01 9.97e-02  7.06e+00  5567s
+  83   2.53416742e+10  2.53180739e+10  9.54e-02 9.25e-02  6.36e+00  5651s
+  84   2.53401142e+10  2.53181873e+10  8.89e-02 8.09e-02  5.91e+00  5732s
+  85   2.53381757e+10  2.53183197e+10  8.06e-02 7.20e-02  5.35e+00  5825s
+  86   2.53372604e+10  2.53183661e+10  7.67e-02 6.91e-02  5.09e+00  5883s
+  87   2.53354835e+10  2.53185764e+10  6.91e-02 5.64e-02  4.56e+00  5959s
+  88   2.53338655e+10  2.53186790e+10  6.22e-02 5.09e-02  4.10e+00  6030s
+  89   2.53317178e+10  2.53189397e+10  5.30e-02 3.79e-02  3.45e+00  6106s
+  90   2.53309430e+10  2.53190105e+10  4.97e-02 3.25e-02  3.22e+00  6196s
+
+Barrier solved model in 90 iterations and 6196.52 seconds (129.72 work units)
+Optimal objective 2.53309430e+10
+
+Crossover log...
+
+  874502 DPushes remaining with DInf 0.0000000e+00              6202s
+  660662 DPushes remaining with DInf 0.0000000e+00              6205s
+  631697 DPushes remaining with DInf 0.0000000e+00              6210s
+  623354 DPushes remaining with DInf 0.0000000e+00              6215s
+  617263 DPushes remaining with DInf 0.0000000e+00              6220s
+  607171 DPushes remaining with DInf 0.0000000e+00              6225s
+  598578 DPushes remaining with DInf 0.0000000e+00              6230s
+  590905 DPushes remaining with DInf 0.0000000e+00              6236s
+  585523 DPushes remaining with DInf 0.0000000e+00              6240s
+  578398 DPushes remaining with DInf 0.0000000e+00              6245s
+  570451 DPushes remaining with DInf 0.0000000e+00              6251s
+  561866 DPushes remaining with DInf 0.0000000e+00              6256s
+  556601 DPushes remaining with DInf 0.0000000e+00              6260s
+  552354 DPushes remaining with DInf 0.0000000e+00              6266s
+  546175 DPushes remaining with DInf 0.0000000e+00              6270s
+  533028 DPushes remaining with DInf 0.0000000e+00              6276s
+  526780 DPushes remaining with DInf 0.0000000e+00              6280s
+  520906 DPushes remaining with DInf 0.0000000e+00              6285s
+  513298 DPushes remaining with DInf 0.0000000e+00              6291s
+  507279 DPushes remaining with DInf 0.0000000e+00              6295s
+  500173 DPushes remaining with DInf 0.0000000e+00              6301s
+  497176 DPushes remaining with DInf 0.0000000e+00              6306s
+  493255 DPushes remaining with DInf 0.0000000e+00              6311s
+  489534 DPushes remaining with DInf 0.0000000e+00              6316s
+  485891 DPushes remaining with DInf 0.0000000e+00              6321s
+  482008 DPushes remaining with DInf 0.0000000e+00              6326s
+  478975 DPushes remaining with DInf 0.0000000e+00              6332s
+  476954 DPushes remaining with DInf 0.0000000e+00              6336s
+  470122 DPushes remaining with DInf 0.0000000e+00              6340s
+  466305 DPushes remaining with DInf 0.0000000e+00              6346s
+  462533 DPushes remaining with DInf 0.0000000e+00              6351s
+  459312 DPushes remaining with DInf 0.0000000e+00              6356s
+  456940 DPushes remaining with DInf 0.0000000e+00              6362s
+  455578 DPushes remaining with DInf 0.0000000e+00              6367s
+  453513 DPushes remaining with DInf 0.0000000e+00              6372s
+  451204 DPushes remaining with DInf 0.0000000e+00              6377s
+  449705 DPushes remaining with DInf 0.0000000e+00              6381s
+  447964 DPushes remaining with DInf 0.0000000e+00              6385s
+  444875 DPushes remaining with DInf 0.0000000e+00              6390s
+  440560 DPushes remaining with DInf 0.0000000e+00              6396s
+  438040 DPushes remaining with DInf 0.0000000e+00              6400s
+  435501 DPushes remaining with DInf 0.0000000e+00              6405s
+  433118 DPushes remaining with DInf 0.0000000e+00              6411s
+  431073 DPushes remaining with DInf 0.0000000e+00              6417s
+  429254 DPushes remaining with DInf 0.0000000e+00              6421s
+  427168 DPushes remaining with DInf 0.0000000e+00              6426s
+  425338 DPushes remaining with DInf 0.0000000e+00              6431s
+  422259 DPushes remaining with DInf 0.0000000e+00              6436s
+  419617 DPushes remaining with DInf 0.0000000e+00              6441s
+  417390 DPushes remaining with DInf 0.0000000e+00              6446s
+  416168 DPushes remaining with DInf 0.0000000e+00              6453s
+  415534 DPushes remaining with DInf 0.0000000e+00              6457s
+  414331 DPushes remaining with DInf 0.0000000e+00              6464s
+  413761 DPushes remaining with DInf 0.0000000e+00              6466s
+  413174 DPushes remaining with DInf 0.0000000e+00              6470s
+  412015 DPushes remaining with DInf 0.0000000e+00              6477s
+  411452 DPushes remaining with DInf 0.0000000e+00              6480s
+  410336 DPushes remaining with DInf 0.0000000e+00              6487s
+  409771 DPushes remaining with DInf 0.0000000e+00              6491s
+  408630 DPushes remaining with DInf 0.0000000e+00              6497s
+  407258 DPushes remaining with DInf 0.0000000e+00              6503s
+  406590 DPushes remaining with DInf 0.0000000e+00              6505s
+  404811 DPushes remaining with DInf 0.0000000e+00              6512s
+  404226 DPushes remaining with DInf 0.0000000e+00              6515s
+  403100 DPushes remaining with DInf 0.0000000e+00              6522s
+  402520 DPushes remaining with DInf 0.0000000e+00              6526s
+  399363 DPushes remaining with DInf 0.0000000e+00              6531s
+  397857 DPushes remaining with DInf 0.0000000e+00              6535s
+  395262 DPushes remaining with DInf 0.0000000e+00              6541s
+  393915 DPushes remaining with DInf 0.0000000e+00              6547s
+  392259 DPushes remaining with DInf 0.0000000e+00              6552s
+  389287 DPushes remaining with DInf 0.0000000e+00              6558s
+  388523 DPushes remaining with DInf 0.0000000e+00              6560s
+  387156 DPushes remaining with DInf 0.0000000e+00              6566s
+  385816 DPushes remaining with DInf 0.0000000e+00              6572s
+  385206 DPushes remaining with DInf 0.0000000e+00              6576s
+  384082 DPushes remaining with DInf 0.0000000e+00              6583s
+  383479 DPushes remaining with DInf 0.0000000e+00              6585s
+  380965 DPushes remaining with DInf 0.0000000e+00              6592s
+  379427 DPushes remaining with DInf 0.0000000e+00              6598s
+  378836 DPushes remaining with DInf 0.0000000e+00              6600s
+  377460 DPushes remaining with DInf 0.0000000e+00              6606s
+  375963 DPushes remaining with DInf 0.0000000e+00              6610s
+  374451 DPushes remaining with DInf 0.0000000e+00              6615s
+  371571 DPushes remaining with DInf 0.0000000e+00              6622s
+  368517 DPushes remaining with DInf 0.0000000e+00              6626s
+  365999 DPushes remaining with DInf 0.0000000e+00              6631s
+  364620 DPushes remaining with DInf 0.0000000e+00              6636s
+  363244 DPushes remaining with DInf 0.0000000e+00              6640s
+  360758 DPushes remaining with DInf 0.0000000e+00              6646s
+  358918 DPushes remaining with DInf 0.0000000e+00              6650s
+  357415 DPushes remaining with DInf 0.0000000e+00              6655s
+  356048 DPushes remaining with DInf 0.0000000e+00              6661s
+  354703 DPushes remaining with DInf 0.0000000e+00              6667s
+  353336 DPushes remaining with DInf 0.0000000e+00              6673s
+  352660 DPushes remaining with DInf 0.0000000e+00              6676s
+  351244 DPushes remaining with DInf 0.0000000e+00              6681s
+  349809 DPushes remaining with DInf 0.0000000e+00              6688s
+  349094 DPushes remaining with DInf 0.0000000e+00              6691s
+  347761 DPushes remaining with DInf 0.0000000e+00              6697s
+  346404 DPushes remaining with DInf 0.0000000e+00              6702s
+  345711 DPushes remaining with DInf 0.0000000e+00              6705s
+  343603 DPushes remaining with DInf 0.0000000e+00              6711s
+  342253 DPushes remaining with DInf 0.0000000e+00              6716s
+  340326 DPushes remaining with DInf 0.0000000e+00              6721s
+  337894 DPushes remaining with DInf 0.0000000e+00              6727s
+  336076 DPushes remaining with DInf 0.0000000e+00              6731s
+  334347 DPushes remaining with DInf 0.0000000e+00              6735s
+  330925 DPushes remaining with DInf 0.0000000e+00              6741s
+  325766 DPushes remaining with DInf 0.0000000e+00              6747s
+  323600 DPushes remaining with DInf 0.0000000e+00              6751s
+  320721 DPushes remaining with DInf 0.0000000e+00              6756s
+  319426 DPushes remaining with DInf 0.0000000e+00              6762s
+  318089 DPushes remaining with DInf 0.0000000e+00              6769s
+  317456 DPushes remaining with DInf 0.0000000e+00              6774s
+  316838 DPushes remaining with DInf 0.0000000e+00              6778s
+  316152 DPushes remaining with DInf 0.0000000e+00              6784s
+  315311 DPushes remaining with DInf 0.0000000e+00              6787s
+  314470 DPushes remaining with DInf 0.0000000e+00              6792s
+  313674 DPushes remaining with DInf 0.0000000e+00              6796s
+  312951 DPushes remaining with DInf 0.0000000e+00              6802s
+  312218 DPushes remaining with DInf 0.0000000e+00              6806s
+  311508 DPushes remaining with DInf 0.0000000e+00              6811s
+  310749 DPushes remaining with DInf 0.0000000e+00              6816s
+  309252 DPushes remaining with DInf 0.0000000e+00              6825s
+  308511 DPushes remaining with DInf 0.0000000e+00              6828s
+  307739 DPushes remaining with DInf 0.0000000e+00              6831s
+  305681 DPushes remaining with DInf 0.0000000e+00              6836s
+  303067 DPushes remaining with DInf 0.0000000e+00              6842s
+  302372 DPushes remaining with DInf 0.0000000e+00              6845s
+  300365 DPushes remaining with DInf 0.0000000e+00              6851s
+  298808 DPushes remaining with DInf 0.0000000e+00              6856s
+  298051 DPushes remaining with DInf 0.0000000e+00              6861s
+  297225 DPushes remaining with DInf 0.0000000e+00              6866s
+  294271 DPushes remaining with DInf 0.0000000e+00              6872s
+  292677 DPushes remaining with DInf 0.0000000e+00              6876s
+  290658 DPushes remaining with DInf 0.0000000e+00              6884s
+  289568 DPushes remaining with DInf 0.0000000e+00              6889s
+  288393 DPushes remaining with DInf 0.0000000e+00              6893s
+  287205 DPushes remaining with DInf 0.0000000e+00              6899s
+  285691 DPushes remaining with DInf 0.0000000e+00              6902s
+  284552 DPushes remaining with DInf 0.0000000e+00              6907s
+  283385 DPushes remaining with DInf 0.0000000e+00              6912s
+  282250 DPushes remaining with DInf 0.0000000e+00              6915s
+  280945 DPushes remaining with DInf 0.0000000e+00              6920s
+  279483 DPushes remaining with DInf 0.0000000e+00              6925s
+  277370 DPushes remaining with DInf 0.0000000e+00              6935s
+  276555 DPushes remaining with DInf 0.0000000e+00              6939s
+  275724 DPushes remaining with DInf 0.0000000e+00              6942s
+  274913 DPushes remaining with DInf 0.0000000e+00              6948s
+  274145 DPushes remaining with DInf 0.0000000e+00              6953s
+  273391 DPushes remaining with DInf 0.0000000e+00              6957s
+  272633 DPushes remaining with DInf 0.0000000e+00              6963s
+  271850 DPushes remaining with DInf 0.0000000e+00              6967s
+  271102 DPushes remaining with DInf 0.0000000e+00              6971s
+  270326 DPushes remaining with DInf 0.0000000e+00              6977s
+  268361 DPushes remaining with DInf 0.0000000e+00              6984s
+  267593 DPushes remaining with DInf 0.0000000e+00              6987s
+  266608 DPushes remaining with DInf 0.0000000e+00              6991s
+  264217 DPushes remaining with DInf 0.0000000e+00              6997s
+  261891 DPushes remaining with DInf 0.0000000e+00              7003s
+  260362 DPushes remaining with DInf 0.0000000e+00              7007s
+  257751 DPushes remaining with DInf 0.0000000e+00              7013s
+  256716 DPushes remaining with DInf 0.0000000e+00              7017s
+  255875 DPushes remaining with DInf 0.0000000e+00              7021s
+  254975 DPushes remaining with DInf 0.0000000e+00              7026s
+  251751 DPushes remaining with DInf 0.0000000e+00              7032s
+  250265 DPushes remaining with DInf 0.0000000e+00              7035s
+  247766 DPushes remaining with DInf 0.0000000e+00              7041s
+  244271 DPushes remaining with DInf 0.0000000e+00              7046s
+  242730 DPushes remaining with DInf 0.0000000e+00              7051s
+  241274 DPushes remaining with DInf 0.0000000e+00              7058s
+  240555 DPushes remaining with DInf 0.0000000e+00              7061s
+  239831 DPushes remaining with DInf 0.0000000e+00              7066s
+  239142 DPushes remaining with DInf 0.0000000e+00              7071s
+  238491 DPushes remaining with DInf 0.0000000e+00              7078s
+  237871 DPushes remaining with DInf 0.0000000e+00              7083s
+  237245 DPushes remaining with DInf 0.0000000e+00              7088s
+  236599 DPushes remaining with DInf 0.0000000e+00              7092s
+  235978 DPushes remaining with DInf 0.0000000e+00              7095s
+  234645 DPushes remaining with DInf 0.0000000e+00              7103s
+  233731 DPushes remaining with DInf 0.0000000e+00              7106s
+  230276 DPushes remaining with DInf 0.0000000e+00              7111s
+  225985 DPushes remaining with DInf 0.0000000e+00              7117s
+  224987 DPushes remaining with DInf 0.0000000e+00              7120s
+  223588 DPushes remaining with DInf 0.0000000e+00              7129s
+  222951 DPushes remaining with DInf 0.0000000e+00              7134s
+  221980 DPushes remaining with DInf 0.0000000e+00              7138s
+  220867 DPushes remaining with DInf 0.0000000e+00              7142s
+  218813 DPushes remaining with DInf 0.0000000e+00              7145s
+  216217 DPushes remaining with DInf 0.0000000e+00              7152s
+  214672 DPushes remaining with DInf 0.0000000e+00              7156s
+  212449 DPushes remaining with DInf 0.0000000e+00              7163s
+  211775 DPushes remaining with DInf 0.0000000e+00              7166s
+  210250 DPushes remaining with DInf 0.0000000e+00              7172s
+  208756 DPushes remaining with DInf 0.0000000e+00              7177s
+  207205 DPushes remaining with DInf 0.0000000e+00              7181s
+  205795 DPushes remaining with DInf 0.0000000e+00              7187s
+  203299 DPushes remaining with DInf 0.0000000e+00              7191s
+  199612 DPushes remaining with DInf 0.0000000e+00              7197s
+  197095 DPushes remaining with DInf 0.0000000e+00              7202s
+  195825 DPushes remaining with DInf 0.0000000e+00              7207s
+  193021 DPushes remaining with DInf 0.0000000e+00              7212s
+  191578 DPushes remaining with DInf 0.0000000e+00              7216s
+  188735 DPushes remaining with DInf 0.0000000e+00              7221s
+  186813 DPushes remaining with DInf 0.0000000e+00              7227s
+  185693 DPushes remaining with DInf 0.0000000e+00              7230s
+  184077 DPushes remaining with DInf 0.0000000e+00              7237s
+  182938 DPushes remaining with DInf 0.0000000e+00              7241s
+  179771 DPushes remaining with DInf 0.0000000e+00              7245s
+  168602 DPushes remaining with DInf 0.0000000e+00              7252s
+  161902 DPushes remaining with DInf 0.0000000e+00              7255s
+  158896 DPushes remaining with DInf 0.0000000e+00              7261s
+  157179 DPushes remaining with DInf 0.0000000e+00              7265s
+  155869 DPushes remaining with DInf 0.0000000e+00              7273s
+  154396 DPushes remaining with DInf 0.0000000e+00              7277s
+  153216 DPushes remaining with DInf 0.0000000e+00              7280s
+  150590 DPushes remaining with DInf 0.0000000e+00              7286s
+  145335 DPushes remaining with DInf 0.0000000e+00              7291s
+  139423 DPushes remaining with DInf 0.0000000e+00              7298s
+  138249 DPushes remaining with DInf 0.0000000e+00              7300s
+  135663 DPushes remaining with DInf 0.0000000e+00              7308s
+  135015 DPushes remaining with DInf 0.0000000e+00              7311s
+  133725 DPushes remaining with DInf 0.0000000e+00              7316s
+  131900 DPushes remaining with DInf 0.0000000e+00              7322s
+  130591 DPushes remaining with DInf 0.0000000e+00              7327s
+  129362 DPushes remaining with DInf 0.0000000e+00              7334s
+  128717 DPushes remaining with DInf 0.0000000e+00              7337s
+  128009 DPushes remaining with DInf 0.0000000e+00              7342s
+  127397 DPushes remaining with DInf 0.0000000e+00              7346s
+  126749 DPushes remaining with DInf 0.0000000e+00              7350s
+  125425 DPushes remaining with DInf 0.0000000e+00              7357s
+  124738 DPushes remaining with DInf 0.0000000e+00              7361s
+  123331 DPushes remaining with DInf 0.0000000e+00              7366s
+  121904 DPushes remaining with DInf 0.0000000e+00              7371s
+  120574 DPushes remaining with DInf 0.0000000e+00              7377s
+  119944 DPushes remaining with DInf 0.0000000e+00              7380s
+  118695 DPushes remaining with DInf 0.0000000e+00              7387s
+  118072 DPushes remaining with DInf 0.0000000e+00              7391s
+  116742 DPushes remaining with DInf 0.0000000e+00              7397s
+  115400 DPushes remaining with DInf 0.0000000e+00              7403s
+  114787 DPushes remaining with DInf 0.0000000e+00              7406s
+  113549 DPushes remaining with DInf 0.0000000e+00              7411s
+  112285 DPushes remaining with DInf 0.0000000e+00              7418s
+  111642 DPushes remaining with DInf 0.0000000e+00              7420s
+  110327 DPushes remaining with DInf 0.0000000e+00              7427s
+  108955 DPushes remaining with DInf 0.0000000e+00              7431s
+  107637 DPushes remaining with DInf 0.0000000e+00              7437s
+  106350 DPushes remaining with DInf 0.0000000e+00              7443s
+  105682 DPushes remaining with DInf 0.0000000e+00              7446s
+  104453 DPushes remaining with DInf 0.0000000e+00              7451s
+  103284 DPushes remaining with DInf 0.0000000e+00              7457s
+  102092 DPushes remaining with DInf 0.0000000e+00              7462s
+  101491 DPushes remaining with DInf 0.0000000e+00              7466s
+  100167 DPushes remaining with DInf 0.0000000e+00              7472s
+   99419 DPushes remaining with DInf 0.0000000e+00              7476s
+   97970 DPushes remaining with DInf 0.0000000e+00              7484s
+   97412 DPushes remaining with DInf 0.0000000e+00              7490s
+   96744 DPushes remaining with DInf 0.0000000e+00              7492s
+   96141 DPushes remaining with DInf 0.0000000e+00              7497s
+   95548 DPushes remaining with DInf 0.0000000e+00              7501s
+   94930 DPushes remaining with DInf 0.0000000e+00              7505s
+   93702 DPushes remaining with DInf 0.0000000e+00              7513s
+   93100 DPushes remaining with DInf 0.0000000e+00              7517s
+   92481 DPushes remaining with DInf 0.0000000e+00              7521s
+   91262 DPushes remaining with DInf 0.0000000e+00              7529s
+   90595 DPushes remaining with DInf 0.0000000e+00              7532s
+   89927 DPushes remaining with DInf 0.0000000e+00              7536s
+   89259 DPushes remaining with DInf 0.0000000e+00              7541s
+   87975 DPushes remaining with DInf 0.0000000e+00              7550s
+   87343 DPushes remaining with DInf 0.0000000e+00              7553s
+   86726 DPushes remaining with DInf 0.0000000e+00              7557s
+   86107 DPushes remaining with DInf 0.0000000e+00              7562s
+   84869 DPushes remaining with DInf 0.0000000e+00              7569s
+   84266 DPushes remaining with DInf 0.0000000e+00              7573s
+   83096 DPushes remaining with DInf 0.0000000e+00              7578s
+   82486 DPushes remaining with DInf 0.0000000e+00              7583s
+   81897 DPushes remaining with DInf 0.0000000e+00              7587s
+   81305 DPushes remaining with DInf 0.0000000e+00              7592s
+   80730 DPushes remaining with DInf 0.0000000e+00              7597s
+   80120 DPushes remaining with DInf 0.0000000e+00              7602s
+   79558 DPushes remaining with DInf 0.0000000e+00              7607s
+   79017 DPushes remaining with DInf 0.0000000e+00              7613s
+   78458 DPushes remaining with DInf 0.0000000e+00              7616s
+   77894 DPushes remaining with DInf 0.0000000e+00              7621s
+   77346 DPushes remaining with DInf 0.0000000e+00              7626s
+   76792 DPushes remaining with DInf 0.0000000e+00              7631s
+   76224 DPushes remaining with DInf 0.0000000e+00              7636s
+   75651 DPushes remaining with DInf 0.0000000e+00              7641s
+   75087 DPushes remaining with DInf 0.0000000e+00              7646s
+   74490 DPushes remaining with DInf 0.0000000e+00              7650s
+   73937 DPushes remaining with DInf 0.0000000e+00              7655s
+   72777 DPushes remaining with DInf 0.0000000e+00              7663s
+   72194 DPushes remaining with DInf 0.0000000e+00              7666s
+   71002 DPushes remaining with DInf 0.0000000e+00              7674s
+   70407 DPushes remaining with DInf 0.0000000e+00              7678s
+   69813 DPushes remaining with DInf 0.0000000e+00              7684s
+   69214 DPushes remaining with DInf 0.0000000e+00              7688s
+   68600 DPushes remaining with DInf 0.0000000e+00              7694s
+   68014 DPushes remaining with DInf 0.0000000e+00              7699s
+   67417 DPushes remaining with DInf 0.0000000e+00              7704s
+   66823 DPushes remaining with DInf 0.0000000e+00              7709s
+   66215 DPushes remaining with DInf 0.0000000e+00              7715s
+   65605 DPushes remaining with DInf 0.0000000e+00              7719s
+   64925 DPushes remaining with DInf 0.0000000e+00              7724s
+   64249 DPushes remaining with DInf 0.0000000e+00              7729s
+   63646 DPushes remaining with DInf 0.0000000e+00              7733s
+   63015 DPushes remaining with DInf 0.0000000e+00              7737s
+   62404 DPushes remaining with DInf 0.0000000e+00              7740s
+   61187 DPushes remaining with DInf 0.0000000e+00              7749s
+   60614 DPushes remaining with DInf 0.0000000e+00              7752s
+   60035 DPushes remaining with DInf 0.0000000e+00              7757s
+   59459 DPushes remaining with DInf 0.0000000e+00              7761s
+   58256 DPushes remaining with DInf 0.0000000e+00              7769s
+   57675 DPushes remaining with DInf 0.0000000e+00              7772s
+   57067 DPushes remaining with DInf 0.0000000e+00              7777s
+   56469 DPushes remaining with DInf 0.0000000e+00              7781s
+   55858 DPushes remaining with DInf 0.0000000e+00              7786s
+   55262 DPushes remaining with DInf 0.0000000e+00              7791s
+   54082 DPushes remaining with DInf 0.0000000e+00              7799s
+   53495 DPushes remaining with DInf 0.0000000e+00              7802s
+   52895 DPushes remaining with DInf 0.0000000e+00              7807s
+   52303 DPushes remaining with DInf 0.0000000e+00              7812s
+   51718 DPushes remaining with DInf 0.0000000e+00              7815s
+   50502 DPushes remaining with DInf 0.0000000e+00              7823s
+   49891 DPushes remaining with DInf 0.0000000e+00              7827s
+   49292 DPushes remaining with DInf 0.0000000e+00              7831s
+   48134 DPushes remaining with DInf 0.0000000e+00              7838s
+   47538 DPushes remaining with DInf 0.0000000e+00              7841s
+   46279 DPushes remaining with DInf 0.0000000e+00              7847s
+   45525 DPushes remaining with DInf 0.0000000e+00              7852s
+   44122 DPushes remaining with DInf 0.0000000e+00              7858s
+   43511 DPushes remaining with DInf 0.0000000e+00              7862s
+   42869 DPushes remaining with DInf 0.0000000e+00              7865s
+   41691 DPushes remaining with DInf 0.0000000e+00              7873s
+   41106 DPushes remaining with DInf 0.0000000e+00              7876s
+   40538 DPushes remaining with DInf 0.0000000e+00              7880s
+   39397 DPushes remaining with DInf 0.0000000e+00              7888s
+   38836 DPushes remaining with DInf 0.0000000e+00              7893s
+   38248 DPushes remaining with DInf 0.0000000e+00              7896s
+   37651 DPushes remaining with DInf 0.0000000e+00              7901s
+   37083 DPushes remaining with DInf 0.0000000e+00              7905s
+   35970 DPushes remaining with DInf 0.0000000e+00              7913s
+   35408 DPushes remaining with DInf 0.0000000e+00              7918s
+   34850 DPushes remaining with DInf 0.0000000e+00              7923s
+   34280 DPushes remaining with DInf 0.0000000e+00              7927s
+   33710 DPushes remaining with DInf 0.0000000e+00              7933s
+   33155 DPushes remaining with DInf 0.0000000e+00              7937s
+   32591 DPushes remaining with DInf 0.0000000e+00              7942s
+   32026 DPushes remaining with DInf 0.0000000e+00              7947s
+   31468 DPushes remaining with DInf 0.0000000e+00              7953s
+   30900 DPushes remaining with DInf 0.0000000e+00              7958s
+   30345 DPushes remaining with DInf 0.0000000e+00              7964s
+   29775 DPushes remaining with DInf 0.0000000e+00              7969s
+   29203 DPushes remaining with DInf 0.0000000e+00              7975s
+   28066 DPushes remaining with DInf 0.0000000e+00              7986s
+   27493 DPushes remaining with DInf 0.0000000e+00              7990s
+   26913 DPushes remaining with DInf 0.0000000e+00              7996s
+   26315 DPushes remaining with DInf 0.0000000e+00              8001s
+   25731 DPushes remaining with DInf 0.0000000e+00              8007s
+   25113 DPushes remaining with DInf 0.0000000e+00              8013s
+   24533 DPushes remaining with DInf 0.0000000e+00              8019s
+   23968 DPushes remaining with DInf 0.0000000e+00              8025s
+   23413 DPushes remaining with DInf 0.0000000e+00              8031s
+   22848 DPushes remaining with DInf 0.0000000e+00              8037s
+   22287 DPushes remaining with DInf 0.0000000e+00              8042s
+   21741 DPushes remaining with DInf 0.0000000e+00              8049s
+   21190 DPushes remaining with DInf 0.0000000e+00              8054s
+   20633 DPushes remaining with DInf 0.0000000e+00              8059s
+   20071 DPushes remaining with DInf 0.0000000e+00              8062s
+   19501 DPushes remaining with DInf 0.0000000e+00              8067s
+   18938 DPushes remaining with DInf 0.0000000e+00              8071s
+   18361 DPushes remaining with DInf 0.0000000e+00              8076s
+   17791 DPushes remaining with DInf 0.0000000e+00              8082s
+   17192 DPushes remaining with DInf 0.0000000e+00              8088s
+   16333 DPushes remaining with DInf 0.0000000e+00              8093s
+   15658 DPushes remaining with DInf 0.0000000e+00              8098s
+   15072 DPushes remaining with DInf 0.0000000e+00              8102s
+   13973 DPushes remaining with DInf 0.0000000e+00              8109s
+   13431 DPushes remaining with DInf 0.0000000e+00              8114s
+   12888 DPushes remaining with DInf 0.0000000e+00              8118s
+   12351 DPushes remaining with DInf 0.0000000e+00              8123s
+   11810 DPushes remaining with DInf 0.0000000e+00              8126s
+   11263 DPushes remaining with DInf 0.0000000e+00              8131s
+   10188 DPushes remaining with DInf 0.0000000e+00              8140s
+    9650 DPushes remaining with DInf 0.0000000e+00              8145s
+    9094 DPushes remaining with DInf 0.0000000e+00              8153s
+    8468 DPushes remaining with DInf 0.0000000e+00              8158s
+    7780 DPushes remaining with DInf 0.0000000e+00              8166s
+    7204 DPushes remaining with DInf 0.0000000e+00              8175s
+    6421 DPushes remaining with DInf 0.0000000e+00              8183s
+    5634 DPushes remaining with DInf 0.0000000e+00              8187s
+    5018 DPushes remaining with DInf 0.0000000e+00              8192s
+    4437 DPushes remaining with DInf 0.0000000e+00              8196s
+    3870 DPushes remaining with DInf 0.0000000e+00              8202s
+    3161 DPushes remaining with DInf 0.0000000e+00              8209s
+    2274 DPushes remaining with DInf 0.0000000e+00              8215s
+     944 DPushes remaining with DInf 0.0000000e+00              8225s
+     273 DPushes remaining with DInf 0.0000000e+00              8228s
+       0 DPushes remaining with DInf 0.0000000e+00              8232s
+
+Restart crossover...
+
+  874502 DPushes remaining with DInf 0.0000000e+00              8235s
+  716251 DPushes remaining with DInf 0.0000000e+00              8237s
+  654169 DPushes remaining with DInf 0.0000000e+00              8241s
+  633195 DPushes remaining with DInf 0.0000000e+00              8246s
+  629224 DPushes remaining with DInf 0.0000000e+00              8250s
+  622190 DPushes remaining with DInf 0.0000000e+00              8256s
+  617263 DPushes remaining with DInf 0.0000000e+00              8261s
+  611566 DPushes remaining with DInf 0.0000000e+00              8266s
+  604631 DPushes remaining with DInf 0.0000000e+00              8271s
+  596385 DPushes remaining with DInf 0.0000000e+00              8276s
+  589872 DPushes remaining with DInf 0.0000000e+00              8280s
+  584741 DPushes remaining with DInf 0.0000000e+00              8285s
+  577464 DPushes remaining with DInf 0.0000000e+00              8290s
+  568957 DPushes remaining with DInf 0.0000000e+00              8295s
+  560504 DPushes remaining with DInf 0.0000000e+00              8300s
+  554484 DPushes remaining with DInf 0.0000000e+00              8306s
+  550619 DPushes remaining with DInf 0.0000000e+00              8310s
+  541408 DPushes remaining with DInf 0.0000000e+00              8316s
+  533081 DPushes remaining with DInf 0.0000000e+00              8321s
+  526427 DPushes remaining with DInf 0.0000000e+00              8326s
+  521766 DPushes remaining with DInf 0.0000000e+00              8330s
+  513837 DPushes remaining with DInf 0.0000000e+00              8335s
+  505841 DPushes remaining with DInf 0.0000000e+00              8341s
+  500530 DPushes remaining with DInf 0.0000000e+00              8346s
+  497459 DPushes remaining with DInf 0.0000000e+00              8352s
+  495047 DPushes remaining with DInf 0.0000000e+00              8355s
+  491175 DPushes remaining with DInf 0.0000000e+00              8360s
+  487426 DPushes remaining with DInf 0.0000000e+00              8365s
+  483950 DPushes remaining with DInf 0.0000000e+00              8370s
+  480031 DPushes remaining with DInf 0.0000000e+00              8375s
+  477254 DPushes remaining with DInf 0.0000000e+00              8382s
+  473489 DPushes remaining with DInf 0.0000000e+00              8386s
+  468424 DPushes remaining with DInf 0.0000000e+00              8390s
+  463591 DPushes remaining with DInf 0.0000000e+00              8396s
+  460133 DPushes remaining with DInf 0.0000000e+00              8401s
+  457531 DPushes remaining with DInf 0.0000000e+00              8405s
+  455392 DPushes remaining with DInf 0.0000000e+00              8412s
+  453212 DPushes remaining with DInf 0.0000000e+00              8417s
+  451771 DPushes remaining with DInf 0.0000000e+00              8420s
+  449463 DPushes remaining with DInf 0.0000000e+00              8426s
+  447768 DPushes remaining with DInf 0.0000000e+00              8430s
+  444746 DPushes remaining with DInf 0.0000000e+00              8436s
+  441546 DPushes remaining with DInf 0.0000000e+00              8440s
+  438006 DPushes remaining with DInf 0.0000000e+00              8446s
+  435466 DPushes remaining with DInf 0.0000000e+00              8451s
+  433074 DPushes remaining with DInf 0.0000000e+00              8457s
+  431019 DPushes remaining with DInf 0.0000000e+00              8461s
+  428460 DPushes remaining with DInf 0.0000000e+00              8466s
+  426183 DPushes remaining with DInf 0.0000000e+00              8472s
+  424062 DPushes remaining with DInf 0.0000000e+00              8476s
+  421417 DPushes remaining with DInf 0.0000000e+00              8481s
+  419495 DPushes remaining with DInf 0.0000000e+00              8486s
+  417270 DPushes remaining with DInf 0.0000000e+00              8491s
+  416047 DPushes remaining with DInf 0.0000000e+00              8498s
+  415407 DPushes remaining with DInf 0.0000000e+00              8502s
+  414804 DPushes remaining with DInf 0.0000000e+00              8505s
+  413639 DPushes remaining with DInf 0.0000000e+00              8511s
+  412478 DPushes remaining with DInf 0.0000000e+00              8517s
+  411345 DPushes remaining with DInf 0.0000000e+00              8523s
+  410781 DPushes remaining with DInf 0.0000000e+00              8525s
+  409659 DPushes remaining with DInf 0.0000000e+00              8531s
+  408511 DPushes remaining with DInf 0.0000000e+00              8536s
+  407124 DPushes remaining with DInf 0.0000000e+00              8542s
+  405871 DPushes remaining with DInf 0.0000000e+00              8546s
+  404118 DPushes remaining with DInf 0.0000000e+00              8553s
+  403550 DPushes remaining with DInf 0.0000000e+00              8556s
+  402356 DPushes remaining with DInf 0.0000000e+00              8563s
+  400657 DPushes remaining with DInf 0.0000000e+00              8565s
+  398314 DPushes remaining with DInf 0.0000000e+00              8571s
+  396222 DPushes remaining with DInf 0.0000000e+00              8576s
+  394969 DPushes remaining with DInf 0.0000000e+00              8580s
+  393512 DPushes remaining with DInf 0.0000000e+00              8586s
+  391837 DPushes remaining with DInf 0.0000000e+00              8592s
+  388944 DPushes remaining with DInf 0.0000000e+00              8597s
+  387452 DPushes remaining with DInf 0.0000000e+00              8601s
+  386228 DPushes remaining with DInf 0.0000000e+00              8607s
+  384954 DPushes remaining with DInf 0.0000000e+00              8611s
+  383829 DPushes remaining with DInf 0.0000000e+00              8616s
+  382225 DPushes remaining with DInf 0.0000000e+00              8620s
+  379898 DPushes remaining with DInf 0.0000000e+00              8628s
+  379252 DPushes remaining with DInf 0.0000000e+00              8631s
+  378661 DPushes remaining with DInf 0.0000000e+00              8635s
+  376416 DPushes remaining with DInf 0.0000000e+00              8642s
+  375020 DPushes remaining with DInf 0.0000000e+00              8646s
+  372176 DPushes remaining with DInf 0.0000000e+00              8652s
+  370472 DPushes remaining with DInf 0.0000000e+00              8656s
+  366488 DPushes remaining with DInf 0.0000000e+00              8661s
+  365087 DPushes remaining with DInf 0.0000000e+00              8666s
+  363746 DPushes remaining with DInf 0.0000000e+00              8671s
+  362285 DPushes remaining with DInf 0.0000000e+00              8677s
+  360486 DPushes remaining with DInf 0.0000000e+00              8681s
+  358669 DPushes remaining with DInf 0.0000000e+00              8686s
+  357214 DPushes remaining with DInf 0.0000000e+00              8692s
+  355853 DPushes remaining with DInf 0.0000000e+00              8698s
+  355149 DPushes remaining with DInf 0.0000000e+00              8701s
+  353783 DPushes remaining with DInf 0.0000000e+00              8707s
+  352414 DPushes remaining with DInf 0.0000000e+00              8711s
+  350231 DPushes remaining with DInf 0.0000000e+00              8718s
+  349486 DPushes remaining with DInf 0.0000000e+00              8720s
+  347434 DPushes remaining with DInf 0.0000000e+00              8728s
+  346743 DPushes remaining with DInf 0.0000000e+00              8730s
+  345301 DPushes remaining with DInf 0.0000000e+00              8735s
+  343859 DPushes remaining with DInf 0.0000000e+00              8740s
+  341787 DPushes remaining with DInf 0.0000000e+00              8747s
+  339815 DPushes remaining with DInf 0.0000000e+00              8751s
+  337126 DPushes remaining with DInf 0.0000000e+00              8756s
+  334583 DPushes remaining with DInf 0.0000000e+00              8761s
+  329631 DPushes remaining with DInf 0.0000000e+00              8765s
+  322438 DPushes remaining with DInf 0.0000000e+00              8772s
+  320379 DPushes remaining with DInf 0.0000000e+00              8775s
+  318434 DPushes remaining with DInf 0.0000000e+00              8782s
+  317774 DPushes remaining with DInf 0.0000000e+00              8786s
+  316519 DPushes remaining with DInf 0.0000000e+00              8793s
+  315771 DPushes remaining with DInf 0.0000000e+00              8795s
+  314063 DPushes remaining with DInf 0.0000000e+00              8802s
+  313338 DPushes remaining with DInf 0.0000000e+00              8805s
+  311858 DPushes remaining with DInf 0.0000000e+00              8812s
+  311129 DPushes remaining with DInf 0.0000000e+00              8815s
+  309611 DPushes remaining with DInf 0.0000000e+00              8822s
+  308146 DPushes remaining with DInf 0.0000000e+00              8828s
+  307274 DPushes remaining with DInf 0.0000000e+00              8831s
+  305103 DPushes remaining with DInf 0.0000000e+00              8835s
+  302688 DPushes remaining with DInf 0.0000000e+00              8841s
+  301356 DPushes remaining with DInf 0.0000000e+00              8847s
+  300696 DPushes remaining with DInf 0.0000000e+00              8850s
+  299178 DPushes remaining with DInf 0.0000000e+00              8857s
+  297627 DPushes remaining with DInf 0.0000000e+00              8863s
+  296784 DPushes remaining with DInf 0.0000000e+00              8867s
+  293399 DPushes remaining with DInf 0.0000000e+00              8870s
+  291208 DPushes remaining with DInf 0.0000000e+00              8877s
+  290132 DPushes remaining with DInf 0.0000000e+00              8880s
+  287714 DPushes remaining with DInf 0.0000000e+00              8887s
+  286074 DPushes remaining with DInf 0.0000000e+00              8891s
+  283706 DPushes remaining with DInf 0.0000000e+00              8898s
+  282542 DPushes remaining with DInf 0.0000000e+00              8901s
+  279720 DPushes remaining with DInf 0.0000000e+00              8908s
+  278448 DPushes remaining with DInf 0.0000000e+00              8912s
+  277497 DPushes remaining with DInf 0.0000000e+00              8916s
+  276640 DPushes remaining with DInf 0.0000000e+00              8920s
+  274973 DPushes remaining with DInf 0.0000000e+00              8929s
+  274202 DPushes remaining with DInf 0.0000000e+00              8933s
+  273437 DPushes remaining with DInf 0.0000000e+00              8937s
+  272664 DPushes remaining with DInf 0.0000000e+00              8941s
+  271875 DPushes remaining with DInf 0.0000000e+00              8945s
+  270326 DPushes remaining with DInf 0.0000000e+00              8953s
+  269136 DPushes remaining with DInf 0.0000000e+00              8955s
+  266505 DPushes remaining with DInf 0.0000000e+00              8962s
+  264037 DPushes remaining with DInf 0.0000000e+00              8966s
+  261457 DPushes remaining with DInf 0.0000000e+00              8971s
+  258640 DPushes remaining with DInf 0.0000000e+00              8976s
+  256450 DPushes remaining with DInf 0.0000000e+00              8981s
+  254590 DPushes remaining with DInf 0.0000000e+00              8987s
+  251565 DPushes remaining with DInf 0.0000000e+00              8991s
+  249152 DPushes remaining with DInf 0.0000000e+00              8996s
+  244247 DPushes remaining with DInf 0.0000000e+00              9001s
+  242740 DPushes remaining with DInf 0.0000000e+00              9008s
+  242033 DPushes remaining with DInf 0.0000000e+00              9012s
+  240587 DPushes remaining with DInf 0.0000000e+00              9018s
+  239877 DPushes remaining with DInf 0.0000000e+00              9022s
+  239183 DPushes remaining with DInf 0.0000000e+00              9025s
+  237912 DPushes remaining with DInf 0.0000000e+00              9033s
+  237301 DPushes remaining with DInf 0.0000000e+00              9036s
+  236037 DPushes remaining with DInf 0.0000000e+00              9041s
+  234738 DPushes remaining with DInf 0.0000000e+00              9045s
+  230422 DPushes remaining with DInf 0.0000000e+00              9050s
+  225103 DPushes remaining with DInf 0.0000000e+00              9057s
+  224348 DPushes remaining with DInf 0.0000000e+00              9060s
+  223038 DPushes remaining with DInf 0.0000000e+00              9067s
+  220970 DPushes remaining with DInf 0.0000000e+00              9072s
+  218147 DPushes remaining with DInf 0.0000000e+00              9077s
+  215548 DPushes remaining with DInf 0.0000000e+00              9081s
+  212506 DPushes remaining with DInf 0.0000000e+00              9087s
+  211093 DPushes remaining with DInf 0.0000000e+00              9090s
+  207987 DPushes remaining with DInf 0.0000000e+00              9096s
+  205875 DPushes remaining with DInf 0.0000000e+00              9101s
+  201898 DPushes remaining with DInf 0.0000000e+00              9105s
+  198288 DPushes remaining with DInf 0.0000000e+00              9111s
+  196873 DPushes remaining with DInf 0.0000000e+00              9115s
+  193993 DPushes remaining with DInf 0.0000000e+00              9121s
+  190861 DPushes remaining with DInf 0.0000000e+00              9126s
+  187948 DPushes remaining with DInf 0.0000000e+00              9131s
+  184903 DPushes remaining with DInf 0.0000000e+00              9136s
+  183239 DPushes remaining with DInf 0.0000000e+00              9141s
+  179276 DPushes remaining with DInf 0.0000000e+00              9145s
+  164625 DPushes remaining with DInf 0.0000000e+00              9151s
+  158966 DPushes remaining with DInf 0.0000000e+00              9155s
+  156590 DPushes remaining with DInf 0.0000000e+00              9161s
+  154451 DPushes remaining with DInf 0.0000000e+00              9167s
+  152167 DPushes remaining with DInf 0.0000000e+00              9173s
+  150793 DPushes remaining with DInf 0.0000000e+00              9175s
+  143346 DPushes remaining with DInf 0.0000000e+00              9180s
+  138299 DPushes remaining with DInf 0.0000000e+00              9186s
+  135681 DPushes remaining with DInf 0.0000000e+00              9190s
+  133732 DPushes remaining with DInf 0.0000000e+00              9196s
+  131872 DPushes remaining with DInf 0.0000000e+00              9200s
+  129886 DPushes remaining with DInf 0.0000000e+00              9206s
+  128571 DPushes remaining with DInf 0.0000000e+00              9211s
+  127242 DPushes remaining with DInf 0.0000000e+00              9216s
+  125929 DPushes remaining with DInf 0.0000000e+00              9221s
+  123833 DPushes remaining with DInf 0.0000000e+00              9226s
+  121726 DPushes remaining with DInf 0.0000000e+00              9231s
+  120396 DPushes remaining with DInf 0.0000000e+00              9235s
+  118536 DPushes remaining with DInf 0.0000000e+00              9241s
+  116567 DPushes remaining with DInf 0.0000000e+00              9246s
+  115213 DPushes remaining with DInf 0.0000000e+00              9250s
+  113354 DPushes remaining with DInf 0.0000000e+00              9256s
+  112082 DPushes remaining with DInf 0.0000000e+00              9261s
+  110111 DPushes remaining with DInf 0.0000000e+00              9266s
+  108067 DPushes remaining with DInf 0.0000000e+00              9271s
+  106127 DPushes remaining with DInf 0.0000000e+00              9277s
+  104843 DPushes remaining with DInf 0.0000000e+00              9280s
+  102476 DPushes remaining with DInf 0.0000000e+00              9286s
+  101092 DPushes remaining with DInf 0.0000000e+00              9291s
+   99517 DPushes remaining with DInf 0.0000000e+00              9296s
+   97916 DPushes remaining with DInf 0.0000000e+00              9301s
+   96624 DPushes remaining with DInf 0.0000000e+00              9307s
+   95313 DPushes remaining with DInf 0.0000000e+00              9312s
+   94039 DPushes remaining with DInf 0.0000000e+00              9317s
+   92734 DPushes remaining with DInf 0.0000000e+00              9322s
+   91470 DPushes remaining with DInf 0.0000000e+00              9327s
+   90151 DPushes remaining with DInf 0.0000000e+00              9332s
+   88820 DPushes remaining with DInf 0.0000000e+00              9337s
+   87533 DPushes remaining with DInf 0.0000000e+00              9342s
+   86280 DPushes remaining with DInf 0.0000000e+00              9347s
+   85062 DPushes remaining with DInf 0.0000000e+00              9352s
+   83864 DPushes remaining with DInf 0.0000000e+00              9356s
+   82672 DPushes remaining with DInf 0.0000000e+00              9360s
+   81440 DPushes remaining with DInf 0.0000000e+00              9366s
+   80180 DPushes remaining with DInf 0.0000000e+00              9372s
+   79598 DPushes remaining with DInf 0.0000000e+00              9375s
+   78495 DPushes remaining with DInf 0.0000000e+00              9382s
+   77364 DPushes remaining with DInf 0.0000000e+00              9388s
+   76797 DPushes remaining with DInf 0.0000000e+00              9391s
+   75649 DPushes remaining with DInf 0.0000000e+00              9397s
+   75080 DPushes remaining with DInf 0.0000000e+00              9400s
+   73926 DPushes remaining with DInf 0.0000000e+00              9406s
+   72760 DPushes remaining with DInf 0.0000000e+00              9410s
+   70983 DPushes remaining with DInf 0.0000000e+00              9417s
+   69798 DPushes remaining with DInf 0.0000000e+00              9422s
+   69196 DPushes remaining with DInf 0.0000000e+00              9425s
+   67989 DPushes remaining with DInf 0.0000000e+00              9430s
+   66786 DPushes remaining with DInf 0.0000000e+00              9436s
+   65290 DPushes remaining with DInf 0.0000000e+00              9441s
+   63788 DPushes remaining with DInf 0.0000000e+00              9447s
+   63135 DPushes remaining with DInf 0.0000000e+00              9450s
+   61858 DPushes remaining with DInf 0.0000000e+00              9456s
+   60653 DPushes remaining with DInf 0.0000000e+00              9463s
+   60072 DPushes remaining with DInf 0.0000000e+00              9467s
+   59493 DPushes remaining with DInf 0.0000000e+00              9470s
+   58298 DPushes remaining with DInf 0.0000000e+00              9478s
+   57706 DPushes remaining with DInf 0.0000000e+00              9481s
+   56497 DPushes remaining with DInf 0.0000000e+00              9487s
+   55887 DPushes remaining with DInf 0.0000000e+00              9490s
+   54708 DPushes remaining with DInf 0.0000000e+00              9496s
+   53521 DPushes remaining with DInf 0.0000000e+00              9502s
+   52922 DPushes remaining with DInf 0.0000000e+00              9505s
+   51744 DPushes remaining with DInf 0.0000000e+00              9511s
+   50529 DPushes remaining with DInf 0.0000000e+00              9517s
+   49317 DPushes remaining with DInf 0.0000000e+00              9522s
+   48161 DPushes remaining with DInf 0.0000000e+00              9527s
+   46961 DPushes remaining with DInf 0.0000000e+00              9531s
+   45581 DPushes remaining with DInf 0.0000000e+00              9537s
+   44182 DPushes remaining with DInf 0.0000000e+00              9542s
+   42804 DPushes remaining with DInf 0.0000000e+00              9546s
+   41637 DPushes remaining with DInf 0.0000000e+00              9551s
+   40481 DPushes remaining with DInf 0.0000000e+00              9557s
+   39322 DPushes remaining with DInf 0.0000000e+00              9563s
+   38754 DPushes remaining with DInf 0.0000000e+00              9566s
+   37577 DPushes remaining with DInf 0.0000000e+00              9572s
+   37008 DPushes remaining with DInf 0.0000000e+00              9575s
+   35891 DPushes remaining with DInf 0.0000000e+00              9581s
+   34776 DPushes remaining with DInf 0.0000000e+00              9587s
+   34208 DPushes remaining with DInf 0.0000000e+00              9590s
+   33075 DPushes remaining with DInf 0.0000000e+00              9597s
+   32513 DPushes remaining with DInf 0.0000000e+00              9600s
+   31390 DPushes remaining with DInf 0.0000000e+00              9607s
+   30826 DPushes remaining with DInf 0.0000000e+00              9611s
+   29701 DPushes remaining with DInf 0.0000000e+00              9618s
+   29125 DPushes remaining with DInf 0.0000000e+00              9621s
+   27980 DPushes remaining with DInf 0.0000000e+00              9627s
+   27407 DPushes remaining with DInf 0.0000000e+00              9630s
+   26145 DPushes remaining with DInf 0.0000000e+00              9636s
+   24608 DPushes remaining with DInf 0.0000000e+00              9643s
+   24028 DPushes remaining with DInf 0.0000000e+00              9646s
+   22892 DPushes remaining with DInf 0.0000000e+00              9654s
+   22329 DPushes remaining with DInf 0.0000000e+00              9657s
+   21786 DPushes remaining with DInf 0.0000000e+00              9661s
+   20681 DPushes remaining with DInf 0.0000000e+00              9667s
+   20118 DPushes remaining with DInf 0.0000000e+00              9670s
+   18988 DPushes remaining with DInf 0.0000000e+00              9676s
+   17836 DPushes remaining with DInf 0.0000000e+00              9683s
+   17245 DPushes remaining with DInf 0.0000000e+00              9686s
+   15734 DPushes remaining with DInf 0.0000000e+00              9693s
+   15145 DPushes remaining with DInf 0.0000000e+00              9696s
+   14041 DPushes remaining with DInf 0.0000000e+00              9701s
+   12956 DPushes remaining with DInf 0.0000000e+00              9706s
+   11884 DPushes remaining with DInf 0.0000000e+00              9712s
+   10796 DPushes remaining with DInf 0.0000000e+00              9718s
+   10258 DPushes remaining with DInf 0.0000000e+00              9721s
+    9137 DPushes remaining with DInf 0.0000000e+00              9729s
+    8235 DPushes remaining with DInf 0.0000000e+00              9732s
+    7570 DPushes remaining with DInf 0.0000000e+00              9736s
+    7023 DPushes remaining with DInf 0.0000000e+00              9741s
+    5550 DPushes remaining with DInf 0.0000000e+00              9748s
+    4970 DPushes remaining with DInf 0.0000000e+00              9750s
+    3779 DPushes remaining with DInf 0.0000000e+00              9756s
+    3036 DPushes remaining with DInf 0.0000000e+00              9760s
+    1632 DPushes remaining with DInf 0.0000000e+00              9766s
+     326 DPushes remaining with DInf 0.0000000e+00              9772s
+       0 DPushes remaining with DInf 0.0000000e+00              9774s
+
+ 1317631 PPushes remaining with PInf 6.6361304e+03              9775s
+  526307 PPushes remaining with PInf 1.2563497e+03              9796s
+  369677 PPushes remaining with PInf 5.6517548e+02              9801s
+  247011 PPushes remaining with PInf 5.0108696e+02              9805s
+  155364 PPushes remaining with PInf 3.9475300e+02              9811s
+  109288 PPushes remaining with PInf 2.3047144e+02              9816s
+   69387 PPushes remaining with PInf 1.7264721e+02              9821s
+   43494 PPushes remaining with PInf 1.4666086e+02              9826s
+   24935 PPushes remaining with PInf 9.3992953e+01              9831s
+   15508 PPushes remaining with PInf 9.0774096e+01              9836s
+    9982 PPushes remaining with PInf 6.3014414e+01              9889s
+    7346 PPushes remaining with PInf 6.0702641e+01              9902s
+    5912 PPushes remaining with PInf 5.7988519e+01              9911s
+    4297 PPushes remaining with PInf 5.1628237e+01              9917s
+    1406 PPushes remaining with PInf 2.5524030e-01              9925s
+      52 PPushes remaining with PInf 2.5524030e-01              9929s
+       0 PPushes remaining with PInf 2.5524030e-01              9932s
+
+  Push phase complete: Pinf 2.5524030e-01, Dinf 7.2287608e+08   9932s
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+ 1760453    2.5322402e+10   0.000000e+00   7.228761e+08   9934s
+ 1760603    2.5321544e+10   0.000000e+00   6.932258e+07   9948s
+ 1760763    2.5321544e+10   0.000000e+00   6.907216e+07   9961s
+ 1760923    2.5321459e+10   0.000000e+00   1.516569e+09   9975s
+ 1761344    2.5321148e+10   0.000000e+00   4.017375e+07   9982s
+ 1762660    2.5320873e+10   0.000000e+00   5.104804e+07   9998s
+ 1762760    2.5320872e+10   0.000000e+00   5.931987e+07  10005s
+ 1762860    2.5320872e+10   0.000000e+00   5.934786e+07  10011s
+ 1762960    2.5320865e+10   0.000000e+00   5.697449e+07  10018s
+ 1763150    2.5320810e+10   0.000000e+00   1.080998e+08  10031s
+ 1763250    2.5320777e+10   0.000000e+00   8.155326e+06  10038s
+ 1763360    2.5320742e+10   0.000000e+00   1.710493e+07  10045s
+ 1763460    2.5320742e+10   0.000000e+00   3.671161e+07  10052s
+ 1763640    2.5320713e+10   0.000000e+00   1.640124e+07  10064s
+ 1763740    2.5320704e+10   0.000000e+00   4.740929e+07  10071s
+ 1763850    2.5320682e+10   0.000000e+00   1.488132e+07  10078s
+ 1763950    2.5320671e+10   0.000000e+00   5.232344e+06  10084s
+ 1764060    2.5320619e+10   0.000000e+00   1.134881e+07  10091s
+ 1764170    2.5320615e+10   0.000000e+00   8.814150e+06  10097s
+ 1764280    2.5320578e+10   0.000000e+00   3.994815e+06  10104s
+ 1764390    2.5320551e+10   0.000000e+00   7.355107e+06  10111s
+ 1764500    2.5320520e+10   0.000000e+00   7.968630e+06  10118s
+ 1764910    2.5320506e+10   0.000000e+00   5.417123e+06  10124s
+ 1765180    2.5320506e+10   0.000000e+00   5.387916e+06  10131s
+ 1765340    2.5320499e+10   0.000000e+00   1.522816e+07  10137s
+ 1765450    2.5320485e+10   0.000000e+00   5.498890e+06  10144s
+ 1765570    2.5320468e+10   0.000000e+00   6.663096e+07  10151s
+ 1765680    2.5320456e+10   0.000000e+00   1.608448e+08  10157s
+ 1765790    2.5320456e+10   0.000000e+00   1.599070e+08  10163s
+ 1765900    2.5320452e+10   0.000000e+00   1.488332e+08  10169s
+ 1766351    2.5320429e+10   0.000000e+00   4.535946e+08  10175s
+ 1766471    2.5320427e+10   0.000000e+00   7.058500e+06  10182s
+ 1767523    2.5320419e+10   0.000000e+00   7.598306e+08  10190s
+ 1767643    2.5320411e+10   0.000000e+00   3.210047e+07  10196s
+ 1767763    2.5320408e+10   0.000000e+00   2.763224e+07  10203s
+ 1767913    2.5320388e+10   0.000000e+00   3.304831e+07  10209s
+ 1768183    2.5320374e+10   0.000000e+00   5.093691e+06  10216s
+ 1768303    2.5320370e+10   0.000000e+00   1.780145e+06  10222s
+ 1768423    2.5320369e+10   0.000000e+00   2.885246e+06  10228s
+ 1768543    2.5320357e+10   0.000000e+00   6.539123e+06  10235s
+ 1768663    2.5320357e+10   0.000000e+00   6.574277e+06  10241s
+ 1768783    2.5320348e+10   0.000000e+00   1.166472e+07  10247s
+ 1768903    2.5320341e+10   0.000000e+00   4.521429e+07  10254s
+ 1769023    2.5320341e+10   0.000000e+00   4.522482e+07  10260s
+ 1769143    2.5320334e+10   0.000000e+00   4.004396e+07  10266s
+ 1769263    2.5320325e+10   0.000000e+00   4.106782e+06  10272s
+ 1769403    2.5320311e+10   0.000000e+00   1.984890e+06  10278s
+ 1769523    2.5320292e+10   0.000000e+00   5.157912e+06  10285s
+ 1769643    2.5320266e+10   0.000000e+00   5.252483e+06  10291s
+ 1769763    2.5320249e+10   0.000000e+00   1.541658e+06  10297s
+ 1769893    2.5320249e+10   0.000000e+00   1.551865e+06  10304s
+ 1770013    2.5320236e+10   0.000000e+00   3.329763e+06  10310s
+ 1770143    2.5320232e+10   0.000000e+00   1.423147e+06  10317s
+ 1770273    2.5320230e+10   0.000000e+00   9.659189e+05  10323s
+ 1770403    2.5320212e+10   0.000000e+00   1.758971e+06  10329s
+ 1770533    2.5320197e+10   0.000000e+00   1.631862e+06  10336s
+ 1770663    2.5320193e+10   0.000000e+00   1.913162e+06  10342s
+ 1770793    2.5320190e+10   0.000000e+00   1.601028e+06  10348s
+ 1770923    2.5320186e+10   0.000000e+00   1.960610e+06  10355s
+ 1771053    2.5320184e+10   0.000000e+00   3.397048e+06  10361s
+ 1771173    2.5320154e+10   0.000000e+00   2.456953e+06  10368s
+ 1771293    2.5320143e+10   0.000000e+00   3.437385e+06  10374s
+ 1771423    2.5320134e+10   0.000000e+00   1.151416e+06  10381s
+ 1771553    2.5320118e+10   0.000000e+00   5.575625e+06  10387s
+ 1771683    2.5320099e+10   0.000000e+00   6.144221e+06  10394s
+ 1771823    2.5320068e+10   0.000000e+00   1.813105e+06  10400s
+ 1771963    2.5320034e+10   0.000000e+00   5.872309e+05  10407s
+ 1772103    2.5320027e+10   0.000000e+00   1.312423e+06  10413s
+ 1772233    2.5320019e+10   0.000000e+00   2.522884e+06  10420s
+ 1772383    2.5320012e+10   0.000000e+00   7.935435e+05  10426s
+ 1772523    2.5320003e+10   0.000000e+00   3.088765e+06  10433s
+ 1772673    2.5319995e+10   0.000000e+00   1.967732e+06  10439s
+ 1772833    2.5319986e+10   0.000000e+00   3.034926e+06  10445s
+ 1772993    2.5319969e+10   0.000000e+00   2.087247e+06  10452s
+ 1773163    2.5319958e+10   0.000000e+00   1.007435e+06  10458s
+ 1773323    2.5319953e+10   0.000000e+00   7.137960e+05  10465s
+ 1773473    2.5319944e+10   0.000000e+00   4.933734e+05  10472s
+ 1773623    2.5319942e+10   0.000000e+00   8.668558e+05  10478s
+ 1773783    2.5319930e+10   0.000000e+00   1.731312e+06  10484s
+ 1773953    2.5319924e+10   0.000000e+00   2.456026e+06  10490s
+ 1774113    2.5319914e+10   0.000000e+00   5.262541e+06  10497s
+ 1774273    2.5319906e+10   0.000000e+00   1.351428e+07  10504s
+ 1774433    2.5319897e+10   0.000000e+00   1.436561e+06  10510s
+ 1774633    2.5319884e+10   0.000000e+00   2.774957e+07  10519s
+ 1774843    2.5319850e+10   0.000000e+00   1.291720e+07  10528s
+ 1774983    2.5319849e+10   0.000000e+00   6.441260e+06  10534s
+ 1775143    2.5319839e+10   0.000000e+00   1.295841e+06  10540s
+ 1775303    2.5319829e+10   0.000000e+00   5.974282e+06  10547s
+ 1775473    2.5319804e+10   0.000000e+00   1.637285e+07  10553s
+ 1775643    2.5319799e+10   0.000000e+00   1.759658e+07  10559s
+ 1775823    2.5319798e+10   0.000000e+00   7.629391e+07  10566s
+ 1776003    2.5319798e+10   0.000000e+00   7.624493e+07  10572s
+ 1776173    2.5319790e+10   0.000000e+00   6.826104e+06  10579s
+ 1776343    2.5319774e+10   0.000000e+00   3.766057e+06  10585s
+ 1776513    2.5319768e+10   0.000000e+00   6.397586e+06  10592s
+ 1776683    2.5319759e+10   0.000000e+00   4.997773e+06  10598s
+ 1776853    2.5319753e+10   0.000000e+00   4.731600e+06  10605s
+ 1777023    2.5319741e+10   0.000000e+00   4.663693e+06  10611s
+ 1777203    2.5319734e+10   0.000000e+00   5.062587e+06  10618s
+ 1777373    2.5319734e+10   0.000000e+00   5.022737e+06  10624s
+ 1777523    2.5319728e+10   0.000000e+00   7.184536e+06  10631s
+ 1777703    2.5319728e+10   0.000000e+00   7.206217e+06  10637s
+ 1777873    2.5319723e+10   0.000000e+00   2.560408e+06  10643s
+ 1778053    2.5319721e+10   0.000000e+00   5.808077e+06  10650s
+ 1778203    2.5319721e+10   0.000000e+00   5.838339e+06  10656s
+ 1778373    2.5319721e+10   0.000000e+00   5.770280e+06  10663s
+ 1778533    2.5319721e+10   0.000000e+00   5.702345e+06  10669s
+ 1778703    2.5319721e+10   0.000000e+00   5.104680e+06  10676s
+ 1778853    2.5319710e+10   0.000000e+00   3.194246e+05  10682s
+ 1779073    2.5319700e+10   0.000000e+00   6.089506e+06  10689s
+ 1779243    2.5319700e+10   0.000000e+00   1.887537e+06  10695s
+ 1779403    2.5319694e+10   0.000000e+00   5.224785e+06  10701s
+ 1779573    2.5319686e+10   0.000000e+00   1.263080e+07  10707s
+ 1779753    2.5319672e+10   0.000000e+00   1.540568e+06  10714s
+ 1779933    2.5319662e+10   0.000000e+00   9.751161e+05  10720s
+ 1780123    2.5319657e+10   0.000000e+00   7.279848e+06  10727s
+ 1780303    2.5319657e+10   0.000000e+00   7.313710e+06  10733s
+ 1780483    2.5319656e+10   0.000000e+00   1.036148e+06  10739s
+ 1780673    2.5319653e+10   0.000000e+00   5.245598e+05  10746s
+ 1780853    2.5319651e+10   0.000000e+00   1.254294e+05  10753s
+ 1781063    2.5319651e+10   0.000000e+00   1.367531e+05  10759s
+ 1781273    2.5319641e+10   0.000000e+00   7.737971e+05  10766s
+ 1781503    2.5319635e+10   0.000000e+00   4.443578e+05  10772s
+ 1781733    2.5319633e+10   0.000000e+00   6.316728e+05  10779s
+ 1781953    2.5319632e+10   0.000000e+00   1.079173e+05  10786s
+ 1782173    2.5319627e+10   0.000000e+00   1.440767e+06  10793s
+ 1782393    2.5319620e+10   0.000000e+00   2.586093e+05  10799s
+ 1782583    2.5319617e+10   0.000000e+00   1.721204e+05  10806s
+ 1782783    2.5319617e+10   0.000000e+00   1.276792e+05  10813s
+ 1783003    2.5319612e+10   0.000000e+00   4.246263e+06  10820s
+ 1783223    2.5319610e+10   0.000000e+00   7.913361e+05  10827s
+ 1783443    2.5319610e+10   0.000000e+00   7.794133e+05  10833s
+ 1783970    2.5319598e+10   0.000000e+00   9.185764e+04  10840s
+ 1784440    2.5319594e+10   0.000000e+00   4.428048e+04  10847s
+ 1784670    2.5319593e+10   0.000000e+00   1.200574e+05  10853s
+ 1784880    2.5319586e+10   0.000000e+00   1.662437e+06  10860s
+ 1785130    2.5319575e+10   0.000000e+00   2.023642e+06  10867s
+ 1785390    2.5319560e+10   0.000000e+00   2.553362e+05  10873s
+ 1785630    2.5319551e+10   0.000000e+00   2.103632e+05  10879s
+ 1785980    2.5319542e+10   0.000000e+00   2.045522e+05  10887s
+ 1786506    2.5319536e+10   0.000000e+00   1.823160e+05  10891s
+ 1787376    2.5319531e+10   0.000000e+00   1.233372e+04  10900s
+ 1787626    2.5319528e+10   0.000000e+00   6.134246e+03  10906s
+ 1787926    2.5319522e+10   0.000000e+00   5.898027e+05  10914s
+ 1788196    2.5319518e+10   0.000000e+00   4.257463e+05  10920s
+ 1788476    2.5319514e+10   0.000000e+00   5.963090e+03  10926s
+ 1789532    2.5319504e+10   0.000000e+00   3.998712e+03  10930s
+ 1789813    2.5319503e+10   0.000000e+00   9.084747e+02  10937s
+ 1790093    2.5319501e+10   0.000000e+00   1.743623e+06  10943s
+ 1790373    2.5319500e+10   0.000000e+00   2.633619e+04  10949s
+ 1790673    2.5319499e+10   0.000000e+00   9.967939e+04  10955s
+ 1790973    2.5319498e+10   0.000000e+00   5.949802e+04  10961s
+ 1791303    2.5319497e+10   0.000000e+00   2.587950e+03  10966s
+ 1791703    2.5319494e+10   0.000000e+00   9.814414e+02  10973s
+ 1792231    2.5319493e+10   0.000000e+00   1.189572e+03  10976s
+ 1793326    2.5319492e+10   0.000000e+00   1.060069e+02  10982s
+ 1801877    2.5319491e+10   0.000000e+00   5.483679e+01  10987s
+ 1806123    2.5319491e+10   0.000000e+00   4.181928e+01  10991s
+ 1814615    2.5319490e+10   0.000000e+00   3.063609e+01  10998s
+ 1818870    2.5319490e+10   0.000000e+00   2.302492e+01  11003s
+ 1821130    2.5319490e+10   0.000000e+00   2.217330e+01  11010s
+ 1823918    2.5319490e+10   0.000000e+00   1.248575e+01  11017s
+ 1827128    2.5319489e+10   0.000000e+00   1.012747e+01  11024s
+ 1830790    2.5319489e+10   0.000000e+00   8.071933e+00  11031s
+ 1834874    2.5319489e+10   0.000000e+00   6.535844e+00  11038s
+ 1839601    2.5319488e+10   0.000000e+00   4.688447e+00  11045s
+ 1845400    2.5319488e+10   0.000000e+00   2.749795e+00  11052s
+ 1850874    2.5319487e+10   0.000000e+00   1.330271e+00  11058s
+ 1857011    2.5319487e+10   0.000000e+00   3.787944e-01  11061s
+
+Solved with barrier
+ 1861607    2.5319509e+10   0.000000e+00   4.794225e-04  11070s
+Extra simplex iterations after uncrush: 135
+ 1861972    2.5319509e+10   0.000000e+00   0.000000e+00  11073s
+
+Solved in 1861972 iterations and 11073.23 seconds (1342.24 work units)
+Optimal objective  2.531950921e+10
+Warning: variable name "g[ES1 0 CCGT,NT,2025,5,0]" has a space
+Warning: constraint name "C_power_balance[ES1 0,NT,2025,5,0]" has a space
+Warning: default variable names used to write mps file
+Warning: default constraint names used to write mps file
+Warning: variable name "g[ES1 0 CCGT,NT,2025,5,0]" has a space
+Warning: default variable names used to write solution file
+Model saved to: /cluster/home/tinusfa/master_project/runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-128_ES_PT
+Running EVPI analysis for scenario 1...
+New config saved to: /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_1.yaml
+No preprocessing config provided. Skipping preprocessing...
+Path_or_name: temp_EVPI_1
+Configuration loaded from /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_1.yaml
+{'data_folder_name': 'elec_s_128_ES_PT_no_bat_limit', 'model_name': 'GTSEP_stochastic_v1', 'model_id': '128_ES_PT', 'MIPGap': 0.01, 'VOLL': 6350, 'CC': 100, 'CO2_price': 85, 'E_limit': inf, 'p_max_new_branch': 5000, 'p_min_new_branch': 100, 'expansion_factor': 2.0, 'MS': 0.1, 'years': [2025, 2030, 2040, 2050], 'clustering_unit': None, 'clustering_periods': None, 'scenario_file': 'EVPI_1', 'EVPI': False, 'VSS': False, 'battery_capacity_path': None, 'generator_capacity_path': None, 'branch_capacity_path': None, 'query': 'not (x > 2 and y < 40)', 'carriers': ['CCGT', 'solar', 'onwind'], 'discount_rate': 0.07, 'representative_period_unit': 'week', 'representative_periods': [5, 11, 16, 21, 32, 37, 42, 52], 'save_folder': '/cluster/home/tinusfa/master_project/runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-128_ES_PT_EVPI_1'}
+Set parameter MIPGap to value 0.01
+Set parameter TimeLimit to value 21600
+Set parameter BarConvTol to value 0.01
+Set parameter BarHomogeneous to value 1
+Model built in 219.5310378074646 seconds.
+Gurobi Optimizer version 12.0.1 build v12.0.1rc0 (linux64 - "Rocky Linux 9.4 (Blue Onyx)")
+
+CPU model: Intel(R) Xeon(R) Gold 6252 CPU @ 2.10GHz, instruction set [SSE2|AVX|AVX2|AVX512]
+Thread count: 48 physical cores, 48 logical processors, using up to 32 threads
+
+Non-default parameters:
+TimeLimit  21600
+MIPGap  0.01
+BarConvTol  0.01
+BarHomogeneous  1
+
+Warning: environment still referenced so free is deferred (Continue to use WLS)
+Job finished at Mon 12 May 12:47:53 CEST 2025
+Pushing to git
