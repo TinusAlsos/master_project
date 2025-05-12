@@ -15,11 +15,9 @@ discount_rate: 0.07
 expansion_factor: 2.0
 representative_period_unit: week
 representative_periods:
-- 11
 - 21
 - 42
-- 52
 VSS: false
 EVPI: false
-scenario_file: EVPI_2
-save_folder: /cluster/home/tinusfa/master_project/runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-128_ES_PT_EVPI_2
+scenario_file: EVPI_3
+save_folder: /cluster/home/tinusfa/master_project/runs/single_runs/May12_Mon_h13-GTSEP_stochastic_v1-128_ES_PT_EVPI_3

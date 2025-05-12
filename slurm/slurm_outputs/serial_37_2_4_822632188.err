@@ -1,0 +1,13 @@
+Running EVPI analysis:   0%|          | 0/6 [00:00<?, ?it/s]Running EVPI analysis:  17%|█▋        | 1/6 [00:19<01:35, 19.08s/it]Running EVPI analysis:  33%|███▎      | 2/6 [00:39<01:18, 19.71s/it]Running EVPI analysis:  50%|█████     | 3/6 [00:54<00:53, 17.83s/it]Running EVPI analysis:  67%|██████▋   | 4/6 [01:13<00:36, 18.24s/it]Running EVPI analysis:  83%|████████▎ | 5/6 [01:32<00:18, 18.39s/it]Running EVPI analysis: 100%|██████████| 6/6 [01:50<00:00, 18.32s/it]Running EVPI analysis: 100%|██████████| 6/6 [01:50<00:00, 18.42s/it]
+Running EVPI analysis:   0%|          | 0/6 [00:00<?, ?it/s]Running EVPI analysis:  17%|█▋        | 1/6 [01:32<07:40, 92.09s/it]Running EVPI analysis:  33%|███▎      | 2/6 [03:21<06:48, 102.06s/it]Running EVPI analysis:  50%|█████     | 3/6 [05:09<05:14, 104.96s/it]Running EVPI analysis:  67%|██████▋   | 4/6 [07:05<03:38, 109.28s/it]Running EVPI analysis:  83%|████████▎ | 5/6 [08:50<01:47, 107.61s/it]Running EVPI analysis: 100%|██████████| 6/6 [10:45<00:00, 110.40s/it]Running EVPI analysis: 100%|██████████| 6/6 [10:45<00:00, 107.65s/it]
+Running EVPI analysis:   0%|          | 0/6 [00:00<?, ?it/s]Running EVPI analysis:  17%|█▋        | 1/6 [05:13<26:06, 313.30s/it]Running EVPI analysis:  17%|█▋        | 1/6 [10:41<53:25, 641.10s/it]
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/cluster/home/tinusfa/master_project/src/run.py", line 523, in <module>
+    run(
+  File "/cluster/home/tinusfa/master_project/src/run.py", line 308, in run
+    utils.delete_config_file(temp_file_name)
+  File "/cluster/home/tinusfa/master_project/src/utils.py", line 221, in delete_config_file
+    raise FileNotFoundError(
+FileNotFoundError: Model configuration file not found: /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_2.yaml, created from config_temp_EVPI_2.yaml
