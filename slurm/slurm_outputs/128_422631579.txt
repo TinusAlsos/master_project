@@ -568,3 +568,31 @@ Warning: default variable names used to write mps file
 Warning: default constraint names used to write mps file
 Warning: variable name "g[ES1 0 CCGT,NT,2025,11,0]" has a space
 Warning: default variable names used to write solution file
+Model saved to: /cluster/home/tinusfa/master_project/runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-128_ES_PT_EVPI_1
+Deleted config file: /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_1.yaml
+Deleting folder: /cluster/home/tinusfa/master_project/runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-128_ES_PT_EVPI_1
+Running EVPI analysis for scenario 2...
+New config saved to: /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_2.yaml
+No preprocessing config provided. Skipping preprocessing...
+Path_or_name: temp_EVPI_2
+Configuration loaded from /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_2.yaml
+{'data_folder_name': 'elec_s_128_ES_PT_no_bat_limit', 'model_name': 'GTSEP_stochastic_v1', 'model_id': '128_ES_PT', 'MIPGap': 0.01, 'VOLL': 6350, 'CC': 100, 'CO2_price': 85, 'E_limit': inf, 'p_max_new_branch': 5000, 'p_min_new_branch': 100, 'expansion_factor': 2.0, 'MS': 0.1, 'years': [2025, 2030, 2040, 2050], 'clustering_unit': None, 'clustering_periods': None, 'scenario_file': 'EVPI_2', 'EVPI': False, 'VSS': False, 'battery_capacity_path': None, 'generator_capacity_path': None, 'branch_capacity_path': None, 'query': 'not (x > 2 and y < 40)', 'carriers': ['CCGT', 'solar', 'onwind'], 'discount_rate': 0.07, 'representative_period_unit': 'week', 'representative_periods': [11, 21, 42, 52], 'save_folder': '/cluster/home/tinusfa/master_project/runs/single_runs/May12_Mon_h09-GTSEP_stochastic_v1-128_ES_PT_EVPI_2'}
+Set parameter MIPGap to value 0.01
+Set parameter TimeLimit to value 21600
+Set parameter BarConvTol to value 0.01
+Set parameter BarHomogeneous to value 1
+Model built in 110.34850192070007 seconds.
+Gurobi Optimizer version 12.0.1 build v12.0.1rc0 (linux64 - "Rocky Linux 9.4 (Blue Onyx)")
+
+CPU model: Intel(R) Xeon(R) Gold 6252 CPU @ 2.10GHz, instruction set [SSE2|AVX|AVX2|AVX512]
+Thread count: 48 physical cores, 48 logical processors, using up to 32 threads
+
+Non-default parameters:
+TimeLimit  21600
+MIPGap  0.01
+BarConvTol  0.01
+BarHomogeneous  1
+
+Warning: environment still referenced so free is deferred (Continue to use WLS)
+Job finished at Mon 12 May 10:41:41 CEST 2025
+Pushing to git
