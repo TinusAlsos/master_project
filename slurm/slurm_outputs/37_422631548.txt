@@ -4,3 +4,17 @@ ID of job: 22631548
 The job was run on these nodes: idun-04-21
 Job finished at Mon 12 May 09:19:01 CEST 2025
 Pushing to git
+[idun_runs 45cd584] results from 37_4
+ 14 files changed, 186 insertions(+)
+ create mode 100644 slurm/slurm_outputs/128_222631550.err
+ create mode 100644 slurm/slurm_outputs/128_222631550.txt
+ create mode 100644 slurm/slurm_outputs/128_422631551.err
+ create mode 100644 slurm/slurm_outputs/128_422631551.txt
+ create mode 100644 slurm/slurm_outputs/128_822631552.err
+ create mode 100644 slurm/slurm_outputs/128_822631552.txt
+ create mode 100644 slurm/slurm_outputs/37_222631547.err
+ create mode 100644 slurm/slurm_outputs/37_222631547.txt
+ create mode 100644 slurm/slurm_outputs/37_422631548.err
+ create mode 100644 slurm/slurm_outputs/37_422631548.txt
+ create mode 100644 slurm/slurm_outputs/37_822631549.err
+ create mode 100644 slurm/slurm_outputs/37_822631549.txt

@@ -6,5 +6,3 @@ Traceback (most recent call last):
   File "/cluster/home/tinusfa/master_project/src/models.py", line 15, in <module>
     from IPython.display import display
 ModuleNotFoundError: No module named 'IPython'
-To github.com:TinusAlsos/master_project.git
-   17f627c..45cd584  idun_runs -> idun_runs
