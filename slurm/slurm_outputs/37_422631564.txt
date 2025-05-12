@@ -1,0 +1,4 @@
+Running from this directory: /cluster/home/tinusfa/master_project
+Name of job: 37_4
+ID of job: 22631564
+The job was run on these nodes: idun-04-34
