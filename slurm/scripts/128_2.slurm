@@ -5,7 +5,7 @@
 
 #SBATCH --partition=CPUQ          # Asking for a GPU
 #SBATCH --mem=128G       # Asking for 128 RAM
-#SBATCH --cpus-per-task=1 # 4 CPU cores               
+#SBATCH --cpus-per-task=2 # 4 CPU cores               
 #SBATCH --nodes=1
 #SBATCH --output=slurm/slurm_outputs/%x%j.txt      # Specifying 'stdout'
 #SBATCH --error=slurm/slurm_outputs/%x%j.err        # Specifying 'stderr'

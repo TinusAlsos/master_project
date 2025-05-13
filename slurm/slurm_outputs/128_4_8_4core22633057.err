@@ -1,0 +1,12 @@
+Running EVPI analysis:   0%|          | 0/6 [00:00<?, ?it/s]Running EVPI analysis:  17%|█▋        | 1/6 [05:00<25:01, 300.32s/it]Running EVPI analysis:  33%|███▎      | 2/6 [09:20<18:26, 276.59s/it]Running EVPI analysis:  50%|█████     | 3/6 [14:23<14:26, 288.90s/it]Running EVPI analysis:  67%|██████▋   | 4/6 [19:23<09:46, 293.21s/it]Running EVPI analysis:  83%|████████▎ | 5/6 [23:48<04:42, 282.96s/it]Running EVPI analysis: 100%|██████████| 6/6 [28:28<00:00, 282.11s/it]Running EVPI analysis: 100%|██████████| 6/6 [28:28<00:00, 284.82s/it]
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/cluster/home/tinusfa/master_project/src/run.py", line 524, in <module>
+    run(
+  File "/cluster/home/tinusfa/master_project/src/run.py", line 454, in run
+    result_df = pd.concat(rows, ignore_index=True)
+                          ^^^^
+UnboundLocalError: cannot access local variable 'rows' where it is not associated with a value
+To github.com:TinusAlsos/master_project.git
+   28fa170..287c934  idun_runs -> idun_runs
