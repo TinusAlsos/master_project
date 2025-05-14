@@ -416,49 +416,49 @@ def run(
         SP_df["Label"] = "SP"
         rows = []
         rows.append(SP_df)
-    if VSS:
-        # Read EV
-        ev_path = os.path.join(results_folder, "EV_run", "model_info_EV.csv")
-        ev_df = pd.read_csv(ev_path)
-        ev_df["Label"] = "EV"
-        rows.append(ev_df)
+        if VSS:
+            # Read EV
+            ev_path = os.path.join(results_folder, "EV_run", "model_info_EV.csv")
+            ev_df = pd.read_csv(ev_path)
+            ev_df["Label"] = "EV"
+            rows.append(ev_df)
 
-        # Read EEV
-        eev_path = os.path.join(results_folder, "EEV_run", "model_info_EEV.csv")
-        eev_df = pd.read_csv(eev_path)
-        eev_df["Label"] = "EEV"
-        rows.append(eev_df)
+            # Read EEV
+            eev_path = os.path.join(results_folder, "EEV_run", "model_info_EEV.csv")
+            eev_df = pd.read_csv(eev_path)
+            eev_df["Label"] = "EEV"
+            rows.append(eev_df)
 
-    if EVPI:
-        # Read all EVPI runs
-        evpi_dir = os.path.join(results_folder, "EVPI_runs")
-        evpi_files = [
-            f
-            for f in os.listdir(evpi_dir)
-            if f.startswith("model_info_EVPI_") and f.endswith(".csv")
-        ]
-        evpi_dfs = [pd.read_csv(os.path.join(evpi_dir, f)) for f in evpi_files]
-        evpi_all = pd.concat(evpi_dfs, ignore_index=True)
+        if EVPI:
+            # Read all EVPI runs
+            evpi_dir = os.path.join(results_folder, "EVPI_runs")
+            evpi_files = [
+                f
+                for f in os.listdir(evpi_dir)
+                if f.startswith("model_info_EVPI_") and f.endswith(".csv")
+            ]
+            evpi_dfs = [pd.read_csv(os.path.join(evpi_dir, f)) for f in evpi_files]
+            evpi_all = pd.concat(evpi_dfs, ignore_index=True)
 
-        # Calculate mean and std
-        evpi_mean = evpi_all.mean(numeric_only=True)
-        evpi_std = evpi_all.std(numeric_only=True)
+            # Calculate mean and std
+            evpi_mean = evpi_all.mean(numeric_only=True)
+            evpi_std = evpi_all.std(numeric_only=True)
 
-        evpi_mean["Label"] = "EVPI"
-        evpi_std["Label"] = "EVPI std"
+            evpi_mean["Label"] = "EVPI"
+            evpi_std["Label"] = "EVPI std"
 
-        rows.append(evpi_mean.to_frame().T)
-        rows.append(evpi_std.to_frame().T)
+            rows.append(evpi_mean.to_frame().T)
+            rows.append(evpi_std.to_frame().T)
 
-    # Combine all rows
-    result_df = pd.concat(rows, ignore_index=True)
-    result_df.set_index("Label", inplace=True)
-    result_df
-    save_path = os.path.join(
-        os.path.dirname(results_folder), "model_info", "model_info_combined.csv"
-    )
-    save_path
-    result_df.to_csv(save_path)
+        # Combine all rows
+        result_df = pd.concat(rows, ignore_index=True)
+        result_df.set_index("Label", inplace=True)
+        result_df
+        save_path = os.path.join(
+            os.path.dirname(results_folder), "model_info", "model_info_combined.csv"
+        )
+        save_path
+        result_df.to_csv(save_path)
 
     # Delete old folders
     if VSS:

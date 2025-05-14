@@ -423,6 +423,24 @@ def load_multi_year_csv_files_with_week_from_folder(
                     )
                 new_dfs.append(temp_df)
             data[file_name] = pd.concat(new_dfs)
+    discount_per_new_period = 10.0
+
+    for component in ["generators", "branches", "batteries"]:
+        for i, year in enumerate(years[1:], start=1):
+            discount_amount = discount_per_new_period * i
+
+            # extract just that year’s slice
+            sub = data[component].xs(year, level="year")
+
+            # apply the discount
+            sub["capital_cost"] -= discount_amount
+
+            # write it back into the original DataFrame
+            data[component].update(sub)
+
+            print(f"{component} – {year}: −{discount_amount}")
+            print(sub["capital_cost"].head(), "\n")
+
     hourly_demand = load_hourly_demand(data_folder_path)
     data["hourly_demand"] = hourly_demand
     return data
