@@ -438,9 +438,6 @@ def load_multi_year_csv_files_with_week_from_folder(
             # write it back into the original DataFrame
             data[component].update(sub)
 
-            print(f"{component} – {year}: −{discount_amount}")
-            print(sub["capital_cost"].head(), "\n")
-
     hourly_demand = load_hourly_demand(data_folder_path)
     data["hourly_demand"] = hourly_demand
     return data
