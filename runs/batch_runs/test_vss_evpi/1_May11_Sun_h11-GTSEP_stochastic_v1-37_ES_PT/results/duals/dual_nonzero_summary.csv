@@ -1,0 +1,16 @@
+dual,total_duals,nonzero_duals,percent_nonzero
+battery_charge_new_max_duals,2352,3,0.12755102040816327
+battery_charge_old_duals,0,0,0.0
+battery_discharge_new_max_duals,2352,23,0.9778911564625851
+battery_discharge_old_duals,0,0,0.0
+branch_extension_duals,4,0,0.0
+branch_flow_new_duals_max,1176,0,0.0
+branch_flow_new_duals_min,1176,73,6.207482993197279
+branch_flow_old_duals_max,1176,0,0.0
+branch_flow_old_duals_min,1176,73,6.207482993197279
+emissions_duals,7,0,0.0
+gen_extension_duals,44,12,27.27272727272727
+gen_output_new_duals,12936,8575,66.28787878787878
+gen_output_old_duals,12936,8621,66.643475572047
+load_shedding_duals,2352,0,0.0
+power_balance_duals,2352,2352,100.0

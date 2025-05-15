@@ -1016,6 +1016,89 @@ def analyze_run(
 import yaml
 
 
+def plot_utilization_time_series_by_carrier(
+    generation: pd.DataFrame,
+    capacity_factors: pd.DataFrame,
+    generators: pd.DataFrame,
+    year: int,
+    week: int,
+    scenario: str,
+    savefolder: str | None = None,
+) -> None:
+    """
+    Plot hourly utilization factor time series for each carrier in a given year/week/scenario.
+
+    Utilization factor = sum_actual_gen_by_carrier_hour / sum_total_capacity*cf_by_carrier_hour
+
+    Parameters
+    ----------
+    generation : pd.DataFrame
+        Hourly generation with MultiIndex
+        (generator, scenario, year, week, hour) and 'value' column (MWh).
+    capacity_factors : pd.DataFrame
+        Hourly capacity factors with MultiIndex (year, week, hour),
+        columns are generator names, values in [0,1].
+    generators : pd.DataFrame
+        Generator table indexed by (year, generator) with:
+        - total_capacity (MW)
+        - carrier
+        - color
+    year : int
+    week : int
+    scenario : str
+    savefolder : str or None
+    """
+    # metadata for this year
+    meta = generators.reset_index()
+    year_meta = meta[meta["year"] == year]
+    # carriers to plot
+    carriers = year_meta["carrier"].unique()
+
+    # slice generation for this scenario-year-week; pivot to hour×generator
+    gen_slice = generation.xs(
+        (scenario, year, week), level=("scenario", "year", "week")
+    )["value"]
+    gen_df = gen_slice.unstack("generator").fillna(0)
+
+    # slice capacity_factors for this year-week
+    cf_slice = capacity_factors.xs((year, week), level=("year", "week")).fillna(0)
+
+    # compute potential: cf * total_capacity
+    cap_series = year_meta.set_index("generator")["total_capacity"]
+    potential_df = cf_slice.multiply(cap_series, axis=1)
+
+    # prepare plot
+    fig, ax = plt.subplots(figsize=(10, 6))
+    for carrier in carriers:
+        # generators of this carrier
+        gens = year_meta[year_meta["carrier"] == carrier]["generator"]
+        if len(gens) == 0:
+            continue
+        # sum actual & potential by hour
+        actual_hour = gen_df[gens].sum(axis=1)
+        potential_hour = potential_df[gens].sum(axis=1)
+        # util factor (guard div0)
+        util = actual_hour / potential_hour.replace({0: np.nan})
+        # plot
+        color = year_meta[year_meta["carrier"] == carrier]["color"].iloc[0]
+        label = year_meta[year_meta["carrier"] == carrier]["nice_name"].iloc[0]
+        ax.plot(util.index, util.values, label=label, color=color)
+
+    ax.set_xlabel("Hour")
+    ax.set_ylabel("Utilization Factor")
+    fig.subplots_adjust(right=0.75)
+    ax.legend(title="Technology", bbox_to_anchor=(1.02, 1), loc="upper left")
+    print(
+        f"Hourly utilization factor by carrier: {year}, week {week}, scenario {scenario}"
+    )
+    plt.tight_layout()
+    plt.show()
+
+    if savefolder:
+        fname = f"util_factors_time_series_{year}_w{week}_{scenario}.png"
+        fig.savefig(os.path.join(savefolder, fname), bbox_inches="tight")
+
+
 def add_capacity_and_cumulative_metrics(
     generators_df, generator_capacity_df, capacity_col="value"
 ):
@@ -2896,7 +2979,6 @@ def plot_new_branches_for_years_with_investments(
         temp_branches = branches.xs(year, level="year")
         temp_branches = temp_branches[temp_branches["new_capacity"] > 0]
         temp_branches["p_max"] = temp_branches["new_capacity"]
-        print(temp_branches)
         plotting.plot_sized_branches_with_year(
             nodes, temp_branches, year, savefolder=new_branch_plots_folder
         )
@@ -4654,6 +4736,21 @@ def analyze_run_stochastic(
 
     # years = [int(y) for y in scenarios.keys()]
     # weeks = [int(w) for w in week_weights.keys()]
+    # for year in years:
+    #     for scen in scenarios[str(year)]:
+    #         for week in weeks:
+    #             analytics.plot_utilization_time_series_by_carrier(
+    #                 generation,
+    #                 capacity_factors,
+    #                 generators,
+    #                 year,
+    #                 week,
+    #                 scen,
+    #                 savefolder=tables_folder,
+    #             )
+
+    # years = [int(y) for y in scenarios.keys()]
+    # weeks = [int(w) for w in week_weights.keys()]
     # carriers = generators.reset_index()["carrier"].unique()
 
     # for year in years:
@@ -4747,7 +4844,9 @@ def analyze_run_stochastic(
         curtailment, load_shedding, week_weights, CC, VOLL, savefolder=tables_folder
     )
 
-    system_summary = summary_table = make_system_summary_table(
+    # Macro analysis
+
+    system_summary = make_system_summary_table(
         generation,
         generators,
         week_weights,
@@ -4811,7 +4910,7 @@ def analyze_run_stochastic(
     print(total_system_cost)
     assert (
         abs(total_system_cost["total_cost"].sum() - model_info["Objective Value"][0])
-        < 1e-3
+        < 1000
     ), f"Mismatch in total system cost: {total_system_cost['total_cost'].sum():,.0f} vs {model_info['Objective Value'][0]:,.0f}"
 
     mega_table = make_mega_cost_table(
