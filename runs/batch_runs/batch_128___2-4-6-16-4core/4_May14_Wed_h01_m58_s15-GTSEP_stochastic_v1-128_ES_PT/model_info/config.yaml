@@ -1,0 +1,68 @@
+CC: 100
+CO2_price: 85
+EVPI: true
+E_limit: .inf
+MIPGap: 0.01
+MS: 0.1
+VOLL: 6350
+VSS: true
+battery_capacity_path: null
+branch_capacity_path: null
+carriers:
+- CCGT
+- solar
+- onwind
+clustering_periods: null
+clustering_unit: null
+data_folder_name: elec_s_128_ES_PT_no_bat_limit
+discount_rate: 0.07
+expansion_factor: 2.0
+generator_capacity_path: null
+model_id: 128_ES_PT
+model_name: GTSEP_stochastic_v1
+p_max_new_branch: 5000
+p_min_new_branch: 100
+query: not (x > 2 and y < 40)
+representative_period_unit: week
+representative_periods:
+- 5
+- 8
+- 11
+- 13
+- 16
+- 19
+- 21
+- 26
+- 29
+- 32
+- 35
+- 37
+- 40
+- 42
+- 47
+- 52
+run_id: 4_May14_Wed_h01_m58_s15-GTSEP_stochastic_v1-128_ES_PT
+save_folder: /cluster/home/tinusfa/master_project/runs/batch_runs/batch_128___2-4-6-16-4core/4_May14_Wed_h01_m58_s15-GTSEP_stochastic_v1-128_ES_PT
+scenario_file: null
+week_weights:
+  5: 3.2589285714285716
+  8: 3.2589285714285716
+  11: 3.2589285714285716
+  13: 3.2589285714285716
+  16: 3.2589285714285716
+  19: 3.2589285714285716
+  21: 3.2589285714285716
+  26: 3.2589285714285716
+  29: 3.2589285714285716
+  32: 3.2589285714285716
+  35: 3.2589285714285716
+  37: 3.2589285714285716
+  40: 3.2589285714285716
+  42: 3.2589285714285716
+  47: 3.2589285714285716
+  52: 3.2589285714285716
+years:
+- 2025
+- 2030
+- 2040
+- 2050

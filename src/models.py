@@ -2385,6 +2385,7 @@ def GTSEP_stochastic_v1(config: dict) -> gp.Model:
 
     hourly_demand = input_data["hourly_demand"]
     scenario_multiplier = load_scenario_multiplier(scenario_file)
+
     # Check that years in scenario_multiplier match the years in the data
     scenario_years = scenario_multiplier.index.values.tolist()
     assert set(years) == set(
@@ -2839,7 +2840,10 @@ def GTSEP_stochastic_v1(config: dict) -> gp.Model:
                             / batteries.loc[(y, s), "eta_discharge"]
                         )
                         model.addConstr(
-                            soc[s, ω, y, w, t] == prev + charge - discharge,
+                            soc[s, ω, y, w, t]
+                            == (1 - batteries.loc[(y, s), "delta"]) * prev
+                            + charge
+                            - discharge,
                             name=f"C_soc_dynamics[{s},{ω},{y},{w},{t}]",
                         )
 
