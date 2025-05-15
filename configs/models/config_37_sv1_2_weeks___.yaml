@@ -16,6 +16,6 @@ expansion_factor: 2.0
 representative_period_unit: week
 representative_periods:
 - 21
-# - 42
+- 42
 VSS: True
 EVPI: True
