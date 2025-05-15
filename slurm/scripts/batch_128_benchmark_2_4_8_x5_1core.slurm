@@ -1,6 +1,6 @@
 #!/bin/sh
 #SBATCH --account=share-iv-mtp       # E.g. "ie-idi" if you belong to IDI
-#SBATCH --job-name=batch_128_benchmark_2_4_8_x5_1core
+#SBATCH --job-name=batch_128_benchmark_2_4_8_x5_1core_v2
 #SBATCH --time=0-20:00:00         # format: D-HH:MM:SS
 
 #SBATCH --partition=CPUQ          # Asking for a GPU
@@ -36,12 +36,12 @@ export GRB_WLSSECRET="87c9d38e-3a81-40a9-8d23-fa6fd14a0645" >> ~/.bashrc
 export GRB_LICENSE_FILE="/cluster/home/tinusfa/master_project/gurobi.lic" >> ~/.bashrc
 source ~/.bashrc
 
-python -m src.run_batches -m 128_sv1_2_weeks 128_sv1_2_weeks 128_sv1_2_weeks 128_sv1_2_weeks 128_sv1_2_weeks 128_sv1_4_weeks 128_sv1_4_weeks 128_sv1_4_weeks 128_sv1_4_weeks 128_sv1_4_weeks 128_sv1_8_weeks 128_sv1_8_weeks 128_sv1_8_weeks 128_sv1_8_weeks 128_sv1_8_weeks -b batch_128_benchmark_2_4_8_x5_1core
+python -m src.run_batches -m 128_sv1_2_weeks 128_sv1_2_weeks 128_sv1_2_weeks 128_sv1_2_weeks 128_sv1_2_weeks 128_sv1_4_weeks 128_sv1_4_weeks 128_sv1_4_weeks 128_sv1_4_weeks 128_sv1_4_weeks 128_sv1_8_weeks 128_sv1_8_weeks 128_sv1_8_weeks 128_sv1_8_weeks 128_sv1_8_weeks -b batch_128_benchmark_2_4_8_x5_1core_v2
 
 echo "Job finished at $(date)"
 
 echo "Pushing to git"
 
 git add .
-git commit -m "results from batch_128_benchmark_2_4_8_x5_1core"
+git commit -m "results from batch_128_benchmark_2_4_8_x5_1core_v2"
 git push
