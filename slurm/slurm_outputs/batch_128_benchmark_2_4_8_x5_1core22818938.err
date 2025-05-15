@@ -1262,3 +1262,28 @@ Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   sub["capital_cost"] -= discount_amount
+Processing Models:  73%|███████▎  | 11/15 [18:45:22<10:00:19, 9004.97s/model]/cluster/home/tinusfa/master_project/src/utils.py:436: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  sub["capital_cost"] -= discount_amount
+/cluster/home/tinusfa/master_project/src/utils.py:436: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  sub["capital_cost"] -= discount_amount
+/cluster/home/tinusfa/master_project/src/utils.py:436: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  sub["capital_cost"] -= discount_amount
+/cluster/home/tinusfa/master_project/src/utils.py:436: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  sub["capital_cost"] -= discount_amount
+slurmstepd: error: *** JOB 22818938 ON idun-05-20 CANCELLED AT 2025-05-15T17:34:27 ***
