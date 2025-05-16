@@ -359,3 +359,5 @@ Try using .loc[row_indexer,col_indexer] = value instead
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   sub["capital_cost"] -= discount_amount
 Processing Models: 100%|██████████| 15/15 [18:02:45<00:00, 7096.18s/model]  Processing Models: 100%|██████████| 15/15 [18:02:45<00:00, 4331.02s/model]
+To github.com:TinusAlsos/master_project.git
+   42dbc83..f8ac7a3  idun_runs -> idun_runs
