@@ -1,7 +1,7 @@
 #!/bin/sh
 #SBATCH --account=share-iv-mtp       # E.g. "ie-idi" if you belong to IDI
-#SBATCH --job-name=128_4_4core_no_bat
-#SBATCH --time=0-8:00:00         # format: D-HH:MM:SS
+#SBATCH --job-name=batch_128_4_4_4core_bat_and_no_bat
+#SBATCH --time=0-12:00:00         # format: D-HH:MM:SS
 
 #SBATCH --partition=CPUQ          # Asking for a GPU
 #SBATCH --mem=128G       # Asking for 128 RAM
@@ -36,12 +36,12 @@ export GRB_WLSSECRET="87c9d38e-3a81-40a9-8d23-fa6fd14a0645" >> ~/.bashrc
 export GRB_LICENSE_FILE="/cluster/home/tinusfa/master_project/gurobi.lic" >> ~/.bashrc
 source ~/.bashrc
 
-python -m src.run --name 128_sv1_4_weeks____no_bat
+python -m src.run_batches -m 128_sv1_4_weeks___ 128_sv1_4_weeks_no_bats -b batch_128_4_4_4core_bat_and_no_bat
 
 echo "Job finished at $(date)"
 
 echo "Pushing to git"
 
 git add .
-git commit -m "results from 128_4_4core_no_bat"
+git commit -m "results from batch_128_4_4_4core_bat_and_no_bat"
 git push
