@@ -429,13 +429,13 @@ def load_multi_year_csv_files_with_week_from_folder(
         for i, year in enumerate(years[1:], start=1):
             discount_amount = discount_per_new_period * i
 
-            # extract just that year’s slice
-            sub = data[component].xs(year, level="year")
+            # Make an explicit copy of that year's slice
+            sub = data[component].xs(year, level="year").copy()
 
-            # apply the discount
+            # Apply the discount
             sub["capital_cost"] -= discount_amount
 
-            # write it back into the original DataFrame
+            # Write it back into the original DataFrame
             data[component].update(sub)
 
     hourly_demand = load_hourly_demand(data_folder_path)

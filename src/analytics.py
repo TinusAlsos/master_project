@@ -4345,7 +4345,7 @@ def create_top_10_dual_intervals_tables(
 
 
 def summarise_extension_status_by_carrier(
-    generators: pd.DataFrame, savfolder=None
+    generators: pd.DataFrame, savefolder=None
 ) -> pd.DataFrame:
     """
     For each year and carrier, count how many generators are
@@ -4397,8 +4397,8 @@ def summarise_extension_status_by_carrier(
     summary = summary[["not extended", "partly extended", "fully extended"]]
 
     print(f"Extension status by carrier")
-    if savfolder:
-        summary.to_csv(os.path.join(savfolder, "extension_status_by_carrier.csv"))
+    if savefolder:
+        summary.to_csv(os.path.join(savefolder, "extension_status_by_carrier.csv"))
     # Print the first few rows of the summary
     return summary
 
@@ -4527,6 +4527,907 @@ def list_nonzero_gen_extension_duals(
     return result
 
 
+def plot_lmp_bucket_frequencies(
+    freqs: pd.DataFrame, savefolder: str | None = None
+) -> None:
+    """
+    Bar chart of LMP bucket absolute frequencies with custom colors and labels,
+    plus bold text labels above each bar and extended top margin.
+
+    - Buckets sorted by lower bound.
+    - Ignore buckets with zero count.
+    - Rename 'other' to '>highest_upper'.
+    - 'Solar', 'Wind', 'Thermal' capitalized with midpoint on next line.
+    - Gaps labeled as 'lower-upper'.
+    - Solar and Wind midpoints with 3 decimals, others 2 decimals.
+    - No rotation on x-tick labels.
+    - Custom bar colors:
+        solar   -> solar color
+        wind    -> mix of onshore/offshore color
+        thermal -> CCGT color
+        gaps    -> gray
+        '>' bin -> black
+    """
+    # Colors
+    color_solar = "#f9d002"
+    color_on = "#235ebc"
+    color_off = "#6895dd"
+    wind_rgb = (
+        (int(color_on[1:3], 16) + int(color_off[1:3], 16)) // 2,
+        (int(color_on[3:5], 16) + int(color_off[3:5], 16)) // 2,
+        (int(color_on[5:7], 16) + int(color_off[5:7], 16)) // 2,
+    )
+    color_wind = "#{:02x}{:02x}{:02x}".format(*wind_rgb)
+    color_thermal = "#b20101"
+    color_gap = "#888888"
+    color_other = "black"
+
+    # Filter non-zero buckets
+    df = freqs[freqs["absolute"] > 0].copy()
+    # Rename other
+    non_other = df.drop(index="other", errors="ignore")
+    max_upper = non_other["upper"].max()
+    if "other" in df.index:
+        new_label = f">{max_upper:.2f}"
+        df = df.rename(index={"other": new_label})
+        df.at[new_label, "lower"] = max_upper
+        df.at[new_label, "upper"] = max_upper
+    # Sort
+    df = df.sort_values("lower")
+    buckets = list(df.index)
+    lowers = df["lower"].values
+    uppers = df["upper"].values
+    mids = (lowers + uppers) / 2
+
+    # Labels and colors
+    labels = []
+    colors = []
+    for key, low, up, mid in zip(buckets, lowers, uppers, mids):
+        if key == "solar":
+            labels.append(f"Solar\n{mid:.3f}")
+            colors.append(color_solar)
+        elif key == "wind":
+            labels.append(f"Wind\n{mid:.3f}")
+            colors.append(color_wind)
+        elif key == "thermal":
+            labels.append(f"Thermal\n{mid:.2f}")
+            colors.append(color_thermal)
+        elif key.startswith("gap"):
+            labels.append(f"{low:.2f}-{up:.2f}")
+            colors.append(color_gap)
+        elif key.startswith(">"):
+            labels.append(f"{key} €/MWh")
+            colors.append(color_other)
+        else:
+            labels.append(f"{key}\n{mid:.2f}")
+            colors.append(color_gap)
+
+    # Plot
+    fig, ax = plt.subplots(figsize=(10, 6))
+    x = np.arange(len(buckets))
+    bars = ax.bar(x, df["absolute"], color=colors, edgecolor="black")
+
+    # Extend top margin
+    max_count = df["absolute"].max()
+    ax.set_ylim(0, max_count * 1.10)
+
+    # Text labels
+    for bar, cnt in zip(bars, df["absolute"]):
+        height = bar.get_height()
+        ax.text(
+            bar.get_x() + bar.get_width() / 2,
+            height + max_count * 0.02,
+            f"{cnt}",
+            ha="center",
+            va="bottom",
+            fontsize=12,
+            fontweight="bold",
+        )
+
+    # Styling
+    ax.set_xlabel("LMP Bucket [€/MWh]", fontsize=16)
+    ax.set_ylabel("Frequency (timesteps)", fontsize=16)
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels, fontsize=14)
+    ax.tick_params(axis="y", labelsize=14)
+    ax.grid(axis="y", linestyle="--", alpha=0.5)
+
+    plt.tight_layout()
+    print("LMP Bucket Absolute Frequencies")
+    plt.show()
+
+    # Save
+    if savefolder:
+        fig.savefig(
+            os.path.join(savefolder, "lmp_bucket_frequencies.png"), bbox_inches="tight"
+        )
+
+
+def plot_lmp_bucket_percentages(
+    freqs: pd.DataFrame, savefolder: str | None = None
+) -> None:
+    """
+    Bar chart of LMP bucket relative frequencies (percent) with custom colors and labels,
+    plus bold text labels above each bar and extended top margin to accommodate them.
+
+    - Buckets sorted by lower bound.
+    - Ignore buckets with zero count.
+    - Rename 'other' to '>highest_upper'.
+    - 'Solar', 'Wind', 'Thermal' capitalized with midpoint on next line.
+    - Gaps labeled as 'lower-upper'.
+    - Solar and Wind midpoints with 3 decimals, others 2 decimals.
+    - No rotation on x-tick labels.
+    - Custom bar colors:
+        solar   -> solar color
+        wind    -> mix of onshore/offshore color
+        thermal -> CCGT color
+        gaps    -> gray
+        '>' bin -> black
+    """
+    # Define colors
+    color_solar = "#f9d002"
+    color_on = "#235ebc"
+    color_off = "#6895dd"
+    wind_rgb = (
+        (int(color_on[1:3], 16) + int(color_off[1:3], 16)) // 2,
+        (int(color_on[3:5], 16) + int(color_off[3:5], 16)) // 2,
+        (int(color_on[5:7], 16) + int(color_off[5:7], 16)) // 2,
+    )
+    color_wind = "#{:02x}{:02x}{:02x}".format(*wind_rgb)
+    color_thermal = "#b20101"
+    color_gap = "#888888"
+    color_other = "black"
+
+    # 1) Filter zero-count buckets
+    df = freqs[freqs["absolute"] > 0].copy()
+    # 2) Rename 'other' bucket
+    non_other = df.drop(index="other", errors="ignore")
+    max_upper = non_other["upper"].max()
+    if "other" in df.index:
+        new_label = f">{max_upper:.2f}"
+        df = df.rename(index={"other": new_label})
+        df.at[new_label, "lower"] = max_upper
+        df.at[new_label, "upper"] = max_upper
+    # 3) Sort by lower bound
+    df = df.sort_values("lower")
+    buckets = list(df.index)
+    lowers = df["lower"].values
+    uppers = df["upper"].values
+    mids = (lowers + uppers) / 2
+
+    # 4) Prepare labels and colors
+    labels = []
+    colors = []
+    for key, low, up, mid in zip(buckets, lowers, uppers, mids):
+        if key == "solar":
+            labels.append(f"Solar\n{mid:.3f}")
+            colors.append(color_solar)
+        elif key == "wind":
+            labels.append(f"Wind\n{mid:.3f}")
+            colors.append(color_wind)
+        elif key == "thermal":
+            labels.append(f"Thermal\n{mid:.2f}")
+            colors.append(color_thermal)
+        elif key.startswith("gap"):
+            labels.append(f"{low:.2f}-{up:.2f}")
+            colors.append(color_gap)
+        elif key.startswith(">"):
+            labels.append(f"{key} €/MWh")
+            colors.append(color_other)
+        else:
+            labels.append(f"{key}\n{mid:.2f}")
+            colors.append(color_gap)
+
+    # 5) Plot bars
+    fig, ax = plt.subplots(figsize=(10, 6))
+    x = np.arange(len(buckets))
+    bars = ax.bar(x, df["relative_percent"], color=colors, edgecolor="black")
+
+    # 6) Extend top margin so labels fit
+    max_pct = df["relative_percent"].max()
+    ax.set_ylim(0, max_pct * 1.1)
+
+    # 7) Add bold text labels above bars
+    for bar, pct in zip(bars, df["relative_percent"]):
+        height = bar.get_height()
+        ax.text(
+            bar.get_x() + bar.get_width() / 2,
+            height + max_pct * 0.02,  # offset as 2% of max
+            f"{pct:.1f}%",
+            ha="center",
+            va="bottom",
+            fontsize=12,
+            fontweight="bold",
+        )
+
+    # Styling
+    ax.set_xlabel("LMP Bucket [€/MWh]", fontsize=16)
+    ax.set_ylabel("Frequency (%)", fontsize=16)
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels, fontsize=14)
+    ax.tick_params(axis="y", labelsize=14)
+    ax.grid(axis="y", linestyle="--", alpha=0.5)
+
+    plt.tight_layout()
+    print("LMP Bucket Relative Frequencies (%)")
+    plt.show()
+
+    # Save if requested
+    if savefolder:
+        fig.savefig(
+            os.path.join(savefolder, "lmp_bucket_percentages.png"), bbox_inches="tight"
+        )
+
+
+def plot_high_lmp_event_counts(
+    power_balance_duals: pd.DataFrame, cap: float, savefolder: str | None = None
+) -> None:
+    """
+    Bar chart of the number of LMP events exceeding cap, by year and scenario.
+
+    Parameters
+    ----------
+    power_balance_duals : pd.DataFrame
+        MultiIndexed by (node, scenario, year, week, hour) with 'dual_value'.
+    cap : float
+        Threshold above which LMPs are considered 'high'.
+    savefolder : str or None
+        Directory to save the plot. If None, not saved.
+    """
+    # 1) Flatten and filter
+    df = power_balance_duals.reset_index()[["year", "scenario", "dual_value"]]
+    high = df[df["dual_value"] > cap]
+
+    # 2) Count events per year & scenario
+    counts = (
+        high.groupby(["year", "scenario"])
+        .size()
+        .unstack("scenario")
+        .fillna(0)
+        .astype(int)
+    )
+
+    # 3) Plot grouped bar chart
+    fig, ax = plt.subplots(figsize=(10, 6))
+    counts.plot(kind="bar", ax=ax)
+
+    # 4) Styling
+    ax.set_xlabel("Year", fontsize=16)
+    ax.set_ylabel(f"Events (LMP > {cap:.2f} €/MWh)", fontsize=16)
+    ax.tick_params(axis="x", labelsize=14)
+    ax.tick_params(axis="y", labelsize=14)
+    ax.grid(axis="y", linestyle="--", alpha=0.5)
+    ax.legend(title="Scenario", fontsize=16, title_fontsize=16)
+
+    plt.tight_layout()
+    print(f"LMP event counts above {cap:.2f} €/MWh by Year & Scenario")
+    plt.show()
+
+    # 5) Save if requested
+    if savefolder:
+        fig.savefig(
+            os.path.join(savefolder, "high_lmp_event_counts.png"), bbox_inches="tight"
+        )
+
+
+def plot_high_lmp_distribution(
+    power_balance_duals: pd.DataFrame,
+    cap: float,
+    n_bins: int = 10,
+    savefolder: str | None = None,
+) -> None:
+    """
+    Histogram of LMP values exceeding cap, to show their distribution.
+
+    Parameters
+    ----------
+    power_balance_duals : pd.DataFrame
+        MultiIndexed by (node, scenario, year, week, hour) with 'dual_value'.
+    cap : float
+        Threshold above which LMPs are considered 'high'.
+    n_bins : int
+        Number of histogram bins between cap and the max value.
+    savefolder : str or None
+        Directory to save the figure. If None, not saved.
+    """
+    # 1) Extract high LMPs
+    vals = power_balance_duals.reset_index()["dual_value"]
+    high_vals = vals[vals > cap]
+    if high_vals.empty:
+        print(f"No LMP values above {cap:.2f} €/MWh to plot.")
+        return
+
+    # 2) Determine bins
+    min_edge = cap
+    max_edge = high_vals.max()
+    bins = np.linspace(min_edge, max_edge, n_bins + 1)
+
+    # 3) Plot
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.hist(high_vals, bins=bins, edgecolor="black")
+
+    # 4) Styling
+    ax.set_xlabel("LMP (€/MWh)", fontsize=16)
+    ax.set_ylabel("Frequency (timesteps)", fontsize=16)
+    ax.tick_params(axis="x", labelsize=14)
+    ax.tick_params(axis="y", labelsize=14)
+    ax.grid(axis="y", linestyle="--", alpha=0.5)
+
+    plt.tight_layout()
+    print(f"Distribution of LMPs > {cap:.2f} €/MWh")
+    plt.show()
+
+    # 5) Save if requested
+    if savefolder:
+        fig.savefig(
+            os.path.join(savefolder, f"high_lmp_distribution_{int(cap)}plus.png"),
+            bbox_inches="tight",
+        )
+
+
+def make_high_lmp_frequency_table(
+    power_balance_duals: pd.DataFrame,
+    cap: float,
+    n_bins: int = 10,
+    savefolder: str | None = None,
+) -> pd.DataFrame:
+    """
+    Create a table of frequencies for LMP values exceeding cap,
+    dividing [cap, max(LMP)] into n_bins.
+
+    Parameters
+    ----------
+    power_balance_duals : pd.DataFrame
+        MultiIndexed by (node, scenario, year, week, hour) with 'dual_value'.
+    cap : float
+        Lower threshold; only values > cap are considered.
+    n_bins : int, optional
+        Number of equal-width bins in [cap, max_value].
+    savefolder : str or None, optional
+        Directory to save CSV. If None, not saved.
+
+    Returns
+    -------
+    pd.DataFrame
+        Columns:
+          - lower_bound: left edge of bin
+          - upper_bound: right edge of bin
+          - count: number of timesteps in this bin
+          - percent_of_high: % of high events in this bin
+          - percent_of_total: % of all timesteps in this bin
+    """
+    vals = power_balance_duals.reset_index()["dual_value"]
+    total = len(vals)
+    high = vals[vals > cap]
+    n_high = len(high)
+    # If no high values, return empty table
+    if n_high == 0:
+        cols = [
+            "lower_bound",
+            "upper_bound",
+            "count",
+            "percent_of_high",
+            "percent_of_total",
+        ]
+        return pd.DataFrame(columns=cols)
+    # Bin edges
+    min_edge = cap
+    max_edge = high.max()
+    edges = np.linspace(min_edge, max_edge, n_bins + 1)
+    # Categorize
+    cats = pd.cut(high, bins=edges, include_lowest=True, right=True)
+    freq = cats.value_counts().sort_index()
+    # Build table
+    rows = []
+    for interval, cnt in freq.items():
+        rows.append(
+            {
+                "lower_bound": interval.left,
+                "upper_bound": interval.right,
+                "count": int(cnt),
+                "percent_of_high": cnt / n_high * 100,
+                "percent_of_total": cnt / total * 100,
+            }
+        )
+    table = pd.DataFrame(rows)
+    if savefolder:
+        table.to_csv(
+            os.path.join(savefolder, f"high_lmp_freq_table_{int(cap)}plus.csv"),
+            index=False,
+        )
+    return table
+
+
+def get_top_high_lmp_buckets(
+    high_freq_table: pd.DataFrame, top_n: int = 5, savefolder: str | None = None
+) -> pd.DataFrame:
+    """
+    Return the top_n bins with the highest counts from the high-LMP frequency table.
+    """
+    top_bins = high_freq_table.sort_values("count", ascending=False).head(top_n)
+    if savefolder:
+        top_bins.to_csv(
+            os.path.join(savefolder, f"top_{top_n}_high_lmp_bins.csv"), index=False
+        )
+    return top_bins
+
+
+def plot_top_high_lmp_buckets(
+    high_freq_table: pd.DataFrame, top_n: int = 5, savefolder: str | None = None
+) -> None:
+    """
+    Bar chart of the top_n high-LMP bins by count.
+    """
+    top_bins = high_freq_table.sort_values("count", ascending=False).head(top_n)
+    labels = [
+        f"{row['lower_bound']:.0f}-{row['upper_bound']:.0f}"
+        for _, row in top_bins.iterrows()
+    ]
+    counts = top_bins["count"].values
+    fig, ax = plt.subplots(figsize=(8, 5))
+    bars = ax.bar(labels, counts, edgecolor="black")
+    # annotate
+    max_count = counts.max()
+    for bar, cnt in zip(bars, counts):
+        ax.text(
+            bar.get_x() + bar.get_width() / 2,
+            cnt + max_count * 0.02,
+            f"{cnt}",
+            ha="center",
+            va="bottom",
+            fontsize=12,
+            fontweight="bold",
+        )
+    ax.set_xlabel("High-LMP bin [€/MWh]", fontsize=16)
+    ax.set_ylabel("Frequency (timesteps)", fontsize=16)
+    ax.tick_params(axis="x", labelsize=14)
+    ax.tick_params(axis="y", labelsize=14)
+    ax.grid(axis="y", linestyle="--", alpha=0.5)
+    plt.tight_layout()
+    print(f"Top {top_n} high-LMP bins by occurrence")
+    plt.show()
+    if savefolder:
+        fig.savefig(
+            os.path.join(savefolder, f"top_{top_n}_high_lmp_bins.png"),
+            bbox_inches="tight",
+        )
+
+
+def plot_top_high_bucket_detail(
+    power_balance_duals: pd.DataFrame,
+    high_freq_table: pd.DataFrame,
+    width: float = 1.0,
+    savefolder: str | None = None,
+) -> None:
+    """
+    For the highest-frequency high-LMP bin, re-bin its LMP values into width-sized bins (default 1 €/MWh)
+    and plot their distribution.
+
+    Parameters
+    ----------
+    power_balance_duals : pd.DataFrame
+        MultiIndexed by (node, scenario, year, week, hour) with column 'dual_value'.
+    high_freq_table : pd.DataFrame
+        Output of make_high_lmp_frequency_table(...), must contain 'lower_bound' and 'upper_bound'.
+    width : float
+        Width of the new detailed bins (default 1 €/MWh).
+    savefolder : str or None
+        Directory to save the figure. If None, not saved.
+    """
+    # 1) Identify top bucket
+    top = high_freq_table.sort_values("count", ascending=False).iloc[0]
+    low = top["lower_bound"]
+    high = top["upper_bound"]
+
+    # 2) Extract values in that interval
+    vals = power_balance_duals.reset_index()["dual_value"]
+    subset = vals[(vals > low) & (vals <= high)]
+
+    if subset.empty:
+        print(f"No LMPs found in top bucket interval ({low:.2f}, {high:.2f}].")
+        return
+
+    # 3) Build detailed bins
+    start = np.floor(low)
+    end = np.ceil(high)
+    bins = np.arange(start, end + width, width)
+
+    # 4) Plot histogram
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.hist(subset, bins=bins, edgecolor="black")
+
+    # 5) Styling
+    ax.set_xlabel("LMP [€/MWh]", fontsize=16)
+    ax.set_ylabel("Frequency (timesteps)", fontsize=16)
+    ax.tick_params(axis="x", labelsize=14)
+    ax.tick_params(axis="y", labelsize=14)
+    ax.grid(axis="y", linestyle="--", alpha=0.5)
+    plt.tight_layout()
+    print(f"Detailed histogram for top high-LMP bucket ({low:.2f}–{high:.2f} €/MWh)")
+    plt.show()
+
+    # 6) Save if requested
+    if savefolder:
+        filename = f"top_bucket_detail_{int(low)}_{int(high)}_bin{int(width)}.png"
+        fig.savefig(os.path.join(savefolder, filename), bbox_inches="tight")
+
+
+def extract_duals_in_lmp_bucket(
+    power_balance_duals: pd.DataFrame, freqs: pd.DataFrame, bucket: str
+) -> pd.DataFrame:
+    """
+    Return all power‐balance duals whose LMP falls in the named bucket.
+    Uses freqs[['lower','upper']] rather than lower_bound/upper_bound.
+    """
+    # 1) Grab the numeric bounds
+    try:
+        lower = freqs.loc[bucket, "lower"]
+        upper = freqs.loc[bucket, "upper"]
+    except KeyError:
+        raise KeyError(f"Bucket '{bucket}' not found in freqs index.")
+
+    # 2) Filter the duals
+    df = power_balance_duals.reset_index()
+    mask = (df["dual_value"] > lower) & (df["dual_value"] <= upper)
+    subset = df[mask].copy()
+
+    # 3) Restore original MultiIndex
+    return subset.set_index(power_balance_duals.index.names)
+
+
+def summarize_gap_duals_by_year_scenario(
+    subset: pd.DataFrame,
+    power_balance_duals: pd.DataFrame,
+    savefolder: str | None = None,
+) -> pd.DataFrame:
+    """
+    Summarize how many timesteps in each (year, scenario) fall into the extracted bucket.
+    """
+    # total hours per year/scenario
+    flat = power_balance_duals.reset_index()[["year", "scenario"]]
+    total = flat.groupby(["year", "scenario"]).size().rename("count_total")
+    # hours in the bucket
+    bucket = subset.reset_index()[["year", "scenario"]]
+    bucket_counts = bucket.groupby(["year", "scenario"]).size().rename("count_bucket")
+    # combine
+    summary = pd.concat([total, bucket_counts], axis=1).fillna(0).astype(int)
+    summary["percent_bucket_of_total"] = (
+        summary["count_bucket"] / summary["count_total"] * 100
+    )
+    if savefolder:
+        summary.to_csv(f"{savefolder}/gap_wind_thermal_dual_summary.csv")
+    return summary
+
+
+def plot_gap_lmp_distribution(
+    subset: pd.DataFrame, bucket: str, savefolder: str | None = None
+) -> None:
+    """
+    Histogram of LMPs in the given bucket interval.
+    """
+    vals = subset["dual_value"]
+    if vals.empty:
+        print(f"No duals found in bucket '{bucket}'.")
+        return
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.hist(vals, bins=20, edgecolor="black")
+    ax.set_xlabel("LMP [€/MWh]", fontsize=16)
+    ax.set_ylabel("Frequency (timesteps)", fontsize=16)
+    ax.grid(axis="y", linestyle="--", alpha=0.5)
+    plt.tight_layout()
+    print(f"Distribution of LMPs in bucket '{bucket}'")
+    plt.show()
+
+    if savefolder:
+        fig.savefig(f"{savefolder}/gap_{bucket}_distribution.png", bbox_inches="tight")
+
+
+def make_annual_lmp_table(
+    power_balance_duals: pd.DataFrame, savefolder: str | None = None
+) -> pd.DataFrame:
+    """
+    Build a table of average LMP by year and scenario, plus overall average.
+    """
+    df = power_balance_duals.reset_index()[["year", "scenario", "dual_value"]]
+    table = df.groupby(["year", "scenario"])["dual_value"].mean().unstack("scenario")
+    table["Average"] = table.mean(axis=1)
+
+    if savefolder:
+        # 1) Save the full table
+        table.to_csv(f"{savefolder}/annual_lmp_table.csv")
+
+        # 2) Save a one‐row CSV with the overall average across years
+        overall_avg = table["Average"].mean()
+        avg_df = pd.DataFrame({"Average_LMP_across_years_€/MWh": [overall_avg]})
+        avg_df.to_csv(f"{savefolder}/annual_lmp_overall_average.csv", index=False)
+        print(f"Average LMP across years: {overall_avg:.2f} €/MWh")
+
+    return table
+
+
+def plot_annual_lmp_by_scenario(
+    power_balance_duals: pd.DataFrame, savefolder: str | None = None
+) -> None:
+    """
+    Grouped bar chart of mean LMP by year and scenario with ±1 std error bars.
+    """
+    # Flatten
+    df = power_balance_duals.reset_index()[["year", "scenario", "dual_value"]]
+    # Compute stats
+    stats = (
+        df.groupby(["year", "scenario"])["dual_value"]
+        .agg(["mean", "std"])
+        .reset_index()
+    )
+    years = sorted(stats["year"].unique())
+    scenarios = sorted(stats["scenario"].unique())
+
+    # Pivot
+    mean_df = stats.pivot(index="year", columns="scenario", values="mean")
+    std_df = stats.pivot(index="year", columns="scenario", values="std")
+
+    # Bar plotting
+    x = np.arange(len(years))
+    n = len(scenarios)
+    width = 0.8 / n
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+
+    for i, scen in enumerate(scenarios):
+        xs = x - 0.4 + i * width + width / 2
+        ax.bar(xs, mean_df[scen], width, yerr=std_df[scen], label=scen, capsize=5)
+
+    # Styling
+    ax.set_xlabel("Year", fontsize=16)
+    ax.set_ylabel("Average LMP (€/MWh)", fontsize=16)
+    ax.set_xticks(x)
+    ax.set_xticklabels([str(y) for y in years], fontsize=14)
+    ax.tick_params(axis="y", labelsize=14)
+    ax.legend(
+        title="Scenario",
+        fontsize=16,
+        title_fontsize=16,
+        bbox_to_anchor=(1.02, 1),
+        loc="upper left",
+    )
+    ax.grid(axis="y", linestyle="--", alpha=0.5)
+
+    plt.tight_layout()
+    print("Average LMP by Year and Scenario (±1 std)")
+    plt.show()
+
+    if savefolder:
+        fig.savefig(
+            os.path.join(savefolder, "annual_lmp_by_scenario.png"), bbox_inches="tight"
+        )
+
+
+def plot_annual_lmp_by_scenario_simple(
+    power_balance_duals: pd.DataFrame, savefolder: str | None = None
+) -> None:
+    """
+    Grouped bar chart of mean LMP by year and scenario without error bars.
+    """
+    # Flatten
+    df = power_balance_duals.reset_index()[["year", "scenario", "dual_value"]]
+    # Compute mean per year & scenario
+    mean_df = df.groupby(["year", "scenario"])["dual_value"].mean().unstack("scenario")
+    # Plot setup
+    years = mean_df.index.tolist()
+    scenarios = mean_df.columns.tolist()
+    x = np.arange(len(years))
+    n = len(scenarios)
+    width = 0.8 / n
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+    for i, scen in enumerate(scenarios):
+        xs = x - 0.4 + i * width + width / 2
+        ax.bar(xs, mean_df[scen], width, label=scen)
+
+    # Styling
+    ax.set_xlabel("Year", fontsize=16)
+    ax.set_ylabel("Average LMP (€/MWh)", fontsize=16)
+    ax.set_xticks(x)
+    ax.set_xticklabels([str(y) for y in years], fontsize=14)
+    ax.tick_params(axis="y", labelsize=14)
+    ax.legend(
+        title="Scenario",
+        fontsize=16,
+        title_fontsize=16,
+        bbox_to_anchor=(1.02, 1),
+        loc="upper left",
+    )
+    ax.grid(axis="y", linestyle="--", alpha=0.5)
+
+    plt.tight_layout()
+    print("Average LMP by Year and Scenario")
+    plt.show()
+
+    if savefolder:
+        fig.savefig(
+            os.path.join(savefolder, "annual_lmp_by_scenario_simple.png"),
+            bbox_inches="tight",
+        )
+
+
+def plot_annual_lmp_by_scenario_line(
+    power_balance_duals: pd.DataFrame, savefolder: str | None = None
+) -> None:
+    """
+    Line chart of mean LMP by year and scenario.
+
+    - One line per scenario.
+    - X-axis: years; Y-axis: average LMP (€/MWh).
+    - Grid lines on y-axis (linestyle '--', alpha=0.5).
+    - Axis labels fontsize 16; tick labels fontsize 14; legend fontsize 16.
+    """
+    # 1) Flatten and compute mean
+    df = power_balance_duals.reset_index()[["year", "scenario", "dual_value"]]
+    mean_df = df.groupby(["year", "scenario"])["dual_value"].mean().unstack("scenario")
+
+    # 2) Prepare plot
+    years = mean_df.index.tolist()
+    scenarios = mean_df.columns.tolist()
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+
+    # 3) Plot each scenario as a line
+    for scen in scenarios:
+        ax.plot(years, mean_df[scen], marker="o", linestyle="-", label=scen)
+
+    # 4) Styling
+    ax.set_xlabel("Year", fontsize=16)
+    ax.set_ylabel("Average LMP (€/MWh)", fontsize=16)
+    ax.set_xticks(years)
+    ax.set_xticklabels([str(y) for y in years], fontsize=14)
+    ax.tick_params(axis="y", labelsize=14)
+    ax.grid(axis="y", linestyle="--", alpha=0.5)
+    ax.legend(
+        title="Scenario",
+        fontsize=16,
+        title_fontsize=16,
+        bbox_to_anchor=(1.02, 1),
+        loc="upper left",
+    )
+
+    plt.tight_layout()
+    print("Average LMP by Year and Scenario (line chart)")
+    plt.show()
+
+    # 5) Save if requested
+    if savefolder:
+        fig.savefig(
+            os.path.join(savefolder, "annual_lmp_by_scenario_line.png"),
+            bbox_inches="tight",
+        )
+
+
+def plot_lmp_bucket_percentages_by_year_scenario(
+    power_balance_duals: pd.DataFrame,
+    freqs: pd.DataFrame,
+    savefolder: str | None = None,
+) -> None:
+    """
+    For each year & scenario, plot LMP bucket % frequencies using global freqs,
+    including a correct ">cap" bin with upper=np.inf, and omitting zero‐count buckets.
+    """
+    # Colors
+    color_solar = "#f9d002"
+    color_on = "#235ebc"
+    color_off = "#6895dd"
+    wind_rgb = (
+        (int(color_on[1:3], 16) + int(color_off[1:3], 16)) // 2,
+        (int(color_on[3:5], 16) + int(color_off[3:5], 16)) // 2,
+        (int(color_on[5:7], 16) + int(color_off[5:7], 16)) // 2,
+    )
+    color_wind = "#{:02x}{:02x}{:02x}".format(*wind_rgb)
+    color_thermal = "#b20101"
+    color_gap = "#888888"
+    color_other = "black"
+
+    # Prepare global buckets
+    df_buckets = freqs[["lower", "upper"]].copy()
+    if "other" in df_buckets.index:
+        cap = df_buckets.drop(index="other")["upper"].max()
+        label = f">{cap:.2f}"
+        df_buckets = df_buckets.rename(index={"other": label})
+        df_buckets.at[label, "lower"] = cap
+        df_buckets.at[label, "upper"] = np.inf
+    df_buckets = df_buckets.sort_values("lower")
+
+    keys = df_buckets.index.tolist()
+    lowers = df_buckets["lower"].values
+    uppers = df_buckets["upper"].values
+
+    # Build labels & colors
+    labels = []
+    colors = []
+    for key, low, up in zip(keys, lowers, uppers):
+        mid = (low + (up if np.isfinite(up) else low * 1.1)) / 2
+        if key == "solar":
+            labels.append(f"Solar\n{mid:.3f}")
+            colors.append(color_solar)
+        elif key == "wind":
+            labels.append(f"Wind\n{mid:.3f}")
+            colors.append(color_wind)
+        elif key == "thermal":
+            labels.append(f"Thermal\n{mid:.2f}")
+            colors.append(color_thermal)
+        elif key.startswith("gap"):
+            labels.append(f"{low:.2f}-{up:.2f}")
+            colors.append(color_gap)
+        elif key.startswith(">"):
+            labels.append(f"{key} €/MWh")
+            colors.append(color_other)
+        else:
+            labels.append(f"{key}\n{mid:.2f}")
+            colors.append(color_gap)
+
+    # Loop through years & scenarios
+    for year in power_balance_duals.index.get_level_values("year").unique():
+        scen_list = (
+            power_balance_duals.xs(year, level="year")
+            .index.get_level_values("scenario")
+            .unique()
+        )
+        for scen in scen_list:
+            sub = power_balance_duals.xs((scen, year), level=("scenario", "year"))
+            vals = sub["dual_value"].values
+            total = vals.size
+            if total == 0:
+                continue
+
+            # Compute percents
+            rel = []
+            for low, up in zip(lowers, uppers):
+                if np.isfinite(up):
+                    cnt = ((vals > low) & (vals <= up)).sum()
+                else:
+                    cnt = (vals > low).sum()
+                rel.append(cnt / total * 100)
+
+            # Filter out zero‐count
+            mask = np.array(rel) > 0
+            x = np.arange(mask.sum())
+            lbls = [labels[i] for i, m in enumerate(mask) if m]
+            cols = [colors[i] for i, m in enumerate(mask) if m]
+            vals_pct = [rel[i] for i, m in enumerate(mask) if m]
+
+            # Plot
+            fig, ax = plt.subplots(figsize=(10, 6))
+            bars = ax.bar(x, vals_pct, color=cols, edgecolor="black")
+            max_pct = max(vals_pct)
+            ax.set_ylim(0, max_pct * 1.10)
+            for xi, pct in zip(x, vals_pct):
+                ax.text(
+                    xi,
+                    pct + max_pct * 0.02,
+                    f"{pct:.1f}%",
+                    ha="center",
+                    va="bottom",
+                    fontsize=12,
+                    fontweight="bold",
+                )
+
+            # Styling
+            ax.set_xlabel("LMP Bucket [€/MWh]", fontsize=16)
+            ax.set_ylabel("Frequency (%)", fontsize=16)
+            ax.set_xticks(x)
+            ax.set_xticklabels(lbls, fontsize=14)
+            ax.tick_params(axis="y", labelsize=14)
+            ax.grid(axis="y", linestyle="--", alpha=0.5)
+            ax.set_title(f"{year} – {scen}", fontsize=16)
+            plt.tight_layout()
+            plt.show()
+
+            # Save
+            if savefolder:
+                fname = f"lmp_buckets_{year}_{scen}.png"
+                fig.savefig(os.path.join(savefolder, fname), bbox_inches="tight")
+            plt.close()
+
+
 def analyze_run_stochastic(
     model_config: dict,
     SAVE_FIGURES: bool = True,
@@ -4566,6 +5467,72 @@ def analyze_run_stochastic(
             os.makedirs(figures_folder)
     else:
         figures_folder = None
+
+    if SAVE_FIGURES:
+        generators_save_folder = os.path.join(figures_folder, "generators")
+        if not os.path.exists(generators_save_folder):
+            os.makedirs(generators_save_folder)
+    else:
+        generators_save_folder = None
+
+    if SAVE_TABLES:
+        generators_save_table_folder = os.path.join(tables_folder, "generators")
+        if not os.path.exists(generators_save_table_folder):
+            os.makedirs(generators_save_table_folder)
+    else:
+        generators_save_table_folder = None
+
+    if SAVE_FIGURES:
+        branches_save_folder = os.path.join(figures_folder, "branches")
+        if not os.path.exists(branches_save_folder):
+            os.makedirs(branches_save_folder)
+    else:
+        branches_save_folder = None
+    if SAVE_TABLES:
+        branches_save_table_folder = os.path.join(tables_folder, "branches")
+        if not os.path.exists(branches_save_table_folder):
+            os.makedirs(branches_save_table_folder)
+    else:
+        branches_save_table_folder = None
+
+    if SAVE_FIGURES:
+        batteries_save_folder = os.path.join(figures_folder, "batteries")
+        if not os.path.exists(batteries_save_folder):
+            os.makedirs(batteries_save_folder)
+    else:
+        batteries_save_folder = None
+    if SAVE_TABLES:
+        batteries_save_table_folder = os.path.join(tables_folder, "batteries")
+        if not os.path.exists(batteries_save_table_folder):
+            os.makedirs(batteries_save_table_folder)
+        else:
+            batteries_save_table_folder = None
+
+    if SAVE_FIGURES:
+        macro_save_folder = os.path.join(figures_folder, "macro")
+        if not os.path.exists(macro_save_folder):
+            os.makedirs(macro_save_folder)
+    else:
+        macro_save_folder = None
+    if SAVE_TABLES:
+        macro_save_table_folder = os.path.join(tables_folder, "macro")
+        if not os.path.exists(macro_save_table_folder):
+            os.makedirs(macro_save_table_folder)
+    else:
+        macro_save_table_folder = None
+
+    if SAVE_FIGURES:
+        # Create the figures folder if it doesn't exist
+        dual_folder = os.path.join(RESULTS_FOLDER, "duals")
+        os.makedirs(dual_folder, exist_ok=True)
+    else:
+        dual_folder = None
+    if SAVE_TABLES:
+        # Create the tables folder if it doesn't exist
+        dual_save_table_folder = os.path.join(tables_folder, "duals")
+        os.makedirs(dual_save_table_folder, exist_ok=True)
+    else:
+        dual_save_table_folder = None
 
     ## Read data
     model_info = pd.read_csv(os.path.join(model_info_folder, "model_info.csv"))
@@ -4626,22 +5593,6 @@ def analyze_run_stochastic(
     generator_capacity = decision_varables["generator_capacity"]
     load_shedding = decision_varables["load_shedding"]
     power_flow = decision_varables["power_flow"]
-    # dual variables
-    battery_charge_new_max_duals = dual_variables["battery_charge_new_max_duals"]
-    battery_charge_old_duals = dual_variables["battery_charge_old_duals"]
-    battery_discharge_new_max_duals = dual_variables["battery_discharge_new_max_duals"]
-    battery_discharge_old_duals = dual_variables["battery_discharge_old_duals"]
-    branch_extension_duals = dual_variables["branch_extension_duals"]
-    branch_flow_old_duals_min = dual_variables["branch_flow_old_duals_min"]
-    branch_flow_old_duals_max = dual_variables["branch_flow_old_duals_max"]
-    branch_flow_new_duals_min = dual_variables["branch_flow_new_duals_min"]
-    branch_flow_new_duals_max = dual_variables["branch_flow_new_duals_max"]
-    emissions_duals = dual_variables["emissions_duals"]
-    gen_extension_duals = dual_variables["gen_extension_duals"]
-    gen_output_new_duals = dual_variables["gen_output_new_duals"]
-    gen_output_old_duals = dual_variables["gen_output_old_duals"]
-    load_shedding_duals = dual_variables["load_shedding_duals"]
-    power_balance_duals = dual_variables["power_balance_duals"]
 
     # region Generators
     # Preprocess generators
@@ -4666,7 +5617,7 @@ def analyze_run_stochastic(
         scenarios,
         scenario_probabilities,
         week_weights,
-        savefolder=tables_folder,
+        savefolder=generators_save_table_folder,
     )
     make_annual_production_table(
         generation,
@@ -4674,7 +5625,7 @@ def analyze_run_stochastic(
         scenarios,
         scenario_probabilities,
         week_weights=week_weights,
-        savefolder=tables_folder,
+        savefolder=generators_save_table_folder,
     )
     annual_cost_table = make_weighted_annual_production_cost_by_year_table(
         generation,
@@ -4683,7 +5634,7 @@ def analyze_run_stochastic(
         scenario_probabilities,
         week_weights,
         carbon_price=CO2_price,
-        savefolder=tables_folder,
+        savefolder=generators_save_table_folder,
     )
     weighted_annual_production_by_year = make_weighted_annual_production_by_year(
         generation,
@@ -4691,23 +5642,27 @@ def analyze_run_stochastic(
         scenarios,
         scenario_probabilities,
         week_weights=week_weights,
-        savefolder=tables_folder,
+        savefolder=generators_save_table_folder,
     )
     plot_weighted_production_evolution(
-        weighted_annual_production_by_year, generators, savefolder=figures_folder
+        weighted_annual_production_by_year,
+        generators,
+        savefolder=generators_save_folder,
     )
     plot_weighted_production_cost_evolution(
-        annual_cost_table, generators, savefolder=figures_folder
+        annual_cost_table, generators, savefolder=generators_save_folder
     )
     yearly_system_cost_table = make_yearly_system_costs_table(
-        generation, generators, week_weights, CO2_price, tables_folder
+        generation, generators, week_weights, CO2_price, macro_save_table_folder
     )
-    plot_co2_emissions_by_scenario(yearly_system_cost_table, savefolder=figures_folder)
-    plot_co2_emissions_by_scenario_avg(yearly_system_cost_table, figures_folder)
-    plot_production_by_scenario(yearly_system_cost_table, figures_folder)
-    plot_production_cost_by_scenario(yearly_system_cost_table, figures_folder)
+    plot_co2_emissions_by_scenario(
+        yearly_system_cost_table, savefolder=generators_save_folder
+    )
+    plot_co2_emissions_by_scenario_avg(yearly_system_cost_table, generators_save_folder)
+    plot_production_by_scenario(yearly_system_cost_table, generators_save_folder)
+    plot_production_cost_by_scenario(yearly_system_cost_table, generators_save_folder)
     plot_production_cost_with_emission_by_scenario(
-        yearly_system_cost_table, figures_folder
+        yearly_system_cost_table, generators_save_folder
     )
 
     # Example loop over years, weeks, scenarios, and carrier types
@@ -4715,7 +5670,7 @@ def analyze_run_stochastic(
     weeks = [int(w) for w in week_weights.keys()]
     carriers = generators.reset_index()["carrier"].unique()
     # if figures_folder:
-    #     generation_curves_folder = os.path.join(figures_folder, "generation_curves")
+    #     generation_curves_folder = os.path.join(generators_save_folder, "generation_curves")
     #     os.makedirs(generation_curves_folder, exist_ok=True)
     # else:
     #     generation_curves_folder = None
@@ -4746,7 +5701,7 @@ def analyze_run_stochastic(
     #                 year,
     #                 week,
     #                 scen,
-    #                 savefolder=tables_folder,
+    #                 savefolder=generators_save_table_folder,
     #             )
 
     # years = [int(y) for y in scenarios.keys()]
@@ -4774,7 +5729,7 @@ def analyze_run_stochastic(
         generators,
         week_weights,
         scenarios,
-        figures_folder,
+        generators_save_folder,
     )
 
     summary_table = make_system_summary_table(
@@ -4784,7 +5739,7 @@ def analyze_run_stochastic(
         scenarios,
         scenario_probabilities,
         CO2_price,
-        savefolder=tables_folder,
+        savefolder=macro_save_table_folder,
     )
     summary_by_carrier_table = make_system_summary_table_by_carrier(
         generation,
@@ -4793,7 +5748,7 @@ def analyze_run_stochastic(
         scenarios,
         scenario_probabilities,
         CO2_price,
-        tables_folder,
+        macro_save_table_folder,
     )
     # Preprocessing
     if "extended_by" in branches.columns:
@@ -4805,22 +5760,26 @@ def analyze_run_stochastic(
     branches["extension_potential"] = p_max_new_branch
 
     branches = extend_branches_table(branches, branch_capacity)
-    plot_branch_new_capacity(branches, figures_folder)
-    branch_buildout_summary = make_branch_buildout_summary(branches, tables_folder)
+    plot_branch_new_capacity(branches, branches_save_folder)
+    branch_buildout_summary = make_branch_buildout_summary(
+        branches, branches_save_table_folder
+    )
     branch_flow_table_per_line = make_branch_flow_metrics(
-        power_flow, branches, week_weights, savefolder=tables_folder
+        power_flow, branches, week_weights, savefolder=branches_save_table_folder
     )
     branch_flow_summary = make_aggregate_branch_flow_summary(
-        power_flow, branches, week_weights, savefolder=tables_folder
+        power_flow, branches, week_weights, savefolder=branches_save_table_folder
     )
     plot_new_branches_for_years_with_investments(
-        branches, branch_capacity, nodes, savefolder=figures_folder
+        branches, branch_capacity, nodes, savefolder=branches_save_folder
     )
 
     if len(batteries) > 0:
         batteries = extend_batteries_table(batteries, battery_capacity)
-        plot_battery_investment_by_year(batteries, savefolder=figures_folder)
-        plot_battery_investment_cost_by_year(batteries, savefolder=figures_folder)
+        plot_battery_investment_by_year(batteries, savefolder=batteries_save_folder)
+        plot_battery_investment_cost_by_year(
+            batteries, savefolder=batteries_save_folder
+        )
         battery_summary = make_battery_system_summary(
             batteries,
             battery_discharging,
@@ -4833,7 +5792,7 @@ def analyze_run_stochastic(
             battery_discharging,
             week_weights,
             reference_cycle_mwh=400,
-            savefolder=figures_folder,
+            savefolder=batteries_save_folder,
         )
 
     plot_curtailment_by_scenario(curtailment, week_weights, savefolder=figures_folder)
@@ -4853,7 +5812,7 @@ def analyze_run_stochastic(
         scenarios,
         scenario_probabilities,
         CO2_price,
-        savefolder=tables_folder,
+        savefolder=macro_save_table_folder,
     )
     if len(batteries) > 0:
         battery_summary = make_battery_system_summary(
@@ -4862,7 +5821,7 @@ def analyze_run_stochastic(
             week_weights,
             scenarios,
             scenario_probabilities,
-            savefolder=tables_folder,
+            savefolder=batteries_save_table_folder,
         )
     else:
         # Dummy columns
@@ -4873,9 +5832,13 @@ def analyze_run_stochastic(
         empty_df.index.name = "year"
         battery_summary = empty_df
 
-    branch_summary = make_branch_buildout_summary(branches, tables_folder)
+    branch_summary = make_branch_buildout_summary(branches, branches_save_table_folder)
     yearly_system_cost_table = make_yearly_system_costs_table(
-        generation, generators, week_weights, CO2_price, savefolder=tables_folder
+        generation,
+        generators,
+        week_weights,
+        CO2_price,
+        savefolder=macro_save_table_folder,
     )
     curtailment_and_load_shedding_table = make_curtailment_load_shedding_cost_table(
         curtailment, load_shedding, week_weights, CC, VOLL, savefolder=tables_folder
@@ -4887,7 +5850,7 @@ def analyze_run_stochastic(
         branch_summary,
         yearly_system_cost_table,
         curtailment_and_load_shedding_table,
-        savefolder=figures_folder,
+        savefolder=macro_save_folder,
     )
     plot_yearly_costs_stacked_by_scenario(
         system_summary,
@@ -4895,7 +5858,7 @@ def analyze_run_stochastic(
         branch_summary,
         yearly_system_cost_table,
         curtailment_and_load_shedding_table,
-        savefolder=figures_folder,
+        savefolder=macro_save_folder,
     )
     total_system_cost = compute_total_system_cost(
         system_summary,
@@ -4905,7 +5868,7 @@ def analyze_run_stochastic(
         curtailment_and_load_shedding_table,
         scenarios,
         scenario_probabilities,
-        savefolder=tables_folder,
+        savefolder=macro_save_table_folder,
     )
     print(total_system_cost)
     assert (
@@ -4921,7 +5884,7 @@ def analyze_run_stochastic(
         curtailment_and_load_shedding_table,
         scenarios,
         scenario_probabilities,
-        savefolder=tables_folder,
+        savefolder=macro_save_table_folder,
     )
     # End  by saving the extended generators, transmission lines, and batteries tables to and extended tables folder
     if tables_folder:
@@ -4948,10 +5911,61 @@ def analyze_run_stochastic(
         os.makedirs(tables_folder, exist_ok=True)
         os.makedirs(figures_folder, exist_ok=True)
 
-    lmp_table = make_nodal_price_table(power_balance_duals, savefolder=tables_folder)
-    plot_nodal_price_evolution_with_markers(lmp_table, savefolder=figures_folder)
+    # Preprocessing dual variables so scenario-duals are probability-adjusted.
+    # Build a DataFrame of scenario probabilities (p_{ω,y})
+    prob_rows = []
+    for year_str, scen_list in scenarios.items():
+        year = int(year_str)
+        probs = scenario_probabilities[year_str]
+        for scen, p in zip(scen_list, probs):
+            prob_rows.append({"year": year, "scenario": scen, "p": p})
+    prob_df = pd.DataFrame(prob_rows).set_index(["year", "scenario"])
+
+    # Loop through duals and apply 1/p weighting where appropriate
+    for key, df in dual_variables.items():
+        # Only apply to duals that vary by scenario
+        if "scenario" in df.index.names:
+            temp = df.reset_index().merge(prob_df, on=["year", "scenario"], how="left")
+            # Compute 1/p weight
+            temp["weight"] = 1.0 / temp["p"]
+            # Apply weight to the dual values
+            temp["dual_value"] = temp["dual_value"] * temp["weight"]
+
+            # Reconstruct a weighted-dual Series with the original index
+            weighted = temp.set_index(df.index.names)
+            # Display the first two rows
+            dual_variables[key] = weighted
+
+    # read dual variables
+    battery_charge_new_max_duals = dual_variables["battery_charge_new_max_duals"]
+    battery_charge_old_duals = dual_variables["battery_charge_old_duals"]
+    battery_discharge_new_max_duals = dual_variables["battery_discharge_new_max_duals"]
+    battery_discharge_old_duals = dual_variables["battery_discharge_old_duals"]
+    branch_extension_duals = dual_variables["branch_extension_duals"]
+    branch_flow_old_duals_min = dual_variables["branch_flow_old_duals_min"]
+    branch_flow_old_duals_max = dual_variables["branch_flow_old_duals_max"]
+    branch_flow_new_duals_min = dual_variables["branch_flow_new_duals_min"]
+    branch_flow_new_duals_max = dual_variables["branch_flow_new_duals_max"]
+    emissions_duals = dual_variables["emissions_duals"]
+    gen_extension_duals = dual_variables["gen_extension_duals"]
+    gen_output_new_duals = dual_variables["gen_output_new_duals"]
+    gen_output_old_duals = dual_variables["gen_output_old_duals"]
+    load_shedding_duals = dual_variables["load_shedding_duals"]
+    power_balance_duals = dual_variables["power_balance_duals"]
+
+    lmp_table = make_nodal_price_table(
+        power_balance_duals, savefolder=dual_save_table_folder
+    )
+    annual_lmp_table = make_annual_lmp_table(
+        power_balance_duals, savefolder=dual_save_table_folder
+    )
+
+    plot_annual_lmp_by_scenario(power_balance_duals, savefolder=dual_folder)
+    plot_annual_lmp_by_scenario_simple(power_balance_duals, savefolder=dual_folder)
+    plot_annual_lmp_by_scenario_line(power_balance_duals, savefolder=dual_folder)
+    plot_nodal_price_evolution_with_markers(lmp_table, savefolder=dual_folder)
     plot_nodal_price_grouped_bar(
-        lmp_table, node_to_city=plotting.node_to_city, savefolder=figures_folder
+        lmp_table, node_to_city=plotting.node_to_city, savefolder=dual_folder
     )
     branch_extension_duals = branch_extension_duals.rename_axis(
         index={"branch": "line"}
@@ -4960,25 +5974,65 @@ def analyze_run_stochastic(
         generators["marginal_cost"] + generators["co2_emissions"] * CO2_price
     )
     freqs = compute_lmp_bucket_frequencies(
-        power_balance_duals, generators, tables_folder
+        power_balance_duals, generators, dual_save_table_folder
     )
+
+    plot_lmp_bucket_frequencies(freqs, savefolder=dual_folder)
+    # determine cap from your buckets:
+    cap = freqs.loc[freqs.index != "other", "upper"].max()
+    plot_lmp_bucket_percentages(freqs, savefolder=dual_folder)
+    plot_lmp_bucket_percentages_by_year_scenario(
+        power_balance_duals, freqs, savefolder=dual_folder
+    )
+
+    plot_high_lmp_event_counts(power_balance_duals, cap, savefolder=dual_folder)
+    plot_high_lmp_distribution(
+        power_balance_duals, cap, n_bins=100, savefolder=dual_folder
+    )
+    high_tbl = make_high_lmp_frequency_table(
+        power_balance_duals, cap=cap, n_bins=100, savefolder=dual_save_table_folder
+    )
+    top5 = get_top_high_lmp_buckets(
+        high_tbl, top_n=10, savefolder=dual_save_table_folder
+    )
+    plot_top_high_lmp_buckets(high_tbl, top_n=6, savefolder=dual_folder)
+    plot_top_high_bucket_detail(
+        power_balance_duals, high_tbl, width=1.0, savefolder=dual_folder
+    )
+    gap_subset = extract_duals_in_lmp_bucket(
+        power_balance_duals, freqs, "gap_wind_thermal"
+    )
+    gap_summary = summarize_gap_duals_by_year_scenario(
+        gap_subset,
+        power_balance_duals=power_balance_duals,
+        savefolder=dual_save_table_folder,
+    )
+    plot_gap_lmp_distribution(gap_subset, "gap_wind_thermal", savefolder=dual_folder)
+
     plot_lmp_histogram_70plus(
-        power_balance_duals, cap=70, bin_width=2.0, savefolder=figures_folder
+        power_balance_duals, cap=70, bin_width=2.0, savefolder=dual_folder
     )
     freq_table = make_lmp_frequency_table(
-        power_balance_duals, bin_width=1.0, cap=70, savefolder=tables_folder
+        power_balance_duals, bin_width=1.0, cap=70, savefolder=dual_save_table_folder
     )
     sorted_freq_table = freq_table.sort_values(by="count", ascending=False)
     plot_top_10_dual_intervals(
-        power_balance_duals, sorted_freq_table, n_bins=10, savefolder=figures_folder
+        power_balance_duals, sorted_freq_table, n_bins=10, savefolder=dual_folder
     )
     create_top_10_dual_intervals_tables(
-        power_balance_duals, sorted_freq_table, n_bins=10, savefolder=tables_folder
+        power_balance_duals, freq_table, n_bins=10, savefolder=tables_folder
     )
+
     summary_by_carrier = summarise_extension_status_by_carrier(generators)
-    summary_table = summarize_dual_nonzero_counts(dual_variables, duals_folder)
-    summary = summarize_duals_by_year_scenario(dual_variables, savefolder=tables_folder)
-    nz = list_nonzero_gen_extension_duals(gen_extension_duals, savefolder=tables_folder)
+    summary_table = summarize_dual_nonzero_counts(
+        dual_variables, dual_save_table_folder
+    )
+    summary = summarize_duals_by_year_scenario(
+        dual_variables, savefolder=dual_save_table_folder
+    )
+    nz = list_nonzero_gen_extension_duals(
+        gen_extension_duals, savefolder=dual_save_table_folder
+    )
 
     if not show_plots:
         # Restore the original show function

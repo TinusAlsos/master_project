@@ -22,10 +22,10 @@ if __name__ == "__main__":
     Finally, set the folders to run to either be the single or batch runs.
     """
     single_runs_folder_names = [
-        "XXX4weeks_1core___",
+        # "XXX4weeks_1core___",
         "XXX4weeks_2core___",
-        "XXX8weeks_1core",
-        "XXX8weeks_2core",
+        # "XXX8weeks_1core",
+        # "XXX8weeks_2core",
     ]
     single_runs_folder_paths = [
         os.path.join(SINGLE_RUNS_FOLDER, folder_name)
@@ -35,7 +35,7 @@ if __name__ == "__main__":
     batch_runs_folder_path = os.path.join(BATCH_RUNS_FOLDER, batch_runs_folder_name)
 
     ### select either single or batch runs
-    run_batch = True
+    run_batch = False
     if run_batch:
         print("Running batch runs")
         runs_folder_paths = [
