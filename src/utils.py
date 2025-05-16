@@ -402,6 +402,8 @@ def load_multi_year_csv_files_with_week_from_folder(
                 continue
             for year in years:
                 temp_df = df.copy()
+                if len(temp_df) == 0:
+                    continue
                 if file_name in ["hourly_demand", "capacity_factors"]:
                     iso_info = temp_df.index.to_series().dt.isocalendar()
                     temp_df["hour_in_week"] = temp_df.groupby(
@@ -422,13 +424,19 @@ def load_multi_year_csv_files_with_week_from_folder(
                         [[year], temp_df.index], names=["year", temp_df.index.name]
                     )
                 new_dfs.append(temp_df)
-            data[file_name] = pd.concat(new_dfs)
+            if file_name == "batteries" and len(temp_df) == 0:
+                data[file_name] = temp_df
+            else:
+                data[file_name] = pd.concat(new_dfs)
     discount_per_new_period = 10.0
 
     for component in ["generators", "branches", "batteries"]:
+        if len(data[component]) == 0:
+            continue
         for i, year in enumerate(years[1:], start=1):
             discount_amount = discount_per_new_period * i
-
+            print(f"Component: {component}, Year: {year}")
+            print(f"Data[component]: {data[component]}")
             # Make an explicit copy of that year's slice
             sub = data[component].xs(year, level="year").copy()
 
@@ -500,6 +508,7 @@ def load_multi_year_csv_files_with_week_from_folder_with_demand_scaling(
                 continue
             for year in years:
                 temp_df = df.copy()
+
                 if file_name == "hourly_demand":
                     temp_df = temp_df * demand_multiplier
                     demand_multiplier += 1

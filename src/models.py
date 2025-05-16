@@ -51,7 +51,7 @@ def _create_mappings(
             - generators_at_node (dict): Mapping from each node identifier to a list of generator identifiers
               at that node.
     """
-    if "year" in batteries.index.names:
+    if "year" in branches.index.names:
         y0 = branches.index.unique(level="year")[0]
         branches = branches.loc[y0, :]
         generators = generators.loc[y0, :]
