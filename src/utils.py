@@ -435,8 +435,6 @@ def load_multi_year_csv_files_with_week_from_folder(
             continue
         for i, year in enumerate(years[1:], start=1):
             discount_amount = discount_per_new_period * i
-            print(f"Component: {component}, Year: {year}")
-            print(f"Data[component]: {data[component]}")
             # Make an explicit copy of that year's slice
             sub = data[component].xs(year, level="year").copy()
 
