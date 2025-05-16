@@ -5,7 +5,7 @@ MIPGap: 0.01
 # Parameters
 VOLL: 6350        # Value of Lost Load [€/MWh]
 CC: 100               # Curtailment cost [€/MWh]
-CO2_price: 85         # Price of CO2 emissions [€/ton]
+CO2_price: 80         # Price of CO2 emissions [€/ton]
 E_limit: .inf         # CO2 emissions limit (using YAML's infinity representation)
 p_max_new_branch: 5000  # Maximum capacity of new branches [MW]
 p_min_new_branch: 100   # Minimum capacity of new branches [MW]
