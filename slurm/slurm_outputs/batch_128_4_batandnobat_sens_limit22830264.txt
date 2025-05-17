@@ -1,7 +1,7 @@
 Running from this directory: /cluster/home/tinusfa/master_project
-Name of job: batch_128_4_batandnobat_sens_co2price
-ID of job: 22830259
-The job was run on these nodes: idun-04-01
+Name of job: batch_128_4_batandnobat_sens_limit
+ID of job: 22830264
+The job was run on these nodes: idun-03-12
 Base folder: /cluster/home/tinusfa/master_project
 ['/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat/1_May16_Fri_h23_m07_s45-GTSEP_stochastic_v1-128_ES_PT', '/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat/2_May17_Sat_h00_m00_s46-GTSEP_stochastic_v1-128_ES_PT_no_bat']
 Path_or_name: config_128_sv1_4_weeks___
@@ -364,65 +364,25 @@ New config saved to: /cluster/home/tinusfa/master_project/configs/models/config_
 New config saved to: /cluster/home/tinusfa/master_project/configs/models/config_128_sv1_4_weeks___no_bats_emissionsreduction_0.8.yaml
 New config saved to: /cluster/home/tinusfa/master_project/configs/models/config_128_sv1_4_weeks___no_bats_emissionsreduction_1.0.yaml
 True
-Running batches for: ['128_sv1_4_weeks___co2price_80', '128_sv1_4_weeks___co2price_100', '128_sv1_4_weeks___co2price_120', '128_sv1_4_weeks___co2price_140', '128_sv1_4_weeks___co2price_160', '128_sv1_4_weeks___no_bats_co2price_80', '128_sv1_4_weeks___no_bats_co2price_100', '128_sv1_4_weeks___no_bats_co2price_120', '128_sv1_4_weeks___no_bats_co2price_140', '128_sv1_4_weeks___no_bats_co2price_160']
-Saving results to: batch_128_4_batandnobat_sens_co2price
-Running batch of length 10.
-Batch folder: batch_128_4_batandnobat_sens_co2price
+Running batches for: ['128_sv1_4_weeks___emissionsreduction_0.0', '128_sv1_4_weeks___emissionsreduction_0.2', '128_sv1_4_weeks___emissionsreduction_0.4', '128_sv1_4_weeks___emissionsreduction_0.6', '128_sv1_4_weeks___emissionsreduction_0.8', '128_sv1_4_weeks___emissionsreduction_1.0', '128_sv1_4_weeks___no_bats_emissionsreduction_0.0', '128_sv1_4_weeks___no_bats_emissionsreduction_0.2', '128_sv1_4_weeks___no_bats_emissionsreduction_0.4', '128_sv1_4_weeks___no_bats_emissionsreduction_0.6', '128_sv1_4_weeks___no_bats_emissionsreduction_0.8', '128_sv1_4_weeks___no_bats_emissionsreduction_1.0']
+Saving results to: batch_128_4_batandnobat_sens_limit
+Running batch of length 12.
+Batch folder: batch_128_4_batandnobat_sens_limit
 Running the following model_configs:
-128_sv1_4_weeks___co2price_80
-128_sv1_4_weeks___co2price_100
-128_sv1_4_weeks___co2price_120
-128_sv1_4_weeks___co2price_140
-128_sv1_4_weeks___co2price_160
-128_sv1_4_weeks___no_bats_co2price_80
-128_sv1_4_weeks___no_bats_co2price_100
-128_sv1_4_weeks___no_bats_co2price_120
-128_sv1_4_weeks___no_bats_co2price_140
-128_sv1_4_weeks___no_bats_co2price_160
-@@@@ Batch number 1: 128_sv1_4_weeks___co2price_80 @@@@
+128_sv1_4_weeks___emissionsreduction_0.0
+128_sv1_4_weeks___emissionsreduction_0.2
+128_sv1_4_weeks___emissionsreduction_0.4
+128_sv1_4_weeks___emissionsreduction_0.6
+128_sv1_4_weeks___emissionsreduction_0.8
+128_sv1_4_weeks___emissionsreduction_1.0
+128_sv1_4_weeks___no_bats_emissionsreduction_0.0
+128_sv1_4_weeks___no_bats_emissionsreduction_0.2
+128_sv1_4_weeks___no_bats_emissionsreduction_0.4
+128_sv1_4_weeks___no_bats_emissionsreduction_0.6
+128_sv1_4_weeks___no_bats_emissionsreduction_0.8
+128_sv1_4_weeks___no_bats_emissionsreduction_1.0
+@@@@ Batch number 1: 128_sv1_4_weeks___emissionsreduction_0.0 @@@@
 No preprocessing config provided. Skipping preprocessing...
-Path_or_name: 128_sv1_4_weeks___co2price_80
-Job finished at Sat 17 May 07:28:50 CEST 2025
+Path_or_name: 128_sv1_4_weeks___emissionsreduction_0.0
+Job finished at Sat 17 May 07:54:27 CEST 2025
 Pushing to git
-[idun_runs e5a21a2] results from batch_128_4_batandnobat_sens_co2price
- 42 files changed, 1604 insertions(+)
- create mode 100644 configs/models/config_128_sv1_4_weeks____co2price_100.yaml
- create mode 100644 configs/models/config_128_sv1_4_weeks____co2price_120.yaml
- create mode 100644 configs/models/config_128_sv1_4_weeks____co2price_140.yaml
- create mode 100644 configs/models/config_128_sv1_4_weeks____co2price_160.yaml
- create mode 100644 configs/models/config_128_sv1_4_weeks____co2price_80.yaml
- create mode 100644 configs/models/config_128_sv1_4_weeks____emissionsreduction_0.0.yaml
- create mode 100644 configs/models/config_128_sv1_4_weeks____emissionsreduction_0.2.yaml
- create mode 100644 configs/models/config_128_sv1_4_weeks____emissionsreduction_0.4.yaml
- create mode 100644 configs/models/config_128_sv1_4_weeks____emissionsreduction_0.6.yaml
- create mode 100644 configs/models/config_128_sv1_4_weeks____emissionsreduction_0.8.yaml
- create mode 100644 configs/models/config_128_sv1_4_weeks____emissionsreduction_1.0.yaml
- create mode 100644 configs/models/config_128_sv1_4_weeks___no_bats_co2price_100.yaml
- create mode 100644 configs/models/config_128_sv1_4_weeks___no_bats_co2price_120.yaml
- create mode 100644 configs/models/config_128_sv1_4_weeks___no_bats_co2price_140.yaml
- create mode 100644 configs/models/config_128_sv1_4_weeks___no_bats_co2price_160.yaml
- create mode 100644 configs/models/config_128_sv1_4_weeks___no_bats_co2price_80.yaml
- create mode 100644 configs/models/config_128_sv1_4_weeks___no_bats_emissionsreduction_0.0.yaml
- create mode 100644 configs/models/config_128_sv1_4_weeks___no_bats_emissionsreduction_0.2.yaml
- create mode 100644 configs/models/config_128_sv1_4_weeks___no_bats_emissionsreduction_0.4.yaml
- create mode 100644 configs/models/config_128_sv1_4_weeks___no_bats_emissionsreduction_0.6.yaml
- create mode 100644 configs/models/config_128_sv1_4_weeks___no_bats_emissionsreduction_0.8.yaml
- create mode 100644 configs/models/config_128_sv1_4_weeks___no_bats_emissionsreduction_1.0.yaml
- create mode 100644 data/co2_emissions_files/co2_emissions_1_May16_Fri_h23_m07_s45-GTSEP_stochastic_v1-128_ES_PT.csv
- create mode 100644 data/co2_emissions_files/co2_emissions_1_May16_Fri_h23_m07_s45-GTSEP_stochastic_v1-128_ES_PT_emissionsreduction_0.0.csv
- create mode 100644 data/co2_emissions_files/co2_emissions_1_May16_Fri_h23_m07_s45-GTSEP_stochastic_v1-128_ES_PT_emissionsreduction_0.2.csv
- create mode 100644 data/co2_emissions_files/co2_emissions_1_May16_Fri_h23_m07_s45-GTSEP_stochastic_v1-128_ES_PT_emissionsreduction_0.4.csv
- create mode 100644 data/co2_emissions_files/co2_emissions_1_May16_Fri_h23_m07_s45-GTSEP_stochastic_v1-128_ES_PT_emissionsreduction_0.6.csv
- create mode 100644 data/co2_emissions_files/co2_emissions_1_May16_Fri_h23_m07_s45-GTSEP_stochastic_v1-128_ES_PT_emissionsreduction_0.8.csv
- create mode 100644 data/co2_emissions_files/co2_emissions_1_May16_Fri_h23_m07_s45-GTSEP_stochastic_v1-128_ES_PT_emissionsreduction_1.0.csv
- create mode 100644 data/co2_emissions_files/co2_emissions_2_May17_Sat_h00_m00_s46-GTSEP_stochastic_v1-128_ES_PT_no_bat.csv
- create mode 100644 data/co2_emissions_files/co2_emissions_2_May17_Sat_h00_m00_s46-GTSEP_stochastic_v1-128_ES_PT_no_bat_emissionsreduction_0.0.csv
- create mode 100644 data/co2_emissions_files/co2_emissions_2_May17_Sat_h00_m00_s46-GTSEP_stochastic_v1-128_ES_PT_no_bat_emissionsreduction_0.2.csv
- create mode 100644 data/co2_emissions_files/co2_emissions_2_May17_Sat_h00_m00_s46-GTSEP_stochastic_v1-128_ES_PT_no_bat_emissionsreduction_0.4.csv
- create mode 100644 data/co2_emissions_files/co2_emissions_2_May17_Sat_h00_m00_s46-GTSEP_stochastic_v1-128_ES_PT_no_bat_emissionsreduction_0.6.csv
- create mode 100644 data/co2_emissions_files/co2_emissions_2_May17_Sat_h00_m00_s46-GTSEP_stochastic_v1-128_ES_PT_no_bat_emissionsreduction_0.8.csv
- create mode 100644 data/co2_emissions_files/co2_emissions_2_May17_Sat_h00_m00_s46-GTSEP_stochastic_v1-128_ES_PT_no_bat_emissionsreduction_1.0.csv
- create mode 100644 slurm/slurm_outputs/batch_128_4_batandnobat_sens_co2price22830259.err
- create mode 100644 slurm/slurm_outputs/batch_128_4_batandnobat_sens_co2price22830259.txt
- create mode 100644 slurm/slurm_outputs/batch_128_4_batandnobat_sens_limit22830260.err
- create mode 100644 slurm/slurm_outputs/batch_128_4_batandnobat_sens_limit22830260.txt
