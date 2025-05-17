@@ -2468,6 +2468,14 @@ def GTSEP_stochastic_v1(config: dict) -> gp.Model:
     # create Yy mapping, accessed as Yy[y] and returns a list of years up to and including y from Y
     Yy = {y: [yy for yy in Y if yy <= y] for y in Y}
 
+    # Handle the case where we are imposing co2 restrictions
+    if config["co2_emissions_path"]:
+        # TODO: read it
+        E_limit_df = pd.read_csv(config["co2_emissions_path"], index_col=0)
+        overwrite_co2_restrictions = True
+    else:
+        overwrite_co2_restrictions = False
+
     # Handle the case where the investment decisions are predetermined
     if (
         config["battery_capacity_path"]
@@ -2743,7 +2751,13 @@ def GTSEP_stochastic_v1(config: dict) -> gp.Model:
                 for w in W
                 for t in T
             )
-            model.addConstr(expr <= E_limit, name=f"C_emission_limit[{ω},{y}]")
+            if overwrite_co2_restrictions:
+                co2_limit = E_limit_df.loc[y, w]
+                if co2_limit.isnan():
+                    limit = E_limit
+                else:
+                    limit = co2_limit
+            model.addConstr(expr <= limit, name=f"C_emission_limit[{ω},{y}]")
 
     # 11a) Battery charging limits (old)
     for s in S_old:

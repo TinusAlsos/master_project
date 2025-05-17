@@ -20,3 +20,4 @@ VSS: False
 battery_capacity_path: 
 generator_capacity_path:
 branch_capacity_path:
+co2_emissions_path:
