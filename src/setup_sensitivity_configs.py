@@ -33,8 +33,8 @@ emissions_restriction_reduction = [0.0, 0.20, 0.40, 0.60, 0.80, 1.0]
 
 # %%
 folder_names = [
-    "May16_Fri_h20_m37_s52-GTSEP_stochastic_v1-37_ES_PT_no_bat",
-    "May16_Fri_h20_m41_s08-GTSEP_stochastic_v1-37_ES_PT",
+    "1_May16_Fri_h23_m07_s45-GTSEP_stochastic_v1-128_ES_PT",
+    "2_May17_Sat_h00_m00_s46-GTSEP_stochastic_v1-128_ES_PT_no_bat",
 ]
 config_names = ["config_128_sv1_4_weeks___", "config_128_sv1_4_weeks___no_bats"]
 
@@ -45,7 +45,12 @@ SINGLE_RUNS_FOLDER = os.path.join(RUNS_FOLDER, "single_runs")
 # # Switch to batch runs folder when doing the 128 4week model run
 
 # %%
-folders = [os.path.join(BATCH_RUNS_FOLDER, folder_name) for folder_name in folder_names]
+BATCH_RUNS_FOLDER_BASE = os.path.join(
+    BATCH_RUNS_FOLDER, "batch_128_4_4_4core_bat_and_no_bat"
+)
+folders = [
+    os.path.join(BATCH_RUNS_FOLDER_BASE, folder_name) for folder_name in folder_names
+]
 print(folders)
 
 # %% [markdown]
@@ -82,12 +87,6 @@ input_data_sets = [
 #     print(f"config: {i}, {config_names[i]}")
 #     print(f"Input data folder: {input_data_folders[i]}")
 #     print(f"Input data set: {input_data_sets[i]}")
-
-# %%
-folders = [
-    os.path.join(SINGLE_RUNS_FOLDER, folder_name) for folder_name in folder_names
-]
-print(folders)
 
 # %%
 decision_variables_folders = [
