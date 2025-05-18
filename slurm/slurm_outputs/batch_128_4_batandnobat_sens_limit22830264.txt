@@ -386,3 +386,7 @@ No preprocessing config provided. Skipping preprocessing...
 Path_or_name: 128_sv1_4_weeks___emissionsreduction_0.0
 Job finished at Sat 17 May 07:54:27 CEST 2025
 Pushing to git
+[idun_runs 8555fb1] results from batch_128_4_batandnobat_sens_limit
+ 5 files changed, 447 insertions(+)
+ create mode 100644 slurm/slurm_outputs/batch_128_4_batandnobat_sens_limit22830264.err
+ create mode 100644 slurm/slurm_outputs/batch_128_4_batandnobat_sens_limit22830264.txt
