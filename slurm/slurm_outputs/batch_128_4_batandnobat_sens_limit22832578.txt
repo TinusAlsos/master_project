@@ -391,3 +391,9 @@ Set parameter WLSSecret
 Set parameter LicenseID to value 2622400
 Job finished at Sun 18 May 15:13:54 CEST 2025
 Pushing to git
+[idun_runs 1a5a729] results from batch_128_4_batandnobat_sens_limit
+ 4 files changed, 840 insertions(+)
+ create mode 100644 slurm/slurm_outputs/batch_128_4_batandnobat_sens_co2price22832577.err
+ create mode 100644 slurm/slurm_outputs/batch_128_4_batandnobat_sens_co2price22832577.txt
+ create mode 100644 slurm/slurm_outputs/batch_128_4_batandnobat_sens_limit22832578.err
+ create mode 100644 slurm/slurm_outputs/batch_128_4_batandnobat_sens_limit22832578.txt
