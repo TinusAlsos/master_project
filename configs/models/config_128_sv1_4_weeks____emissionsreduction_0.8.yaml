@@ -21,4 +21,4 @@ representative_periods:
 - 52
 VSS: true
 EVPI: true
-co2_emissions_path: c:\Users\tinus\OneDrive\Dokumenter\0 Master\code\master_project\data\co2_emissions_files\co2_emissions_1_May16_Fri_h23_m07_s45-GTSEP_stochastic_v1-128_ES_PT_emissionsreduction_0.8.csv
+co2_emissions_path: /cluster/home/tinusfa/master_project/data/co2_emissions_files/co2_emissions_1_May16_Fri_h23_m07_s45-GTSEP_stochastic_v1-128_ES_PT_emissionsreduction_0.8.csv

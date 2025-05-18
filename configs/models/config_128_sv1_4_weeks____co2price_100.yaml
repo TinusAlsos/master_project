@@ -21,4 +21,4 @@ representative_periods:
 - 52
 VSS: true
 EVPI: true
-co2_price: 100
+CO2_price: 100

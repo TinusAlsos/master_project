@@ -50,3 +50,5 @@ Traceback (most recent call last):
   File "/cluster/home/tinusfa/.conda/envs/project/lib/python3.12/site-packages/pandas/core/indexes/base.py", line 3812, in get_loc
     raise KeyError(key) from err
 KeyError: 'mean'
+To github.com:TinusAlsos/master_project.git
+   df4eab2..3281f3d  idun_runs -> idun_runs
