@@ -1,2 +1,4 @@
 Processing Models:   0%|          | 0/12 [00:00<?, ?model/s]
 Running EVPI analysis:   0%|          | 0/6 [00:00<?, ?it/s][A
+Running EVPI analysis:  17%|█▋        | 1/6 [07:15<36:17, 435.41s/it][A
+Running EVPI analysis:  33%|███▎      | 2/6 [12:22<23:59, 359.93s/it][Aslurmstepd: error: *** JOB 22832672 ON idun-03-16 CANCELLED AT 2025-05-18T16:19:26 ***

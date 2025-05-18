@@ -1,0 +1,9 @@
+Processing Models:   0%|          | 0/10 [00:00<?, ?model/s]
+Running EVPI analysis:   0%|          | 0/6 [00:00<?, ?it/s][A
+Running EVPI analysis:  17%|█▋        | 1/6 [04:19<21:39, 259.87s/it][A
+Running EVPI analysis:  33%|███▎      | 2/6 [08:47<17:37, 264.39s/it][A
+Running EVPI analysis:  50%|█████     | 3/6 [13:32<13:41, 273.83s/it][A
+Running EVPI analysis:  67%|██████▋   | 4/6 [17:37<08:45, 262.56s/it][A
+Running EVPI analysis:  83%|████████▎ | 5/6 [22:25<04:31, 271.66s/it][A
+Running EVPI analysis: 100%|██████████| 6/6 [26:28<00:00, 262.02s/it][ARunning EVPI analysis: 100%|██████████| 6/6 [26:28<00:00, 264.81s/it]
+Processing Models:  10%|█         | 1/10 [43:55<6:35:23, 2635.92s/model]

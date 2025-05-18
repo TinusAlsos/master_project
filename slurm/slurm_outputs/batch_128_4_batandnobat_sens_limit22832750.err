@@ -1,0 +1,52 @@
+Processing Models:   0%|          | 0/12 [00:00<?, ?model/s]
+Running EVPI analysis:   0%|          | 0/6 [00:00<?, ?it/s][A
+Running EVPI analysis:  17%|█▋        | 1/6 [06:50<34:12, 410.47s/it][A
+Running EVPI analysis:  33%|███▎      | 2/6 [11:50<23:03, 345.79s/it][A
+Running EVPI analysis:  50%|█████     | 3/6 [17:44<17:27, 349.24s/it][A
+Running EVPI analysis:  67%|██████▋   | 4/6 [24:19<12:14, 367.49s/it][A
+Running EVPI analysis:  83%|████████▎ | 5/6 [31:36<06:32, 392.28s/it][A
+Running EVPI analysis: 100%|██████████| 6/6 [38:12<00:00, 393.77s/it][ARunning EVPI analysis: 100%|██████████| 6/6 [38:12<00:00, 382.12s/it]
+Processing Models:   0%|          | 0/12 [50:14<?, ?model/s]
+Traceback (most recent call last):
+  File "/cluster/home/tinusfa/.conda/envs/project/lib/python3.12/site-packages/pandas/core/indexes/base.py", line 3805, in get_loc
+    return self._engine.get_loc(casted_key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "index.pyx", line 167, in pandas._libs.index.IndexEngine.get_loc
+  File "index.pyx", line 196, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/hashtable_class_helper.pxi", line 7081, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas/_libs/hashtable_class_helper.pxi", line 7089, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: 'mean'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/cluster/home/tinusfa/master_project/src/run_batches.py", line 86, in <module>
+    run_batches(
+  File "/cluster/home/tinusfa/master_project/src/run_batches.py", line 43, in run_batches
+    run(
+  File "/cluster/home/tinusfa/master_project/src/run.py", line 341, in run
+    model_info_df = run(
+                    ^^^^
+  File "/cluster/home/tinusfa/master_project/src/run.py", line 215, in run
+    model_output = get_model(model_config)
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cluster/home/tinusfa/master_project/src/models.py", line 4222, in get_model
+    return model_func(config)
+           ^^^^^^^^^^^^^^^^^^
+  File "/cluster/home/tinusfa/master_project/src/models.py", line 2757, in GTSEP_stochastic_v1
+    co2_limit = E_limit_df.loc[y, ω]
+                ~~~~~~~~~~~~~~^^^^^^
+  File "/cluster/home/tinusfa/.conda/envs/project/lib/python3.12/site-packages/pandas/core/indexing.py", line 1183, in __getitem__
+    return self.obj._get_value(*key, takeable=self._takeable)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cluster/home/tinusfa/.conda/envs/project/lib/python3.12/site-packages/pandas/core/frame.py", line 4214, in _get_value
+    series = self._get_item_cache(col)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cluster/home/tinusfa/.conda/envs/project/lib/python3.12/site-packages/pandas/core/frame.py", line 4638, in _get_item_cache
+    loc = self.columns.get_loc(item)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cluster/home/tinusfa/.conda/envs/project/lib/python3.12/site-packages/pandas/core/indexes/base.py", line 3812, in get_loc
+    raise KeyError(key) from err
+KeyError: 'mean'

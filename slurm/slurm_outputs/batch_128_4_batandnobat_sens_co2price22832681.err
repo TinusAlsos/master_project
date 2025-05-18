@@ -19,3 +19,5 @@ Traceback (most recent call last):
   File "src/gurobipy/var.pxi", line 156, in gurobipy._core.Var.getAttr
   File "src/gurobipy/_attrutil.pyx", line 117, in gurobipy._attrutil._getattr
 AttributeError: Unable to retrieve attribute 'X'. Did you mean: 'Xn'?
+To github.com:TinusAlsos/master_project.git
+   718d5da..a96ac71  idun_runs -> idun_runs

@@ -22,5 +22,5 @@ representative_periods:
 VSS: false
 EVPI: false
 co2_emissions_path: /cluster/home/tinusfa/master_project/data/co2_emissions_files/co2_emissions_1_May16_Fri_h23_m07_s45-GTSEP_stochastic_v1-128_ES_PT_emissionsreduction_0.0.csv
-scenario_file: EVPI_1
-save_folder: /cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_batandnobat_sens_limit/1_May18_Sun_h15_m51_s28-GTSEP_stochastic_v1-128_ES_PT_EVPI_1
+scenario_file: EVPI_3
+save_folder: /cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_batandnobat_sens_limit/1_May18_Sun_h15_m51_s28-GTSEP_stochastic_v1-128_ES_PT_EVPI_3
