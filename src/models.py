@@ -2753,11 +2753,15 @@ def GTSEP_stochastic_v1(config: dict) -> gp.Model:
                 for t in T
             )
             if overwrite_co2_restrictions:
+                print(f"YES, OVERWRITING CO2 RESTRICTIONS")
                 co2_limit = E_limit_df.loc[y, ω]
                 if np.isnan(co2_limit):
                     limit = E_limit
                 else:
                     limit = co2_limit
+                print(f"CO2 LIMIT: {limit}")
+            else:
+                limit = E_limit
             model.addConstr(expr <= limit, name=f"C_emission_limit[{ω},{y}]")
 
     # 11a) Battery charging limits (old)

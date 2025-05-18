@@ -267,7 +267,7 @@ for i, name in enumerate(folder_names):
     for num, co2_price in enumerate(co2_prices):
         suffix = f"_co2price_{co2_price}"
         overwrite_dict = {
-            "co2_price": co2_price,
+            "CO2_price": co2_price,
         }
         utils.copy_and_modify_config(
             config_names[i], overwrite_dict=overwrite_dict, suffix=suffix
