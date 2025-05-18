@@ -217,6 +217,8 @@ for i, decision_variables_set in enumerate(decision_variables_sets):
         week_weights=week_weights_set[i],
         savefolder=BENCHMARKING_FOLDER,
     )
+    # Compute row-wise mean across all scenario columns
+    co2_emissions["mean"] = co2_emissions.mean(axis=1, skipna=True)
     co2_emissions_dataframes.append(co2_emissions)
     print(co2_emissions)
 
@@ -251,13 +253,13 @@ test1
 # %%
 years = [2025, 2030, 2040, 2050]
 scenarios = ["DE", "GA", "NT"]
-for year in years:
-    for scenario in scenarios:
+# for year in years:
+#     for scenario in scenarios:
 
-        print(
-            f"For year {year} scenario {scenario} the value is {test1.loc[year, scenario]}"
-        )
-        print(type(test1.loc[year, scenario]))
+#         print(
+#             f"For year {year} scenario {scenario} the value is {test1.loc[year, scenario]}"
+#         )
+#         print(type(test1.loc[year, scenario]))
 
 # %% [markdown]
 # # Time to make copies of the config files
@@ -273,16 +275,6 @@ for i, name in enumerate(folder_names):
             config_names[i], overwrite_dict=overwrite_dict, suffix=suffix
         )
 
-# %%
-for i, name in enumerate(folder_names):
-    for num, co2_price in enumerate(co2_prices):
-        suffix = f"_co2price_{co2_price}"
-        overwrite_dict = {
-            "co2_price": co2_price,
-        }
-        utils.copy_and_modify_config(
-            config_names[i], overwrite_dict=overwrite_dict, suffix=suffix
-        )
 
 # %%
 for i, name in enumerate(folder_names):
