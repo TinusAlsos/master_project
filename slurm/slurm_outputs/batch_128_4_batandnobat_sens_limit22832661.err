@@ -16,3 +16,5 @@ Traceback (most recent call last):
     if co2_limit.isnan():
        ^^^^^^^^^^^^^^^
 AttributeError: 'numpy.float64' object has no attribute 'isnan'
+To github.com:TinusAlsos/master_project.git
+   a88d37d..ce3f711  idun_runs -> idun_runs
