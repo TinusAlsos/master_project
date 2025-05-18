@@ -1,6 +1,6 @@
 Running from this directory: /cluster/home/tinusfa/master_project
 Name of job: batch_128_4_batandnobat_sens_limit
-ID of job: 22832590
+ID of job: 22832634
 The job was run on these nodes: idun-03-18
 Base folder: /cluster/home/tinusfa/master_project
 ['/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat/1_May16_Fri_h23_m07_s45-GTSEP_stochastic_v1-128_ES_PT', '/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat/2_May17_Sat_h00_m00_s46-GTSEP_stochastic_v1-128_ES_PT_no_bat']
@@ -389,9 +389,7 @@ Configuration loaded from /cluster/home/tinusfa/master_project/configs/models/co
 Set parameter WLSAccessID
 Set parameter WLSSecret
 Set parameter LicenseID to value 2622400
-Job finished at Sun 18 May 15:23:13 CEST 2025
+Academic license 2622400 - for non-commercial use only - registered to ti___@stud.ntnu.no
+Warning: environment still referenced so free is deferred (Continue to use WLS)
+Job finished at Sun 18 May 15:32:26 CEST 2025
 Pushing to git
-[idun_runs 6f13003] results from batch_128_4_batandnobat_sens_limit
- 2 files changed, 414 insertions(+)
- create mode 100644 slurm/slurm_outputs/batch_128_4_batandnobat_sens_limit22832590.err
- create mode 100644 slurm/slurm_outputs/batch_128_4_batandnobat_sens_limit22832590.txt
