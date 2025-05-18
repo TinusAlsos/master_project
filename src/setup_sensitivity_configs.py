@@ -17,7 +17,6 @@ import yaml
 
 # %%
 BASE_FOLDER = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-print(f"Base folder: {BASE_FOLDER}")
 RUNS_FOLDER = os.path.join(BASE_FOLDER, "runs")
 BATCH_RUNS_FOLDER = os.path.join(RUNS_FOLDER, "batch_runs")
 
@@ -67,10 +66,6 @@ for config in configs:
 # %%
 years_list = [config["years"] for config in configs]
 data_folder_names = [config["data_folder_name"] for config in configs]
-for i in range(len(configs)):
-    print(f"Config {i}:")
-    print(f"Data folder path: {data_folder_names[i]}")
-    print(f"Years: {years_list[i]}")
 
 # %%
 input_data_folders = [
@@ -96,16 +91,16 @@ decision_variables_sets = [
     utils.load_csv_files_from_folder_with_scenarios(decision_variables_folder)
     for decision_variables_folder in decision_variables_folders
 ]
-for i in range(len(decision_variables_sets)):
-    print(f"config: {i}, {config_names[i]}")
-    print(f"Decision variables set: {decision_variables_sets[i]}")
 
 # %%
 decision_variables_sets[0].keys()
 
 # %%
 # Finally, calculate the CO2 emissions for each scenario, but first I need the scenarios
-scenario_file_path = r"C:\Users\tinus\OneDrive\Dokumenter\0 Master\code\master_project\data\scenario_multipliers\base_scenarios.csv"
+# scenario_file_path = r"C:\Users\tinus\OneDrive\Dokumenter\0 Master\code\master_project\data\scenario_multipliers\base_scenarios.csv"
+scenario_file_path = os.path.join(
+    DATA_FOLDER, "scenario_multipliers", "base_scenarios.csv"
+)
 import pandas as pd
 
 # %%
@@ -140,10 +135,10 @@ for i, config in enumerate(configs):
     Omega_y = scenarios  # e.g. {2040:['NT','GA','DE'],...}
 
     # Still need Ys, Gs, Ws, and Ts
-for i, scenario in enumerate(scenarios_set):
-    print(f"Scenario: {scenario}")
-    print(f"Omega: {Omegas[i]}")
-    print(week_weights_set[i])
+# for i, scenario in enumerate(scenarios_set):
+#     print(f"Scenario: {scenario}")
+#     print(f"Omega: {Omegas[i]}")
+#     print(week_weights_set[i])
 
 # %%
 decision_variables_sets[0].keys()

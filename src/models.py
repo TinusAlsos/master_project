@@ -2752,7 +2752,7 @@ def GTSEP_stochastic_v1(config: dict) -> gp.Model:
                 for t in T
             )
             if overwrite_co2_restrictions:
-                co2_limit = E_limit_df.loc[y, w]
+                co2_limit = E_limit_df.loc[y, ω]
                 if co2_limit.isnan():
                     limit = E_limit
                 else:
