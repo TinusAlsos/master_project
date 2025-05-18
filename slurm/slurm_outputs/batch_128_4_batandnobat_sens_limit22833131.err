@@ -1,0 +1,29 @@
+Processing Models:   0%|          | 0/12 [00:00<?, ?model/s]
+Running EVPI analysis:   0%|          | 0/6 [00:00<?, ?it/s][A
+Running EVPI analysis:  17%|█▋        | 1/6 [07:00<35:04, 420.81s/it][A
+Running EVPI analysis:  33%|███▎      | 2/6 [12:07<23:35, 353.94s/it][A
+Running EVPI analysis:  50%|█████     | 3/6 [18:42<18:37, 372.56s/it][A
+Running EVPI analysis:  67%|██████▋   | 4/6 [25:05<12:32, 376.49s/it][A
+Running EVPI analysis:  83%|████████▎ | 5/6 [31:32<06:20, 380.44s/it][A
+Running EVPI analysis: 100%|██████████| 6/6 [38:10<00:00, 386.43s/it][ARunning EVPI analysis: 100%|██████████| 6/6 [38:10<00:00, 381.78s/it]
+Processing Models:   8%|▊         | 1/12 [57:25<10:31:37, 3445.22s/model]
+Running EVPI analysis:   0%|          | 0/6 [00:00<?, ?it/s][A
+Running EVPI analysis:  17%|█▋        | 1/6 [17:03<1:25:16, 1023.36s/it][A
+Running EVPI analysis:  33%|███▎      | 2/6 [25:51<48:47, 731.91s/it]   [A
+Running EVPI analysis:  50%|█████     | 3/6 [33:51<30:51, 617.17s/it][A
+Running EVPI analysis:  67%|██████▋   | 4/6 [41:10<18:13, 546.54s/it][A
+Running EVPI analysis:  83%|████████▎ | 5/6 [50:09<09:03, 543.95s/it][A
+Running EVPI analysis: 100%|██████████| 6/6 [59:35<00:00, 551.57s/it][ARunning EVPI analysis: 100%|██████████| 6/6 [59:35<00:00, 595.98s/it]
+Processing Models:  17%|█▋        | 2/12 [2:31:29<13:09:49, 4738.98s/model]
+Running EVPI analysis:   0%|          | 0/6 [00:00<?, ?it/s][A
+Running EVPI analysis:  17%|█▋        | 1/6 [13:11<1:05:55, 791.12s/it][A
+Running EVPI analysis:  33%|███▎      | 2/6 [26:05<52:04, 781.16s/it]  [A
+Running EVPI analysis:  50%|█████     | 3/6 [33:42<31:40, 633.34s/it][A
+Running EVPI analysis:  67%|██████▋   | 4/6 [45:23<22:00, 660.11s/it][A
+Running EVPI analysis:  83%|████████▎ | 5/6 [53:52<10:05, 605.37s/it][A
+Running EVPI analysis: 100%|██████████| 6/6 [1:02:20<00:00, 572.49s/it][ARunning EVPI analysis: 100%|██████████| 6/6 [1:02:20<00:00, 623.48s/it]
+Processing Models:  25%|██▌       | 3/12 [4:15:38<13:34:15, 5428.36s/model]
+Running EVPI analysis:   0%|          | 0/6 [00:00<?, ?it/s][A
+Running EVPI analysis:  17%|█▋        | 1/6 [09:03<45:16, 543.21s/it][A
+Running EVPI analysis:  33%|███▎      | 2/6 [44:29<1:38:18, 1474.52s/it][A
+Running EVPI analysis:  50%|█████     | 3/6 [53:33<52:28, 1049.63s/it]  [A

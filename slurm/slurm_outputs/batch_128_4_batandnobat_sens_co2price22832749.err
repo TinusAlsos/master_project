@@ -52,3 +52,5 @@ Traceback (most recent call last):
   File "/cluster/home/tinusfa/master_project/src/utils.py", line 91, in load_model_config
     raise FileNotFoundError(f"Model configuration file not found: {config_path}")
 FileNotFoundError: Model configuration file not found: /cluster/home/tinusfa/master_project/configs/models/config_128_sv1_4_weeks____no_bats_co2price_80.yaml
+To github.com:TinusAlsos/master_project.git
+   c6af220..07cdb4f  idun_runs -> idun_runs

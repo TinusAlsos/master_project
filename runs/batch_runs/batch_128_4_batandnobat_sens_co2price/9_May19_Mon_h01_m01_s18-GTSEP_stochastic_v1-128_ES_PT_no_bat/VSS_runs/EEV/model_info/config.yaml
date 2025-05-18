@@ -1,0 +1,44 @@
+CC: 100
+CO2_price: 140
+EVPI: false
+E_limit: .inf
+MIPGap: 0.01
+MS: 0.1
+VOLL: 6350
+VSS: false
+battery_capacity_path: /cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_batandnobat_sens_co2price/9_May19_Mon_h01_m01_s18-GTSEP_stochastic_v1-128_ES_PT_no_bat/VSS_runs/EV_run/decision_variables/battery_capacity.csv
+branch_capacity_path: /cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_batandnobat_sens_co2price/9_May19_Mon_h01_m01_s18-GTSEP_stochastic_v1-128_ES_PT_no_bat/VSS_runs/EV_run/decision_variables/branch_capacity.csv
+carriers:
+- CCGT
+- solar
+- onwind
+clustering_periods: null
+clustering_unit: null
+co2_emissions_path: null
+data_folder_name: elec_s_128_ES_PT_no_bat
+discount_rate: 0.07
+expansion_factor: 2.0
+generator_capacity_path: /cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_batandnobat_sens_co2price/9_May19_Mon_h01_m01_s18-GTSEP_stochastic_v1-128_ES_PT_no_bat/VSS_runs/EV_run/decision_variables/generator_capacity.csv
+model_id: 128_ES_PT_no_bat
+model_name: GTSEP_stochastic_v1
+p_max_new_branch: 5000
+p_min_new_branch: 100
+query: not (x > 2 and y < 40)
+representative_period_unit: week
+representative_periods:
+- 11
+- 21
+- 42
+- 52
+save_folder: /cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_batandnobat_sens_co2price/9_May19_Mon_h01_m01_s18-GTSEP_stochastic_v1-128_ES_PT_no_bat/VSS_runs/EEV
+scenario_file: ''
+week_weights:
+  11: 13.035714285714286
+  21: 13.035714285714286
+  42: 13.035714285714286
+  52: 13.035714285714286
+years:
+- 2025
+- 2030
+- 2040
+- 2050

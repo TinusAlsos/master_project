@@ -7,3 +7,4 @@
 Running EVPI analysis:  83%|████████▎ | 5/6 [30:48<06:18, 379.00s/it][A
 Running EVPI analysis: 100%|██████████| 6/6 [38:16<00:00, 402.53s/it][ARunning EVPI analysis: 100%|██████████| 6/6 [38:16<00:00, 382.72s/it]
 Processing Models:   8%|▊         | 1/12 [58:53<10:47:44, 3533.11s/model]
+Running EVPI analysis:   0%|          | 0/6 [00:00<?, ?it/s][Aslurmstepd: error: *** JOB 22832915 ON idun-03-22 CANCELLED AT 2025-05-18T20:15:34 ***
