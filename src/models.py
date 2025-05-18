@@ -1,6 +1,7 @@
 from time import time
 import gurobipy as gp
 from gurobipy import GRB
+import numpy as np
 import pandas as pd
 from src.utils import (
     load_csv_files_from_folder,
@@ -2753,7 +2754,7 @@ def GTSEP_stochastic_v1(config: dict) -> gp.Model:
             )
             if overwrite_co2_restrictions:
                 co2_limit = E_limit_df.loc[y, ω]
-                if co2_limit.isnan():
+                if np.isnan(co2_limit):
                     limit = E_limit
                 else:
                     limit = co2_limit
