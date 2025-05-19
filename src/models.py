@@ -2652,8 +2652,7 @@ def GTSEP_stochastic_v1(config: dict) -> gp.Model:
                     for t in T:
                         model.addConstr(
                             sh[n, ω, y, w, t]
-                            <= MS
-                            * hourly_demand.loc[(w, t), n]
+                            <= hourly_demand.loc[(w, t), n]
                             * scenario_multiplier.loc[y, ω],
                             name=f"C_load_shedding_limit[{n},{ω},{y},{w},{t}]",
                         )
