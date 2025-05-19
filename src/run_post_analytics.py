@@ -31,11 +31,11 @@ if __name__ == "__main__":
         os.path.join(SINGLE_RUNS_FOLDER, folder_name)
         for folder_name in single_runs_folder_names
     ]
-    batch_runs_folder_name = "test_vss_evpi"
+    batch_runs_folder_name = "batch_128_4_4_4core_bat_and_no_bat"
     batch_runs_folder_path = os.path.join(BATCH_RUNS_FOLDER, batch_runs_folder_name)
 
     ### select either single or batch runs
-    run_batch = False
+    run_batch = True
     if run_batch:
         print("Running batch runs")
         runs_folder_paths = [
