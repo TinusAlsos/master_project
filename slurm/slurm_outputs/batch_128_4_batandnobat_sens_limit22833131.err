@@ -27,3 +27,27 @@
 Running EVPI analysis:  17%|█▋        | 1/6 [09:03<45:16, 543.21s/it][A
 Running EVPI analysis:  33%|███▎      | 2/6 [44:29<1:38:18, 1474.52s/it][A
 Running EVPI analysis:  50%|█████     | 3/6 [53:33<52:28, 1049.63s/it]  [A
+Running EVPI analysis:  67%|██████▋   | 4/6 [1:05:24<30:31, 915.85s/it][A
+Running EVPI analysis:  83%|████████▎ | 5/6 [1:16:12<13:39, 819.39s/it][A
+Running EVPI analysis: 100%|██████████| 6/6 [1:22:44<00:00, 674.00s/it][ARunning EVPI analysis: 100%|██████████| 6/6 [1:22:44<00:00, 827.43s/it]
+Processing Models:  33%|███▎      | 4/12 [6:05:27<13:04:51, 5886.45s/model]Processing Models:  33%|███▎      | 4/12 [6:18:39<12:37:18, 5679.77s/model]
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/cluster/home/tinusfa/master_project/src/run_batches.py", line 86, in <module>
+    run_batches(
+  File "/cluster/home/tinusfa/master_project/src/run_batches.py", line 43, in run_batches
+    run(
+  File "/cluster/home/tinusfa/master_project/src/run.py", line 215, in run
+    model_output = get_model(model_config)
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cluster/home/tinusfa/master_project/src/models.py", line 4222, in get_model
+    return model_func(config)
+           ^^^^^^^^^^^^^^^^^^
+  File "/cluster/home/tinusfa/master_project/src/models.py", line 2927, in GTSEP_stochastic_v1
+    g[i, omega, y, w, t].X + (g_new[i, omega, y, w, t].X if i in G_new else 0),
+    ^^^^^^^^^^^^^^^^^^^^^^
+  File "src/gurobipy/var.pxi", line 128, in gurobipy._core.Var.__getattr__
+  File "src/gurobipy/var.pxi", line 156, in gurobipy._core.Var.getAttr
+  File "src/gurobipy/_attrutil.pyx", line 117, in gurobipy._attrutil._getattr
+AttributeError: Unable to retrieve attribute 'X'. Did you mean: 'Xn'?
