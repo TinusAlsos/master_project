@@ -1,0 +1,97 @@
+Processing Models:   0%|          | 0/12 [00:00<?, ?model/s]
+Running EVPI analysis:   0%|          | 0/6 [00:00<?, ?it/s][A
+Running EVPI analysis:  17%|█▋        | 1/6 [07:29<37:29, 449.91s/it][A
+Running EVPI analysis:  33%|███▎      | 2/6 [12:45<24:44, 371.11s/it][A
+Running EVPI analysis:  50%|█████     | 3/6 [20:08<20:11, 403.80s/it][A
+Running EVPI analysis:  67%|██████▋   | 4/6 [25:58<12:45, 382.56s/it][A
+Running EVPI analysis:  83%|████████▎ | 5/6 [31:55<06:13, 373.49s/it][A
+Running EVPI analysis: 100%|██████████| 6/6 [37:10<00:00, 353.48s/it][ARunning EVPI analysis: 100%|██████████| 6/6 [37:10<00:00, 371.77s/it]
+Processing Models:   8%|▊         | 1/12 [1:17:33<14:13:10, 4653.68s/model]
+Running EVPI analysis:   0%|          | 0/6 [00:00<?, ?it/s][A
+Running EVPI analysis:  17%|█▋        | 1/6 [07:44<38:44, 464.91s/it][A
+Running EVPI analysis:  33%|███▎      | 2/6 [17:14<35:06, 526.71s/it][A
+Running EVPI analysis:  50%|█████     | 3/6 [25:34<25:42, 514.28s/it][A
+Running EVPI analysis:  67%|██████▋   | 4/6 [33:09<16:21, 490.84s/it][A
+Running EVPI analysis:  83%|████████▎ | 5/6 [41:00<08:03, 483.67s/it][A
+Running EVPI analysis: 100%|██████████| 6/6 [50:40<00:00, 516.44s/it][ARunning EVPI analysis: 100%|██████████| 6/6 [50:40<00:00, 506.72s/it]
+Processing Models:  17%|█▋        | 2/12 [2:44:24<13:50:14, 4981.44s/model]
+Running EVPI analysis:   0%|          | 0/6 [00:00<?, ?it/s][A
+Running EVPI analysis:  17%|█▋        | 1/6 [08:09<40:46, 489.38s/it][A
+Running EVPI analysis:  33%|███▎      | 2/6 [16:29<33:03, 495.84s/it][A
+Running EVPI analysis:  50%|█████     | 3/6 [26:07<26:39, 533.26s/it][A
+Running EVPI analysis:  67%|██████▋   | 4/6 [35:18<18:00, 540.38s/it][A
+Running EVPI analysis:  83%|████████▎ | 5/6 [45:56<09:35, 575.40s/it][A
+Running EVPI analysis: 100%|██████████| 6/6 [56:06<00:00, 587.23s/it][ARunning EVPI analysis: 100%|██████████| 6/6 [56:06<00:00, 561.09s/it]
+Processing Models:  25%|██▌       | 3/12 [4:18:54<13:14:24, 5296.01s/model]
+Running EVPI analysis:   0%|          | 0/6 [00:00<?, ?it/s][A
+Running EVPI analysis:  17%|█▋        | 1/6 [13:40<1:08:24, 820.96s/it][A
+Running EVPI analysis:  33%|███▎      | 2/6 [24:52<48:51, 732.88s/it]  [A
+Running EVPI analysis:  50%|█████     | 3/6 [36:47<36:15, 725.08s/it][A
+Running EVPI analysis:  67%|██████▋   | 4/6 [46:53<22:36, 678.07s/it][A
+Running EVPI analysis:  83%|████████▎ | 5/6 [56:57<10:51, 651.23s/it][A
+Running EVPI analysis: 100%|██████████| 6/6 [1:06:33<00:00, 625.67s/it][ARunning EVPI analysis: 100%|██████████| 6/6 [1:06:33<00:00, 665.62s/it]
+Processing Models:  33%|███▎      | 4/12 [6:58:11<15:30:23, 6977.94s/model]
+Running EVPI analysis:   0%|          | 0/6 [00:00<?, ?it/s][A
+Running EVPI analysis:  17%|█▋        | 1/6 [14:09<1:10:45, 849.19s/it][A
+Running EVPI analysis:  33%|███▎      | 2/6 [27:34<54:53, 823.42s/it]  [A
+Running EVPI analysis:  50%|█████     | 3/6 [44:54<46:07, 922.46s/it][A
+Running EVPI analysis:  67%|██████▋   | 4/6 [2:06:32<1:23:03, 2491.83s/it][A
+Running EVPI analysis:  83%|████████▎ | 5/6 [2:22:10<32:11, 1931.42s/it]  [A
+Running EVPI analysis: 100%|██████████| 6/6 [2:38:59<00:00, 1617.95s/it][ARunning EVPI analysis: 100%|██████████| 6/6 [2:38:59<00:00, 1589.97s/it]
+Processing Models:  42%|████▏     | 5/12 [10:48:28<18:21:50, 9444.39s/model]
+Running EVPI analysis:   0%|          | 0/6 [00:00<?, ?it/s][A
+Running EVPI analysis:  17%|█▋        | 1/6 [10:54<54:34, 654.95s/it][A
+Running EVPI analysis:  33%|███▎      | 2/6 [27:20<56:37, 849.30s/it][A
+Running EVPI analysis:  50%|█████     | 3/6 [38:45<38:43, 774.59s/it][A
+Running EVPI analysis:  67%|██████▋   | 4/6 [54:44<28:14, 847.14s/it][A
+Running EVPI analysis:  83%|████████▎ | 5/6 [1:07:43<13:42, 822.68s/it][A
+Running EVPI analysis: 100%|██████████| 6/6 [1:22:53<00:00, 852.46s/it][ARunning EVPI analysis: 100%|██████████| 6/6 [1:22:53<00:00, 828.99s/it]
+Processing Models:  50%|█████     | 6/12 [13:12:31<15:17:11, 9171.85s/model]
+Running EVPI analysis:   0%|          | 0/6 [00:00<?, ?it/s][A
+Running EVPI analysis:  17%|█▋        | 1/6 [04:04<20:24, 244.85s/it][A
+Running EVPI analysis:  33%|███▎      | 2/6 [07:53<15:41, 235.31s/it][A
+Running EVPI analysis:  50%|█████     | 3/6 [12:13<12:19, 246.40s/it][A
+Running EVPI analysis:  67%|██████▋   | 4/6 [16:49<08:36, 258.19s/it][A
+Running EVPI analysis:  83%|████████▎ | 5/6 [20:52<04:12, 252.90s/it][A
+Running EVPI analysis: 100%|██████████| 6/6 [24:48<00:00, 246.97s/it][ARunning EVPI analysis: 100%|██████████| 6/6 [24:48<00:00, 248.06s/it]
+Processing Models:  58%|█████▊    | 7/12 [13:52:53<9:40:26, 6965.25s/model] 
+Running EVPI analysis:   0%|          | 0/6 [00:00<?, ?it/s][A
+Running EVPI analysis:  17%|█▋        | 1/6 [05:27<27:16, 327.36s/it][A
+Running EVPI analysis:  33%|███▎      | 2/6 [10:19<20:25, 306.36s/it][A
+Running EVPI analysis:  50%|█████     | 3/6 [15:30<15:25, 308.66s/it][A
+Running EVPI analysis:  67%|██████▋   | 4/6 [21:02<10:36, 318.02s/it][A
+Running EVPI analysis:  83%|████████▎ | 5/6 [26:13<05:15, 315.38s/it][A
+Running EVPI analysis: 100%|██████████| 6/6 [31:47<00:00, 321.61s/it][ARunning EVPI analysis: 100%|██████████| 6/6 [31:47<00:00, 317.86s/it]
+Processing Models:  67%|██████▋   | 8/12 [14:44:20<6:22:01, 5730.30s/model]
+Running EVPI analysis:   0%|          | 0/6 [00:00<?, ?it/s][A
+Running EVPI analysis:  17%|█▋        | 1/6 [05:28<27:20, 328.05s/it][A
+Running EVPI analysis:  33%|███▎      | 2/6 [10:49<21:36, 324.24s/it][A
+Running EVPI analysis:  50%|█████     | 3/6 [15:48<15:38, 312.85s/it][A
+Running EVPI analysis:  67%|██████▋   | 4/6 [21:36<10:53, 326.64s/it][A
+Running EVPI analysis:  83%|████████▎ | 5/6 [26:39<05:18, 318.09s/it][A
+Running EVPI analysis: 100%|██████████| 6/6 [32:40<00:00, 332.53s/it][ARunning EVPI analysis: 100%|██████████| 6/6 [32:40<00:00, 326.70s/it]
+Processing Models:  75%|███████▌  | 9/12 [15:41:09<4:10:14, 5004.85s/model]
+Running EVPI analysis:   0%|          | 0/6 [00:00<?, ?it/s][A
+Running EVPI analysis:  17%|█▋        | 1/6 [05:07<25:39, 307.98s/it][A
+Running EVPI analysis:  33%|███▎      | 2/6 [10:00<19:54, 298.68s/it][A
+Running EVPI analysis:  50%|█████     | 3/6 [14:58<14:54, 298.31s/it][A
+Running EVPI analysis:  67%|██████▋   | 4/6 [20:23<10:17, 308.97s/it][A
+Running EVPI analysis:  83%|████████▎ | 5/6 [25:28<05:07, 307.47s/it][A
+Running EVPI analysis: 100%|██████████| 6/6 [30:19<00:00, 302.06s/it][ARunning EVPI analysis: 100%|██████████| 6/6 [30:19<00:00, 303.29s/it]
+Processing Models:  83%|████████▎ | 10/12 [16:34:18<2:28:08, 4444.23s/model]
+Running EVPI analysis:   0%|          | 0/6 [00:00<?, ?it/s][A
+Running EVPI analysis:  17%|█▋        | 1/6 [04:27<22:15, 267.18s/it][A
+Running EVPI analysis:  33%|███▎      | 2/6 [09:10<18:26, 276.69s/it][A
+Running EVPI analysis:  50%|█████     | 3/6 [13:54<14:00, 280.01s/it][A
+Running EVPI analysis:  67%|██████▋   | 4/6 [18:08<08:59, 269.94s/it][A
+Running EVPI analysis:  83%|████████▎ | 5/6 [22:48<04:33, 273.40s/it][A
+Running EVPI analysis: 100%|██████████| 6/6 [27:21<00:00, 273.20s/it][ARunning EVPI analysis: 100%|██████████| 6/6 [27:21<00:00, 273.55s/it]
+Processing Models:  92%|█████████▏| 11/12 [17:19:04<1:05:06, 3906.19s/model]
+Running EVPI analysis:   0%|          | 0/6 [00:00<?, ?it/s][A
+Running EVPI analysis:  17%|█▋        | 1/6 [02:59<14:55, 179.01s/it][A
+Running EVPI analysis:  33%|███▎      | 2/6 [06:12<12:30, 187.61s/it][A
+Running EVPI analysis:  50%|█████     | 3/6 [09:19<09:21, 187.16s/it][A
+Running EVPI analysis:  67%|██████▋   | 4/6 [12:29<06:16, 188.46s/it][A
+Running EVPI analysis:  83%|████████▎ | 5/6 [15:47<03:11, 191.71s/it][A
+Running EVPI analysis: 100%|██████████| 6/6 [19:03<00:00, 193.16s/it][ARunning EVPI analysis: 100%|██████████| 6/6 [19:03<00:00, 190.53s/it]
+Processing Models: 100%|██████████| 12/12 [17:49:53<00:00, 3280.37s/model]  Processing Models: 100%|██████████| 12/12 [17:49:53<00:00, 5349.49s/model]

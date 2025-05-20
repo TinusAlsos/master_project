@@ -1,0 +1,2 @@
+Objective Value,Optimality Gap (%),Runtime (s),Build Time (s),Optimize Time (s),Total Time (s),Number of Variables,Number of Constraints,Number of Nonzeros,Number of Integer Variables,Number of Binary Variables,Number of Quadratic Constraints,Model Status
+52936343402.36829,,4610.806689977646,133.88091945648193,4611.450051784515,4745.330971240997,1895688,1440348,3869565,0,0,0,2
