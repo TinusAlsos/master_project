@@ -1875,6 +1875,67 @@ def plot_weighted_production_evolution(
         fig.savefig(savepath, bbox_inches="tight")
 
 
+def plot_weighted_production_evolution_no_legend(
+    weighted_table: pd.DataFrame,
+    generators: pd.DataFrame,
+    savefolder: str | None = None,
+) -> None:
+    """
+    Plot the evolution of scenario-weighted annual energy production by technology over years.
+
+    Parameters
+    ----------
+    weighted_table : pd.DataFrame
+        Indexed by year, columns are carrier types (and possibly 'Total'), values are expected annual generation in MWh.
+    generators : pd.DataFrame
+        Generator metadata with 'carrier', 'nice_name', and 'color' columns.
+    savefolder : str or None
+        Directory to save the figure. If None, the figure is not saved.
+    """
+    # Identify carrier columns (exclude 'Total' if present)
+    carriers = [c for c in weighted_table.columns if c != "Total"]
+
+    # Extract color and label mappings
+    meta = (
+        generators.reset_index()[["carrier", "nice_name", "color"]]
+        .drop_duplicates("carrier")
+        .set_index("carrier")
+    )
+
+    # Convert MWh → TWh
+    data_twh = weighted_table[carriers] / 1e6
+
+    # Plot stacked area
+    fig, ax = plt.subplots(figsize=(10, 6))
+    colors = [meta.loc[c, "color"] for c in carriers]
+    labels = [meta.loc[c, "nice_name"] for c in carriers]
+    ax.stackplot(
+        data_twh.index, [data_twh[c] for c in carriers], labels=labels, colors=colors
+    )
+
+    ax.set_xlabel("Year")
+    ax.set_ylabel("Annual Generation (TWh)")
+    plt.tight_layout()
+
+    # Place legend to the right
+    # fig.subplots_adjust(right=0.75)
+    # ax.legend(title="Technology", bbox_to_anchor=(1.02, 1), loc="upper left")
+
+    # Print title
+    print(
+        "Evolution of Annual Energy Production by Technology (averaged across scenarios)"
+    )
+
+    plt.show()
+
+    # Save if requested
+    if savefolder:
+        savepath = os.path.join(
+            savefolder, "production_evolution_by_technology_no_legend.png"
+        )
+        fig.savefig(savepath, bbox_inches="tight")
+
+
 def plot_weighted_production_cost_evolution(
     weighted_cost_table: pd.DataFrame,
     generators: pd.DataFrame,
@@ -4145,12 +4206,10 @@ def make_lmp_frequency_table(
     # Build DataFrame
     table = pd.DataFrame(rows)
     if savefolder:
-        table.to_csv(os.path.join(savefolder, "lmp_frequency_table.csv"), index=False)
+        table.to_csv(os.path.join(savefolder, "lmp_frequency_table.csv"))
     table_sorted = table.sort_values(by="count", ascending=False).reset_index(drop=True)
     if savefolder:
-        table_sorted.to_csv(
-            os.path.join(savefolder, "lmp_frequency_table_sorted.csv"), index=False
-        )
+        table_sorted.to_csv(os.path.join(savefolder, "lmp_frequency_table_sorted.csv"))
     return table
 
 
@@ -4220,7 +4279,6 @@ def analyze_dual_interval(
     if savefolder:
         df.to_csv(
             os.path.join(savefolder, f"table_duals_{lower}-{upper}_{n_bins}.csv"),
-            index=False,
         )
     return pd.DataFrame(rows)
 
@@ -4932,8 +4990,7 @@ def make_high_lmp_frequency_table(
     table = pd.DataFrame(rows)
     if savefolder:
         table.to_csv(
-            os.path.join(savefolder, f"high_lmp_freq_table_{int(cap)}plus.csv"),
-            index=False,
+            os.path.join(savefolder, f"high_lmp_freq_table_{int(cap)}plus.csv")
         )
     return table
 
@@ -4946,9 +5003,7 @@ def get_top_high_lmp_buckets(
     """
     top_bins = high_freq_table.sort_values("count", ascending=False).head(top_n)
     if savefolder:
-        top_bins.to_csv(
-            os.path.join(savefolder, f"top_{top_n}_high_lmp_bins.csv"), index=False
-        )
+        top_bins.to_csv(os.path.join(savefolder, f"top_{top_n}_high_lmp_bins.csv"))
     return top_bins
 
 
@@ -4983,6 +5038,10 @@ def plot_top_high_lmp_buckets(
     ax.tick_params(axis="x", labelsize=14)
     ax.tick_params(axis="y", labelsize=14)
     ax.grid(axis="y", linestyle="--", alpha=0.5)
+
+    # Stretch y-axis by 0.05 (5%) above the tallest bar
+    ax.set_ylim(0, max_count * 1.10)
+
     plt.tight_layout()
     print(f"Top {top_n} high-LMP bins by occurrence")
     plt.show()
@@ -5140,7 +5199,7 @@ def make_annual_lmp_table(
         # 2) Save a one‐row CSV with the overall average across years
         overall_avg = table["Average"].mean()
         avg_df = pd.DataFrame({"Average_LMP_across_years_€/MWh": [overall_avg]})
-        avg_df.to_csv(f"{savefolder}/annual_lmp_overall_average.csv", index=False)
+        avg_df.to_csv(f"{savefolder}/annual_lmp_overall_average.csv")
         print(f"Average LMP across years: {overall_avg:.2f} €/MWh")
 
     return table
@@ -5649,6 +5708,11 @@ def analyze_run_stochastic(
         generators,
         savefolder=generators_save_folder,
     )
+    plot_weighted_production_evolution_no_legend(
+        weighted_annual_production_by_year,
+        generators,
+        savefolder=generators_save_folder,
+    )
     plot_weighted_production_cost_evolution(
         annual_cost_table, generators, savefolder=generators_save_folder
     )
@@ -5892,14 +5956,10 @@ def analyze_run_stochastic(
         extended_tables_folder = os.path.join(tables_folder, "extended_tables")
         os.makedirs(extended_tables_folder, exist_ok=True)
         generators.to_csv(
-            os.path.join(extended_tables_folder, "extended_generators.csv"), index=False
+            os.path.join(extended_tables_folder, "extended_generators.csv")
         )
-        branches.to_csv(
-            os.path.join(extended_tables_folder, "extended_branches.csv"), index=False
-        )
-        batteries.to_csv(
-            os.path.join(extended_tables_folder, "extended_batteries.csv"), index=False
-        )
+        branches.to_csv(os.path.join(extended_tables_folder, "extended_branches.csv"))
+        batteries.to_csv(os.path.join(extended_tables_folder, "extended_batteries.csv"))
 
     # region Dual Variables
     if SAVE_FIGURES:
