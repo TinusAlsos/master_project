@@ -1,0 +1,2121 @@
+Running from this directory: /cluster/home/tinusfa/master_project
+Name of job: batch_128_4_4_4core_bat_and_no_bat_ef1
+ID of job: 22840986
+The job was run on these nodes: idun-05-21
+True
+Running batches for: ['128_sv1_4_weeks____ef1', '128_sv1_4_weeks___no_bats_ef1']
+Saving results to: batch_128_4_4_4core_bat_and_no_bat_ef1
+Running batch of length 2.
+Batch folder: batch_128_4_4_4core_bat_and_no_bat_ef1
+Running the following model_configs:
+128_sv1_4_weeks____ef1
+128_sv1_4_weeks___no_bats_ef1
+@@@@ Batch number 1: 128_sv1_4_weeks____ef1 @@@@
+No preprocessing config provided. Skipping preprocessing...
+Path_or_name: 128_sv1_4_weeks____ef1
+Configuration loaded from /cluster/home/tinusfa/master_project/configs/models/config_128_sv1_4_weeks____ef1.yaml
+{'data_folder_name': 'elec_s_128_ES_PT_no_bat_limit', 'model_name': 'GTSEP_stochastic_v1', 'model_id': '128_ES_PT', 'MIPGap': 0.01, 'VOLL': 6350, 'CC': 100, 'CO2_price': 80, 'E_limit': inf, 'p_max_new_branch': 5000, 'p_min_new_branch': 100, 'expansion_factor': 1.0, 'MS': 0.1, 'years': [2025, 2030, 2040, 2050], 'clustering_unit': None, 'clustering_periods': None, 'scenario_file': None, 'EVPI': True, 'VSS': True, 'battery_capacity_path': None, 'generator_capacity_path': None, 'branch_capacity_path': None, 'co2_emissions_path': None, 'query': 'not (x > 2 and y < 40)', 'carriers': ['CCGT', 'solar', 'onwind'], 'discount_rate': 0.07, 'representative_period_unit': 'week', 'representative_periods': [11, 21, 42, 52]}
+Set parameter WLSAccessID
+Set parameter WLSSecret
+Set parameter LicenseID to value 2622400
+Academic license 2622400 - for non-commercial use only - registered to ti___@stud.ntnu.no
+Set parameter MIPGap to value 0.01
+Set parameter TimeLimit to value 21600
+Set parameter BarConvTol to value 0.01
+Set parameter BarHomogeneous to value 1
+Model built in 155.46867108345032 seconds.
+Gurobi Optimizer version 12.0.1 build v12.0.1rc0 (linux64 - "Rocky Linux 9.4 (Blue Onyx)")
+
+CPU model: Intel(R) Xeon(R) Gold 6242 CPU @ 2.80GHz, instruction set [SSE2|AVX|AVX2|AVX512]
+Thread count: 32 physical cores, 32 logical processors, using up to 32 threads
+
+Non-default parameters:
+TimeLimit  21600
+MIPGap  0.01
+BarConvTol  0.01
+BarHomogeneous  1
+
+Academic license 2622400 - for non-commercial use only - registered to ti___@stud.ntnu.no
+Optimize a model with 1440348 rows, 1895688 columns and 3869565 nonzeros
+Model fingerprint: 0xa9ffd045
+Coefficient statistics:
+  Matrix range     [8e-06, 4e+00]
+  Objective range  [4e-02, 3e+05]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [6e-03, 1e+100]
+Warning: Model contains large rhs
+         Consider reformulating model or setting NumericFocus parameter
+         to avoid numerical issues.
+Presolve removed 884174 rows and 1173057 columns
+Presolve time: 3.56s
+Presolved: 556174 rows, 722631 columns, 2477742 nonzeros
+
+Concurrent LP optimizer: primal simplex, dual simplex, and barrier
+Showing barrier log only...
+
+Ordering time: 0.47s
+
+Barrier statistics:
+ Dense cols : 357
+ AA' NZ     : 2.407e+06
+ Factor NZ  : 1.125e+07 (roughly 600 MB of memory)
+ Factor Ops : 5.571e+08 (less than 1 second per iteration)
+ Threads    : 30
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   3.95663754e+13 -2.68676358e+16  3.68e+05 5.21e+04  6.87e+10     6s
+   1   3.00929648e+13 -1.41973097e+16  2.77e+05 2.99e+05  3.69e+10     9s
+   2   2.30560472e+13 -9.41904143e+15  2.04e+05 1.06e+05  2.29e+10    12s
+   3   1.96855596e+13 -5.59773364e+15  1.68e+05 2.61e+04  1.52e+10    17s
+   4   1.35492605e+13 -1.82630395e+15  1.07e+05 8.29e+03  5.28e+09    22s
+   5   8.09068524e+12 -4.45305221e+14  5.71e+04 2.06e+03  1.23e+09    25s
+   6   4.38605778e+12 -2.02238251e+14  2.53e+04 9.27e+02  3.63e+08    28s
+   7   3.02699516e+12 -9.60007512e+13  1.46e+04 4.38e+02  1.42e+08    31s
+   8   1.16599602e+12 -3.76761865e+13  2.81e+03 1.78e+02  3.27e+07    35s
+   9   4.70934893e+11 -7.82148569e+12  6.00e+02 3.73e+01  5.90e+06    40s
+  10   3.65805787e+11 -3.58612064e+12  4.31e+02 1.72e+01  2.76e+06    44s
+  11   3.06645018e+11 -2.76087506e+12  3.37e+02 1.33e+01  2.10e+06    48s
+  12   2.55955201e+11 -1.85460617e+12  2.58e+02 9.02e+00  1.42e+06    50s
+  13   2.17900108e+11 -1.19784103e+12  2.06e+02 5.91e+00  9.43e+05    53s
+  14   1.70366131e+11 -9.70400652e+11  1.45e+02 4.82e+00  7.48e+05    57s
+  15   1.39992126e+11 -4.04326957e+11  1.10e+02 2.10e+00  3.51e+05    63s
+  16   1.13444245e+11 -2.20630666e+11  8.18e+01 1.22e+00  2.12e+05    68s
+  17   9.49359097e+10 -1.44299977e+11  6.38e+01 8.46e-01  1.51e+05    73s
+  18   8.37206462e+10 -6.56312474e+10  5.35e+01 4.65e-01  9.24e+04    78s
+  19   7.29803161e+10 -5.02062487e+10  4.38e+01 3.87e-01  7.59e+04    83s
+  20   6.26960700e+10 -3.33439752e+10  3.43e+01 3.03e-01  5.88e+04    88s
+  21   5.81842932e+10 -1.72022258e+10  3.02e+01 2.21e-01  4.57e+04    94s
+  22   5.20113562e+10  1.85537359e+09  2.50e+01 1.28e-01  2.99e+04    99s
+  23   4.75275502e+10  9.54765764e+09  2.12e+01 8.41e-02  2.23e+04   104s
+  24   4.34080067e+10  1.35183966e+10  1.76e+01 1.65e-01  1.74e+04   110s
+  25   4.00144626e+10  1.76778060e+10  1.44e+01 3.83e-01  1.29e+04   115s
+  26   3.64286782e+10  1.95076479e+10  1.11e+01 6.71e-01  9.70e+03   121s
+  27   3.43542159e+10  2.20088963e+10  9.16e+00 8.41e-01  6.98e+03   126s
+  28   3.20882093e+10  2.27016316e+10  6.85e+00 8.20e-01  5.30e+03   133s
+  29   3.06343501e+10  2.38438329e+10  5.28e+00 7.87e-01  3.81e+03   139s
+  30   2.96449510e+10  2.45516147e+10  4.31e+00 6.97e-01  2.85e+03   145s
+  31   2.85640688e+10  2.49608541e+10  3.13e+00 6.13e-01  2.01e+03   150s
+  32   2.81244683e+10  2.52337543e+10  2.64e+00 6.03e-01  1.61e+03   155s
+  33   2.74933282e+10  2.53640390e+10  1.96e+00 6.40e-01  1.18e+03   161s
+  34   2.69725584e+10  2.54167050e+10  1.38e+00 6.25e-01  8.64e+02   166s
+  35   2.67655337e+10  2.55457840e+10  1.15e+00 5.58e-01  6.77e+02   171s
+  36   2.65377325e+10  2.56239498e+10  8.85e-01 4.99e-01  5.07e+02   176s
+  37   2.63640998e+10  2.56799942e+10  6.83e-01 5.05e-01  3.79e+02   182s
+  38   2.62328710e+10  2.57052431e+10  5.31e-01 4.26e-01  2.93e+02   187s
+  39   2.61114102e+10  2.57180225e+10  3.87e-01 3.79e-01  2.18e+02   193s
+  40   2.60780007e+10  2.57285442e+10  3.48e-01 3.52e-01  1.94e+02   198s
+  41   2.60228730e+10  2.57471109e+10  2.83e-01 2.37e-01  1.53e+02   204s
+  42   2.59982255e+10  2.57556699e+10  2.50e-01 2.11e-01  1.35e+02   209s
+  43   2.59612260e+10  2.57632131e+10  2.06e-01 2.07e-01  1.10e+02   214s
+  44   2.59227911e+10  2.57724220e+10  1.59e-01 1.36e-01  8.34e+01   220s
+  45   2.58878904e+10  2.57785072e+10  1.16e-01 1.22e-01  6.07e+01   226s
+  46   2.58705553e+10  2.57810785e+10  9.48e-02 1.01e-01  4.96e+01   232s
+  47   2.58528059e+10  2.57843178e+10  7.29e-02 7.82e-02  3.80e+01   238s
+  48   2.58450399e+10  2.57860517e+10  6.33e-02 6.56e-02  3.27e+01   245s
+  49   2.58373764e+10  2.57893788e+10  5.38e-02 4.17e-02  2.67e+01   252s
+  50   2.58342371e+10  2.57898968e+10  4.99e-02 3.64e-02  2.46e+01   259s
+  51   2.58297867e+10  2.57906806e+10  4.44e-02 3.05e-02  2.17e+01   265s
+  52   2.58238334e+10  2.57915533e+10  3.69e-02 2.44e-02  1.79e+01   272s
+
+Barrier solved model in 52 iterations and 271.66 seconds (27.77 work units)
+Optimal objective 2.58238334e+10
+
+Crossover log...
+
+  456661 DPushes remaining with DInf 0.0000000e+00               274s
+  306284 DPushes remaining with DInf 0.0000000e+00               275s
+  236961 DPushes remaining with DInf 0.0000000e+00               280s
+  215985 DPushes remaining with DInf 0.0000000e+00               285s
+  203130 DPushes remaining with DInf 0.0000000e+00               290s
+  191030 DPushes remaining with DInf 0.0000000e+00               295s
+  178288 DPushes remaining with DInf 0.0000000e+00               300s
+  168569 DPushes remaining with DInf 0.0000000e+00               305s
+  158930 DPushes remaining with DInf 0.0000000e+00               310s
+  149857 DPushes remaining with DInf 0.0000000e+00               315s
+  140703 DPushes remaining with DInf 0.0000000e+00               320s
+  130269 DPushes remaining with DInf 0.0000000e+00               325s
+  117384 DPushes remaining with DInf 0.0000000e+00               330s
+  100661 DPushes remaining with DInf 0.0000000e+00               335s
+   82220 DPushes remaining with DInf 0.0000000e+00               340s
+   70794 DPushes remaining with DInf 0.0000000e+00               345s
+   60511 DPushes remaining with DInf 0.0000000e+00               350s
+   51393 DPushes remaining with DInf 0.0000000e+00               355s
+   41459 DPushes remaining with DInf 0.0000000e+00               360s
+   33552 DPushes remaining with DInf 0.0000000e+00               365s
+   24048 DPushes remaining with DInf 0.0000000e+00               370s
+   15077 DPushes remaining with DInf 0.0000000e+00               375s
+    5012 DPushes remaining with DInf 0.0000000e+00               380s
+       0 DPushes remaining with DInf 0.0000000e+00               383s
+
+  660136 PPushes remaining with PInf 1.4176839e+04               383s
+  246496 PPushes remaining with PInf 2.9728632e+03               385s
+    4149 PPushes remaining with PInf 4.6265123e-01               394s
+    3325 PPushes remaining with PInf 4.6206388e-01               395s
+       0 PPushes remaining with PInf 4.6053467e-01               398s
+
+  Push phase complete: Pinf 4.6053467e-01, Dinf 1.7150322e+08    398s
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+  907225    2.5803366e+10   0.000000e+00   1.715032e+08    399s
+  907365    2.5800383e+10   0.000000e+00   1.646386e+07    401s
+  907825    2.5799399e+10   0.000000e+00   3.400752e+07    406s
+  908365    2.5798178e+10   0.000000e+00   2.658311e+08    411s
+  909260    2.5797429e+10   0.000000e+00   2.964641e+09    416s
+  909880    2.5796867e+10   0.000000e+00   1.477466e+07    420s
+  911030    2.5796438e+10   0.000000e+00   2.224007e+12    425s
+  911820    2.5796115e+10   0.000000e+00   1.944808e+05    430s
+  912842    2.5795831e+10   0.000000e+00   6.291002e+05    435s
+  913882    2.5795595e+10   0.000000e+00   4.193241e+04    440s
+  915122    2.5795320e+10   0.000000e+00   4.669638e+04    445s
+  918952    2.5795099e+10   0.000000e+00   8.713312e+03    450s
+  926669    2.5795046e+10   0.000000e+00   9.285173e+01    455s
+  935797    2.5795039e+10   0.000000e+00   4.133521e+00    460s
+  958393    2.5795033e+10   7.668780e-01   0.000000e+00    465s
+
+Solved with barrier
+Extra simplex iterations after uncrush: 64
+  961503    2.5795081e+10   0.000000e+00   0.000000e+00    468s
+
+Solved in 961503 iterations and 467.65 seconds (241.93 work units)
+Optimal objective  2.579508117e+10
+Warning: variable name "g[ES1 0 CCGT,NT,2025,11,0]" has a space
+Warning: constraint name "C_power_balance[ES1 0,NT,2025,11,0]" has a space
+Warning: default variable names used to write mps file
+Warning: default constraint names used to write mps file
+Warning: variable name "g[ES1 0 CCGT,NT,2025,11,0]" has a space
+Warning: default variable names used to write solution file
+Model saved to: /cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/1_May21_Wed_h17_m59_s23-GTSEP_stochastic_v1-128_ES_PT
+Running EVPI analysis for scenario 1...
+New config saved to: /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_1_20250521_181006_182db8d5.yaml
+No preprocessing config provided. Skipping preprocessing...
+Path_or_name: temp_EVPI_1_20250521_181006_182db8d5
+Configuration loaded from /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_1_20250521_181006_182db8d5.yaml
+{'data_folder_name': 'elec_s_128_ES_PT_no_bat_limit', 'model_name': 'GTSEP_stochastic_v1', 'model_id': '128_ES_PT', 'MIPGap': 0.01, 'VOLL': 6350, 'CC': 100, 'CO2_price': 80, 'E_limit': inf, 'p_max_new_branch': 5000, 'p_min_new_branch': 100, 'expansion_factor': 1.0, 'MS': 0.1, 'years': [2025, 2030, 2040, 2050], 'clustering_unit': None, 'clustering_periods': None, 'scenario_file': 'EVPI_1', 'EVPI': False, 'VSS': False, 'battery_capacity_path': None, 'generator_capacity_path': None, 'branch_capacity_path': None, 'co2_emissions_path': None, 'query': 'not (x > 2 and y < 40)', 'carriers': ['CCGT', 'solar', 'onwind'], 'discount_rate': 0.07, 'representative_period_unit': 'week', 'representative_periods': [11, 21, 42, 52], 'save_folder': '/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/1_May21_Wed_h17_m59_s23-GTSEP_stochastic_v1-128_ES_PT_EVPI_1'}
+Set parameter MIPGap to value 0.01
+Set parameter TimeLimit to value 21600
+Set parameter BarConvTol to value 0.01
+Set parameter BarHomogeneous to value 1
+Model built in 91.16411185264587 seconds.
+Gurobi Optimizer version 12.0.1 build v12.0.1rc0 (linux64 - "Rocky Linux 9.4 (Blue Onyx)")
+
+CPU model: Intel(R) Xeon(R) Gold 6242 CPU @ 2.80GHz, instruction set [SSE2|AVX|AVX2|AVX512]
+Thread count: 32 physical cores, 32 logical processors, using up to 32 threads
+
+Non-default parameters:
+TimeLimit  21600
+MIPGap  0.01
+BarConvTol  0.01
+BarHomogeneous  1
+
+Academic license 2622400 - for non-commercial use only - registered to ti___@stud.ntnu.no
+Optimize a model with 823316 rows, 1264008 columns and 2236362 nonzeros
+Model fingerprint: 0x02c18143
+Coefficient statistics:
+  Matrix range     [8e-06, 4e+00]
+  Objective range  [1e-01, 3e+05]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [6e-03, 1e+100]
+Warning: Model contains large rhs
+         Consider reformulating model or setting NumericFocus parameter
+         to avoid numerical issues.
+Presolve removed 505417 rows and 850833 columns
+Presolve time: 1.77s
+Presolved: 317899 rows, 413175 columns, 1416156 nonzeros
+
+Concurrent LP optimizer: primal simplex, dual simplex, and barrier
+Showing barrier log only...
+
+Ordering time: 0.26s
+
+Barrier statistics:
+ Dense cols : 357
+ AA' NZ     : 1.376e+06
+ Factor NZ  : 6.388e+06 (roughly 350 MB of memory)
+ Factor Ops : 3.082e+08 (less than 1 second per iteration)
+ Threads    : 30
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   4.68510878e+13 -1.34995748e+16  4.41e+05 5.21e+04  7.62e+10     4s
+   1   3.55738023e+13 -7.71845953e+15  3.33e+05 3.07e+05  4.26e+10     5s
+   2   2.71791190e+13 -5.34401208e+15  2.45e+05 1.04e+05  2.69e+10     7s
+   3   2.23154087e+13 -3.31615972e+15  1.92e+05 2.30e+04  1.76e+10     9s
+   4   1.09186694e+13 -1.13428169e+15  8.34e+04 7.71e+03  4.47e+09    12s
+   5   5.78074158e+12 -2.90502670e+14  3.67e+04 2.08e+03  9.93e+08    14s
+   6   3.96102404e+12 -1.38351091e+14  2.18e+04 9.70e+02  3.96e+08    15s
+   7   2.57612200e+12 -6.75855204e+13  1.13e+04 4.75e+02  1.54e+08    17s
+   8   1.00467859e+12 -3.45676260e+13  2.18e+03 2.48e+02  5.10e+07    19s
+   9   4.96262801e+11 -9.92505003e+12  6.39e+02 7.30e+01  1.34e+07    22s
+  10   3.34162827e+11 -4.30749066e+12  3.57e+02 3.19e+01  5.75e+06    24s
+  11   2.69231815e+11 -2.63295024e+12  2.62e+02 1.97e+01  3.55e+06    26s
+  12   2.23832985e+11 -1.64158086e+12  2.02e+02 1.25e+01  2.26e+06    28s
+  13   2.09334862e+11 -1.06127831e+12  1.82e+02 8.17e+00  1.53e+06    29s
+  14   1.65744252e+11 -8.34729086e+11  1.29e+02 6.47e+00  1.18e+06    32s
+  15   1.26269814e+11 -4.62213976e+11  8.24e+01 3.76e+00  6.86e+05    35s
+  16   1.03567938e+11 -2.54013006e+11  6.03e+01 2.21e+00  4.11e+05    37s
+  17   8.87036956e+10 -1.86891699e+11  4.69e+01 1.70e+00  3.15e+05    40s
+  18   7.78774361e+10 -1.35181960e+11  3.76e+01 1.30e+00  2.41e+05    42s
+  19   6.76181765e+10 -8.69348702e+10  2.91e+01 9.26e-01  1.73e+05    45s
+  20   5.95331869e+10 -5.64380767e+10  2.24e+01 6.85e-01  1.28e+05    48s
+  21   5.24115679e+10 -4.00508396e+10  1.72e+01 5.48e-01  1.01e+05    51s
+  22   4.70852898e+10 -1.71266743e+10  1.34e+01 3.62e-01  6.95e+04    54s
+  23   4.33751020e+10 -1.76788587e+08  1.11e+01 2.26e-01  4.64e+04    57s
+  24   3.84227250e+10  7.32648035e+09  7.96e+00 1.60e-01  3.28e+04    60s
+  25   3.55581723e+10  1.21375834e+10  6.25e+00 1.16e-01  2.44e+04    63s
+  26   3.34724062e+10  1.69215680e+10  5.07e+00 7.14e-02  1.70e+04    66s
+  27   3.04491744e+10  2.02922517e+10  3.40e+00 9.47e-02  1.02e+04    69s
+  28   2.88896199e+10  2.21422163e+10  2.53e+00 8.36e-02  6.73e+03    72s
+  29   2.74383325e+10  2.30236202e+10  1.63e+00 1.21e-01  4.38e+03    75s
+  30   2.69701191e+10  2.36544197e+10  1.32e+00 1.27e-01  3.27e+03    77s
+  31   2.68985527e+10  2.37417775e+10  1.27e+00 1.22e-01  3.11e+03    78s
+  32   2.63534387e+10  2.42124875e+10  9.09e-01 1.42e-01  2.10e+03    80s
+  33   2.58741203e+10  2.43003106e+10  5.89e-01 1.28e-01  1.54e+03    82s
+  34   2.56981703e+10  2.45566593e+10  4.81e-01 7.75e-02  1.12e+03    84s
+  35   2.55020543e+10  2.46803897e+10  3.55e-01 5.26e-02  8.01e+02    87s
+  36   2.53870608e+10  2.47510522e+10  2.83e-01 3.61e-02  6.19e+02    90s
+  37   2.52142031e+10  2.48031244e+10  1.73e-01 3.59e-02  4.00e+02    93s
+  38   2.51490099e+10  2.48556154e+10  1.29e-01 2.93e-02  2.85e+02    96s
+  39   2.51004127e+10  2.48965885e+10  9.64e-02 3.06e-02  1.98e+02    99s
+  40   2.50646775e+10  2.49157652e+10  7.30e-02 2.05e-02  1.44e+02   102s
+  41   2.50513865e+10  2.49191004e+10  6.45e-02 1.87e-02  1.28e+02   105s
+  42   2.50443604e+10  2.49196638e+10  5.99e-02 1.84e-02  1.21e+02   108s
+  43   2.50286904e+10  2.49236311e+10  4.98e-02 1.62e-02  1.02e+02   111s
+  44   2.50208765e+10  2.49336189e+10  4.49e-02 1.04e-02  8.45e+01   114s
+  45   2.50088105e+10  2.49369207e+10  3.73e-02 8.31e-03  6.96e+01   117s
+  46   2.50036944e+10  2.49394136e+10  3.41e-02 6.71e-03  6.22e+01   122s
+  47   2.49938697e+10  2.49417483e+10  2.77e-02 5.21e-03  5.05e+01   125s
+  48   2.49882629e+10  2.49434883e+10  2.42e-02 4.16e-03  4.33e+01   129s
+  49   2.49824306e+10  2.49450391e+10  2.04e-02 3.28e-03  3.62e+01   133s
+  50   2.49799673e+10  2.49454103e+10  1.88e-02 3.07e-03  3.34e+01   137s
+  51   2.49764489e+10  2.49460464e+10  1.66e-02 2.70e-03  2.94e+01   141s
+  52   2.49742608e+10  2.49463819e+10  1.51e-02 2.49e-03  2.70e+01   145s
+
+Barrier solved model in 52 iterations and 145.29 seconds (15.81 work units)
+Optimal objective 2.49742608e+10
+
+Crossover log...
+
+  283882 DPushes remaining with DInf 0.0000000e+00               146s
+  136285 DPushes remaining with DInf 0.0000000e+00               150s
+  110369 DPushes remaining with DInf 0.0000000e+00               155s
+   90142 DPushes remaining with DInf 0.0000000e+00               160s
+   57205 DPushes remaining with DInf 0.0000000e+00               165s
+   30016 DPushes remaining with DInf 0.0000000e+00               170s
+   11057 DPushes remaining with DInf 0.0000000e+00               175s
+       0 DPushes remaining with DInf 0.0000000e+00               178s
+
+  377346 PPushes remaining with PInf 1.3328955e+04               179s
+   94540 PPushes remaining with PInf 1.4788519e+03               180s
+       0 PPushes remaining with PInf 5.2021265e-03               185s
+
+  Push phase complete: Pinf 5.2021265e-03, Dinf 7.4831314e+07    185s
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+  531701    2.4958126e+10   0.000000e+00   7.483131e+07    185s
+  531861    2.4954520e+10   0.000000e+00   3.229770e+07    186s
+  533911    2.4951734e+10   0.000000e+00   1.769923e+05    190s
+  545169    2.4951263e+10   0.000000e+00   4.984512e+00    195s
+
+Solved with barrier
+Extra simplex iterations after uncrush: 2
+  558949    2.4951254e+10   0.000000e+00   0.000000e+00    198s
+
+Solved in 558949 iterations and 197.68 seconds (68.13 work units)
+Optimal objective  2.495125423e+10
+Warning: variable name "g[ES1 0 CCGT,NT,2025,11,0]" has a space
+Warning: constraint name "C_power_balance[ES1 0,NT,2025,11,0]" has a space
+Warning: default variable names used to write mps file
+Warning: default constraint names used to write mps file
+Warning: variable name "g[ES1 0 CCGT,NT,2025,11,0]" has a space
+Warning: default variable names used to write solution file
+Model saved to: /cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/1_May21_Wed_h17_m59_s23-GTSEP_stochastic_v1-128_ES_PT_EVPI_1
+Deleted config file: /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_1_20250521_181006_182db8d5.yaml
+Deleting folder: /cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/1_May21_Wed_h17_m59_s23-GTSEP_stochastic_v1-128_ES_PT_EVPI_1
+Running EVPI analysis for scenario 2...
+New config saved to: /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_2_20250521_181507_fb67bb9d.yaml
+No preprocessing config provided. Skipping preprocessing...
+Path_or_name: temp_EVPI_2_20250521_181507_fb67bb9d
+Configuration loaded from /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_2_20250521_181507_fb67bb9d.yaml
+{'data_folder_name': 'elec_s_128_ES_PT_no_bat_limit', 'model_name': 'GTSEP_stochastic_v1', 'model_id': '128_ES_PT', 'MIPGap': 0.01, 'VOLL': 6350, 'CC': 100, 'CO2_price': 80, 'E_limit': inf, 'p_max_new_branch': 5000, 'p_min_new_branch': 100, 'expansion_factor': 1.0, 'MS': 0.1, 'years': [2025, 2030, 2040, 2050], 'clustering_unit': None, 'clustering_periods': None, 'scenario_file': 'EVPI_2', 'EVPI': False, 'VSS': False, 'battery_capacity_path': None, 'generator_capacity_path': None, 'branch_capacity_path': None, 'co2_emissions_path': None, 'query': 'not (x > 2 and y < 40)', 'carriers': ['CCGT', 'solar', 'onwind'], 'discount_rate': 0.07, 'representative_period_unit': 'week', 'representative_periods': [11, 21, 42, 52], 'save_folder': '/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/1_May21_Wed_h17_m59_s23-GTSEP_stochastic_v1-128_ES_PT_EVPI_2'}
+Set parameter MIPGap to value 0.01
+Set parameter TimeLimit to value 21600
+Set parameter BarConvTol to value 0.01
+Set parameter BarHomogeneous to value 1
+Model built in 90.87005853652954 seconds.
+Gurobi Optimizer version 12.0.1 build v12.0.1rc0 (linux64 - "Rocky Linux 9.4 (Blue Onyx)")
+
+CPU model: Intel(R) Xeon(R) Gold 6242 CPU @ 2.80GHz, instruction set [SSE2|AVX|AVX2|AVX512]
+Thread count: 32 physical cores, 32 logical processors, using up to 32 threads
+
+Non-default parameters:
+TimeLimit  21600
+MIPGap  0.01
+BarConvTol  0.01
+BarHomogeneous  1
+
+Academic license 2622400 - for non-commercial use only - registered to ti___@stud.ntnu.no
+Optimize a model with 823316 rows, 1264008 columns and 2236362 nonzeros
+Model fingerprint: 0x24bc663b
+Coefficient statistics:
+  Matrix range     [8e-06, 4e+00]
+  Objective range  [1e-01, 3e+05]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [6e-03, 1e+100]
+Warning: Model contains large rhs
+         Consider reformulating model or setting NumericFocus parameter
+         to avoid numerical issues.
+Presolve removed 505417 rows and 850833 columns
+Presolve time: 1.80s
+Presolved: 317899 rows, 413175 columns, 1416156 nonzeros
+
+Concurrent LP optimizer: primal simplex, dual simplex, and barrier
+Showing barrier log only...
+
+Ordering time: 0.26s
+
+Barrier statistics:
+ Dense cols : 357
+ AA' NZ     : 1.376e+06
+ Factor NZ  : 6.388e+06 (roughly 350 MB of memory)
+ Factor Ops : 3.082e+08 (less than 1 second per iteration)
+ Threads    : 30
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   4.66189969e+13 -1.35173222e+16  4.37e+05 5.21e+04  7.56e+10     4s
+   1   3.54340110e+13 -7.71035423e+15  3.30e+05 3.07e+05  4.22e+10     5s
+   2   2.71002141e+13 -5.33389964e+15  2.43e+05 1.04e+05  2.66e+10     7s
+   3   2.22770631e+13 -3.30732677e+15  1.91e+05 2.30e+04  1.74e+10    10s
+   4   1.09462506e+13 -1.13110015e+15  8.27e+04 7.73e+03  4.42e+09    12s
+   5   5.82845019e+12 -2.87460037e+14  3.64e+04 2.07e+03  9.79e+08    14s
+   6   4.00428283e+12 -1.36624956e+14  2.16e+04 9.64e+02  3.90e+08    16s
+   7   2.59268342e+12 -6.71373874e+13  1.11e+04 4.75e+02  1.52e+08    17s
+   8   1.00239727e+12 -3.43136674e+13  2.16e+03 2.48e+02  5.05e+07    20s
+   9   4.79310871e+11 -9.47938109e+12  5.84e+02 6.95e+01  1.26e+07    22s
+  10   2.87849663e+11 -3.32353024e+12  2.70e+02 2.46e+01  4.41e+06    25s
+  11   2.39478989e+11 -1.92571306e+12  2.06e+02 1.45e+01  2.61e+06    26s
+  12   2.12323025e+11 -1.49989646e+12  1.73e+02 1.13e+01  2.05e+06    28s
+  13   1.86332227e+11 -8.69980190e+11  1.42e+02 6.73e+00  1.25e+06    30s
+  14   1.55809379e+11 -5.60359559e+11  1.09e+02 4.44e+00  8.38e+05    33s
+  15   1.16032313e+11 -3.15511996e+11  6.85e+01 2.65e+00  4.98e+05    36s
+  16   9.64014744e+10 -1.88511828e+11  5.13e+01 1.70e+00  3.25e+05    39s
+  17   7.90961434e+10 -1.05962714e+11  3.81e+01 1.05e+00  2.08e+05    42s
+  18   6.62788308e+10 -6.94167956e+10  2.76e+01 7.69e-01  1.51e+05    45s
+  19   5.85525656e+10 -5.11471589e+10  2.14e+01 6.27e-01  1.21e+05    47s
+  20   5.25957721e+10 -2.61256271e+10  1.70e+01 4.30e-01  8.59e+04    50s
+  21   4.77230817e+10  6.18678382e+08  1.36e+01 2.23e-01  5.01e+04    53s
+  22   4.24136006e+10  1.03944015e+10  1.01e+01 1.41e-01  3.36e+04    56s
+  23   3.88556385e+10  1.45440016e+10  7.96e+00 1.05e-01  2.52e+04    58s
+  24   3.65358143e+10  1.80176521e+10  6.53e+00 7.28e-02  1.90e+04    61s
+  25   3.44332395e+10  1.96666037e+10  5.22e+00 5.66e-02  1.50e+04    64s
+  26   3.20081515e+10  2.26718858e+10  3.61e+00 1.84e-01  9.38e+03    67s
+  27   3.08793082e+10  2.40115109e+10  2.87e+00 1.53e-01  6.84e+03    70s
+  28   2.92901720e+10  2.43621854e+10  1.77e+00 1.54e-01  4.91e+03    72s
+  29   2.89350189e+10  2.57319138e+10  1.53e+00 4.81e-02  3.14e+03    75s
+  30   2.82899941e+10  2.59593722e+10  1.09e+00 5.97e-02  2.28e+03    78s
+  31   2.78602528e+10  2.61751249e+10  8.13e-01 5.57e-02  1.64e+03    81s
+  32   2.75735471e+10  2.64068930e+10  6.21e-01 8.48e-02  1.13e+03    84s
+  33   2.74140611e+10  2.64792097e+10  5.11e-01 6.88e-02  9.08e+02    86s
+  34   2.71251108e+10  2.65170556e+10  3.03e-01 3.96e-02  5.91e+02    89s
+  35   2.70185422e+10  2.65475462e+10  2.31e-01 3.06e-02  4.57e+02    92s
+  36   2.69332148e+10  2.65828230e+10  1.72e-01 2.48e-02  3.40e+02    96s
+  37   2.68854356e+10  2.65977965e+10  1.38e-01 1.92e-02  2.79e+02    99s
+  38   2.68463713e+10  2.66165157e+10  1.11e-01 1.68e-02  2.23e+02   102s
+  39   2.68248199e+10  2.66318047e+10  9.63e-02 1.61e-02  1.87e+02   105s
+  40   2.68175086e+10  2.66428303e+10  9.10e-02 1.31e-02  1.69e+02   109s
+  41   2.67841603e+10  2.66540322e+10  6.50e-02 1.26e-02  1.26e+02   113s
+  42   2.67667500e+10  2.66702025e+10  5.11e-02 1.45e-02  9.36e+01   117s
+  43   2.67494237e+10  2.66748945e+10  3.73e-02 1.25e-02  7.23e+01   120s
+  44   2.67357329e+10  2.66825885e+10  2.64e-02 9.21e-03  5.15e+01   124s
+  45   2.67270783e+10  2.66880496e+10  1.96e-02 7.85e-03  3.78e+01   127s
+  46   2.67247842e+10  2.66932183e+10  1.79e-02 6.84e-03  3.06e+01   131s
+  47   2.67230672e+10  2.66950818e+10  1.66e-02 5.37e-03  2.71e+01   134s
+
+Barrier solved model in 47 iterations and 134.00 seconds (14.72 work units)
+Optimal objective 2.67230672e+10
+
+Crossover log...
+
+  284869 DPushes remaining with DInf 0.0000000e+00               135s
+  126917 DPushes remaining with DInf 0.0000000e+00               140s
+  103967 DPushes remaining with DInf 0.0000000e+00               145s
+   80184 DPushes remaining with DInf 0.0000000e+00               150s
+   53706 DPushes remaining with DInf 0.0000000e+00               155s
+   22051 DPushes remaining with DInf 0.0000000e+00               160s
+    6482 DPushes remaining with DInf 0.0000000e+00               165s
+       0 DPushes remaining with DInf 0.0000000e+00               167s
+
+  377349 PPushes remaining with PInf 1.9259190e+04               167s
+    3312 PPushes remaining with PInf 2.1027965e-03               171s
+       0 PPushes remaining with PInf 1.9024188e-03               173s
+
+  Push phase complete: Pinf 1.9024188e-03, Dinf 3.9494420e+07    173s
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+  532147    2.6708202e+10   0.000000e+00   3.949442e+07    173s
+  532627    2.6705049e+10   0.000000e+00   1.220651e+07    176s
+  533958    2.6703371e+10   0.000000e+00   6.908979e+06    180s
+  535528    2.6702284e+10   0.000000e+00   5.895317e+05    185s
+  539437    2.6701432e+10   0.000000e+00   6.187476e+03    190s
+  557575    2.6701272e+10   0.000000e+00   3.026302e-01    195s
+
+Solved with barrier
+Extra simplex iterations after uncrush: 2
+  562260    2.6701271e+10   0.000000e+00   0.000000e+00    196s
+
+Solved in 562260 iterations and 196.46 seconds (87.55 work units)
+Optimal objective  2.670127133e+10
+Warning: variable name "g[ES1 0 CCGT,NT,2025,11,0]" has a space
+Warning: constraint name "C_power_balance[ES1 0,NT,2025,11,0]" has a space
+Warning: default variable names used to write mps file
+Warning: default constraint names used to write mps file
+Warning: variable name "g[ES1 0 CCGT,NT,2025,11,0]" has a space
+Warning: default variable names used to write solution file
+Model saved to: /cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/1_May21_Wed_h17_m59_s23-GTSEP_stochastic_v1-128_ES_PT_EVPI_2
+Deleted config file: /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_2_20250521_181507_fb67bb9d.yaml
+Deleting folder: /cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/1_May21_Wed_h17_m59_s23-GTSEP_stochastic_v1-128_ES_PT_EVPI_2
+Running EVPI analysis for scenario 3...
+New config saved to: /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_3_20250521_182007_0cd5cdd5.yaml
+No preprocessing config provided. Skipping preprocessing...
+Path_or_name: temp_EVPI_3_20250521_182007_0cd5cdd5
+Configuration loaded from /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_3_20250521_182007_0cd5cdd5.yaml
+{'data_folder_name': 'elec_s_128_ES_PT_no_bat_limit', 'model_name': 'GTSEP_stochastic_v1', 'model_id': '128_ES_PT', 'MIPGap': 0.01, 'VOLL': 6350, 'CC': 100, 'CO2_price': 80, 'E_limit': inf, 'p_max_new_branch': 5000, 'p_min_new_branch': 100, 'expansion_factor': 1.0, 'MS': 0.1, 'years': [2025, 2030, 2040, 2050], 'clustering_unit': None, 'clustering_periods': None, 'scenario_file': 'EVPI_3', 'EVPI': False, 'VSS': False, 'battery_capacity_path': None, 'generator_capacity_path': None, 'branch_capacity_path': None, 'co2_emissions_path': None, 'query': 'not (x > 2 and y < 40)', 'carriers': ['CCGT', 'solar', 'onwind'], 'discount_rate': 0.07, 'representative_period_unit': 'week', 'representative_periods': [11, 21, 42, 52], 'save_folder': '/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/1_May21_Wed_h17_m59_s23-GTSEP_stochastic_v1-128_ES_PT_EVPI_3'}
+Set parameter MIPGap to value 0.01
+Set parameter TimeLimit to value 21600
+Set parameter BarConvTol to value 0.01
+Set parameter BarHomogeneous to value 1
+Model built in 91.1873025894165 seconds.
+Gurobi Optimizer version 12.0.1 build v12.0.1rc0 (linux64 - "Rocky Linux 9.4 (Blue Onyx)")
+
+CPU model: Intel(R) Xeon(R) Gold 6242 CPU @ 2.80GHz, instruction set [SSE2|AVX|AVX2|AVX512]
+Thread count: 32 physical cores, 32 logical processors, using up to 32 threads
+
+Non-default parameters:
+TimeLimit  21600
+MIPGap  0.01
+BarConvTol  0.01
+BarHomogeneous  1
+
+Academic license 2622400 - for non-commercial use only - registered to ti___@stud.ntnu.no
+Optimize a model with 823316 rows, 1264008 columns and 2236362 nonzeros
+Model fingerprint: 0x8be7ac0c
+Coefficient statistics:
+  Matrix range     [8e-06, 4e+00]
+  Objective range  [1e-01, 3e+05]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [6e-03, 1e+100]
+Warning: Model contains large rhs
+         Consider reformulating model or setting NumericFocus parameter
+         to avoid numerical issues.
+Presolve removed 505417 rows and 850833 columns
+Presolve time: 1.76s
+Presolved: 317899 rows, 413175 columns, 1416156 nonzeros
+
+Concurrent LP optimizer: primal simplex, dual simplex, and barrier
+Showing barrier log only...
+
+Ordering time: 0.26s
+
+Barrier statistics:
+ Dense cols : 357
+ AA' NZ     : 1.376e+06
+ Factor NZ  : 6.388e+06 (roughly 350 MB of memory)
+ Factor Ops : 3.082e+08 (less than 1 second per iteration)
+ Threads    : 30
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   4.67323592e+13 -1.34869396e+16  4.41e+05 5.21e+04  7.61e+10     4s
+   1   3.54583622e+13 -7.70740783e+15  3.33e+05 3.07e+05  4.26e+10     6s
+   2   2.70710959e+13 -5.33428265e+15  2.45e+05 1.04e+05  2.69e+10     7s
+   3   2.22112672e+13 -3.31192287e+15  1.92e+05 2.31e+04  1.76e+10    10s
+   4   1.08460070e+13 -1.13228560e+15  8.34e+04 7.74e+03  4.47e+09    12s
+   5   5.71983279e+12 -2.89264218e+14  3.67e+04 2.09e+03  9.93e+08    14s
+   6   3.91652022e+12 -1.37505774e+14  2.18e+04 9.71e+02  3.96e+08    15s
+   7   2.52369862e+12 -6.70009352e+13  1.12e+04 4.74e+02  1.52e+08    17s
+   8   9.94328368e+11 -3.40973273e+13  2.16e+03 2.47e+02  5.02e+07    20s
+   9   4.89382679e+11 -9.76880745e+12  6.20e+02 7.24e+01  1.31e+07    22s
+  10   3.30826529e+11 -3.81934302e+12  3.49e+02 2.85e+01  5.14e+06    24s
+  11   2.68121993e+11 -2.39471349e+12  2.60e+02 1.80e+01  3.25e+06    26s
+  12   2.22754953e+11 -1.62634803e+12  2.00e+02 1.24e+01  2.23e+06    28s
+  13   2.07555925e+11 -1.08143022e+12  1.81e+02 8.38e+00  1.55e+06    30s
+  14   1.67927010e+11 -7.47172337e+11  1.35e+02 5.87e+00  1.08e+06    32s
+  15   1.30150024e+11 -4.64019731e+11  8.99e+01 3.78e+00  6.94e+05    35s
+  16   1.03473610e+11 -2.61071412e+11  6.45e+01 2.26e+00  4.20e+05    37s
+  17   8.92866406e+10 -1.68054028e+11  5.14e+01 1.54e+00  2.93e+05    40s
+  18   7.57157021e+10 -1.18427144e+11  3.99e+01 1.16e+00  2.19e+05    43s
+  19   6.33544843e+10 -6.83871042e+10  2.90e+01 7.67e-01  1.47e+05    46s
+  20   5.22525104e+10 -4.60651655e+10  1.98e+01 5.86e-01  1.08e+05    49s
+  21   4.86247717e+10 -1.84595309e+10  1.70e+01 3.60e-01  7.27e+04    52s
+  22   4.21169813e+10 -8.60753027e+09  1.23e+01 2.78e-01  5.45e+04    55s
+  23   3.81596234e+10 -2.63692131e+08  9.42e+00 2.07e-01  4.09e+04    57s
+  24   3.52096276e+10  8.33135932e+09  7.37e+00 1.34e-01  2.82e+04    60s
+  25   3.25092688e+10  1.22437337e+10  5.54e+00 1.00e-01  2.11e+04    63s
+  26   2.99796776e+10  1.66313542e+10  3.91e+00 6.12e-02  1.37e+04    66s
+  27   2.82490718e+10  1.92472717e+10  2.79e+00 1.19e-01  9.12e+03    69s
+  28   2.68899582e+10  2.00780160e+10  1.89e+00 6.76e-02  6.87e+03    72s
+  29   2.63130692e+10  2.13589809e+10  1.51e+00 6.88e-02  4.96e+03    75s
+  30   2.56449020e+10  2.21925190e+10  1.07e+00 8.05e-02  3.43e+03    77s
+  31   2.51765001e+10  2.23875711e+10  7.86e-01 6.23e-02  2.77e+03    80s
+  32   2.48662213e+10  2.28071840e+10  5.96e-01 5.02e-02  2.04e+03    83s
+  33   2.46602805e+10  2.31915354e+10  4.65e-01 5.45e-02  1.45e+03    85s
+  34   2.44788127e+10  2.34165820e+10  3.56e-01 4.00e-02  1.04e+03    88s
+  35   2.43027827e+10  2.36175104e+10  2.50e-01 3.38e-02  6.69e+02    91s
+  36   2.41792244e+10  2.37070891e+10  1.78e-01 2.43e-02  4.60e+02    94s
+  37   2.41075408e+10  2.37536003e+10  1.37e-01 1.81e-02  3.44e+02    97s
+  38   2.40721355e+10  2.37950555e+10  1.16e-01 1.67e-02  2.69e+02   100s
+  39   2.40290026e+10  2.38102350e+10  9.11e-02 1.34e-02  2.12e+02   104s
+  40   2.40008229e+10  2.38232600e+10  7.49e-02 1.06e-02  1.72e+02   108s
+  41   2.39812262e+10  2.38294237e+10  6.33e-02 9.40e-03  1.47e+02   111s
+  42   2.39760745e+10  2.38316786e+10  6.02e-02 8.89e-03  1.40e+02   114s
+  43   2.39689122e+10  2.38391214e+10  5.57e-02 7.51e-03  1.26e+02   119s
+  44   2.39559085e+10  2.38514729e+10  4.68e-02 5.25e-03  1.01e+02   123s
+  45   2.39416998e+10  2.38594902e+10  3.76e-02 4.87e-03  7.97e+01   126s
+  46   2.39374246e+10  2.38646385e+10  3.48e-02 4.19e-03  7.05e+01   130s
+  47   2.39218183e+10  2.38689522e+10  2.45e-02 3.32e-03  5.12e+01   134s
+  48   2.39170018e+10  2.38716199e+10  2.15e-02 3.42e-03  4.40e+01   137s
+  49   2.39114585e+10  2.38735198e+10  1.79e-02 3.31e-03  3.68e+01   141s
+  50   2.39073873e+10  2.38765176e+10  1.52e-02 2.99e-03  2.99e+01   145s
+  51   2.39054527e+10  2.38771844e+10  1.40e-02 2.73e-03  2.74e+01   149s
+  52   2.39020450e+10  2.38784569e+10  1.17e-02 1.79e-03  2.28e+01   153s
+
+Barrier solved model in 52 iterations and 152.82 seconds (16.50 work units)
+Optimal objective 2.39020450e+10
+
+Crossover log...
+
+  285271 DPushes remaining with DInf 0.0000000e+00               154s
+  190593 DPushes remaining with DInf 0.0000000e+00               155s
+  125004 DPushes remaining with DInf 0.0000000e+00               160s
+  101047 DPushes remaining with DInf 0.0000000e+00               165s
+   80667 DPushes remaining with DInf 0.0000000e+00               170s
+   39478 DPushes remaining with DInf 0.0000000e+00               175s
+   18475 DPushes remaining with DInf 0.0000000e+00               180s
+    4062 DPushes remaining with DInf 0.0000000e+00               185s
+       0 DPushes remaining with DInf 0.0000000e+00               186s
+
+  377351 PPushes remaining with PInf 4.7896233e+02               186s
+    3020 PPushes remaining with PInf 0.0000000e+00               191s
+       0 PPushes remaining with PInf 0.0000000e+00               192s
+
+  Push phase complete: Pinf 0.0000000e+00, Dinf 2.7660056e+07    192s
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+  532919    2.3888654e+10   0.000000e+00   2.766006e+07    192s
+  533809    2.3886711e+10   0.000000e+00   9.940659e+06    196s
+  534869    2.3885498e+10   0.000000e+00   2.043601e+06    200s
+  537355    2.3884630e+10   0.000000e+00   1.945428e+05    205s
+  540533    2.3884233e+10   0.000000e+00   3.381472e+03    210s
+  562246    2.3884055e+10   0.000000e+00   0.000000e+00    215s
+
+Solved with barrier
+Extra simplex iterations after uncrush: 4
+  563327    2.3884055e+10   0.000000e+00   0.000000e+00    216s
+
+Solved in 563327 iterations and 216.18 seconds (88.53 work units)
+Optimal objective  2.388405498e+10
+Warning: variable name "g[ES1 0 CCGT,NT,2025,11,0]" has a space
+Warning: constraint name "C_power_balance[ES1 0,NT,2025,11,0]" has a space
+Warning: default variable names used to write mps file
+Warning: default constraint names used to write mps file
+Warning: variable name "g[ES1 0 CCGT,NT,2025,11,0]" has a space
+Warning: default variable names used to write solution file
+Model saved to: /cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/1_May21_Wed_h17_m59_s23-GTSEP_stochastic_v1-128_ES_PT_EVPI_3
+Deleted config file: /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_3_20250521_182007_0cd5cdd5.yaml
+Deleting folder: /cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/1_May21_Wed_h17_m59_s23-GTSEP_stochastic_v1-128_ES_PT_EVPI_3
+Running EVPI analysis for scenario 4...
+New config saved to: /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_4_20250521_182526_bd30b775.yaml
+No preprocessing config provided. Skipping preprocessing...
+Path_or_name: temp_EVPI_4_20250521_182526_bd30b775
+Configuration loaded from /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_4_20250521_182526_bd30b775.yaml
+{'data_folder_name': 'elec_s_128_ES_PT_no_bat_limit', 'model_name': 'GTSEP_stochastic_v1', 'model_id': '128_ES_PT', 'MIPGap': 0.01, 'VOLL': 6350, 'CC': 100, 'CO2_price': 80, 'E_limit': inf, 'p_max_new_branch': 5000, 'p_min_new_branch': 100, 'expansion_factor': 1.0, 'MS': 0.1, 'years': [2025, 2030, 2040, 2050], 'clustering_unit': None, 'clustering_periods': None, 'scenario_file': 'EVPI_4', 'EVPI': False, 'VSS': False, 'battery_capacity_path': None, 'generator_capacity_path': None, 'branch_capacity_path': None, 'co2_emissions_path': None, 'query': 'not (x > 2 and y < 40)', 'carriers': ['CCGT', 'solar', 'onwind'], 'discount_rate': 0.07, 'representative_period_unit': 'week', 'representative_periods': [11, 21, 42, 52], 'save_folder': '/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/1_May21_Wed_h17_m59_s23-GTSEP_stochastic_v1-128_ES_PT_EVPI_4'}
+Set parameter MIPGap to value 0.01
+Set parameter TimeLimit to value 21600
+Set parameter BarConvTol to value 0.01
+Set parameter BarHomogeneous to value 1
+Model built in 102.26364493370056 seconds.
+Gurobi Optimizer version 12.0.1 build v12.0.1rc0 (linux64 - "Rocky Linux 9.4 (Blue Onyx)")
+
+CPU model: Intel(R) Xeon(R) Gold 6242 CPU @ 2.80GHz, instruction set [SSE2|AVX|AVX2|AVX512]
+Thread count: 32 physical cores, 32 logical processors, using up to 32 threads
+
+Non-default parameters:
+TimeLimit  21600
+MIPGap  0.01
+BarConvTol  0.01
+BarHomogeneous  1
+
+Academic license 2622400 - for non-commercial use only - registered to ti___@stud.ntnu.no
+Optimize a model with 823320 rows, 1895688 columns and 2322378 nonzeros
+Model fingerprint: 0x9607b849
+Coefficient statistics:
+  Matrix range     [8e-06, 4e+00]
+  Objective range  [1e-01, 3e+05]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [6e-03, 1e+100]
+Warning: Model contains large rhs
+         Consider reformulating model or setting NumericFocus parameter
+         to avoid numerical issues.
+Presolve removed 505421 rows and 1482513 columns
+Presolve time: 1.93s
+Presolved: 317899 rows, 413175 columns, 1416156 nonzeros
+
+Concurrent LP optimizer: primal simplex, dual simplex, and barrier
+Showing barrier log only...
+
+Ordering time: 0.26s
+
+Barrier statistics:
+ Dense cols : 357
+ AA' NZ     : 1.376e+06
+ Factor NZ  : 6.388e+06 (roughly 350 MB of memory)
+ Factor Ops : 3.082e+08 (less than 1 second per iteration)
+ Threads    : 30
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   4.65002683e+13 -1.35046870e+16  4.37e+05 5.21e+04  7.56e+10     4s
+   1   3.53185862e+13 -7.69931357e+15  3.30e+05 3.07e+05  4.22e+10     5s
+   2   2.69922510e+13 -5.32418707e+15  2.43e+05 1.04e+05  2.66e+10     7s
+   3   2.21600146e+13 -3.30312650e+15  1.91e+05 2.31e+04  1.74e+10     9s
+   4   1.07159683e+13 -1.12733957e+15  8.12e+04 7.74e+03  4.36e+09    12s
+   5   5.77279596e+12 -2.87910690e+14  3.65e+04 2.09e+03  9.84e+08    14s
+   6   3.96127258e+12 -1.36921611e+14  2.16e+04 9.73e+02  3.93e+08    15s
+   7   2.55372832e+12 -6.71526503e+13  1.11e+04 4.78e+02  1.52e+08    17s
+   8   9.97708556e+11 -3.42660740e+13  2.15e+03 2.49e+02  5.05e+07    19s
+   9   4.80352671e+11 -9.64537340e+12  5.80e+02 7.12e+01  1.28e+07    22s
+  10   2.86424384e+11 -3.34567117e+12  2.63e+02 2.50e+01  4.43e+06    24s
+  11   2.37923804e+11 -1.91684697e+12  2.00e+02 1.45e+01  2.60e+06    26s
+  12   1.96302652e+11 -1.48659367e+12  1.51e+02 1.13e+01  2.01e+06    28s
+  13   1.70542843e+11 -8.89593670e+11  1.21e+02 6.96e+00  1.25e+06    30s
+  14   1.39848853e+11 -6.40615885e+11  8.94e+01 5.10e+00  9.13e+05    32s
+  15   1.17276566e+11 -3.33323761e+11  6.58e+01 2.84e+00  5.21e+05    35s
+  16   9.76667522e+10 -2.17655892e+11  4.83e+01 1.96e+00  3.61e+05    37s
+  17   8.13069109e+10 -1.24845382e+11  3.51e+01 1.24e+00  2.33e+05    40s
+  18   6.99860909e+10 -7.95055837e+10  2.71e+01 8.84e-01  1.67e+05    43s
+  19   5.89184530e+10 -4.96380941e+10  1.95e+01 6.40e-01  1.20e+05    46s
+  20   5.12810833e+10 -2.98044672e+10  1.46e+01 4.75e-01  8.88e+04    49s
+  21   4.61884988e+10 -1.72955607e+10  1.15e+01 3.67e-01  6.88e+04    51s
+  22   4.16771757e+10 -1.57793240e+09  8.70e+00 2.38e-01  4.63e+04    54s
+  23   3.81097936e+10  6.44898139e+09  6.65e+00 1.70e-01  3.35e+04    57s
+  24   3.54739779e+10  1.16656643e+10  5.22e+00 1.24e-01  2.49e+04    60s
+  25   3.36557030e+10  1.68659479e+10  4.26e+00 7.76e-02  1.73e+04    63s
+  26   3.11003086e+10  2.00537674e+10  2.87e+00 5.20e-02  1.13e+04    65s
+  27   2.92995912e+10  2.19495787e+10  1.91e+00 7.76e-02  7.43e+03    69s
+  28   2.85829578e+10  2.30276219e+10  1.51e+00 6.37e-02  5.59e+03    71s
+  29   2.77399226e+10  2.37529814e+10  1.03e+00 3.43e-02  3.98e+03    74s
+  30   2.74103447e+10  2.39465736e+10  8.53e-01 3.65e-02  3.46e+03    77s
+  31   2.71189763e+10  2.47703694e+10  6.95e-01 9.56e-02  2.33e+03    80s
+  32   2.67937291e+10  2.50641366e+10  5.29e-01 8.00e-02  1.71e+03    83s
+  33   2.64313979e+10  2.53133651e+10  3.45e-01 5.84e-02  1.10e+03    85s
+  34   2.61977420e+10  2.54115171e+10  2.28e-01 4.43e-02  7.72e+02    89s
+  35   2.60741495e+10  2.54762060e+10  1.67e-01 3.38e-02  5.87e+02    92s
+  36   2.59524307e+10  2.55573238e+10  1.07e-01 2.25e-02  3.87e+02    95s
+  37   2.59099176e+10  2.55820318e+10  8.66e-02 1.91e-02  3.22e+02    99s
+  38   2.58934935e+10  2.56349211e+10  7.87e-02 1.22e-02  2.53e+02   102s
+  39   2.58479188e+10  2.56505768e+10  5.57e-02 1.04e-02  1.93e+02   106s
+  40   2.58295353e+10  2.56731844e+10  4.65e-02 7.21e-03  1.53e+02   109s
+  41   2.58077109e+10  2.56851614e+10  3.57e-02 8.00e-03  1.20e+02   113s
+  42   2.58022131e+10  2.56949392e+10  3.30e-02 6.37e-03  1.05e+02   117s
+  43   2.57822947e+10  2.57049642e+10  2.35e-02 4.92e-03  7.54e+01   121s
+  44   2.57765703e+10  2.57070212e+10  2.08e-02 4.57e-03  6.78e+01   125s
+  45   2.57694340e+10  2.57121570e+10  1.74e-02 3.68e-03  5.58e+01   129s
+  46   2.57666450e+10  2.57153823e+10  1.61e-02 3.15e-03  4.99e+01   132s
+  47   2.57585186e+10  2.57177951e+10  1.22e-02 2.43e-03  3.97e+01   136s
+  48   2.57554280e+10  2.57223495e+10  1.07e-02 2.05e-03  3.22e+01   140s
+  49   2.57508743e+10  2.57236373e+10  8.54e-03 1.80e-03  2.65e+01   144s
+  50   2.57480817e+10  2.57242446e+10  7.20e-03 1.68e-03  2.32e+01   147s
+
+Barrier solved model in 50 iterations and 147.31 seconds (16.26 work units)
+Optimal objective 2.57480817e+10
+
+Crossover log...
+
+  290084 DPushes remaining with DInf 0.0000000e+00               148s
+  176779 DPushes remaining with DInf 0.0000000e+00               150s
+  119790 DPushes remaining with DInf 0.0000000e+00               155s
+   97357 DPushes remaining with DInf 0.0000000e+00               160s
+   67190 DPushes remaining with DInf 0.0000000e+00               165s
+   31906 DPushes remaining with DInf 0.0000000e+00               170s
+    6394 DPushes remaining with DInf 0.0000000e+00               175s
+       0 DPushes remaining with DInf 0.0000000e+00               177s
+
+  377347 PPushes remaining with PInf 6.6374631e+03               177s
+   11025 PPushes remaining with PInf 1.6962273e+02               180s
+       0 PPushes remaining with PInf 0.0000000e+00               185s
+
+  Push phase complete: Pinf 0.0000000e+00, Dinf 3.2301402e+07    185s
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+  535878    2.5737484e+10   0.000000e+00   3.230140e+07    185s
+  536048    2.5736667e+10   0.000000e+00   6.560052e+06    186s
+  537701    2.5735292e+10   0.000000e+00   5.927319e+06    190s
+  541011    2.5733283e+10   0.000000e+00   8.671715e+04    195s
+  552010    2.5732999e+10   0.000000e+00   1.398647e+02    200s
+
+Solved with barrier
+Extra simplex iterations after uncrush: 3
+  566293    2.5732992e+10   0.000000e+00   0.000000e+00    204s
+
+Solved in 566293 iterations and 203.54 seconds (76.67 work units)
+Optimal objective  2.573299175e+10
+Warning: variable name "g[ES1 0 CCGT,NT,2025,11,0]" has a space
+Warning: constraint name "C_power_balance[ES1 0,NT,2025,11,0]" has a space
+Warning: default variable names used to write mps file
+Warning: default constraint names used to write mps file
+Warning: variable name "g[ES1 0 CCGT,NT,2025,11,0]" has a space
+Warning: default variable names used to write solution file
+Model saved to: /cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/1_May21_Wed_h17_m59_s23-GTSEP_stochastic_v1-128_ES_PT_EVPI_4
+Deleted config file: /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_4_20250521_182526_bd30b775.yaml
+Deleting folder: /cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/1_May21_Wed_h17_m59_s23-GTSEP_stochastic_v1-128_ES_PT_EVPI_4
+Running EVPI analysis for scenario 5...
+New config saved to: /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_5_20250521_183046_970b0f9d.yaml
+No preprocessing config provided. Skipping preprocessing...
+Path_or_name: temp_EVPI_5_20250521_183046_970b0f9d
+Configuration loaded from /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_5_20250521_183046_970b0f9d.yaml
+{'data_folder_name': 'elec_s_128_ES_PT_no_bat_limit', 'model_name': 'GTSEP_stochastic_v1', 'model_id': '128_ES_PT', 'MIPGap': 0.01, 'VOLL': 6350, 'CC': 100, 'CO2_price': 80, 'E_limit': inf, 'p_max_new_branch': 5000, 'p_min_new_branch': 100, 'expansion_factor': 1.0, 'MS': 0.1, 'years': [2025, 2030, 2040, 2050], 'clustering_unit': None, 'clustering_periods': None, 'scenario_file': 'EVPI_5', 'EVPI': False, 'VSS': False, 'battery_capacity_path': None, 'generator_capacity_path': None, 'branch_capacity_path': None, 'co2_emissions_path': None, 'query': 'not (x > 2 and y < 40)', 'carriers': ['CCGT', 'solar', 'onwind'], 'discount_rate': 0.07, 'representative_period_unit': 'week', 'representative_periods': [11, 21, 42, 52], 'save_folder': '/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/1_May21_Wed_h17_m59_s23-GTSEP_stochastic_v1-128_ES_PT_EVPI_5'}
+Set parameter MIPGap to value 0.01
+Set parameter TimeLimit to value 21600
+Set parameter BarConvTol to value 0.01
+Set parameter BarHomogeneous to value 1
+Model built in 101.05057430267334 seconds.
+Gurobi Optimizer version 12.0.1 build v12.0.1rc0 (linux64 - "Rocky Linux 9.4 (Blue Onyx)")
+
+CPU model: Intel(R) Xeon(R) Gold 6242 CPU @ 2.80GHz, instruction set [SSE2|AVX|AVX2|AVX512]
+Thread count: 32 physical cores, 32 logical processors, using up to 32 threads
+
+Non-default parameters:
+TimeLimit  21600
+MIPGap  0.01
+BarConvTol  0.01
+BarHomogeneous  1
+
+Academic license 2622400 - for non-commercial use only - registered to ti___@stud.ntnu.no
+Optimize a model with 823320 rows, 1895688 columns and 2322378 nonzeros
+Model fingerprint: 0xd4d59135
+Coefficient statistics:
+  Matrix range     [8e-06, 4e+00]
+  Objective range  [1e-01, 3e+05]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [6e-03, 1e+100]
+Warning: Model contains large rhs
+         Consider reformulating model or setting NumericFocus parameter
+         to avoid numerical issues.
+Presolve removed 505421 rows and 1482513 columns
+Presolve time: 1.92s
+Presolved: 317899 rows, 413175 columns, 1416156 nonzeros
+
+Concurrent LP optimizer: primal simplex, dual simplex, and barrier
+Showing barrier log only...
+
+Ordering time: 0.26s
+
+Barrier statistics:
+ Dense cols : 357
+ AA' NZ     : 1.376e+06
+ Factor NZ  : 6.388e+06 (roughly 350 MB of memory)
+ Factor Ops : 3.082e+08 (less than 1 second per iteration)
+ Threads    : 30
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   4.68833435e+13 -1.35030074e+16  4.41e+05 5.21e+04  7.62e+10     4s
+   1   3.56051909e+13 -7.72140787e+15  3.33e+05 3.07e+05  4.26e+10     6s
+   2   2.72085463e+13 -5.34658114e+15  2.45e+05 1.04e+05  2.69e+10     7s
+   3   2.23438096e+13 -3.31721292e+15  1.92e+05 2.30e+04  1.76e+10    10s
+   4   1.09387622e+13 -1.13477554e+15  8.34e+04 7.70e+03  4.46e+09    13s
+   5   5.79752289e+12 -2.90844758e+14  3.67e+04 2.08e+03  9.93e+08    15s
+   6   3.97361153e+12 -1.38585847e+14  2.17e+04 9.69e+02  3.96e+08    16s
+   7   2.59016186e+12 -6.77469555e+13  1.13e+04 4.75e+02  1.54e+08    18s
+   8   1.00692759e+12 -3.46928519e+13  2.18e+03 2.49e+02  5.12e+07    20s
+   9   5.09307815e+11 -9.99117702e+12  6.56e+02 7.33e+01  1.35e+07    23s
+  10   3.14292633e+11 -3.90700772e+12  3.24e+02 2.89e+01  5.21e+06    25s
+  11   2.59699560e+11 -2.33444449e+12  2.46e+02 1.74e+01  3.16e+06    27s
+  12   2.15125430e+11 -1.64895444e+12  1.88e+02 1.24e+01  2.24e+06    29s
+  13   1.99169637e+11 -1.08065370e+12  1.68e+02 8.30e+00  1.53e+06    30s
+  14   1.62542293e+11 -7.27988848e+11  1.25e+02 5.69e+00  1.05e+06    33s
+  15   1.30783682e+11 -4.23413965e+11  8.97e+01 3.47e+00  6.46e+05    35s
+  16   1.09695652e+11 -2.25028517e+11  6.98e+01 1.98e+00  3.85e+05    38s
+  17   8.90958274e+10 -1.15787123e+11  5.15e+01 1.14e+00  2.32e+05    42s
+  18   7.37205880e+10 -7.70592394e+10  3.83e+01 8.32e-01  1.68e+05    44s
+  19   6.20887296e+10 -4.32880898e+10  2.88e+01 5.68e-01  1.16e+05    47s
+  20   5.23180698e+10 -3.09715616e+10  2.08e+01 4.63e-01  9.10e+04    50s
+  21   4.80680009e+10 -3.37819743e+09  1.75e+01 2.48e-01  5.49e+04    53s
+  22   4.18430217e+10  6.55239690e+09  1.27e+01 1.61e-01  3.71e+04    56s
+  23   3.78589382e+10  1.08219399e+10  9.67e+00 1.23e-01  2.82e+04    58s
+  24   3.51473936e+10  1.37931194e+10  7.66e+00 9.66e-02  2.21e+04    61s
+  25   3.32308768e+10  1.70606935e+10  6.24e+00 6.78e-02  1.66e+04    64s
+  26   3.00974835e+10  2.10949644e+10  3.95e+00 1.52e-01  9.05e+03    67s
+  27   2.93042736e+10  2.24235433e+10  3.31e+00 1.15e-01  6.87e+03    70s
+  28   2.76316964e+10  2.30463019e+10  1.97e+00 1.18e-01  4.56e+03    73s
+  29   2.69439604e+10  2.39848667e+10  1.37e+00 1.25e-01  2.93e+03    75s
+  30   2.65479320e+10  2.43155120e+10  1.03e+00 8.50e-02  2.20e+03    78s
+  31   2.64794564e+10  2.45745732e+10  9.71e-01 8.76e-02  1.87e+03    80s
+  32   2.62547207e+10  2.47871125e+10  7.91e-01 1.09e-01  1.44e+03    82s
+  33   2.59734894e+10  2.49414588e+10  5.69e-01 5.50e-02  1.01e+03    84s
+  34   2.58771988e+10  2.50307664e+10  4.91e-01 5.53e-02  8.25e+02    87s
+  35   2.57426561e+10  2.50415160e+10  3.82e-01 5.15e-02  6.84e+02    89s
+  36   2.56303980e+10  2.51137050e+10  2.92e-01 4.32e-02  5.03e+02    92s
+  37   2.55179485e+10  2.51366519e+10  1.99e-01 4.34e-02  3.72e+02    93s
+  38   2.54483175e+10  2.51658758e+10  1.41e-01 3.45e-02  2.75e+02    97s
+  39   2.54217615e+10  2.51901909e+10  1.20e-01 2.68e-02  2.26e+02   100s
+  40   2.53991222e+10  2.52143977e+10  1.02e-01 1.88e-02  1.80e+02   104s
+  41   2.53673141e+10  2.52282696e+10  7.71e-02 1.42e-02  1.35e+02   106s
+  42   2.53606797e+10  2.52412211e+10  7.20e-02 9.83e-03  1.16e+02   111s
+  43   2.53391249e+10  2.52424500e+10  5.46e-02 9.42e-03  9.40e+01   114s
+  44   2.53330977e+10  2.52465127e+10  4.97e-02 8.12e-03  8.42e+01   117s
+  45   2.53210963e+10  2.52548780e+10  4.01e-02 5.42e-03  6.43e+01   126s
+  46   2.53138439e+10  2.52579942e+10  3.42e-02 4.41e-03  5.43e+01   130s
+  47   2.53092282e+10  2.52595891e+10  3.05e-02 3.90e-03  4.82e+01   133s
+  48   2.53059027e+10  2.52609140e+10  2.77e-02 3.47e-03  4.37e+01   137s
+  49   2.53008791e+10  2.52625846e+10  2.37e-02 2.95e-03  3.72e+01   141s
+  50   2.52972537e+10  2.52645726e+10  2.07e-02 2.33e-03  3.17e+01   144s
+  51   2.52942075e+10  2.52655816e+10  1.83e-02 2.00e-03  2.78e+01   148s
+
+Barrier solved model in 51 iterations and 148.02 seconds (15.78 work units)
+Optimal objective 2.52942075e+10
+
+Crossover log...
+
+  285211 DPushes remaining with DInf 0.0000000e+00               149s
+  189969 DPushes remaining with DInf 0.0000000e+00               150s
+  126898 DPushes remaining with DInf 0.0000000e+00               155s
+  106360 DPushes remaining with DInf 0.0000000e+00               160s
+   89621 DPushes remaining with DInf 0.0000000e+00               165s
+   56610 DPushes remaining with DInf 0.0000000e+00               170s
+   24481 DPushes remaining with DInf 0.0000000e+00               175s
+    7598 DPushes remaining with DInf 0.0000000e+00               180s
+       0 DPushes remaining with DInf 0.0000000e+00               183s
+
+  377342 PPushes remaining with PInf 4.9834849e+03               183s
+   40978 PPushes remaining with PInf 3.2744600e+01               185s
+       0 PPushes remaining with PInf 8.0122968e-03               190s
+
+  Push phase complete: Pinf 8.0122968e-03, Dinf 7.4646380e+07    190s
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+  533941    2.5278449e+10   0.000000e+00   7.464638e+07    190s
+  534111    2.5276073e+10   0.000000e+00   8.202503e+06    191s
+  535721    2.5273130e+10   0.000000e+00   1.396676e+06    195s
+  540764    2.5272214e+10   0.000000e+00   2.579378e+04    200s
+  558597    2.5272146e+10   0.000000e+00   2.983564e-01    205s
+
+Solved with barrier
+Extra simplex iterations after uncrush: 1
+  564136    2.5272145e+10   0.000000e+00   0.000000e+00    207s
+
+Solved in 564136 iterations and 206.96 seconds (75.06 work units)
+Optimal objective  2.527214533e+10
+Warning: variable name "g[ES1 0 CCGT,NT,2025,11,0]" has a space
+Warning: constraint name "C_power_balance[ES1 0,NT,2025,11,0]" has a space
+Warning: default variable names used to write mps file
+Warning: default constraint names used to write mps file
+Warning: variable name "g[ES1 0 CCGT,NT,2025,11,0]" has a space
+Warning: default variable names used to write solution file
+Model saved to: /cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/1_May21_Wed_h17_m59_s23-GTSEP_stochastic_v1-128_ES_PT_EVPI_5
+Deleted config file: /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_5_20250521_183046_970b0f9d.yaml
+Deleting folder: /cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/1_May21_Wed_h17_m59_s23-GTSEP_stochastic_v1-128_ES_PT_EVPI_5
+Running EVPI analysis for scenario 6...
+New config saved to: /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_6_20250521_183607_27d3bfc1.yaml
+No preprocessing config provided. Skipping preprocessing...
+Path_or_name: temp_EVPI_6_20250521_183607_27d3bfc1
+Configuration loaded from /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_6_20250521_183607_27d3bfc1.yaml
+{'data_folder_name': 'elec_s_128_ES_PT_no_bat_limit', 'model_name': 'GTSEP_stochastic_v1', 'model_id': '128_ES_PT', 'MIPGap': 0.01, 'VOLL': 6350, 'CC': 100, 'CO2_price': 80, 'E_limit': inf, 'p_max_new_branch': 5000, 'p_min_new_branch': 100, 'expansion_factor': 1.0, 'MS': 0.1, 'years': [2025, 2030, 2040, 2050], 'clustering_unit': None, 'clustering_periods': None, 'scenario_file': 'EVPI_6', 'EVPI': False, 'VSS': False, 'battery_capacity_path': None, 'generator_capacity_path': None, 'branch_capacity_path': None, 'co2_emissions_path': None, 'query': 'not (x > 2 and y < 40)', 'carriers': ['CCGT', 'solar', 'onwind'], 'discount_rate': 0.07, 'representative_period_unit': 'week', 'representative_periods': [11, 21, 42, 52], 'save_folder': '/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/1_May21_Wed_h17_m59_s23-GTSEP_stochastic_v1-128_ES_PT_EVPI_6'}
+Set parameter MIPGap to value 0.01
+Set parameter TimeLimit to value 21600
+Set parameter BarConvTol to value 0.01
+Set parameter BarHomogeneous to value 1
+Model built in 89.85142159461975 seconds.
+Gurobi Optimizer version 12.0.1 build v12.0.1rc0 (linux64 - "Rocky Linux 9.4 (Blue Onyx)")
+
+CPU model: Intel(R) Xeon(R) Gold 6242 CPU @ 2.80GHz, instruction set [SSE2|AVX|AVX2|AVX512]
+Thread count: 32 physical cores, 32 logical processors, using up to 32 threads
+
+Non-default parameters:
+TimeLimit  21600
+MIPGap  0.01
+BarConvTol  0.01
+BarHomogeneous  1
+
+Academic license 2622400 - for non-commercial use only - registered to ti___@stud.ntnu.no
+Optimize a model with 823316 rows, 1264008 columns and 2236362 nonzeros
+Model fingerprint: 0x073c1923
+Coefficient statistics:
+  Matrix range     [8e-06, 4e+00]
+  Objective range  [1e-01, 3e+05]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [6e-03, 1e+100]
+Warning: Model contains large rhs
+         Consider reformulating model or setting NumericFocus parameter
+         to avoid numerical issues.
+Presolve removed 505417 rows and 850833 columns
+Presolve time: 1.77s
+Presolved: 317899 rows, 413175 columns, 1416156 nonzeros
+
+Concurrent LP optimizer: primal simplex, dual simplex, and barrier
+Showing barrier log only...
+
+Ordering time: 0.26s
+
+Barrier statistics:
+ Dense cols : 357
+ AA' NZ     : 1.376e+06
+ Factor NZ  : 6.388e+06 (roughly 350 MB of memory)
+ Factor Ops : 3.082e+08 (less than 1 second per iteration)
+ Threads    : 30
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   4.66512526e+13 -1.35207549e+16  4.37e+05 5.21e+04  7.56e+10     4s
+   1   3.54653957e+13 -7.71329932e+15  3.30e+05 3.07e+05  4.22e+10     5s
+   2   2.71296256e+13 -5.33646393e+15  2.43e+05 1.04e+05  2.66e+10     7s
+   3   2.23054454e+13 -3.30836784e+15  1.91e+05 2.30e+04  1.74e+10    10s
+   4   1.09663527e+13 -1.13159059e+15  8.27e+04 7.72e+03  4.42e+09    12s
+   5   5.84521098e+12 -2.87803467e+14  3.65e+04 2.07e+03  9.79e+08    14s
+   6   4.01679882e+12 -1.36860069e+14  2.16e+04 9.64e+02  3.90e+08    15s
+   7   2.60678221e+12 -6.72979484e+13  1.11e+04 4.75e+02  1.52e+08    17s
+   8   1.00479953e+12 -3.44381557e+13  2.16e+03 2.49e+02  5.07e+07    19s
+   9   4.79671401e+11 -9.53578810e+12  5.85e+02 6.98e+01  1.27e+07    22s
+  10   2.87774388e+11 -3.32953396e+12  2.70e+02 2.46e+01  4.42e+06    24s
+  11   2.39173010e+11 -1.93059898e+12  2.05e+02 1.45e+01  2.62e+06    26s
+  12   2.10978313e+11 -1.50193737e+12  1.71e+02 1.13e+01  2.05e+06    28s
+  13   1.84539725e+11 -8.70128056e+11  1.39e+02 6.72e+00  1.25e+06    29s
+  14   1.54258133e+11 -5.65171015e+11  1.07e+02 4.48e+00  8.42e+05    32s
+  15   1.17278753e+11 -3.24347714e+11  6.96e+01 2.71e+00  5.10e+05    34s
+  16   9.87410670e+10 -1.85968447e+11  5.40e+01 1.68e+00  3.25e+05    37s
+  17   8.37774461e+10 -1.14314791e+11  4.09e+01 1.14e+00  2.24e+05    40s
+  18   7.27967534e+10 -5.52273791e+10  3.27e+01 6.77e-01  1.42e+05    43s
+  19   6.32192453e+10 -2.97388196e+10  2.62e+01 4.72e-01  1.02e+05    46s
+  20   5.44951861e+10 -1.70752072e+10  1.98e+01 3.64e-01  7.77e+04    49s
+  21   4.65640911e+10 -4.63112045e+09  1.41e+01 2.54e-01  5.49e+04    51s
+  22   4.21657319e+10  4.94739537e+09  1.09e+01 1.76e-01  3.94e+04    54s
+  23   3.86011701e+10  1.05114839e+10  8.41e+00 1.29e-01  2.94e+04    57s
+  24   3.53136150e+10  1.44175064e+10  6.12e+00 9.76e-02  2.17e+04    60s
+  25   3.34005162e+10  1.79537635e+10  4.77e+00 6.85e-02  1.59e+04    63s
+  26   3.11797702e+10  2.14455186e+10  3.03e+00 4.26e-02  9.92e+03    66s
+  27   3.07767077e+10  2.36877058e+10  2.73e+00 1.21e-01  7.13e+03    68s
+  28   2.95031592e+10  2.39935875e+10  1.75e+00 1.01e-01  5.54e+03    71s
+  29   2.86703191e+10  2.51410935e+10  1.14e+00 4.11e-02  3.52e+03    74s
+  30   2.84485917e+10  2.55405387e+10  9.78e-01 4.55e-02  2.89e+03    78s
+  31   2.79735312e+10  2.61633280e+10  6.51e-01 4.31e-02  1.79e+03    80s
+  32   2.77876484e+10  2.64556984e+10  5.31e-01 6.45e-02  1.31e+03    83s
+  33   2.75521541e+10  2.66248024e+10  3.75e-01 6.87e-02  9.09e+02    86s
+  34   2.74411342e+10  2.67183440e+10  3.06e-01 6.98e-02  7.07e+02    89s
+  35   2.72835698e+10  2.68001658e+10  2.04e-01 3.82e-02  4.72e+02    92s
+  36   2.71924525e+10  2.68410427e+10  1.44e-01 3.13e-02  3.43e+02    95s
+  37   2.71579745e+10  2.68820800e+10  1.21e-01 2.00e-02  2.69e+02    99s
+  38   2.71243468e+10  2.68938797e+10  9.93e-02 1.69e-02  2.25e+02   102s
+  39   2.70948571e+10  2.69089552e+10  7.98e-02 1.30e-02  1.81e+02   106s
+  40   2.70848025e+10  2.69106927e+10  7.30e-02 1.27e-02  1.70e+02   110s
+  41   2.70745256e+10  2.69255923e+10  6.61e-02 9.78e-03  1.45e+02   114s
+  42   2.70473166e+10  2.69303481e+10  4.81e-02 9.89e-03  1.14e+02   119s
+  43   2.70418375e+10  2.69438534e+10  4.40e-02 8.97e-03  9.54e+01   123s
+  44   2.70206894e+10  2.69528419e+10  2.77e-02 7.02e-03  6.61e+01   127s
+  45   2.70150857e+10  2.69645845e+10  2.35e-02 5.44e-03  4.91e+01   131s
+  46   2.70101205e+10  2.69689557e+10  1.98e-02 5.40e-03  4.00e+01   135s
+  47   2.70071586e+10  2.69702841e+10  1.76e-02 4.89e-03  3.59e+01   140s
+  48   2.70066372e+10  2.69709885e+10  1.72e-02 4.64e-03  3.47e+01   143s
+  49   2.70026037e+10  2.69731038e+10  1.42e-02 3.84e-03  2.87e+01   147s
+  50   2.69999572e+10  2.69748839e+10  1.23e-02 3.19e-03  2.44e+01   151s
+
+Barrier solved model in 50 iterations and 150.81 seconds (15.97 work units)
+Optimal objective 2.69999572e+10
+
+Crossover log...
+
+  284543 DPushes remaining with DInf 0.0000000e+00               152s
+  141835 DPushes remaining with DInf 0.0000000e+00               155s
+  111868 DPushes remaining with DInf 0.0000000e+00               160s
+   90948 DPushes remaining with DInf 0.0000000e+00               165s
+   63376 DPushes remaining with DInf 0.0000000e+00               170s
+   27282 DPushes remaining with DInf 0.0000000e+00               175s
+   11034 DPushes remaining with DInf 0.0000000e+00               180s
+       0 DPushes remaining with DInf 0.0000000e+00               184s
+
+  377349 PPushes remaining with PInf 1.2072401e+04               184s
+  131006 PPushes remaining with PInf 2.7477058e+03               185s
+     220 PPushes remaining with PInf 1.3824909e-02               190s
+       0 PPushes remaining with PInf 1.1975692e-02               190s
+
+  Push phase complete: Pinf 1.1975692e-02, Dinf 4.4816798e+08    190s
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+  530757    2.6990081e+10   0.000000e+00   4.481680e+08    191s
+  531997    2.6984472e+10   0.000000e+00   3.710942e+06    195s
+  534018    2.6983723e+10   0.000000e+00   6.659472e+05    200s
+  537263    2.6983316e+10   0.000000e+00   1.164482e+04    205s
+
+Solved with barrier
+Extra simplex iterations after uncrush: 3
+  559111    2.6983170e+10   0.000000e+00   0.000000e+00    210s
+
+Solved in 559111 iterations and 210.22 seconds (80.86 work units)
+Optimal objective  2.698316969e+10
+Warning: variable name "g[ES1 0 CCGT,NT,2025,11,0]" has a space
+Warning: constraint name "C_power_balance[ES1 0,NT,2025,11,0]" has a space
+Warning: default variable names used to write mps file
+Warning: default constraint names used to write mps file
+Warning: variable name "g[ES1 0 CCGT,NT,2025,11,0]" has a space
+Warning: default variable names used to write solution file
+Model saved to: /cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/1_May21_Wed_h17_m59_s23-GTSEP_stochastic_v1-128_ES_PT_EVPI_6
+Deleted config file: /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_6_20250521_183607_27d3bfc1.yaml
+Deleting folder: /cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/1_May21_Wed_h17_m59_s23-GTSEP_stochastic_v1-128_ES_PT_EVPI_6
+EV save folder: /cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/1_May21_Wed_h17_m59_s23-GTSEP_stochastic_v1-128_ES_PT/VSS_runs/EV_run
+New config saved to: /cluster/home/tinusfa/master_project/configs/models/config_temp_EV_20250521_184119_c8b6cca7.yaml
+Running EV model...
+No preprocessing config provided. Skipping preprocessing...
+Path_or_name: temp_EV_20250521_184119_c8b6cca7
+Configuration loaded from /cluster/home/tinusfa/master_project/configs/models/config_temp_EV_20250521_184119_c8b6cca7.yaml
+{'data_folder_name': 'elec_s_128_ES_PT_no_bat_limit', 'model_name': 'GTSEP_stochastic_v1', 'model_id': '128_ES_PT', 'MIPGap': 0.01, 'VOLL': 6350, 'CC': 100, 'CO2_price': 80, 'E_limit': inf, 'p_max_new_branch': 5000, 'p_min_new_branch': 100, 'expansion_factor': 1.0, 'MS': 0.1, 'years': [2025, 2030, 2040, 2050], 'clustering_unit': None, 'clustering_periods': None, 'scenario_file': 'mean', 'EVPI': False, 'VSS': False, 'battery_capacity_path': None, 'generator_capacity_path': None, 'branch_capacity_path': None, 'co2_emissions_path': None, 'query': 'not (x > 2 and y < 40)', 'carriers': ['CCGT', 'solar', 'onwind'], 'discount_rate': 0.07, 'representative_period_unit': 'week', 'representative_periods': [11, 21, 42, 52], 'save_folder': '/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/1_May21_Wed_h17_m59_s23-GTSEP_stochastic_v1-128_ES_PT/VSS_runs/EV_run'}
+Set parameter MIPGap to value 0.01
+Set parameter TimeLimit to value 21600
+Set parameter BarConvTol to value 0.01
+Set parameter BarHomogeneous to value 1
+Model built in 79.0491578578949 seconds.
+Gurobi Optimizer version 12.0.1 build v12.0.1rc0 (linux64 - "Rocky Linux 9.4 (Blue Onyx)")
+
+CPU model: Intel(R) Xeon(R) Gold 6242 CPU @ 2.80GHz, instruction set [SSE2|AVX|AVX2|AVX512]
+Thread count: 32 physical cores, 32 logical processors, using up to 32 threads
+
+Non-default parameters:
+TimeLimit  21600
+MIPGap  0.01
+BarConvTol  0.01
+BarHomogeneous  1
+
+Academic license 2622400 - for non-commercial use only - registered to ti___@stud.ntnu.no
+Optimize a model with 823312 rows, 632328 columns and 2150346 nonzeros
+Model fingerprint: 0x5a23f189
+Coefficient statistics:
+  Matrix range     [8e-06, 4e+00]
+  Objective range  [1e-01, 3e+05]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [6e-03, 1e+100]
+Warning: Model contains large rhs
+         Consider reformulating model or setting NumericFocus parameter
+         to avoid numerical issues.
+Presolve removed 505413 rows and 219153 columns
+Presolve time: 1.69s
+Presolved: 317899 rows, 413175 columns, 1416156 nonzeros
+
+Concurrent LP optimizer: primal simplex, dual simplex, and barrier
+Showing barrier log only...
+
+Ordering time: 0.26s
+
+Barrier statistics:
+ Dense cols : 357
+ AA' NZ     : 1.376e+06
+ Factor NZ  : 6.388e+06 (roughly 350 MB of memory)
+ Factor Ops : 3.082e+08 (less than 1 second per iteration)
+ Threads    : 30
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   4.67062180e+13 -1.35053810e+16  4.39e+05 5.21e+04  7.59e+10     3s
+   1   3.54758366e+13 -7.71185970e+15  3.31e+05 3.07e+05  4.24e+10     5s
+   2   2.71133232e+13 -5.33676426e+15  2.44e+05 1.04e+05  2.68e+10     6s
+   3   2.22708547e+13 -3.31090335e+15  1.92e+05 2.30e+04  1.75e+10     9s
+   4   1.09140666e+13 -1.13232077e+15  8.30e+04 7.73e+03  4.45e+09    11s
+   5   5.78950088e+12 -2.88639032e+14  3.66e+04 2.08e+03  9.86e+08    13s
+   6   3.97223014e+12 -1.37127195e+14  2.17e+04 9.66e+02  3.93e+08    15s
+   7   2.57053889e+12 -6.71890949e+13  1.12e+04 4.74e+02  1.52e+08    16s
+   8   1.00162304e+12 -3.43073372e+13  2.16e+03 2.48e+02  5.05e+07    19s
+   9   4.82517270e+11 -9.45252748e+12  5.88e+02 6.92e+01  1.26e+07    22s
+  10   2.89038622e+11 -3.37160666e+12  2.71e+02 2.50e+01  4.47e+06    24s
+  11   2.40124368e+11 -1.97073449e+12  2.06e+02 1.48e+01  2.67e+06    25s
+  12   1.98308015e+11 -1.51997246e+12  1.56e+02 1.15e+01  2.05e+06    27s
+  13   1.74571143e+11 -8.77364374e+11  1.28e+02 6.77e+00  1.24e+06    29s
+  14   1.41840860e+11 -6.36913605e+11  9.32e+01 5.01e+00  9.11e+05    31s
+  15   1.16740561e+11 -3.27203514e+11  6.73e+01 2.75e+00  5.13e+05    34s
+  16   9.26832194e+10 -1.99511195e+11  4.70e+01 1.79e+00  3.34e+05    37s
+  17   8.01586131e+10 -1.05555437e+11  3.79e+01 1.06e+00  2.09e+05    40s
+  18   6.73426566e+10 -6.43118063e+10  2.84e+01 7.39e-01  1.46e+05    42s
+  19   5.79043791e+10 -3.71586505e+10  2.15e+01 5.22e-01  1.05e+05    45s
+  20   5.14487911e+10 -1.94854297e+10  1.72e+01 3.74e-01  7.70e+04    49s
+  21   4.47104537e+10  1.37117505e+09  1.28e+01 2.01e-01  4.61e+04    52s
+  22   4.04237624e+10  9.91321233e+09  1.01e+01 1.31e-01  3.19e+04    54s
+  23   3.71275268e+10  1.33433534e+10  7.96e+00 9.96e-02  2.47e+04    57s
+  24   3.46168301e+10  1.62313411e+10  6.33e+00 7.39e-02  1.89e+04    60s
+  25   3.05450792e+10  1.91481549e+10  3.64e+00 8.67e-02  1.16e+04    63s
+  26   2.96310942e+10  2.11908860e+10  2.93e+00 1.37e-01  8.51e+03    65s
+  27   2.84665376e+10  2.24820054e+10  2.07e+00 1.61e-01  5.99e+03    68s
+  28   2.78792984e+10  2.35818280e+10  1.67e+00 1.77e-01  4.27e+03    71s
+  29   2.73052886e+10  2.45296575e+10  1.27e+00 1.40e-01  2.73e+03    74s
+  30   2.67386375e+10  2.47728196e+10  8.72e-01 1.30e-01  1.93e+03    77s
+  31   2.64687065e+10  2.50158956e+10  6.77e-01 1.10e-01  1.42e+03    80s
+  32   2.62653928e+10  2.51886917e+10  5.35e-01 9.44e-02  1.05e+03    82s
+  33   2.61523657e+10  2.52915605e+10  4.57e-01 7.52e-02  8.38e+02    85s
+  34   2.58826037e+10  2.53708401e+10  2.66e-01 5.77e-02  4.97e+02    88s
+  35   2.57560050e+10  2.54039879e+10  1.75e-01 4.52e-02  3.42e+02    91s
+  36   2.57106820e+10  2.54483306e+10  1.42e-01 3.80e-02  2.55e+02    94s
+  37   2.56523183e+10  2.54651032e+10  9.93e-02 2.88e-02  1.82e+02    98s
+  38   2.56321880e+10  2.54743070e+10  8.45e-02 2.70e-02  1.53e+02   100s
+  39   2.56098886e+10  2.54813049e+10  6.88e-02 2.24e-02  1.25e+02   103s
+  40   2.55983998e+10  2.54955546e+10  6.04e-02 1.50e-02  9.96e+01   106s
+  41   2.55910346e+10  2.54973249e+10  5.50e-02 1.38e-02  9.08e+01   109s
+  42   2.55815053e+10  2.54995693e+10  4.78e-02 1.22e-02  7.94e+01   112s
+  43   2.55790513e+10  2.55045945e+10  4.60e-02 1.30e-02  7.21e+01   115s
+  44   2.55732240e+10  2.55060594e+10  4.12e-02 1.19e-02  6.50e+01   118s
+  45   2.55682720e+10  2.55080958e+10  3.71e-02 1.05e-02  5.83e+01   121s
+  46   2.55650584e+10  2.55102635e+10  3.44e-02 9.08e-03  5.30e+01   125s
+  47   2.55600707e+10  2.55117128e+10  3.06e-02 7.84e-03  4.68e+01   128s
+  48   2.55523051e+10  2.55138481e+10  2.45e-02 6.31e-03  3.72e+01   131s
+  49   2.55505337e+10  2.55142375e+10  2.31e-02 5.92e-03  3.51e+01   134s
+  50   2.55491541e+10  2.55150076e+10  2.21e-02 5.07e-03  3.30e+01   137s
+  51   2.55483430e+10  2.55154819e+10  2.14e-02 4.62e-03  3.18e+01   142s
+  52   2.55435790e+10  2.55157010e+10  1.78e-02 4.43e-03  2.70e+01   145s
+  53   2.55430703e+10  2.55160014e+10  1.74e-02 4.19e-03  2.62e+01   148s
+
+Barrier solved model in 53 iterations and 148.53 seconds (16.03 work units)
+Optimal objective 2.55430703e+10
+
+Crossover log...
+
+  282933 DPushes remaining with DInf 0.0000000e+00               150s
+  193656 DPushes remaining with DInf 0.0000000e+00               150s
+  123528 DPushes remaining with DInf 0.0000000e+00               155s
+   96035 DPushes remaining with DInf 0.0000000e+00               160s
+   68888 DPushes remaining with DInf 0.0000000e+00               165s
+   30707 DPushes remaining with DInf 0.0000000e+00               170s
+   12796 DPushes remaining with DInf 0.0000000e+00               175s
+       0 DPushes remaining with DInf 0.0000000e+00               179s
+
+  377349 PPushes remaining with PInf 5.5888050e+02               179s
+  123670 PPushes remaining with PInf 7.9114572e+01               180s
+       0 PPushes remaining with PInf 1.7441058e-03               185s
+
+  Push phase complete: Pinf 1.7441058e-03, Dinf 2.6119697e+08    185s
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+  529880    2.5526626e+10   0.000000e+00   2.611970e+08    185s
+  530030    2.5524505e+10   0.000000e+00   6.458301e+08    186s
+  531461    2.5522967e+10   0.000000e+00   9.465402e+05    190s
+  533673    2.5521651e+10   0.000000e+00   2.582274e+07    195s
+  537186    2.5520713e+10   0.000000e+00   8.380098e+03    200s
+
+Solved with barrier
+Extra simplex iterations after uncrush: 5
+  559030    2.5520498e+10   0.000000e+00   0.000000e+00    206s
+
+Solved in 559030 iterations and 205.95 seconds (84.07 work units)
+Optimal objective  2.552049800e+10
+Warning: variable name "g[ES1 0 CCGT,mean,2025,11,0]" has a space
+Warning: constraint name "C_power_balance[ES1 0,mean,2025,11,0]" has a space
+Warning: default variable names used to write mps file
+Warning: default constraint names used to write mps file
+Warning: variable name "g[ES1 0 CCGT,mean,2025,11,0]" has a space
+Warning: default variable names used to write solution file
+Model saved to: /cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/1_May21_Wed_h17_m59_s23-GTSEP_stochastic_v1-128_ES_PT/VSS_runs/EV_run
+Deleted config file: /cluster/home/tinusfa/master_project/configs/models/config_temp_EV_20250521_184119_c8b6cca7.yaml
+Investment decision variables paths: {'battery_capacity_path': '/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/1_May21_Wed_h17_m59_s23-GTSEP_stochastic_v1-128_ES_PT/VSS_runs/EV_run/decision_variables/battery_capacity.csv', 'branch_capacity_path': '/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/1_May21_Wed_h17_m59_s23-GTSEP_stochastic_v1-128_ES_PT/VSS_runs/EV_run/decision_variables/branch_capacity.csv', 'generator_capacity_path': '/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/1_May21_Wed_h17_m59_s23-GTSEP_stochastic_v1-128_ES_PT/VSS_runs/EV_run/decision_variables/generator_capacity.csv'}
+Overwrite dict for EEV: {'scenario_file': '', 'save_folder': '/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/1_May21_Wed_h17_m59_s23-GTSEP_stochastic_v1-128_ES_PT/VSS_runs/EEV', 'EVPI': False, 'VSS': False, 'battery_capacity_path': '/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/1_May21_Wed_h17_m59_s23-GTSEP_stochastic_v1-128_ES_PT/VSS_runs/EV_run/decision_variables/battery_capacity.csv', 'branch_capacity_path': '/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/1_May21_Wed_h17_m59_s23-GTSEP_stochastic_v1-128_ES_PT/VSS_runs/EV_run/decision_variables/branch_capacity.csv', 'generator_capacity_path': '/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/1_May21_Wed_h17_m59_s23-GTSEP_stochastic_v1-128_ES_PT/VSS_runs/EV_run/decision_variables/generator_capacity.csv'}
+New config saved to: /cluster/home/tinusfa/master_project/configs/models/config_temp_EEV_20250521_184615_363122f0.yaml
+Running EEV model...
+No preprocessing config provided. Skipping preprocessing...
+Path_or_name: temp_EEV_20250521_184615_363122f0
+Configuration loaded from /cluster/home/tinusfa/master_project/configs/models/config_temp_EEV_20250521_184615_363122f0.yaml
+{'data_folder_name': 'elec_s_128_ES_PT_no_bat_limit', 'model_name': 'GTSEP_stochastic_v1', 'model_id': '128_ES_PT', 'MIPGap': 0.01, 'VOLL': 6350, 'CC': 100, 'CO2_price': 80, 'E_limit': inf, 'p_max_new_branch': 5000, 'p_min_new_branch': 100, 'expansion_factor': 1.0, 'MS': 0.1, 'years': [2025, 2030, 2040, 2050], 'clustering_unit': None, 'clustering_periods': None, 'scenario_file': '', 'EVPI': False, 'VSS': False, 'battery_capacity_path': '/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/1_May21_Wed_h17_m59_s23-GTSEP_stochastic_v1-128_ES_PT/VSS_runs/EV_run/decision_variables/battery_capacity.csv', 'generator_capacity_path': '/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/1_May21_Wed_h17_m59_s23-GTSEP_stochastic_v1-128_ES_PT/VSS_runs/EV_run/decision_variables/generator_capacity.csv', 'branch_capacity_path': '/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/1_May21_Wed_h17_m59_s23-GTSEP_stochastic_v1-128_ES_PT/VSS_runs/EV_run/decision_variables/branch_capacity.csv', 'co2_emissions_path': None, 'query': 'not (x > 2 and y < 40)', 'carriers': ['CCGT', 'solar', 'onwind'], 'discount_rate': 0.07, 'representative_period_unit': 'week', 'representative_periods': [11, 21, 42, 52], 'save_folder': '/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/1_May21_Wed_h17_m59_s23-GTSEP_stochastic_v1-128_ES_PT/VSS_runs/EEV'}
+Set parameter MIPGap to value 0.01
+Set parameter TimeLimit to value 21600
+Set parameter BarConvTol to value 0.01
+Set parameter BarHomogeneous to value 1
+Model built in 152.6412181854248 seconds.
+Gurobi Optimizer version 12.0.1 build v12.0.1rc0 (linux64 - "Rocky Linux 9.4 (Blue Onyx)")
+
+CPU model: Intel(R) Xeon(R) Gold 6242 CPU @ 2.80GHz, instruction set [SSE2|AVX|AVX2|AVX512]
+Thread count: 32 physical cores, 32 logical processors, using up to 32 threads
+
+Non-default parameters:
+TimeLimit  21600
+MIPGap  0.01
+BarConvTol  0.01
+BarHomogeneous  1
+
+Academic license 2622400 - for non-commercial use only - registered to ti___@stud.ntnu.no
+Optimize a model with 1440348 rows, 1895688 columns and 3869565 nonzeros
+Model fingerprint: 0xa9d51ff6
+Coefficient statistics:
+  Matrix range     [8e-06, 4e+00]
+  Objective range  [4e-02, 3e+05]
+  Bounds range     [4e+01, 2e+04]
+  RHS range        [6e-03, 1e+100]
+Warning: Model contains large rhs
+         Consider reformulating model or setting NumericFocus parameter
+         to avoid numerical issues.
+Presolve removed 1387296 rows and 1577295 columns
+Presolve time: 1.90s
+Presolved: 53052 rows, 318393 columns, 421065 nonzeros
+
+Concurrent LP optimizer: primal simplex, dual simplex, and barrier
+Showing barrier log only...
+
+Ordering time: 0.02s
+
+Barrier statistics:
+ AA' NZ     : 9.666e+04
+ Factor NZ  : 4.405e+05 (roughly 150 MB of memory)
+ Factor Ops : 4.837e+06 (less than 1 second per iteration)
+ Threads    : 30
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   2.10553036e+13 -2.89511070e+14  6.10e+04 8.49e+02  1.41e+09     3s
+   1   4.34965336e+12 -8.25826877e+13  6.27e+03 9.06e-11  1.95e+08     4s
+   2   1.55815834e+12 -1.43826775e+13  1.72e+02 8.73e-11  2.57e+07     5s
+
+Barrier performed 2 iterations in 4.73 seconds (2.08 work units)
+Barrier solve interrupted - model solved by another algorithm
+
+
+Solved with dual simplex
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+   67431    2.6895829e+10   0.000000e+00   0.000000e+00      7s
+
+Solved in 67431 iterations and 6.63 seconds (3.28 work units)
+Optimal objective  2.689582945e+10
+Warning: variable name "g[ES1 0 CCGT,NT,2025,11,0]" has a space
+Warning: constraint name "C_power_balance[ES1 0,NT,2025,11,0]" has a space
+Warning: default variable names used to write mps file
+Warning: default constraint names used to write mps file
+Warning: variable name "g[ES1 0 CCGT,NT,2025,11,0]" has a space
+Warning: default variable names used to write solution file
+Model saved to: /cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/1_May21_Wed_h17_m59_s23-GTSEP_stochastic_v1-128_ES_PT/VSS_runs/EEV
+Deleted config file: /cluster/home/tinusfa/master_project/configs/models/config_temp_EEV_20250521_184615_363122f0.yaml
+@@@@ Batch number 2: 128_sv1_4_weeks___no_bats_ef1 @@@@
+No preprocessing config provided. Skipping preprocessing...
+Path_or_name: 128_sv1_4_weeks___no_bats_ef1
+Configuration loaded from /cluster/home/tinusfa/master_project/configs/models/config_128_sv1_4_weeks___no_bats_ef1.yaml
+{'data_folder_name': 'elec_s_128_ES_PT_no_bat', 'model_name': 'GTSEP_stochastic_v1', 'model_id': '128_ES_PT_no_bat', 'MIPGap': 0.01, 'VOLL': 6350, 'CC': 100, 'CO2_price': 80, 'E_limit': inf, 'p_max_new_branch': 5000, 'p_min_new_branch': 100, 'expansion_factor': 1.0, 'MS': 0.1, 'years': [2025, 2030, 2040, 2050], 'clustering_unit': None, 'clustering_periods': None, 'scenario_file': None, 'EVPI': True, 'VSS': True, 'battery_capacity_path': None, 'generator_capacity_path': None, 'branch_capacity_path': None, 'co2_emissions_path': None, 'query': 'not (x > 2 and y < 40)', 'carriers': ['CCGT', 'solar', 'onwind'], 'discount_rate': 0.07, 'representative_period_unit': 'week', 'representative_periods': [11, 21, 42, 52]}
+Set parameter MIPGap to value 0.01
+Set parameter TimeLimit to value 21600
+Set parameter BarConvTol to value 0.01
+Set parameter BarHomogeneous to value 1
+Model built in 119.83876252174377 seconds.
+Gurobi Optimizer version 12.0.1 build v12.0.1rc0 (linux64 - "Rocky Linux 9.4 (Blue Onyx)")
+
+CPU model: Intel(R) Xeon(R) Gold 6242 CPU @ 2.80GHz, instruction set [SSE2|AVX|AVX2|AVX512]
+Thread count: 32 physical cores, 32 logical processors, using up to 32 threads
+
+Non-default parameters:
+TimeLimit  21600
+MIPGap  0.01
+BarConvTol  0.01
+BarHomogeneous  1
+
+Academic license 2622400 - for non-commercial use only - registered to ti___@stud.ntnu.no
+Optimize a model with 1181276 rows, 1629488 columns and 3144995 nonzeros
+Model fingerprint: 0x424b1deb
+Coefficient statistics:
+  Matrix range     [8e-06, 4e+00]
+  Objective range  [4e-02, 3e+05]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [6e-03, 1e+100]
+Warning: Model contains large rhs
+         Consider reformulating model or setting NumericFocus parameter
+         to avoid numerical issues.
+Presolve removed 832163 rows and 1022620 columns
+Presolve time: 2.36s
+Presolved: 349113 rows, 606868 columns, 1558006 nonzeros
+
+Concurrent LP optimizer: primal simplex, dual simplex, and barrier
+Showing barrier log only...
+
+Ordering time: 0.09s
+
+Barrier statistics:
+ Dense cols : 279
+ AA' NZ     : 9.515e+05
+ Factor NZ  : 5.794e+06 (roughly 400 MB of memory)
+ Factor Ops : 2.253e+08 (less than 1 second per iteration)
+ Threads    : 30
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   9.26943908e+13 -1.14495841e+16  5.79e+05 1.44e+04  6.17e+10     5s
+   1   7.46004157e+13 -9.06491326e+15  4.68e+05 4.43e+05  4.48e+10     6s
+   2   5.90474982e+13 -6.68253213e+15  3.65e+05 1.32e+05  2.98e+10     9s
+   3   4.85152064e+13 -5.12967130e+15  2.93e+05 4.90e+04  2.18e+10    12s
+   4   2.95027779e+13 -1.90189320e+15  1.71e+05 1.78e+04  6.98e+09    16s
+   5   2.00346178e+13 -7.54146326e+14  1.12e+05 6.88e+03  2.71e+09    19s
+   6   1.30501543e+13 -2.91567467e+14  6.92e+04 2.36e+03  9.42e+08    21s
+   7   8.54315023e+12 -7.30952151e+13  4.38e+04 5.92e+02  2.42e+08    24s
+   8   1.22686945e+12 -1.37159053e+13  6.23e+03 8.68e+01  1.82e+07    28s
+   9   7.00759942e+11 -4.99327435e+12  3.55e+03 3.18e+01  6.44e+06    32s
+  10   5.26995167e+11 -2.32540181e+12  2.65e+03 1.41e+01  3.11e+06    35s
+  11   4.12908567e+11 -1.37698010e+12  2.06e+03 8.05e+00  1.88e+06    37s
+  12   3.36640174e+11 -7.91423577e+11  1.66e+03 4.09e+00  1.13e+06    39s
+  13   2.87068732e+11 -6.29539706e+11  1.39e+03 3.15e+00  8.91e+05    42s
+  14   2.23869329e+11 -3.97646198e+11  1.07e+03 1.65e+00  5.76e+05    45s
+  15   1.75541465e+11 -2.59554162e+11  8.31e+02 1.10e+00  3.84e+05    49s
+  16   1.25699011e+11 -1.63621928e+11  5.82e+02 7.90e-01  2.41e+05    53s
+  17   9.76809653e+10 -1.17740012e+11  4.27e+02 6.93e-01  1.72e+05    57s
+  18   8.59339914e+10 -8.51995836e+10  3.59e+02 5.96e-01  1.34e+05    60s
+  19   7.11407211e+10 -4.49063987e+10  2.77e+02 4.38e-01  8.85e+04    64s
+  20   6.40603692e+10 -9.74518335e+09  2.35e+02 3.04e-01  5.54e+04    68s
+  21   5.50209471e+10 -2.40483312e+09  1.85e+02 2.28e-01  4.24e+04    72s
+  22   4.91424416e+10  8.27206504e+09  1.51e+02 1.38e-01  2.97e+04    76s
+  23   4.53193738e+10  1.09999971e+10  1.28e+02 1.14e-01  2.48e+04    80s
+  24   4.16977071e+10  1.35703851e+10  1.05e+02 9.35e-02  2.01e+04    84s
+  25   3.78437117e+10  1.66057408e+10  8.00e+01 6.84e-02  1.51e+04    88s
+  26   3.52264829e+10  2.07462401e+10  6.34e+01 3.59e-02  1.02e+04    92s
+  27   3.33367126e+10  2.37858261e+10  5.09e+01 1.27e-02  6.66e+03    96s
+  28   3.19728607e+10  2.45235604e+10  4.21e+01 7.32e-03  5.18e+03   100s
+  29   2.98129741e+10  2.51446023e+10  2.74e+01 3.94e-03  3.25e+03   103s
+  30   2.89117601e+10  2.53149180e+10  2.09e+01 3.01e-03  2.50e+03   107s
+  31   2.85735295e+10  2.55184882e+10  1.85e+01 2.12e-03  2.12e+03   110s
+  32   2.78141844e+10  2.56761372e+10  1.30e+01 1.44e-03  1.49e+03   114s
+  33   2.75948028e+10  2.57371124e+10  1.14e+01 1.21e-03  1.29e+03   117s
+  34   2.73027615e+10  2.57995396e+10  9.25e+00 8.88e-04  1.04e+03   120s
+  35   2.72125945e+10  2.58811381e+10  8.56e+00 5.88e-04  9.26e+02   123s
+  36   2.70151844e+10  2.59150558e+10  7.09e+00 3.78e-04  7.65e+02   126s
+  37   2.66946537e+10  2.59501907e+10  4.75e+00 2.26e-04  5.17e+02   129s
+  38   2.65859944e+10  2.59997524e+10  3.96e+00 1.14e-04  4.08e+02   132s
+  39   2.64971421e+10  2.60112598e+10  3.28e+00 6.71e-05  3.38e+02   135s
+  40   2.63560008e+10  2.60272366e+10  2.23e+00 1.91e-05  2.29e+02   138s
+  41   2.62921754e+10  2.60340089e+10  1.75e+00 2.50e-06  1.80e+02   141s
+  42   2.62529103e+10  2.60373590e+10  1.45e+00 1.23e-07  1.50e+02   144s
+  43   2.62098606e+10  2.60525560e+10  1.12e+00 1.99e-07  1.10e+02   147s
+  44   2.61820503e+10  2.60558688e+10  9.07e-01 1.52e-07  8.83e+01   150s
+  45   2.61458405e+10  2.60597359e+10  6.26e-01 7.88e-08  6.03e+01   153s
+  46   2.61165954e+10  2.60622956e+10  3.96e-01 6.25e-07  3.80e+01   156s
+  47   2.61012138e+10  2.60633354e+10  2.74e-01 9.81e-07  2.65e+01   159s
+  48   2.60978331e+10  2.60642607e+10  2.46e-01 7.55e-07  2.35e+01   161s
+  49   2.60924281e+10  2.60649139e+10  2.03e-01 6.10e-07  1.93e+01   164s
+  50   2.60886155e+10  2.60659434e+10  1.72e-01 3.86e-07  1.59e+01   166s
+  51   2.60863086e+10  2.60663506e+10  1.54e-01 1.88e-07  1.40e+01   169s
+  52   2.60784508e+10  2.60669176e+10  8.98e-02 1.96e-06  8.12e+00   173s
+
+Barrier solved model in 52 iterations and 172.95 seconds (17.00 work units)
+Optimal objective 2.60784508e+10
+
+Crossover log...
+
+  276877 DPushes remaining with DInf 0.0000000e+00               174s
+  215434 DPushes remaining with DInf 0.0000000e+00               175s
+  173466 DPushes remaining with DInf 0.0000000e+00               180s
+  155394 DPushes remaining with DInf 0.0000000e+00               185s
+  139555 DPushes remaining with DInf 0.0000000e+00               190s
+  122677 DPushes remaining with DInf 0.0000000e+00               195s
+  108715 DPushes remaining with DInf 0.0000000e+00               200s
+   95925 DPushes remaining with DInf 0.0000000e+00               205s
+
+Solved with dual simplex
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+  348455    2.6067654e+10   0.000000e+00   0.000000e+00    209s
+
+Solved in 348455 iterations and 208.79 seconds (78.23 work units)
+Optimal objective  2.606765446e+10
+Warning: variable name "g[ES1 0 CCGT,NT,2025,11,0]" has a space
+Warning: constraint name "C_power_balance[ES1 0,NT,2025,11,0]" has a space
+Warning: default variable names used to write mps file
+Warning: default constraint names used to write mps file
+Warning: variable name "g[ES1 0 CCGT,NT,2025,11,0]" has a space
+Warning: default variable names used to write solution file
+Model saved to: /cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/2_May21_Wed_h18_m49_s14-GTSEP_stochastic_v1-128_ES_PT_no_bat
+Running EVPI analysis for scenario 1...
+New config saved to: /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_1_20250521_185500_d53be2b0.yaml
+No preprocessing config provided. Skipping preprocessing...
+Path_or_name: temp_EVPI_1_20250521_185500_d53be2b0
+Configuration loaded from /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_1_20250521_185500_d53be2b0.yaml
+{'data_folder_name': 'elec_s_128_ES_PT_no_bat', 'model_name': 'GTSEP_stochastic_v1', 'model_id': '128_ES_PT_no_bat', 'MIPGap': 0.01, 'VOLL': 6350, 'CC': 100, 'CO2_price': 80, 'E_limit': inf, 'p_max_new_branch': 5000, 'p_min_new_branch': 100, 'expansion_factor': 1.0, 'MS': 0.1, 'years': [2025, 2030, 2040, 2050], 'clustering_unit': None, 'clustering_periods': None, 'scenario_file': 'EVPI_1', 'EVPI': False, 'VSS': False, 'battery_capacity_path': None, 'generator_capacity_path': None, 'branch_capacity_path': None, 'co2_emissions_path': None, 'query': 'not (x > 2 and y < 40)', 'carriers': ['CCGT', 'solar', 'onwind'], 'discount_rate': 0.07, 'representative_period_unit': 'week', 'representative_periods': [11, 21, 42, 52], 'save_folder': '/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/2_May21_Wed_h18_m49_s14-GTSEP_stochastic_v1-128_ES_PT_no_bat_EVPI_1'}
+Set parameter MIPGap to value 0.01
+Set parameter TimeLimit to value 21600
+Set parameter BarConvTol to value 0.01
+Set parameter BarHomogeneous to value 1
+Model built in 71.46649193763733 seconds.
+Gurobi Optimizer version 12.0.1 build v12.0.1rc0 (linux64 - "Rocky Linux 9.4 (Blue Onyx)")
+
+CPU model: Intel(R) Xeon(R) Gold 6242 CPU @ 2.80GHz, instruction set [SSE2|AVX|AVX2|AVX512]
+Thread count: 32 physical cores, 32 logical processors, using up to 32 threads
+
+Non-default parameters:
+TimeLimit  21600
+MIPGap  0.01
+BarConvTol  0.01
+BarHomogeneous  1
+
+Academic license 2622400 - for non-commercial use only - registered to ti___@stud.ntnu.no
+Optimize a model with 675256 rows, 1086512 columns and 1822256 nonzeros
+Model fingerprint: 0xd5e6cebf
+Coefficient statistics:
+  Matrix range     [8e-06, 4e+00]
+  Objective range  [1e-01, 3e+05]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [6e-03, 1e+100]
+Warning: Model contains large rhs
+         Consider reformulating model or setting NumericFocus parameter
+         to avoid numerical issues.
+Presolve removed 476242 rows and 740371 columns
+Presolve time: 1.32s
+Presolved: 199014 rows, 346141 columns, 888070 nonzeros
+
+Concurrent LP optimizer: primal simplex, dual simplex, and barrier
+Showing barrier log only...
+
+Ordering time: 0.05s
+
+Barrier statistics:
+ Dense cols : 279
+ AA' NZ     : 5.424e+05
+ Factor NZ  : 3.336e+06 (roughly 250 MB of memory)
+ Factor Ops : 1.308e+08 (less than 1 second per iteration)
+ Threads    : 30
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   9.52835620e+13 -5.81500786e+15  5.96e+05 1.44e+04  6.12e+10     3s
+   1   7.66505049e+13 -4.65465549e+15  4.81e+05 4.42e+05  4.45e+10     4s
+   2   6.06486034e+13 -3.49560641e+15  3.75e+05 1.31e+05  2.98e+10     5s
+   3   4.74274709e+13 -2.68815294e+15  2.86e+05 4.42e+04  2.09e+10     7s
+   4   2.44742311e+13 -1.00772059e+15  1.41e+05 1.60e+04  5.96e+09     8s
+   5   1.63268100e+13 -4.62201597e+14  9.00e+04 7.40e+03  2.50e+09    10s
+   6   1.23530301e+13 -1.49587868e+14  6.61e+04 2.08e+03  9.13e+08    11s
+   7   6.41171154e+12 -5.12067981e+13  3.28e+04 6.80e+02  2.48e+08    12s
+   8   1.43297797e+12 -1.65276895e+13  7.17e+03 2.17e+02  4.01e+07    14s
+   9   4.51315357e+11 -6.21979550e+12  2.07e+03 7.62e+01  1.07e+07    16s
+  10   3.20087547e+11 -2.30739793e+12  1.39e+03 2.55e+01  4.14e+06    17s
+  11   2.46665893e+11 -1.28204601e+12  1.01e+03 1.27e+01  2.32e+06    18s
+  12   2.02405805e+11 -7.07019945e+11  7.90e+02 6.72e+00  1.36e+06    20s
+  13   1.74447341e+11 -5.58190630e+11  6.52e+02 5.17e+00  1.07e+06    21s
+  14   1.45829665e+11 -3.88658434e+11  5.14e+02 3.25e+00  7.62e+05    22s
+  15   1.24887335e+11 -3.23824087e+11  4.25e+02 2.45e+00  6.27e+05    24s
+  16   1.00303065e+11 -1.48525219e+11  3.25e+02 1.24e+00  3.41e+05    26s
+  17   8.46786162e+10 -1.13182993e+11  2.56e+02 1.01e+00  2.66e+05    28s
+  18   6.90035813e+10 -6.38786302e+10  1.93e+02 7.92e-01  1.75e+05    30s
+  19   5.88487359e+10 -2.76006304e+10  1.50e+02 5.80e-01  1.12e+05    32s
+  20   5.01900163e+10 -9.54829166e+09  1.13e+02 4.32e-01  7.59e+04    34s
+  21   4.42822727e+10  2.08092949e+09  8.83e+01 2.98e-01  5.29e+04    36s
+  22   3.95800303e+10  8.61827750e+09  6.78e+01 2.13e-01  3.84e+04    38s
+  23   3.56007619e+10  1.46284427e+10  5.05e+01 1.25e-01  2.57e+04    40s
+  24   3.30687974e+10  1.86798293e+10  3.90e+01 7.53e-02  1.75e+04    42s
+  25   3.10703224e+10  2.18911060e+10  2.91e+01 3.58e-02  1.11e+04    44s
+  26   2.83557269e+10  2.28273806e+10  1.61e+01 2.34e-02  6.63e+03    46s
+  27   2.81370234e+10  2.36387758e+10  1.49e+01 1.57e-02  5.40e+03    48s
+  28   2.73171356e+10  2.41375593e+10  1.08e+01 1.03e-02  3.81e+03    49s
+  29   2.68253798e+10  2.43336175e+10  8.41e+00 7.98e-03  2.98e+03    51s
+  30   2.59325284e+10  2.47604770e+10  3.98e+00 3.68e-03  1.40e+03    53s
+  31   2.58248528e+10  2.49531012e+10  3.46e+00 1.70e-03  1.05e+03    55s
+  32   2.56510009e+10  2.50035203e+10  2.56e+00 1.22e-03  7.77e+02    56s
+  33   2.55296022e+10  2.50429053e+10  1.92e+00 9.33e-04  5.84e+02    58s
+  34   2.54408586e+10  2.50641402e+10  1.45e+00 7.78e-04  4.51e+02    59s
+  35   2.53466463e+10  2.51122727e+10  9.60e-01 4.10e-04  2.81e+02    60s
+  36   2.52922350e+10  2.51316577e+10  6.68e-01 2.48e-04  1.93e+02    63s
+  37   2.52420489e+10  2.51445392e+10  3.99e-01 1.44e-04  1.17e+02    65s
+  38   2.52113919e+10  2.51589482e+10  2.33e-01 5.90e-05  6.31e+01    66s
+  39   2.51979285e+10  2.51620674e+10  1.60e-01 4.11e-05  4.31e+01    67s
+  40   2.51920304e+10  2.51651180e+10  1.27e-01 2.41e-05  3.24e+01    69s
+  41   2.51867243e+10  2.51651913e+10  9.70e-02 2.37e-05  2.59e+01    70s
+  42   2.51828411e+10  2.51658514e+10  7.55e-02 1.88e-05  2.04e+01    71s
+  43   2.51785712e+10  2.51670876e+10  5.18e-02 1.21e-05  1.38e+01    73s
+
+Barrier solved model in 43 iterations and 72.73 seconds (8.06 work units)
+Optimal objective 2.51785712e+10
+
+Crossover log...
+
+  174430 DPushes remaining with DInf 0.0000000e+00                73s
+  119450 DPushes remaining with DInf 0.0000000e+00                75s
+   76437 DPushes remaining with DInf 0.0000000e+00                80s
+
+Solved with dual simplex
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+  182500    2.5169421e+10   0.000000e+00   0.000000e+00     80s
+
+Solved in 182500 iterations and 80.31 seconds (16.93 work units)
+Optimal objective  2.516942087e+10
+Warning: variable name "g[ES1 0 CCGT,NT,2025,11,0]" has a space
+Warning: constraint name "C_power_balance[ES1 0,NT,2025,11,0]" has a space
+Warning: default variable names used to write mps file
+Warning: default constraint names used to write mps file
+Warning: variable name "g[ES1 0 CCGT,NT,2025,11,0]" has a space
+Warning: default variable names used to write solution file
+Model saved to: /cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/2_May21_Wed_h18_m49_s14-GTSEP_stochastic_v1-128_ES_PT_no_bat_EVPI_1
+Deleted config file: /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_1_20250521_185500_d53be2b0.yaml
+Deleting folder: /cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/2_May21_Wed_h18_m49_s14-GTSEP_stochastic_v1-128_ES_PT_no_bat_EVPI_1
+Running EVPI analysis for scenario 2...
+New config saved to: /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_2_20250521_185742_1d9d5a96.yaml
+No preprocessing config provided. Skipping preprocessing...
+Path_or_name: temp_EVPI_2_20250521_185742_1d9d5a96
+Configuration loaded from /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_2_20250521_185742_1d9d5a96.yaml
+{'data_folder_name': 'elec_s_128_ES_PT_no_bat', 'model_name': 'GTSEP_stochastic_v1', 'model_id': '128_ES_PT_no_bat', 'MIPGap': 0.01, 'VOLL': 6350, 'CC': 100, 'CO2_price': 80, 'E_limit': inf, 'p_max_new_branch': 5000, 'p_min_new_branch': 100, 'expansion_factor': 1.0, 'MS': 0.1, 'years': [2025, 2030, 2040, 2050], 'clustering_unit': None, 'clustering_periods': None, 'scenario_file': 'EVPI_2', 'EVPI': False, 'VSS': False, 'battery_capacity_path': None, 'generator_capacity_path': None, 'branch_capacity_path': None, 'co2_emissions_path': None, 'query': 'not (x > 2 and y < 40)', 'carriers': ['CCGT', 'solar', 'onwind'], 'discount_rate': 0.07, 'representative_period_unit': 'week', 'representative_periods': [11, 21, 42, 52], 'save_folder': '/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/2_May21_Wed_h18_m49_s14-GTSEP_stochastic_v1-128_ES_PT_no_bat_EVPI_2'}
+Set parameter MIPGap to value 0.01
+Set parameter TimeLimit to value 21600
+Set parameter BarConvTol to value 0.01
+Set parameter BarHomogeneous to value 1
+Model built in 71.231618642807 seconds.
+Gurobi Optimizer version 12.0.1 build v12.0.1rc0 (linux64 - "Rocky Linux 9.4 (Blue Onyx)")
+
+CPU model: Intel(R) Xeon(R) Gold 6242 CPU @ 2.80GHz, instruction set [SSE2|AVX|AVX2|AVX512]
+Thread count: 32 physical cores, 32 logical processors, using up to 32 threads
+
+Non-default parameters:
+TimeLimit  21600
+MIPGap  0.01
+BarConvTol  0.01
+BarHomogeneous  1
+
+Academic license 2622400 - for non-commercial use only - registered to ti___@stud.ntnu.no
+Optimize a model with 675256 rows, 1086512 columns and 1822256 nonzeros
+Model fingerprint: 0x520d9d7a
+Coefficient statistics:
+  Matrix range     [8e-06, 4e+00]
+  Objective range  [1e-01, 3e+05]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [6e-03, 1e+100]
+Warning: Model contains large rhs
+         Consider reformulating model or setting NumericFocus parameter
+         to avoid numerical issues.
+Presolve removed 476242 rows and 740371 columns
+Presolve time: 1.32s
+Presolved: 199014 rows, 346141 columns, 888070 nonzeros
+
+Concurrent LP optimizer: primal simplex, dual simplex, and barrier
+Showing barrier log only...
+
+Ordering time: 0.05s
+
+Barrier statistics:
+ Dense cols : 279
+ AA' NZ     : 5.424e+05
+ Factor NZ  : 3.336e+06 (roughly 250 MB of memory)
+ Factor Ops : 1.308e+08 (less than 1 second per iteration)
+ Threads    : 30
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   9.63831892e+13 -5.82184590e+15  6.02e+05 1.44e+04  6.17e+10     3s
+   1   7.75607393e+13 -4.66761251e+15  4.86e+05 4.43e+05  4.49e+10     4s
+   2   6.13982638e+13 -3.51288448e+15  3.79e+05 1.30e+05  3.01e+10     5s
+   3   4.80056531e+13 -2.70620741e+15  2.88e+05 4.39e+04  2.11e+10     7s
+   4   2.48019864e+13 -1.01627353e+15  1.42e+05 1.61e+04  6.01e+09     9s
+   5   1.67224735e+13 -4.63619904e+14  9.18e+04 7.37e+03  2.53e+09    11s
+   6   1.25448923e+13 -1.41565367e+14  6.67e+04 1.92e+03  8.86e+08    12s
+   7   6.36660102e+12 -4.76902713e+13  3.26e+04 6.15e+02  2.33e+08    13s
+   8   1.12997826e+12 -1.46692574e+13  5.81e+03 1.84e+02  3.27e+07    15s
+   9   5.14575476e+11 -4.22371707e+12  2.38e+03 4.70e+01  8.21e+06    17s
+  10   3.78136595e+11 -1.90525153e+12  1.70e+03 1.96e+01  3.87e+06    18s
+  11   2.91788531e+11 -1.03003344e+12  1.27e+03 9.27e+00  2.15e+06    20s
+  12   2.33151566e+11 -6.32282558e+11  9.76e+02 5.52e+00  1.37e+06    21s
+  13   1.94730982e+11 -5.35158548e+11  7.85e+02 4.52e+00  1.11e+06    22s
+  14   1.61114557e+11 -3.40224735e+11  6.28e+02 2.33e+00  7.43e+05    24s
+  15   1.21276797e+11 -2.33038085e+11  4.47e+02 1.59e+00  5.04e+05    26s
+  16   1.04263689e+11 -1.55391800e+11  3.66e+02 1.12e+00  3.62e+05    28s
+  17   8.12871227e+10 -1.11997153e+11  2.62e+02 8.68e-01  2.60e+05    30s
+  18   6.32433111e+10 -5.72713375e+10  1.75e+02 7.02e-01  1.57e+05    32s
+  19   5.56892211e+10 -2.31411137e+10  1.39e+02 5.08e-01  1.01e+05    34s
+  20   4.76372177e+10 -4.62985866e+09  1.03e+02 3.88e-01  6.62e+04    36s
+  21   4.37658913e+10  1.13910052e+10  8.53e+01 1.88e-01  4.05e+04    38s
+  22   3.94005859e+10  1.40619194e+10  6.32e+01 1.54e-01  3.14e+04    40s
+  23   3.71950446e+10  1.53626007e+10  5.18e+01 1.41e-01  2.68e+04    42s
+  24   3.46892843e+10  1.99063563e+10  3.85e+01 8.77e-02  1.80e+04    44s
+  25   3.27955130e+10  2.20587275e+10  2.92e+01 6.04e-02  1.30e+04    46s
+  26   3.07877521e+10  2.49844127e+10  1.92e+01 2.07e-02  6.99e+03    48s
+  27   2.97572852e+10  2.51642310e+10  1.40e+01 1.85e-02  5.52e+03    50s
+  28   2.92822564e+10  2.59842712e+10  1.17e+01 9.31e-03  3.96e+03    52s
+  29   2.85479254e+10  2.63666827e+10  7.91e+00 5.56e-03  2.61e+03    53s
+  30   2.83450861e+10  2.65386825e+10  6.83e+00 4.01e-03  2.16e+03    54s
+  31   2.80223445e+10  2.66681683e+10  5.15e+00 2.83e-03  1.62e+03    55s
+  32   2.79349132e+10  2.67765574e+10  4.69e+00 1.97e-03  1.39e+03    57s
+  33   2.75621746e+10  2.68841964e+10  2.80e+00 7.41e-04  8.16e+02    59s
+  34   2.74418111e+10  2.69596208e+10  2.17e+00 2.88e-04  5.83e+02    61s
+  35   2.72561994e+10  2.69935929e+10  1.16e+00 1.12e-04  3.17e+02    63s
+  36   2.71824746e+10  2.70119219e+10  7.57e-01 7.22e-05  2.06e+02    64s
+  37   2.71552094e+10  2.70212698e+10  6.05e-01 5.28e-05  1.62e+02    65s
+  38   2.71491829e+10  2.70270558e+10  5.71e-01 4.13e-05  1.48e+02    66s
+  39   2.71264100e+10  2.70304486e+10  4.44e-01 3.44e-05  1.16e+02    68s
+  40   2.71114196e+10  2.70352549e+10  3.62e-01 2.30e-05  9.23e+01    69s
+  41   2.70913762e+10  2.70404597e+10  2.51e-01 9.09e-06  6.19e+01    71s
+  42   2.70794662e+10  2.70433683e+10  1.83e-01 8.65e-06  4.40e+01    73s
+  43   2.70707678e+10  2.70442108e+10  1.33e-01 6.49e-06  3.24e+01    76s
+  44   2.70682616e+10  2.70450466e+10  1.19e-01 2.69e-06  2.83e+01    77s
+  45   2.70653621e+10  2.70455728e+10  1.02e-01 2.33e-06  2.42e+01    78s
+  46   2.70636127e+10  2.70461977e+10  9.17e-02 8.92e-06  2.13e+01    80s
+
+Barrier solved model in 46 iterations and 80.06 seconds (8.65 work units)
+Optimal objective 2.70636127e+10
+
+Crossover log...
+
+  173238 DPushes remaining with DInf 0.0000000e+00                81s
+   85021 DPushes remaining with DInf 0.0000000e+00                85s
+   52919 DPushes remaining with DInf 0.0000000e+00                90s
+
+Solved with dual simplex
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+  182641    2.7048113e+10   0.000000e+00   0.000000e+00     91s
+
+Solved in 182641 iterations and 91.11 seconds (23.39 work units)
+Optimal objective  2.704811288e+10
+Warning: variable name "g[ES1 0 CCGT,NT,2025,11,0]" has a space
+Warning: constraint name "C_power_balance[ES1 0,NT,2025,11,0]" has a space
+Warning: default variable names used to write mps file
+Warning: default constraint names used to write mps file
+Warning: variable name "g[ES1 0 CCGT,NT,2025,11,0]" has a space
+Warning: default variable names used to write solution file
+Model saved to: /cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/2_May21_Wed_h18_m49_s14-GTSEP_stochastic_v1-128_ES_PT_no_bat_EVPI_2
+Deleted config file: /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_2_20250521_185742_1d9d5a96.yaml
+Deleting folder: /cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/2_May21_Wed_h18_m49_s14-GTSEP_stochastic_v1-128_ES_PT_no_bat_EVPI_2
+Running EVPI analysis for scenario 3...
+New config saved to: /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_3_20250521_190035_a61edde5.yaml
+No preprocessing config provided. Skipping preprocessing...
+Path_or_name: temp_EVPI_3_20250521_190035_a61edde5
+Configuration loaded from /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_3_20250521_190035_a61edde5.yaml
+{'data_folder_name': 'elec_s_128_ES_PT_no_bat', 'model_name': 'GTSEP_stochastic_v1', 'model_id': '128_ES_PT_no_bat', 'MIPGap': 0.01, 'VOLL': 6350, 'CC': 100, 'CO2_price': 80, 'E_limit': inf, 'p_max_new_branch': 5000, 'p_min_new_branch': 100, 'expansion_factor': 1.0, 'MS': 0.1, 'years': [2025, 2030, 2040, 2050], 'clustering_unit': None, 'clustering_periods': None, 'scenario_file': 'EVPI_3', 'EVPI': False, 'VSS': False, 'battery_capacity_path': None, 'generator_capacity_path': None, 'branch_capacity_path': None, 'co2_emissions_path': None, 'query': 'not (x > 2 and y < 40)', 'carriers': ['CCGT', 'solar', 'onwind'], 'discount_rate': 0.07, 'representative_period_unit': 'week', 'representative_periods': [11, 21, 42, 52], 'save_folder': '/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/2_May21_Wed_h18_m49_s14-GTSEP_stochastic_v1-128_ES_PT_no_bat_EVPI_3'}
+Set parameter MIPGap to value 0.01
+Set parameter TimeLimit to value 21600
+Set parameter BarConvTol to value 0.01
+Set parameter BarHomogeneous to value 1
+Model built in 71.37066888809204 seconds.
+Gurobi Optimizer version 12.0.1 build v12.0.1rc0 (linux64 - "Rocky Linux 9.4 (Blue Onyx)")
+
+CPU model: Intel(R) Xeon(R) Gold 6242 CPU @ 2.80GHz, instruction set [SSE2|AVX|AVX2|AVX512]
+Thread count: 32 physical cores, 32 logical processors, using up to 32 threads
+
+Non-default parameters:
+TimeLimit  21600
+MIPGap  0.01
+BarConvTol  0.01
+BarHomogeneous  1
+
+Academic license 2622400 - for non-commercial use only - registered to ti___@stud.ntnu.no
+Optimize a model with 675256 rows, 1086512 columns and 1822256 nonzeros
+Model fingerprint: 0xf48f5c82
+Coefficient statistics:
+  Matrix range     [8e-06, 4e+00]
+  Objective range  [1e-01, 3e+05]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [6e-03, 1e+100]
+Warning: Model contains large rhs
+         Consider reformulating model or setting NumericFocus parameter
+         to avoid numerical issues.
+Presolve removed 476242 rows and 740371 columns
+Presolve time: 1.32s
+Presolved: 199014 rows, 346141 columns, 888070 nonzeros
+
+Concurrent LP optimizer: primal simplex, dual simplex, and barrier
+Showing barrier log only...
+
+Ordering time: 0.05s
+
+Barrier statistics:
+ Dense cols : 279
+ AA' NZ     : 5.424e+05
+ Factor NZ  : 3.336e+06 (roughly 250 MB of memory)
+ Factor Ops : 1.308e+08 (less than 1 second per iteration)
+ Threads    : 30
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   9.51633601e+13 -5.81013846e+15  5.96e+05 1.44e+04  6.12e+10     3s
+   1   7.65323140e+13 -4.65000780e+15  4.81e+05 4.42e+05  4.45e+10     4s
+   2   6.05335939e+13 -3.49131101e+15  3.75e+05 1.31e+05  2.98e+10     6s
+   3   4.73084436e+13 -2.68427853e+15  2.85e+05 4.42e+04  2.09e+10     7s
+   4   2.43869649e+13 -1.00604652e+15  1.41e+05 1.60e+04  5.97e+09     9s
+   5   1.62262864e+13 -4.61367986e+14  8.99e+04 7.39e+03  2.50e+09    10s
+   6   1.22874913e+13 -1.51195624e+14  6.61e+04 2.11e+03  9.21e+08    11s
+   7   6.38511253e+12 -5.17733298e+13  3.29e+04 6.89e+02  2.51e+08    13s
+   8   1.48535527e+12 -1.68747764e+13  7.42e+03 2.22e+02  4.15e+07    14s
+   9   4.73393612e+11 -6.39229977e+12  2.18e+03 7.87e+01  1.11e+07    16s
+  10   3.35161560e+11 -2.15401329e+12  1.45e+03 2.38e+01  4.01e+06    18s
+  11   2.60938763e+11 -1.17641335e+12  1.08e+03 1.16e+01  2.23e+06    19s
+  12   2.08566521e+11 -6.54272843e+11  8.20e+02 6.11e+00  1.31e+06    20s
+  13   1.83554721e+11 -5.38107817e+11  7.00e+02 4.90e+00  1.08e+06    22s
+  14   1.48018864e+11 -3.76291416e+11  5.31e+02 3.07e+00  7.57e+05    23s
+  15   1.26029133e+11 -3.18759206e+11  4.39e+02 2.35e+00  6.28e+05    24s
+  16   1.02873179e+11 -1.45561283e+11  3.44e+02 1.16e+00  3.45e+05    26s
+  17   8.44658309e+10 -1.09694049e+11  2.65e+02 9.55e-01  2.62e+05    28s
+  18   6.80649110e+10 -6.24518052e+10  1.95e+02 8.02e-01  1.72e+05    31s
+  19   5.52379827e+10 -3.03660963e+10  1.40e+02 6.03e-01  1.10e+05    33s
+  20   4.89307592e+10 -5.39007806e+09  1.12e+02 4.09e-01  6.90e+04    35s
+  21   4.34540730e+10  3.19122938e+09  8.92e+01 2.96e-01  5.05e+04    37s
+  22   3.97313762e+10  1.45815567e+10  7.33e+01 1.44e-01  3.12e+04    39s
+  23   3.59951323e+10  1.76172992e+10  5.69e+01 8.77e-02  2.27e+04    41s
+  24   3.33287882e+10  1.96616945e+10  4.52e+01 5.12e-02  1.67e+04    43s
+  25   3.13857276e+10  2.15978887e+10  3.63e+01 2.49e-02  1.19e+04    45s
+  26   2.96673465e+10  2.28447390e+10  2.79e+01 1.08e-02  8.29e+03    47s
+  27   2.79465802e+10  2.32962541e+10  1.94e+01 4.57e-03  5.63e+03    49s
+  28   2.66627076e+10  2.35396748e+10  1.30e+01 2.74e-03  3.77e+03    50s
+  29   2.63107877e+10  2.37217803e+10  1.12e+01 1.54e-03  3.13e+03    52s
+  30   2.56191307e+10  2.38290345e+10  7.60e+00 9.72e-04  2.16e+03    53s
+  31   2.53726115e+10  2.39109136e+10  6.36e+00 5.67e-04  1.76e+03    54s
+  32   2.49797769e+10  2.40092724e+10  4.33e+00 2.11e-04  1.17e+03    56s
+  33   2.47795743e+10  2.40662575e+10  3.28e+00 1.21e-04  8.61e+02    59s
+  34   2.44858587e+10  2.40894963e+10  1.80e+00 3.78e-06  4.81e+02    61s
+  35   2.43658979e+10  2.41175677e+10  1.17e+00 1.23e-06  3.02e+02    63s
+  36   2.42914773e+10  2.41332659e+10  7.66e-01 3.69e-07  1.93e+02    64s
+  37   2.42481832e+10  2.41391406e+10  5.26e-01 1.80e-07  1.33e+02    65s
+  38   2.42209482e+10  2.41435422e+10  3.75e-01 5.27e-07  9.42e+01    67s
+  39   2.42118568e+10  2.41468494e+10  3.23e-01 6.34e-07  7.93e+01    68s
+  40   2.41936237e+10  2.41492352e+10  2.21e-01 9.95e-07  5.41e+01    69s
+  41   2.41788535e+10  2.41513967e+10  1.38e-01 1.13e-05  3.35e+01    71s
+  42   2.41658661e+10  2.41529427e+10  6.38e-02 3.63e-05  1.57e+01    73s
+  43   2.41612099e+10  2.41543202e+10  3.66e-02 3.02e-05  8.41e+00    74s
+
+Barrier solved model in 43 iterations and 74.42 seconds (8.20 work units)
+Optimal objective 2.41612099e+10
+
+Crossover log...
+
+  168167 DPushes remaining with DInf 0.0000000e+00                75s
+   80091 DPushes remaining with DInf 0.0000000e+00                80s
+
+Solved with dual simplex
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+  193530    2.4155092e+10   0.000000e+00   0.000000e+00     85s
+
+Solved in 193530 iterations and 84.69 seconds (20.02 work units)
+Optimal objective  2.415509205e+10
+Warning: variable name "g[ES1 0 CCGT,NT,2025,11,0]" has a space
+Warning: constraint name "C_power_balance[ES1 0,NT,2025,11,0]" has a space
+Warning: default variable names used to write mps file
+Warning: default constraint names used to write mps file
+Warning: variable name "g[ES1 0 CCGT,NT,2025,11,0]" has a space
+Warning: default variable names used to write solution file
+Model saved to: /cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/2_May21_Wed_h18_m49_s14-GTSEP_stochastic_v1-128_ES_PT_no_bat_EVPI_3
+Deleted config file: /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_3_20250521_190035_a61edde5.yaml
+Deleting folder: /cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/2_May21_Wed_h18_m49_s14-GTSEP_stochastic_v1-128_ES_PT_no_bat_EVPI_3
+Running EVPI analysis for scenario 4...
+New config saved to: /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_4_20250521_190322_cc79d330.yaml
+No preprocessing config provided. Skipping preprocessing...
+Path_or_name: temp_EVPI_4_20250521_190322_cc79d330
+Configuration loaded from /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_4_20250521_190322_cc79d330.yaml
+{'data_folder_name': 'elec_s_128_ES_PT_no_bat', 'model_name': 'GTSEP_stochastic_v1', 'model_id': '128_ES_PT_no_bat', 'MIPGap': 0.01, 'VOLL': 6350, 'CC': 100, 'CO2_price': 80, 'E_limit': inf, 'p_max_new_branch': 5000, 'p_min_new_branch': 100, 'expansion_factor': 1.0, 'MS': 0.1, 'years': [2025, 2030, 2040, 2050], 'clustering_unit': None, 'clustering_periods': None, 'scenario_file': 'EVPI_4', 'EVPI': False, 'VSS': False, 'battery_capacity_path': None, 'generator_capacity_path': None, 'branch_capacity_path': None, 'co2_emissions_path': None, 'query': 'not (x > 2 and y < 40)', 'carriers': ['CCGT', 'solar', 'onwind'], 'discount_rate': 0.07, 'representative_period_unit': 'week', 'representative_periods': [11, 21, 42, 52], 'save_folder': '/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/2_May21_Wed_h18_m49_s14-GTSEP_stochastic_v1-128_ES_PT_no_bat_EVPI_4'}
+Set parameter MIPGap to value 0.01
+Set parameter TimeLimit to value 21600
+Set parameter BarConvTol to value 0.01
+Set parameter BarHomogeneous to value 1
+Model built in 82.91299962997437 seconds.
+Gurobi Optimizer version 12.0.1 build v12.0.1rc0 (linux64 - "Rocky Linux 9.4 (Blue Onyx)")
+
+CPU model: Intel(R) Xeon(R) Gold 6242 CPU @ 2.80GHz, instruction set [SSE2|AVX|AVX2|AVX512]
+Thread count: 32 physical cores, 32 logical processors, using up to 32 threads
+
+Non-default parameters:
+TimeLimit  21600
+MIPGap  0.01
+BarConvTol  0.01
+BarHomogeneous  1
+
+Academic license 2622400 - for non-commercial use only - registered to ti___@stud.ntnu.no
+Optimize a model with 675260 rows, 1629488 columns and 1908272 nonzeros
+Model fingerprint: 0x308a1d40
+Coefficient statistics:
+  Matrix range     [8e-06, 4e+00]
+  Objective range  [1e-01, 3e+05]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [6e-03, 1e+100]
+Warning: Model contains large rhs
+         Consider reformulating model or setting NumericFocus parameter
+         to avoid numerical issues.
+Presolve removed 476246 rows and 1283347 columns
+Presolve time: 1.42s
+Presolved: 199014 rows, 346141 columns, 888070 nonzeros
+
+Concurrent LP optimizer: primal simplex, dual simplex, and barrier
+Showing barrier log only...
+
+Ordering time: 0.05s
+
+Barrier statistics:
+ Dense cols : 279
+ AA' NZ     : 5.424e+05
+ Factor NZ  : 3.336e+06 (roughly 250 MB of memory)
+ Factor Ops : 1.308e+08 (less than 1 second per iteration)
+ Threads    : 30
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   9.62629872e+13 -5.81697651e+15  6.02e+05 1.44e+04  6.17e+10     3s
+   1   7.74425410e+13 -4.66296264e+15  4.86e+05 4.43e+05  4.49e+10     4s
+   2   6.12832303e+13 -3.50858551e+15  3.79e+05 1.30e+05  3.01e+10     5s
+   3   4.78877510e+13 -2.70230292e+15  2.88e+05 4.39e+04  2.11e+10     7s
+   4   2.47143299e+13 -1.01458591e+15  1.42e+05 1.61e+04  6.02e+09     9s
+   5   1.66223032e+13 -4.62781989e+14  9.17e+04 7.37e+03  2.53e+09    10s
+   6   1.24789968e+13 -1.42825866e+14  6.67e+04 1.94e+03  8.93e+08    11s
+   7   6.34250045e+12 -4.81374354e+13  3.26e+04 6.22e+02  2.36e+08    12s
+   8   1.19015746e+12 -1.49697955e+13  6.09e+03 1.88e+02  3.41e+07    14s
+   9   5.28525094e+11 -4.24815972e+12  2.44e+03 4.73e+01  8.34e+06    16s
+  10   3.68820297e+11 -1.90671020e+12  1.65e+03 1.80e+01  3.77e+06    17s
+  11   2.79348175e+11 -1.09146526e+12  1.20e+03 9.91e+00  2.19e+06    19s
+  12   2.35029375e+11 -6.79030130e+11  9.80e+02 5.95e+00  1.44e+06    20s
+  13   1.98167144e+11 -5.27278281e+11  7.98e+02 4.47e+00  1.11e+06    21s
+  14   1.58010917e+11 -4.05704712e+11  6.15e+02 3.10e+00  8.29e+05    23s
+  15   1.20877603e+11 -1.85438733e+11  4.48e+02 1.27e+00  4.41e+05    25s
+  16   1.00758818e+11 -1.08888743e+11  3.59e+02 8.36e-01  2.93e+05    27s
+  17   7.66088337e+10 -6.55494323e+10  2.49e+02 7.64e-01  1.92e+05    29s
+  18   6.52614361e+10 -3.65273125e+10  1.95e+02 6.02e-01  1.34e+05    31s
+  19   5.50423944e+10 -7.86005510e+09  1.48e+02 3.58e-01  8.13e+04    33s
+  20   4.67855960e+10  5.07139174e+08  1.09e+02 2.84e-01  5.88e+04    35s
+  21   4.30397102e+10  1.26331001e+10  9.07e+01 1.52e-01  3.82e+04    37s
+  22   3.74685842e+10  1.68451259e+10  6.19e+01 9.70e-02  2.55e+04    39s
+  23   3.40634263e+10  2.21488171e+10  4.37e+01 4.15e-02  1.46e+04    41s
+  24   3.30443760e+10  2.27405858e+10  3.84e+01 3.43e-02  1.26e+04    43s
+  25   3.15737805e+10  2.40430618e+10  3.04e+01 2.14e-02  9.18e+03    45s
+  26   3.10343807e+10  2.46831516e+10  2.75e+01 1.19e-02  7.72e+03    46s
+  27   2.94692314e+10  2.51467344e+10  1.89e+01 7.10e-03  5.24e+03    48s
+  28   2.80502327e+10  2.55158592e+10  1.08e+01 4.27e-03  3.06e+03    50s
+  29   2.75829540e+10  2.55990905e+10  8.22e+00 3.65e-03  2.39e+03    52s
+  30   2.70473851e+10  2.58878246e+10  5.18e+00 1.71e-03  1.40e+03    54s
+  31   2.69493196e+10  2.60254326e+10  4.61e+00 6.10e-04  1.12e+03    56s
+  32   2.66954133e+10  2.60489613e+10  3.14e+00 4.39e-04  7.80e+02    58s
+  33   2.66193546e+10  2.60789960e+10  2.69e+00 3.18e-04  6.52e+02    59s
+  34   2.64828821e+10  2.60804187e+10  1.90e+00 3.12e-04  4.85e+02    60s
+  35   2.63912364e+10  2.60982509e+10  1.38e+00 2.03e-04  3.53e+02    61s
+  36   2.63015339e+10  2.61235902e+10  8.59e-01 1.11e-04  2.14e+02    63s
+  37   2.62531420e+10  2.61360216e+10  5.78e-01 6.51e-05  1.41e+02    65s
+  38   2.62228113e+10  2.61441556e+10  4.04e-01 3.40e-05  9.55e+01    67s
+  39   2.62137443e+10  2.61473213e+10  3.50e-01 2.40e-05  8.08e+01    69s
+  40   2.62061012e+10  2.61485967e+10  3.04e-01 2.07e-05  6.99e+01    70s
+  41   2.61997130e+10  2.61507304e+10  2.65e-01 1.50e-05  5.96e+01    71s
+  42   2.61897643e+10  2.61516148e+10  2.05e-01 9.68e-06  4.65e+01    73s
+  43   2.61788472e+10  2.61526843e+10  1.38e-01 1.11e-05  3.19e+01    75s
+  44   2.61722032e+10  2.61540940e+10  9.74e-02 2.67e-05  2.21e+01    77s
+
+Barrier solved model in 44 iterations and 77.04 seconds (8.63 work units)
+Optimal objective 2.61722032e+10
+
+Crossover log...
+
+  175243 DPushes remaining with DInf 0.0000000e+00                78s
+  106713 DPushes remaining with DInf 0.0000000e+00                80s
+
+Solved with dual simplex
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+  177020    2.6156806e+10   0.000000e+00   0.000000e+00     83s
+
+Solved in 177020 iterations and 83.39 seconds (16.38 work units)
+Optimal objective  2.615680638e+10
+Warning: variable name "g[ES1 0 CCGT,NT,2025,11,0]" has a space
+Warning: constraint name "C_power_balance[ES1 0,NT,2025,11,0]" has a space
+Warning: default variable names used to write mps file
+Warning: default constraint names used to write mps file
+Warning: variable name "g[ES1 0 CCGT,NT,2025,11,0]" has a space
+Warning: default variable names used to write solution file
+Model saved to: /cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/2_May21_Wed_h18_m49_s14-GTSEP_stochastic_v1-128_ES_PT_no_bat_EVPI_4
+Deleted config file: /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_4_20250521_190322_cc79d330.yaml
+Deleting folder: /cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/2_May21_Wed_h18_m49_s14-GTSEP_stochastic_v1-128_ES_PT_no_bat_EVPI_4
+Running EVPI analysis for scenario 5...
+New config saved to: /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_5_20250521_190620_5dd9d58e.yaml
+No preprocessing config provided. Skipping preprocessing...
+Path_or_name: temp_EVPI_5_20250521_190620_5dd9d58e
+Configuration loaded from /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_5_20250521_190620_5dd9d58e.yaml
+{'data_folder_name': 'elec_s_128_ES_PT_no_bat', 'model_name': 'GTSEP_stochastic_v1', 'model_id': '128_ES_PT_no_bat', 'MIPGap': 0.01, 'VOLL': 6350, 'CC': 100, 'CO2_price': 80, 'E_limit': inf, 'p_max_new_branch': 5000, 'p_min_new_branch': 100, 'expansion_factor': 1.0, 'MS': 0.1, 'years': [2025, 2030, 2040, 2050], 'clustering_unit': None, 'clustering_periods': None, 'scenario_file': 'EVPI_5', 'EVPI': False, 'VSS': False, 'battery_capacity_path': None, 'generator_capacity_path': None, 'branch_capacity_path': None, 'co2_emissions_path': None, 'query': 'not (x > 2 and y < 40)', 'carriers': ['CCGT', 'solar', 'onwind'], 'discount_rate': 0.07, 'representative_period_unit': 'week', 'representative_periods': [11, 21, 42, 52], 'save_folder': '/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/2_May21_Wed_h18_m49_s14-GTSEP_stochastic_v1-128_ES_PT_no_bat_EVPI_5'}
+Set parameter MIPGap to value 0.01
+Set parameter TimeLimit to value 21600
+Set parameter BarConvTol to value 0.01
+Set parameter BarHomogeneous to value 1
+Model built in 81.86820602416992 seconds.
+Gurobi Optimizer version 12.0.1 build v12.0.1rc0 (linux64 - "Rocky Linux 9.4 (Blue Onyx)")
+
+CPU model: Intel(R) Xeon(R) Gold 6242 CPU @ 2.80GHz, instruction set [SSE2|AVX|AVX2|AVX512]
+Thread count: 32 physical cores, 32 logical processors, using up to 32 threads
+
+Non-default parameters:
+TimeLimit  21600
+MIPGap  0.01
+BarConvTol  0.01
+BarHomogeneous  1
+
+Academic license 2622400 - for non-commercial use only - registered to ti___@stud.ntnu.no
+Optimize a model with 675260 rows, 1629488 columns and 1908272 nonzeros
+Model fingerprint: 0x2df51e18
+Coefficient statistics:
+  Matrix range     [8e-06, 4e+00]
+  Objective range  [1e-01, 3e+05]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [6e-03, 1e+100]
+Warning: Model contains large rhs
+         Consider reformulating model or setting NumericFocus parameter
+         to avoid numerical issues.
+Presolve removed 476246 rows and 1283347 columns
+Presolve time: 1.42s
+Presolved: 199014 rows, 346141 columns, 888070 nonzeros
+
+Concurrent LP optimizer: primal simplex, dual simplex, and barrier
+Showing barrier log only...
+
+Ordering time: 0.05s
+
+Barrier statistics:
+ Dense cols : 279
+ AA' NZ     : 5.424e+05
+ Factor NZ  : 3.336e+06 (roughly 250 MB of memory)
+ Factor Ops : 1.308e+08 (less than 1 second per iteration)
+ Threads    : 30
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   9.53162180e+13 -5.81633076e+15  5.96e+05 1.44e+04  6.12e+10     3s
+   1   7.66826237e+13 -4.65590910e+15  4.81e+05 4.42e+05  4.45e+10     4s
+   2   6.06798799e+13 -3.49675610e+15  3.75e+05 1.31e+05  2.98e+10     5s
+   3   4.74598508e+13 -2.68918205e+15  2.86e+05 4.42e+04  2.09e+10     7s
+   4   2.44981261e+13 -1.00816024e+15  1.41e+05 1.60e+04  5.96e+09     9s
+   5   1.63544707e+13 -4.62418721e+14  9.00e+04 7.40e+03  2.50e+09    10s
+   6   1.23709501e+13 -1.49152775e+14  6.61e+04 2.07e+03  9.11e+08    11s
+   7   6.41892004e+12 -5.10539031e+13  3.28e+04 6.78e+02  2.47e+08    12s
+   8   1.41845519e+12 -1.64349296e+13  7.10e+03 2.16e+02  3.97e+07    14s
+   9   4.48170742e+11 -6.17027478e+12  2.06e+03 7.55e+01  1.06e+07    16s
+  10   3.17395777e+11 -2.30958040e+12  1.38e+03 2.55e+01  4.13e+06    18s
+  11   2.44378292e+11 -1.28548594e+12  1.00e+03 1.26e+01  2.31e+06    19s
+  12   2.01724043e+11 -7.10382832e+11  7.85e+02 6.73e+00  1.36e+06    20s
+  13   1.72718493e+11 -5.57612900e+11  6.43e+02 5.13e+00  1.06e+06    21s
+  14   1.45874194e+11 -3.88892334e+11  5.13e+02 3.23e+00  7.62e+05    22s
+  15   1.33893833e+11 -2.24655089e+11  4.63e+02 1.84e+00  5.11e+05    24s
+  16   1.02039211e+11 -1.20557965e+11  3.29e+02 1.10e+00  3.07e+05    26s
+  17   8.66436402e+10 -9.18020193e+10  2.66e+02 1.02e+00  2.42e+05    28s
+  18   6.99483657e+10 -4.69516395e+10  1.96e+02 8.03e-01  1.54e+05    30s
+  19   6.04812102e+10 -1.86620956e+10  1.56e+02 5.35e-01  1.02e+05    32s
+  20   5.14500812e+10 -9.68224322e+08  1.19e+02 3.28e-01  6.67e+04    34s
+  21   4.54641466e+10  6.05556892e+09  9.41e+01 2.18e-01  4.95e+04    36s
+  22   4.05337750e+10  1.24549082e+10  7.25e+01 1.44e-01  3.48e+04    38s
+  23   3.59059963e+10  1.79340687e+10  5.14e+01 8.28e-02  2.20e+04    40s
+  24   3.33721239e+10  2.10426857e+10  3.94e+01 4.59e-02  1.50e+04    42s
+  25   3.17314850e+10  2.23938461e+10  3.16e+01 3.09e-02  1.14e+04    44s
+  26   3.04355632e+10  2.37965012e+10  2.51e+01 1.78e-02  8.05e+03    46s
+  27   2.87951906e+10  2.43232971e+10  1.71e+01 1.20e-02  5.42e+03    48s
+  28   2.73074863e+10  2.46100959e+10  9.28e+00 9.09e-03  3.25e+03    50s
+  29   2.67177157e+10  2.47377800e+10  6.14e+00 7.80e-03  2.37e+03    52s
+  30   2.63702846e+10  2.51233692e+10  4.34e+00 3.77e-03  1.49e+03    54s
+  31   2.61531200e+10  2.52418730e+10  3.25e+00 2.46e-03  1.09e+03    55s
+  32   2.59776591e+10  2.53248135e+10  2.32e+00 1.78e-03  7.82e+02    57s
+  33   2.59162857e+10  2.53717780e+10  2.00e+00 1.38e-03  6.53e+02    59s
+  34   2.59005139e+10  2.53837233e+10  1.91e+00 1.28e-03  6.20e+02    60s
+  35   2.57912854e+10  2.54362180e+10  1.35e+00 8.17e-04  4.26e+02    62s
+  36   2.56809753e+10  2.54737886e+10  7.75e-01 4.69e-04  2.49e+02    64s
+  37   2.56121225e+10  2.54926522e+10  4.00e-01 3.23e-04  1.43e+02    66s
+  38   2.55891745e+10  2.55139957e+10  2.75e-01 1.74e-04  9.03e+01    68s
+  39   2.55716378e+10  2.55245373e+10  1.79e-01 1.02e-04  5.66e+01    69s
+  40   2.55634821e+10  2.55276345e+10  1.34e-01 8.14e-05  4.31e+01    70s
+  41   2.55579217e+10  2.55312463e+10  1.03e-01 5.67e-05  3.21e+01    72s
+  42   2.55530241e+10  2.55335824e+10  7.56e-02 4.07e-05  2.34e+01    73s
+  43   2.55498222e+10  2.55358705e+10  5.79e-02 2.48e-05  1.68e+01    75s
+
+Barrier solved model in 43 iterations and 74.68 seconds (8.38 work units)
+Optimal objective 2.55498222e+10
+
+Crossover log...
+
+  177534 DPushes remaining with DInf 0.0000000e+00                75s
+   91233 DPushes remaining with DInf 0.0000000e+00                80s
+
+Solved with dual simplex
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+  186634    2.5539446e+10   0.000000e+00   0.000000e+00     83s
+
+Solved in 186634 iterations and 83.22 seconds (18.99 work units)
+Optimal objective  2.553944597e+10
+Warning: variable name "g[ES1 0 CCGT,NT,2025,11,0]" has a space
+Warning: constraint name "C_power_balance[ES1 0,NT,2025,11,0]" has a space
+Warning: default variable names used to write mps file
+Warning: default constraint names used to write mps file
+Warning: variable name "g[ES1 0 CCGT,NT,2025,11,0]" has a space
+Warning: default variable names used to write solution file
+Model saved to: /cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/2_May21_Wed_h18_m49_s14-GTSEP_stochastic_v1-128_ES_PT_no_bat_EVPI_5
+Deleted config file: /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_5_20250521_190620_5dd9d58e.yaml
+Deleting folder: /cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/2_May21_Wed_h18_m49_s14-GTSEP_stochastic_v1-128_ES_PT_no_bat_EVPI_5
+Running EVPI analysis for scenario 6...
+New config saved to: /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_6_20250521_190917_20a8f481.yaml
+No preprocessing config provided. Skipping preprocessing...
+Path_or_name: temp_EVPI_6_20250521_190917_20a8f481
+Configuration loaded from /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_6_20250521_190917_20a8f481.yaml
+{'data_folder_name': 'elec_s_128_ES_PT_no_bat', 'model_name': 'GTSEP_stochastic_v1', 'model_id': '128_ES_PT_no_bat', 'MIPGap': 0.01, 'VOLL': 6350, 'CC': 100, 'CO2_price': 80, 'E_limit': inf, 'p_max_new_branch': 5000, 'p_min_new_branch': 100, 'expansion_factor': 1.0, 'MS': 0.1, 'years': [2025, 2030, 2040, 2050], 'clustering_unit': None, 'clustering_periods': None, 'scenario_file': 'EVPI_6', 'EVPI': False, 'VSS': False, 'battery_capacity_path': None, 'generator_capacity_path': None, 'branch_capacity_path': None, 'co2_emissions_path': None, 'query': 'not (x > 2 and y < 40)', 'carriers': ['CCGT', 'solar', 'onwind'], 'discount_rate': 0.07, 'representative_period_unit': 'week', 'representative_periods': [11, 21, 42, 52], 'save_folder': '/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/2_May21_Wed_h18_m49_s14-GTSEP_stochastic_v1-128_ES_PT_no_bat_EVPI_6'}
+Set parameter MIPGap to value 0.01
+Set parameter TimeLimit to value 21600
+Set parameter BarConvTol to value 0.01
+Set parameter BarHomogeneous to value 1
+Model built in 71.24528169631958 seconds.
+Gurobi Optimizer version 12.0.1 build v12.0.1rc0 (linux64 - "Rocky Linux 9.4 (Blue Onyx)")
+
+CPU model: Intel(R) Xeon(R) Gold 6242 CPU @ 2.80GHz, instruction set [SSE2|AVX|AVX2|AVX512]
+Thread count: 32 physical cores, 32 logical processors, using up to 32 threads
+
+Non-default parameters:
+TimeLimit  21600
+MIPGap  0.01
+BarConvTol  0.01
+BarHomogeneous  1
+
+Academic license 2622400 - for non-commercial use only - registered to ti___@stud.ntnu.no
+Optimize a model with 675256 rows, 1086512 columns and 1822256 nonzeros
+Model fingerprint: 0xbd45d380
+Coefficient statistics:
+  Matrix range     [8e-06, 4e+00]
+  Objective range  [1e-01, 3e+05]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [6e-03, 1e+100]
+Warning: Model contains large rhs
+         Consider reformulating model or setting NumericFocus parameter
+         to avoid numerical issues.
+Presolve removed 476242 rows and 740371 columns
+Presolve time: 1.32s
+Presolved: 199014 rows, 346141 columns, 888070 nonzeros
+
+Concurrent LP optimizer: primal simplex, dual simplex, and barrier
+Showing barrier log only...
+
+Ordering time: 0.05s
+
+Barrier statistics:
+ Dense cols : 279
+ AA' NZ     : 5.424e+05
+ Factor NZ  : 3.336e+06 (roughly 250 MB of memory)
+ Factor Ops : 1.308e+08 (less than 1 second per iteration)
+ Threads    : 30
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   9.64158452e+13 -5.82316880e+15  6.02e+05 1.44e+04  6.17e+10     3s
+   1   7.75928601e+13 -4.66886678e+15  4.86e+05 4.43e+05  4.49e+10     4s
+   2   6.14295467e+13 -3.51403523e+15  3.79e+05 1.30e+05  3.01e+10     5s
+   3   4.80380118e+13 -2.70723811e+15  2.88e+05 4.39e+04  2.11e+10     7s
+   4   2.48259514e+13 -1.01671407e+15  1.42e+05 1.61e+04  6.01e+09     9s
+   5   1.67500095e+13 -4.63836572e+14  9.18e+04 7.38e+03  2.53e+09    10s
+   6   1.25629146e+13 -1.41225257e+14  6.67e+04 1.92e+03  8.84e+08    11s
+   7   6.37306730e+12 -4.75694422e+13  3.25e+04 6.13e+02  2.33e+08    12s
+   8   1.11357158e+12 -1.45891830e+13  5.73e+03 1.83e+02  3.24e+07    14s
+   9   5.07900426e+11 -4.19443036e+12  2.35e+03 4.66e+01  8.13e+06    16s
+  10   3.59445284e+11 -1.82849796e+12  1.61e+03 1.69e+01  3.61e+06    17s
+  11   2.72899015e+11 -1.01069736e+12  1.17e+03 8.18e+00  2.03e+06    19s
+  12   2.25730939e+11 -5.95660477e+11  9.30e+02 4.72e+00  1.28e+06    20s
+  13   1.99777453e+11 -4.58062904e+11  8.00e+02 3.47e+00  1.00e+06    21s
+  14   1.60944272e+11 -3.54524650e+11  6.23e+02 2.37e+00  7.60e+05    23s
+  15   1.35745957e+11 -1.77985919e+11  5.05e+02 1.00e+00  4.53e+05    25s
+  16   1.02624313e+11 -8.09103354e+10  3.57e+02 6.44e-01  2.58e+05    27s
+  17   8.85942717e+10 -3.60996886e+10  2.93e+02 6.96e-01  1.71e+05    29s
+  18   7.34403091e+10 -1.75116440e+10  2.26e+02 5.18e-01  1.22e+05    31s
+  19   6.15064325e+10 -5.84945407e+09  1.72e+02 3.57e-01  8.83e+04    33s
+  20   5.34939462e+10  8.63995135e+08  1.34e+02 2.94e-01  6.78e+04    35s
+  21   4.75568003e+10  7.81284997e+09  1.06e+02 2.11e-01  5.05e+04    37s
+  22   4.36889008e+10  1.45508900e+10  8.66e+01 1.24e-01  3.66e+04    39s
+  23   3.68778074e+10  1.89620015e+10  5.19e+01 7.99e-02  2.21e+04    41s
+  24   3.58334990e+10  2.35519440e+10  4.63e+01 2.96e-02  1.51e+04    43s
+  25   3.22233704e+10  2.42655659e+10  2.69e+01 2.34e-02  9.69e+03    45s
+  26   3.17258439e+10  2.48983766e+10  2.42e+01 1.79e-02  8.29e+03    47s
+  27   3.06184127e+10  2.52097531e+10  1.83e+01 1.56e-02  6.55e+03    49s
+  28   2.98872927e+10  2.57626228e+10  1.43e+01 1.12e-02  4.98e+03    51s
+  29   2.87575804e+10  2.64273814e+10  8.17e+00 6.31e-03  2.81e+03    53s
+  30   2.85431044e+10  2.67254800e+10  6.96e+00 3.98e-03  2.19e+03    55s
+  31   2.78604105e+10  2.69755152e+10  3.12e+00 2.13e-03  1.06e+03    57s
+  32   2.78275860e+10  2.70754717e+10  2.93e+00 1.47e-03  9.03e+02    59s
+  33   2.76446282e+10  2.70948551e+10  1.92e+00 1.35e-03  6.57e+02    60s
+  34   2.76237070e+10  2.71401583e+10  1.80e+00 1.05e-03  5.79e+02    62s
+  35   2.75461937e+10  2.71764962e+10  1.35e+00 8.21e-04  4.42e+02    63s
+  36   2.74618365e+10  2.71957367e+10  8.93e-01 6.79e-04  3.17e+02    64s
+  37   2.74276111e+10  2.72285428e+10  6.99e-01 4.73e-04  2.38e+02    65s
+  38   2.74016483e+10  2.72443551e+10  5.52e-01 3.74e-04  1.88e+02    67s
+  39   2.73764708e+10  2.72627548e+10  4.12e-01 2.56e-04  1.36e+02    68s
+  40   2.73561524e+10  2.72771718e+10  2.98e-01 1.64e-04  9.47e+01    70s
+  41   2.73415881e+10  2.72862448e+10  2.14e-01 1.09e-04  6.64e+01    72s
+  42   2.73346657e+10  2.72918075e+10  1.75e-01 7.47e-05  5.16e+01    74s
+  43   2.73251526e+10  2.72939230e+10  1.20e-01 6.06e-05  3.75e+01    76s
+  44   2.73195172e+10  2.72984033e+10  8.71e-02 3.40e-05  2.55e+01    78s
+  45   2.73158325e+10  2.73002434e+10  6.54e-02 2.42e-05  1.88e+01    81s
+
+Barrier solved model in 45 iterations and 80.56 seconds (8.83 work units)
+Optimal objective 2.73158325e+10
+
+Crossover log...
+
+  179577 DPushes remaining with DInf 0.0000000e+00                81s
