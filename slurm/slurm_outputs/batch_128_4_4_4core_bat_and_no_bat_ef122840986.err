@@ -15,3 +15,5 @@
 Running EVPI analysis:  83%|████████▎ | 5/6 [14:17<02:53, 173.82s/it][A
 Running EVPI analysis: 100%|██████████| 6/6 [17:07<00:00, 172.61s/it][ARunning EVPI analysis: 100%|██████████| 6/6 [17:07<00:00, 171.26s/it]
 Processing Models: 100%|██████████| 2/2 [1:17:44<00:00, 2215.83s/model]Processing Models: 100%|██████████| 2/2 [1:17:44<00:00, 2332.14s/model]
+To github.com:TinusAlsos/master_project.git
+   79fca26..70d7ff6  idun_runs -> idun_runs
