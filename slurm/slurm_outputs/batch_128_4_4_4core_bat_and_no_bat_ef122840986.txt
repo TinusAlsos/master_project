@@ -2119,3 +2119,215 @@ Optimal objective 2.73158325e+10
 Crossover log...
 
   179577 DPushes remaining with DInf 0.0000000e+00                81s
+   96347 DPushes remaining with DInf 0.0000000e+00                85s
+
+Solved with dual simplex
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+  179289    2.7304754e+10   0.000000e+00   0.000000e+00     89s
+
+Solved in 179289 iterations and 88.58 seconds (18.32 work units)
+Optimal objective  2.730475444e+10
+Warning: variable name "g[ES1 0 CCGT,NT,2025,11,0]" has a space
+Warning: constraint name "C_power_balance[ES1 0,NT,2025,11,0]" has a space
+Warning: default variable names used to write mps file
+Warning: default constraint names used to write mps file
+Warning: variable name "g[ES1 0 CCGT,NT,2025,11,0]" has a space
+Warning: default variable names used to write solution file
+Model saved to: /cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/2_May21_Wed_h18_m49_s14-GTSEP_stochastic_v1-128_ES_PT_no_bat_EVPI_6
+Deleted config file: /cluster/home/tinusfa/master_project/configs/models/config_temp_EVPI_6_20250521_190917_20a8f481.yaml
+Deleting folder: /cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/2_May21_Wed_h18_m49_s14-GTSEP_stochastic_v1-128_ES_PT_no_bat_EVPI_6
+EV save folder: /cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/2_May21_Wed_h18_m49_s14-GTSEP_stochastic_v1-128_ES_PT_no_bat/VSS_runs/EV_run
+New config saved to: /cluster/home/tinusfa/master_project/configs/models/config_temp_EV_20250521_191207_c01214d0.yaml
+Running EV model...
+No preprocessing config provided. Skipping preprocessing...
+Path_or_name: temp_EV_20250521_191207_c01214d0
+Configuration loaded from /cluster/home/tinusfa/master_project/configs/models/config_temp_EV_20250521_191207_c01214d0.yaml
+{'data_folder_name': 'elec_s_128_ES_PT_no_bat', 'model_name': 'GTSEP_stochastic_v1', 'model_id': '128_ES_PT_no_bat', 'MIPGap': 0.01, 'VOLL': 6350, 'CC': 100, 'CO2_price': 80, 'E_limit': inf, 'p_max_new_branch': 5000, 'p_min_new_branch': 100, 'expansion_factor': 1.0, 'MS': 0.1, 'years': [2025, 2030, 2040, 2050], 'clustering_unit': None, 'clustering_periods': None, 'scenario_file': 'mean', 'EVPI': False, 'VSS': False, 'battery_capacity_path': None, 'generator_capacity_path': None, 'branch_capacity_path': None, 'co2_emissions_path': None, 'query': 'not (x > 2 and y < 40)', 'carriers': ['CCGT', 'solar', 'onwind'], 'discount_rate': 0.07, 'representative_period_unit': 'week', 'representative_periods': [11, 21, 42, 52], 'save_folder': '/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/2_May21_Wed_h18_m49_s14-GTSEP_stochastic_v1-128_ES_PT_no_bat/VSS_runs/EV_run'}
+Set parameter MIPGap to value 0.01
+Set parameter TimeLimit to value 21600
+Set parameter BarConvTol to value 0.01
+Set parameter BarHomogeneous to value 1
+Model built in 60.90627861022949 seconds.
+Gurobi Optimizer version 12.0.1 build v12.0.1rc0 (linux64 - "Rocky Linux 9.4 (Blue Onyx)")
+
+CPU model: Intel(R) Xeon(R) Gold 6242 CPU @ 2.80GHz, instruction set [SSE2|AVX|AVX2|AVX512]
+Thread count: 32 physical cores, 32 logical processors, using up to 32 threads
+
+Non-default parameters:
+TimeLimit  21600
+MIPGap  0.01
+BarConvTol  0.01
+BarHomogeneous  1
+
+Academic license 2622400 - for non-commercial use only - registered to ti___@stud.ntnu.no
+Optimize a model with 675252 rows, 543536 columns and 1736240 nonzeros
+Model fingerprint: 0x650aab96
+Coefficient statistics:
+  Matrix range     [8e-06, 4e+00]
+  Objective range  [1e-01, 3e+05]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [6e-03, 1e+100]
+Warning: Model contains large rhs
+         Consider reformulating model or setting NumericFocus parameter
+         to avoid numerical issues.
+Presolve removed 476238 rows and 197395 columns
+Presolve time: 1.23s
+Presolved: 199014 rows, 346141 columns, 888070 nonzeros
+
+Concurrent LP optimizer: primal simplex, dual simplex, and barrier
+Showing barrier log only...
+
+Ordering time: 0.05s
+
+Barrier statistics:
+ Dense cols : 279
+ AA' NZ     : 5.424e+05
+ Factor NZ  : 3.336e+06 (roughly 250 MB of memory)
+ Factor Ops : 1.308e+08 (less than 1 second per iteration)
+ Threads    : 30
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   9.58041936e+13 -5.81724471e+15  5.99e+05 1.44e+04  6.15e+10     3s
+   1   7.70769061e+13 -4.66003018e+15  4.84e+05 4.43e+05  4.47e+10     4s
+   2   6.09954846e+13 -3.50325576e+15  3.77e+05 1.31e+05  2.99e+10     5s
+   3   4.76879797e+13 -2.69630457e+15  2.87e+05 4.40e+04  2.10e+10     7s
+   4   2.46168119e+13 -1.01162428e+15  1.41e+05 1.60e+04  5.99e+09     8s
+   5   1.64982717e+13 -4.62733943e+14  9.09e+04 7.39e+03  2.51e+09    10s
+   6   1.24329387e+13 -1.45863050e+14  6.64e+04 2.01e+03  9.01e+08    11s
+   7   6.38420142e+12 -4.95368107e+13  3.27e+04 6.49e+02  2.41e+08    12s
+   8   1.30292907e+12 -1.56684664e+13  6.59e+03 2.01e+02  3.68e+07    14s
+   9   5.72581182e+11 -4.44682045e+12  2.65e+03 5.13e+01  8.93e+06    16s
+  10   3.95999435e+11 -1.91024950e+12  1.79e+03 1.83e+01  3.89e+06    17s
+  11   2.89745722e+11 -1.09802696e+12  1.26e+03 9.74e+00  2.24e+06    18s
+  12   2.35396050e+11 -6.29550587e+11  9.90e+02 5.44e+00  1.37e+06    20s
+  13   2.09509926e+11 -4.95741315e+11  8.61e+02 4.14e+00  1.10e+06    21s
+  14   1.62507327e+11 -3.46297335e+11  6.38e+02 2.51e+00  7.61e+05    23s
+  15   1.27778688e+11 -2.31311791e+11  4.82e+02 1.52e+00  5.17e+05    25s
+  16   1.02153169e+11 -1.14245592e+11  3.67e+02 8.73e-01  3.03e+05    27s
+  17   8.74399458e+10 -5.01969233e+10  2.99e+02 7.71e-01  1.89e+05    29s
+  18   7.02309809e+10 -2.83181484e+10  2.23e+02 5.99e-01  1.32e+05    31s
+  19   6.01900543e+10 -5.29732531e+09  1.78e+02 3.44e-01  8.56e+04    33s
+  20   5.29969266e+10  4.23608199e+09  1.44e+02 2.42e-01  6.27e+04    35s
+  21   4.45879792e+10  1.01599268e+10  1.03e+02 1.65e-01  4.36e+04    37s
+  22   3.85388695e+10  1.27928294e+10  7.25e+01 1.33e-01  3.21e+04    39s
+  23   3.57761685e+10  1.79661434e+10  5.72e+01 7.93e-02  2.20e+04    42s
+  24   3.34114275e+10  2.08467048e+10  4.41e+01 4.80e-02  1.54e+04    44s
+  25   3.10656032e+10  2.22337691e+10  3.04e+01 3.43e-02  1.08e+04    46s
+  26   2.93763206e+10  2.34838536e+10  2.05e+01 2.22e-02  7.13e+03    48s
+  27   2.84295962e+10  2.44220648e+10  1.51e+01 1.28e-02  4.84e+03    50s
+  28   2.80735515e+10  2.48097830e+10  1.32e+01 8.84e-03  3.94e+03    52s
+  29   2.71684266e+10  2.50955964e+10  7.95e+00 5.97e-03  2.49e+03    54s
+  30   2.69539131e+10  2.54723700e+10  6.67e+00 2.60e-03  1.78e+03    56s
+  31   2.66506225e+10  2.55031605e+10  4.92e+00 2.25e-03  1.38e+03    58s
+  32   2.63585507e+10  2.56188165e+10  3.24e+00 1.28e-03  8.89e+02    60s
+  33   2.62768233e+10  2.56638862e+10  2.78e+00 9.30e-04  7.38e+02    62s
+  34   2.60959025e+10  2.57317705e+10  1.73e+00 4.21e-04  4.39e+02    64s
+  35   2.59549422e+10  2.57711141e+10  9.04e-01 1.64e-04  2.21e+02    66s
+  36   2.58911424e+10  2.57923650e+10  5.10e-01 7.41e-05  1.19e+02    68s
+  37   2.58740155e+10  2.57963767e+10  4.03e-01 5.09e-05  9.36e+01    69s
+  38   2.58521386e+10  2.57991208e+10  2.65e-01 4.09e-05  6.38e+01    70s
+  39   2.58384024e+10  2.58019110e+10  1.78e-01 3.09e-05  4.38e+01    72s
+  40   2.58321623e+10  2.58043606e+10  1.39e-01 2.21e-05  3.34e+01    73s
+  41   2.58275511e+10  2.58063481e+10  1.09e-01 1.51e-05  2.55e+01    74s
+  42   2.58229956e+10  2.58074474e+10  7.99e-02 1.12e-05  1.87e+01    75s
+
+Barrier solved model in 42 iterations and 75.28 seconds (8.23 work units)
+Optimal objective 2.58229956e+10
+
+Crossover log...
+
+  175765 DPushes remaining with DInf 0.0000000e+00                76s
+   95199 DPushes remaining with DInf 0.0000000e+00                80s
+   63019 DPushes remaining with DInf 0.0000000e+00                85s
+
+Solved with dual simplex
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+  195444    2.5810655e+10   0.000000e+00   0.000000e+00     86s
+
+Solved in 195444 iterations and 86.10 seconds (24.88 work units)
+Optimal objective  2.581065522e+10
+Warning: variable name "g[ES1 0 CCGT,mean,2025,11,0]" has a space
+Warning: constraint name "C_power_balance[ES1 0,mean,2025,11,0]" has a space
+Warning: default variable names used to write mps file
+Warning: default constraint names used to write mps file
+Warning: variable name "g[ES1 0 CCGT,mean,2025,11,0]" has a space
+Warning: default variable names used to write solution file
+Model saved to: /cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/2_May21_Wed_h18_m49_s14-GTSEP_stochastic_v1-128_ES_PT_no_bat/VSS_runs/EV_run
+Deleted config file: /cluster/home/tinusfa/master_project/configs/models/config_temp_EV_20250521_191207_c01214d0.yaml
+Investment decision variables paths: {'battery_capacity_path': '/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/2_May21_Wed_h18_m49_s14-GTSEP_stochastic_v1-128_ES_PT_no_bat/VSS_runs/EV_run/decision_variables/battery_capacity.csv', 'branch_capacity_path': '/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/2_May21_Wed_h18_m49_s14-GTSEP_stochastic_v1-128_ES_PT_no_bat/VSS_runs/EV_run/decision_variables/branch_capacity.csv', 'generator_capacity_path': '/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/2_May21_Wed_h18_m49_s14-GTSEP_stochastic_v1-128_ES_PT_no_bat/VSS_runs/EV_run/decision_variables/generator_capacity.csv'}
+Overwrite dict for EEV: {'scenario_file': '', 'save_folder': '/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/2_May21_Wed_h18_m49_s14-GTSEP_stochastic_v1-128_ES_PT_no_bat/VSS_runs/EEV', 'EVPI': False, 'VSS': False, 'battery_capacity_path': '/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/2_May21_Wed_h18_m49_s14-GTSEP_stochastic_v1-128_ES_PT_no_bat/VSS_runs/EV_run/decision_variables/battery_capacity.csv', 'branch_capacity_path': '/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/2_May21_Wed_h18_m49_s14-GTSEP_stochastic_v1-128_ES_PT_no_bat/VSS_runs/EV_run/decision_variables/branch_capacity.csv', 'generator_capacity_path': '/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/2_May21_Wed_h18_m49_s14-GTSEP_stochastic_v1-128_ES_PT_no_bat/VSS_runs/EV_run/decision_variables/generator_capacity.csv'}
+New config saved to: /cluster/home/tinusfa/master_project/configs/models/config_temp_EEV_20250521_191443_e2ae0a2f.yaml
+Running EEV model...
+No preprocessing config provided. Skipping preprocessing...
+Path_or_name: temp_EEV_20250521_191443_e2ae0a2f
+Configuration loaded from /cluster/home/tinusfa/master_project/configs/models/config_temp_EEV_20250521_191443_e2ae0a2f.yaml
+{'data_folder_name': 'elec_s_128_ES_PT_no_bat', 'model_name': 'GTSEP_stochastic_v1', 'model_id': '128_ES_PT_no_bat', 'MIPGap': 0.01, 'VOLL': 6350, 'CC': 100, 'CO2_price': 80, 'E_limit': inf, 'p_max_new_branch': 5000, 'p_min_new_branch': 100, 'expansion_factor': 1.0, 'MS': 0.1, 'years': [2025, 2030, 2040, 2050], 'clustering_unit': None, 'clustering_periods': None, 'scenario_file': '', 'EVPI': False, 'VSS': False, 'battery_capacity_path': '/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/2_May21_Wed_h18_m49_s14-GTSEP_stochastic_v1-128_ES_PT_no_bat/VSS_runs/EV_run/decision_variables/battery_capacity.csv', 'generator_capacity_path': '/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/2_May21_Wed_h18_m49_s14-GTSEP_stochastic_v1-128_ES_PT_no_bat/VSS_runs/EV_run/decision_variables/generator_capacity.csv', 'branch_capacity_path': '/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/2_May21_Wed_h18_m49_s14-GTSEP_stochastic_v1-128_ES_PT_no_bat/VSS_runs/EV_run/decision_variables/branch_capacity.csv', 'co2_emissions_path': None, 'query': 'not (x > 2 and y < 40)', 'carriers': ['CCGT', 'solar', 'onwind'], 'discount_rate': 0.07, 'representative_period_unit': 'week', 'representative_periods': [11, 21, 42, 52], 'save_folder': '/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/2_May21_Wed_h18_m49_s14-GTSEP_stochastic_v1-128_ES_PT_no_bat/VSS_runs/EEV'}
+Set parameter MIPGap to value 0.01
+Set parameter TimeLimit to value 21600
+Set parameter BarConvTol to value 0.01
+Set parameter BarHomogeneous to value 1
+Model built in 120.01124405860901 seconds.
+Gurobi Optimizer version 12.0.1 build v12.0.1rc0 (linux64 - "Rocky Linux 9.4 (Blue Onyx)")
+
+CPU model: Intel(R) Xeon(R) Gold 6242 CPU @ 2.80GHz, instruction set [SSE2|AVX|AVX2|AVX512]
+Thread count: 32 physical cores, 32 logical processors, using up to 32 threads
+
+Non-default parameters:
+TimeLimit  21600
+MIPGap  0.01
+BarConvTol  0.01
+BarHomogeneous  1
+
+Academic license 2622400 - for non-commercial use only - registered to ti___@stud.ntnu.no
+Optimize a model with 1181276 rows, 1629488 columns and 3144995 nonzeros
+Model fingerprint: 0x05e7f0e3
+Coefficient statistics:
+  Matrix range     [8e-06, 4e+00]
+  Objective range  [4e-02, 3e+05]
+  Bounds range     [4e+01, 5e+03]
+  RHS range        [6e-03, 1e+100]
+Warning: Model contains large rhs
+         Consider reformulating model or setting NumericFocus parameter
+         to avoid numerical issues.
+Presolve removed 1134236 rows and 1329452 columns
+Presolve time: 1.62s
+Presolved: 47040 rows, 300036 columns, 384708 nonzeros
+
+Concurrent LP optimizer: primal simplex, dual simplex, and barrier
+Showing barrier log only...
+
+Ordering time: 0.01s
+
+Barrier statistics:
+ AA' NZ     : 8.467e+04
+ Factor NZ  : 2.587e+05 (roughly 140 MB of memory)
+ Factor Ops : 1.811e+06 (less than 1 second per iteration)
+ Threads    : 30
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   2.12456089e+13 -2.77185414e+14  6.24e+04 8.49e+02  1.44e+09     3s
+   1   4.31200526e+12 -7.86784886e+13  6.63e+03 9.44e-11  2.00e+08     3s
+   2   1.55983218e+12 -1.35536753e+13  1.81e+02 7.98e-11  2.59e+07     4s
+
+Barrier performed 2 iterations in 4.07 seconds (1.83 work units)
+Barrier solve interrupted - model solved by another algorithm
+
+
+Solved with dual simplex
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+   59025    2.6476948e+10   0.000000e+00   0.000000e+00      6s
+
+Solved in 59025 iterations and 6.15 seconds (2.66 work units)
+Optimal objective  2.647694847e+10
+Warning: variable name "g[ES1 0 CCGT,NT,2025,11,0]" has a space
+Warning: constraint name "C_power_balance[ES1 0,NT,2025,11,0]" has a space
+Warning: default variable names used to write mps file
+Warning: default constraint names used to write mps file
+Warning: variable name "g[ES1 0 CCGT,NT,2025,11,0]" has a space
+Warning: default variable names used to write solution file
+Model saved to: /cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_4_4_4core_bat_and_no_bat_ef1/2_May21_Wed_h18_m49_s14-GTSEP_stochastic_v1-128_ES_PT_no_bat/VSS_runs/EEV
+Deleted config file: /cluster/home/tinusfa/master_project/configs/models/config_temp_EEV_20250521_191443_e2ae0a2f.yaml
+Job finished at Wed 21 May 19:17:07 CEST 2025
+Pushing to git

@@ -13,3 +13,5 @@
 Running EVPI analysis:  50%|█████     | 3/6 [08:21<08:22, 167.59s/it][A
 Running EVPI analysis:  67%|██████▋   | 4/6 [11:19<05:43, 171.80s/it][A
 Running EVPI analysis:  83%|████████▎ | 5/6 [14:17<02:53, 173.82s/it][A
+Running EVPI analysis: 100%|██████████| 6/6 [17:07<00:00, 172.61s/it][ARunning EVPI analysis: 100%|██████████| 6/6 [17:07<00:00, 171.26s/it]
+Processing Models: 100%|██████████| 2/2 [1:17:44<00:00, 2215.83s/model]Processing Models: 100%|██████████| 2/2 [1:17:44<00:00, 2332.14s/model]
