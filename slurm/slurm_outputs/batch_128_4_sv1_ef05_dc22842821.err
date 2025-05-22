@@ -1,0 +1,18 @@
+Processing Models:   0%|          | 0/5 [00:00<?, ?model/s]Processing Models:   0%|          | 0/5 [00:00<?, ?model/s]
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/cluster/home/tinusfa/master_project/src/run_batches.py", line 86, in <module>
+    run_batches(
+  File "/cluster/home/tinusfa/master_project/src/run_batches.py", line 43, in run_batches
+    run(
+  File "/cluster/home/tinusfa/master_project/src/run.py", line 215, in run
+    model_output = get_model(model_config)
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cluster/home/tinusfa/master_project/src/models.py", line 6403, in get_model
+    return model_func(config)
+           ^^^^^^^^^^^^^^^^^^
+  File "/cluster/home/tinusfa/master_project/src/models.py", line 2393, in GTSEP_stochastic_v1
+    yearly_discount = config_files["yearly_discount"]
+                      ^^^^^^^^^^^^
+NameError: name 'config_files' is not defined
