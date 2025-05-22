@@ -20,3 +20,5 @@ Traceback (most recent call last):
   File "/cluster/home/tinusfa/master_project/src/models.py", line 6394, in get_model
     raise ValueError(
 ValueError: Model 'GTSEP_stochastic_v2' is not registered. Available models are: GTSEP_v0, GTSEP_v1, GTSEP_v2, GTSEP_v3, GTSEP_v1_multi, GTSEP_v1a_multi, GTSEP_stochastic_v1, GTSEP_stochastic_v1_NL
+To github.com:TinusAlsos/master_project.git
+   923e987..4e3ea58  idun_runs -> idun_runs
