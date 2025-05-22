@@ -2390,6 +2390,7 @@ def GTSEP_stochastic_v1(config: dict) -> gp.Model:
     representative_period_unit = config["representative_period_unit"]
     weeks = config["representative_periods"]
     scenario_file = config["scenario_file"]
+    yearly_discount = config_files["yearly_discount"]
     if not representative_period_unit == "week":
         raise ValueError(
             "Only 'week' is supported as representative_period_unit as of now."
@@ -2401,7 +2402,7 @@ def GTSEP_stochastic_v1(config: dict) -> gp.Model:
     # Load data
     data_folder_path = os.path.join(PROCESSED_DATA_FOLDER, data_folder_name)
     input_data = load_multi_year_csv_files_with_week_from_folder(
-        years, data_folder_path
+        years, data_folder_path, yearly_discount=yearly_discount
     )
     batteries = input_data["batteries"]
     branches = input_data["branches"]
@@ -3451,6 +3452,8 @@ def GTSEP_stochastic_v2(config: dict) -> gp.Model:
     weeks = config["representative_periods"]
     scenario_file = config["scenario_file"]
     ramping_limit = config["ramping_limit"]
+    yearly_discount = config_files["yearly_discount"]
+
     if not representative_period_unit == "week":
         raise ValueError(
             "Only 'week' is supported as representative_period_unit as of now."
@@ -3462,7 +3465,7 @@ def GTSEP_stochastic_v2(config: dict) -> gp.Model:
     # Load data
     data_folder_path = os.path.join(PROCESSED_DATA_FOLDER, data_folder_name)
     input_data = load_multi_year_csv_files_with_week_from_folder(
-        years, data_folder_path
+        years, data_folder_path, yearly_discount=yearly_discount
     )
     batteries = input_data["batteries"]
     branches = input_data["branches"]
@@ -4542,6 +4545,8 @@ def GTSEP_stochastic_v1_NL(config: dict) -> gp.Model:
     representative_period_unit = config["representative_period_unit"]
     weeks = config["representative_periods"]
     scenario_file = config["scenario_file"]
+    yearly_discount = config_files["yearly_discount"]
+
     if not representative_period_unit == "week":
         raise ValueError(
             "Only 'week' is supported as representative_period_unit as of now."
@@ -4553,7 +4558,7 @@ def GTSEP_stochastic_v1_NL(config: dict) -> gp.Model:
     # Load data
     data_folder_path = os.path.join(PROCESSED_DATA_FOLDER, data_folder_name)
     input_data = load_multi_year_csv_files_with_week_from_folder(
-        years, data_folder_path
+        years, data_folder_path, yearly_discount
     )
     batteries = input_data["batteries"]
     branches = input_data["branches"]

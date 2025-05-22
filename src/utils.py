@@ -376,7 +376,7 @@ def load_multi_year_csv_files_from_folder(
 
 
 def load_multi_year_csv_files_with_week_from_folder(
-    years: list[int], data_folder_path: str
+    years: list[int], data_folder_path: str, yearly_discount: int = 10
 ) -> dict[str, pd.DataFrame]:
     """temporary quick fix for multi-year data loading. I use the same data as for a single year, but I just post-process the dataframes to be in a multi-year format. All data is the same accross all years, so results are relatively meaningless."""
     if not os.path.exists(data_folder_path):
@@ -428,13 +428,12 @@ def load_multi_year_csv_files_with_week_from_folder(
                 data[file_name] = temp_df
             else:
                 data[file_name] = pd.concat(new_dfs)
-    discount_per_new_period = 10.0
 
     for component in ["generators", "branches", "batteries"]:
         if len(data[component]) == 0:
             continue
         for i, year in enumerate(years[1:], start=1):
-            discount_amount = discount_per_new_period * i
+            discount_amount = yearly_discount * i
             # Make an explicit copy of that year's slice
             sub = data[component].xs(year, level="year").copy()
 
