@@ -442,7 +442,12 @@ def load_multi_year_csv_files_with_week_from_folder(
             sub["capital_cost"] -= discount_amount
 
             # Write it back into the original DataFrame
-            data[component].update(sub)
+            # Get the subset for the given year
+            data_comp_year = data[component].loc[year]
+
+            # Update the 'capital_cost' in the selected year using sub (matched by generator index)
+            # This works if all generators in sub are present in data[component] for that year.
+            data_comp_year.update(sub["capital_cost"])
 
     hourly_demand = load_hourly_demand(data_folder_path)
     data["hourly_demand"] = hourly_demand

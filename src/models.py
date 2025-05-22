@@ -2858,8 +2858,8 @@ def GTSEP_stochastic_v1(config: dict) -> gp.Model:
             for ω in Omega_y[y]:
                 for w in W:
                     for t in T:
-                        soc_min = batteries.loc[(y, s), "SOC_min"] * soc_s_max[s, y]
-                        soc_max = batteries.loc[(y, s), "SOC_max"] * soc_s_max[s, y]
+                        soc_min = batteries.loc[(y, s), "SOC_min"] * soc_s_cum_max[s, y]
+                        soc_max = batteries.loc[(y, s), "SOC_max"] * soc_s_cum_max[s, y]
                         model.addConstr(
                             soc[s, ω, y, w, t] >= soc_min,
                             name=f"C_soc_min[{s},{ω},{y},{w},{t}]",
@@ -2896,7 +2896,7 @@ def GTSEP_stochastic_v1(config: dict) -> gp.Model:
         for y in Y:
             for ω in Omega_y[y]:
                 for w in W:
-                    soc0 = batteries.loc[(y, s), "SOC_min"] * soc_s_max[s, y]
+                    soc0 = batteries.loc[(y, s), "SOC_min"] * soc_s_cum_max[s, y]
                     model.addConstr(
                         soc[s, ω, y, w, T[0]] == soc0,
                         name=f"C_soc_init[{s},{ω},{y},{w}]",
@@ -3950,8 +3950,8 @@ def GTSEP_stochastic_v2(config: dict) -> gp.Model:
             for ω in Omega_y[y]:
                 for w in W:
                     for t in T:
-                        soc_min = batteries.loc[(y, s), "SOC_min"] * soc_s_max[s, y]
-                        soc_max = batteries.loc[(y, s), "SOC_max"] * soc_s_max[s, y]
+                        soc_min = batteries.loc[(y, s), "SOC_min"] * soc_s_cum_max[s, y]
+                        soc_max = batteries.loc[(y, s), "SOC_max"] * soc_s_cum_max[s, y]
                         model.addConstr(
                             soc[s, ω, y, w, t] >= soc_min,
                             name=f"C_soc_min[{s},{ω},{y},{w},{t}]",
@@ -3988,7 +3988,7 @@ def GTSEP_stochastic_v2(config: dict) -> gp.Model:
         for y in Y:
             for ω in Omega_y[y]:
                 for w in W:
-                    soc0 = batteries.loc[(y, s), "SOC_min"] * soc_s_max[s, y]
+                    soc0 = batteries.loc[(y, s), "SOC_min"] * soc_s_cum_max[s, y]
                     model.addConstr(
                         soc[s, ω, y, w, T[0]] == soc0,
                         name=f"C_soc_init[{s},{ω},{y},{w}]",
@@ -5010,8 +5010,8 @@ def GTSEP_stochastic_v1_NL(config: dict) -> gp.Model:
             for ω in Omega_y[y]:
                 for w in W:
                     for t in T:
-                        soc_min = batteries.loc[(y, s), "SOC_min"] * soc_s_max[s, y]
-                        soc_max = batteries.loc[(y, s), "SOC_max"] * soc_s_max[s, y]
+                        soc_min = batteries.loc[(y, s), "SOC_min"] * soc_s_cum_max[s, y]
+                        soc_max = batteries.loc[(y, s), "SOC_max"] * soc_s_cum_max[s, y]
                         model.addConstr(
                             soc[s, ω, y, w, t] >= soc_min,
                             name=f"C_soc_min[{s},{ω},{y},{w},{t}]",
@@ -5045,7 +5045,7 @@ def GTSEP_stochastic_v1_NL(config: dict) -> gp.Model:
         for y in Y:
             for ω in Omega_y[y]:
                 for w in W:
-                    soc0 = batteries.loc[(y, s), "SOC_min"] * soc_s_max[s, y]
+                    soc0 = batteries.loc[(y, s), "SOC_min"] * soc_s_cum_max[s, y]
                     model.addConstr(
                         soc[s, ω, y, w, T[0]] == soc0,
                         name=f"C_soc_init[{s},{ω},{y},{w}]",
