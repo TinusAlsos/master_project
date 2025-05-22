@@ -6381,6 +6381,7 @@ MODEL_REGISTRY = {
     "GTSEP_v1a_multi": GTSEP_v1a_multi,
     "GTSEP_stochastic_v1": GTSEP_stochastic_v1,
     "GTSEP_stochastic_v1_NL": GTSEP_stochastic_v1_NL,
+    "GTSEP_stochastic_v2": GTSEP_stochastic_v2,
 }
 
 

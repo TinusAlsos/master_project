@@ -1,0 +1,15 @@
+Case,Year,Scenario,utilization_rate (%),congestion_rate (%)
+Leakage,2025,NT,61.9,50.67
+Leakage,2030,NT,62.57,50.81
+Leakage,2040,DE,63.77,51.31
+Leakage,2040,GA,63.25,51.28
+Leakage,2040,NT,63.69,51.39
+Leakage,2050,DE,64.55,51.85
+Leakage,2050,GA,63.61,51.11
+No Leakage,2025,NT,61.9,50.69
+No Leakage,2030,NT,62.58,50.83
+No Leakage,2040,DE,63.77,51.29
+No Leakage,2040,GA,63.25,51.26
+No Leakage,2040,NT,63.69,51.35
+No Leakage,2050,DE,64.5,51.82
+No Leakage,2050,GA,63.53,51.08
