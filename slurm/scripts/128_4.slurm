@@ -1,11 +1,11 @@
 #!/bin/sh
 #SBATCH --account=share-iv-mtp       # E.g. "ie-idi" if you belong to IDI
-#SBATCH --job-name=128_4
+#SBATCH --job-name=128_sv1NL_4_weeks
 #SBATCH --time=0-8:00:00         # format: D-HH:MM:SS
 
 #SBATCH --partition=CPUQ          # Asking for a GPU
 #SBATCH --mem=128G       # Asking for 128 RAM
-#SBATCH --cpus-per-task=1 # 4 CPU cores               
+#SBATCH --cpus-per-task=4 # 4 CPU cores               
 #SBATCH --nodes=1
 #SBATCH --output=slurm/slurm_outputs/%x%j.txt      # Specifying 'stdout'
 #SBATCH --error=slurm/slurm_outputs/%x%j.err        # Specifying 'stderr'
@@ -36,12 +36,12 @@ export GRB_WLSSECRET="87c9d38e-3a81-40a9-8d23-fa6fd14a0645" >> ~/.bashrc
 export GRB_LICENSE_FILE="/cluster/home/tinusfa/master_project/gurobi.lic" >> ~/.bashrc
 source ~/.bashrc
 
-python -m src.run --name 128_sv1_4_weeks___ --no_run_analysis 
+python -m src.run --name 128_sv1NL_4_weeks --no_run_analysis 
 
 echo "Job finished at $(date)"
 
 echo "Pushing to git"
 
 git add .
-git commit -m "results from 128_4"
+git commit -m "results from 128_sv1NL_4_weeks"
 git push
