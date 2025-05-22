@@ -3801,13 +3801,13 @@ def GTSEP_stochastic_v2(config: dict) -> gp.Model:
                         )
                         if t != T[0]:
                             if is_renewable_map[i]:
-                                prev_g = g[i, ω, y, w, t - 1]
+                                prev_g = g_new[i, ω, y, w, t - 1]
                                 model.addConstr(
-                                    g[i, ω, y, w, t] >= prev_g - ramp_limit,
+                                    g_new[i, ω, y, w, t] >= prev_g - ramp_limit,
                                     name=f"C_gen_output_old_min[{i},{ω},{y},{w},{t}]",
                                 )
                                 model.addConstr(
-                                    g[i, ω, y, w, t] <= prev_g + ramp_limit,
+                                    g_new[i, ω, y, w, t] <= prev_g + ramp_limit,
                                     name=f"C_gen_output_old_max[{i},{ω},{y},{w},{t}]",
                                 )
 
