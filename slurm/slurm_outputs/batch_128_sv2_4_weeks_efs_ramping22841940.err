@@ -1,0 +1,22 @@
+Processing Models:   0%|          | 0/3 [00:00<?, ?model/s]Processing Models:   0%|          | 0/3 [00:00<?, ?model/s]
+Traceback (most recent call last):
+  File "/cluster/home/tinusfa/master_project/src/models.py", line 6391, in get_model
+    model_func = MODEL_REGISTRY[model_name]
+                 ~~~~~~~~~~~~~~^^^^^^^^^^^^
+KeyError: 'GTSEP_stochastic_v2'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/cluster/home/tinusfa/master_project/src/run_batches.py", line 86, in <module>
+    run_batches(
+  File "/cluster/home/tinusfa/master_project/src/run_batches.py", line 43, in run_batches
+    run(
+  File "/cluster/home/tinusfa/master_project/src/run.py", line 215, in run
+    model_output = get_model(model_config)
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cluster/home/tinusfa/master_project/src/models.py", line 6394, in get_model
+    raise ValueError(
+ValueError: Model 'GTSEP_stochastic_v2' is not registered. Available models are: GTSEP_v0, GTSEP_v1, GTSEP_v2, GTSEP_v3, GTSEP_v1_multi, GTSEP_v1a_multi, GTSEP_stochastic_v1, GTSEP_stochastic_v1_NL

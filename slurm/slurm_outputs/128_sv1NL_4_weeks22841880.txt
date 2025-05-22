@@ -194,3 +194,39 @@ Warning: default variable names used to write solution file
 Model saved to: /cluster/home/tinusfa/master_project/runs/single_runs/May22_Thu_h10_m38_s40-GTSEP_stochastic_v1_NL-128_ES_PT
 Job finished at Thu 22 May 10:49:00 CEST 2025
 Pushing to git
+[idun_runs 923e987] results from 128_sv1NL_4_weeks
+ 36 files changed, 1821740 insertions(+)
+ create mode 100644 runs/single_runs/May22_Thu_h10_m38_s40-GTSEP_stochastic_v1_NL-128_ES_PT/decision_variables/battery_capacity.csv
+ create mode 100644 runs/single_runs/May22_Thu_h10_m38_s40-GTSEP_stochastic_v1_NL-128_ES_PT/decision_variables/battery_charging.csv
+ create mode 100644 runs/single_runs/May22_Thu_h10_m38_s40-GTSEP_stochastic_v1_NL-128_ES_PT/decision_variables/battery_discharging.csv
+ create mode 100644 runs/single_runs/May22_Thu_h10_m38_s40-GTSEP_stochastic_v1_NL-128_ES_PT/decision_variables/battery_soc.csv
+ create mode 100644 runs/single_runs/May22_Thu_h10_m38_s40-GTSEP_stochastic_v1_NL-128_ES_PT/decision_variables/branch_capacity.csv
+ create mode 100644 runs/single_runs/May22_Thu_h10_m38_s40-GTSEP_stochastic_v1_NL-128_ES_PT/decision_variables/curtailment.csv
+ create mode 100644 runs/single_runs/May22_Thu_h10_m38_s40-GTSEP_stochastic_v1_NL-128_ES_PT/decision_variables/generation.csv
+ create mode 100644 runs/single_runs/May22_Thu_h10_m38_s40-GTSEP_stochastic_v1_NL-128_ES_PT/decision_variables/generator_capacity.csv
+ create mode 100644 runs/single_runs/May22_Thu_h10_m38_s40-GTSEP_stochastic_v1_NL-128_ES_PT/decision_variables/load_shedding.csv
+ create mode 100644 runs/single_runs/May22_Thu_h10_m38_s40-GTSEP_stochastic_v1_NL-128_ES_PT/decision_variables/power_flow.csv
+ create mode 100644 runs/single_runs/May22_Thu_h10_m38_s40-GTSEP_stochastic_v1_NL-128_ES_PT/dual_variables/battery_charge_new_max_duals.csv
+ create mode 100644 runs/single_runs/May22_Thu_h10_m38_s40-GTSEP_stochastic_v1_NL-128_ES_PT/dual_variables/battery_charge_old_duals.csv
+ create mode 100644 runs/single_runs/May22_Thu_h10_m38_s40-GTSEP_stochastic_v1_NL-128_ES_PT/dual_variables/battery_discharge_new_max_duals.csv
+ create mode 100644 runs/single_runs/May22_Thu_h10_m38_s40-GTSEP_stochastic_v1_NL-128_ES_PT/dual_variables/battery_discharge_old_duals.csv
+ create mode 100644 runs/single_runs/May22_Thu_h10_m38_s40-GTSEP_stochastic_v1_NL-128_ES_PT/dual_variables/branch_extension_duals.csv
+ create mode 100644 runs/single_runs/May22_Thu_h10_m38_s40-GTSEP_stochastic_v1_NL-128_ES_PT/dual_variables/branch_flow_new_duals_max.csv
+ create mode 100644 runs/single_runs/May22_Thu_h10_m38_s40-GTSEP_stochastic_v1_NL-128_ES_PT/dual_variables/branch_flow_new_duals_min.csv
+ create mode 100644 runs/single_runs/May22_Thu_h10_m38_s40-GTSEP_stochastic_v1_NL-128_ES_PT/dual_variables/branch_flow_old_duals_max.csv
+ create mode 100644 runs/single_runs/May22_Thu_h10_m38_s40-GTSEP_stochastic_v1_NL-128_ES_PT/dual_variables/branch_flow_old_duals_min.csv
+ create mode 100644 runs/single_runs/May22_Thu_h10_m38_s40-GTSEP_stochastic_v1_NL-128_ES_PT/dual_variables/emissions_duals.csv
+ create mode 100644 runs/single_runs/May22_Thu_h10_m38_s40-GTSEP_stochastic_v1_NL-128_ES_PT/dual_variables/gen_extension_duals.csv
+ create mode 100644 runs/single_runs/May22_Thu_h10_m38_s40-GTSEP_stochastic_v1_NL-128_ES_PT/dual_variables/gen_output_new_duals.csv
+ create mode 100644 runs/single_runs/May22_Thu_h10_m38_s40-GTSEP_stochastic_v1_NL-128_ES_PT/dual_variables/gen_output_old_duals.csv
+ create mode 100644 runs/single_runs/May22_Thu_h10_m38_s40-GTSEP_stochastic_v1_NL-128_ES_PT/dual_variables/load_shedding_duals.csv
+ create mode 100644 runs/single_runs/May22_Thu_h10_m38_s40-GTSEP_stochastic_v1_NL-128_ES_PT/dual_variables/power_balance_duals.csv
+ create mode 100644 runs/single_runs/May22_Thu_h10_m38_s40-GTSEP_stochastic_v1_NL-128_ES_PT/model_info/config.yaml
+ create mode 100644 runs/single_runs/May22_Thu_h10_m38_s40-GTSEP_stochastic_v1_NL-128_ES_PT/model_info/model_info.csv
+ create mode 100644 runs/single_runs/May22_Thu_h10_m38_s40-GTSEP_stochastic_v1_NL-128_ES_PT/model_info/scenario_probabilities.json
+ create mode 100644 runs/single_runs/May22_Thu_h10_m38_s40-GTSEP_stochastic_v1_NL-128_ES_PT/model_info/scenarios.json
+ create mode 100644 runs/single_runs/May22_Thu_h10_m38_s40-GTSEP_stochastic_v1_NL-128_ES_PT/model_info/week_weights.json
+ create mode 100644 slurm/slurm_outputs/128_sv1NL_4_weeks22841880.err
+ create mode 100644 slurm/slurm_outputs/128_sv1NL_4_weeks22841880.txt
+ create mode 100644 slurm/slurm_outputs/batch_128_8_weeks_season_efs22841866.err
+ create mode 100644 slurm/slurm_outputs/batch_128_8_weeks_season_efs22841866.txt
