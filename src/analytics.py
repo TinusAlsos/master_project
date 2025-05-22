@@ -5616,9 +5616,10 @@ def analyze_run_stochastic(
     representative_period_unit = config["representative_period_unit"]
     weeks = config["representative_periods"]
     scenario_file = config["scenario_file"]
+    yearly_discount = config.get("yearly_discount", 10)
     input_data_folder = os.path.join(PROCESSED_DATA_FOLDER, config["data_folder_name"])
     input_data = utils.load_multi_year_csv_files_with_week_from_folder(
-        years=years, data_folder_path=input_data_folder
+        years=years, data_folder_path=input_data_folder, yearly_discount=yearly_discount
     )
     scenario_multiplier = utils.load_scenario_multiplier(
         scenario_file_name=scenario_file
