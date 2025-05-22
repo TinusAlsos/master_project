@@ -2390,7 +2390,7 @@ def GTSEP_stochastic_v1(config: dict) -> gp.Model:
     representative_period_unit = config["representative_period_unit"]
     weeks = config["representative_periods"]
     scenario_file = config["scenario_file"]
-    yearly_discount = config_files["yearly_discount"]
+    yearly_discount = config["yearly_discount"]
     if not representative_period_unit == "week":
         raise ValueError(
             "Only 'week' is supported as representative_period_unit as of now."
@@ -3452,7 +3452,7 @@ def GTSEP_stochastic_v2(config: dict) -> gp.Model:
     weeks = config["representative_periods"]
     scenario_file = config["scenario_file"]
     ramping_limit = config["ramping_limit"]
-    yearly_discount = config_files["yearly_discount"]
+    yearly_discount = config["yearly_discount"]
 
     if not representative_period_unit == "week":
         raise ValueError(
@@ -4545,7 +4545,7 @@ def GTSEP_stochastic_v1_NL(config: dict) -> gp.Model:
     representative_period_unit = config["representative_period_unit"]
     weeks = config["representative_periods"]
     scenario_file = config["scenario_file"]
-    yearly_discount = config_files["yearly_discount"]
+    yearly_discount = config["yearly_discount"]
 
     if not representative_period_unit == "week":
         raise ValueError(
