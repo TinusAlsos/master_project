@@ -32,10 +32,10 @@ emissions_restriction_reduction = [0.0, 0.20, 0.40, 0.60, 0.80, 1.0]
 
 # %%
 folder_names = [
-    "1_May16_Fri_h23_m07_s45-GTSEP_stochastic_v1-128_ES_PT",
-    "2_May17_Sat_h00_m00_s46-GTSEP_stochastic_v1-128_ES_PT_no_bat",
+    "1_May23_Fri_h18_m29_s11-GTSEP_stochastic_v2-128_ES_PT_sv2",
+    "2_May23_Fri_h19_m46_s36-GTSEP_stochastic_v2-128_ES_PT_sv2_no_bat",
 ]
-config_names = ["config_128_sv1_4_weeks___", "config_128_sv1_4_weeks___no_bats"]
+config_names = ["128_sv2_8_weeks_ef05_rf025", "128_sv2_8_weeks_ef05_rf025_no_bat"]
 
 # %%
 SINGLE_RUNS_FOLDER = os.path.join(RUNS_FOLDER, "single_runs")
@@ -45,7 +45,7 @@ SINGLE_RUNS_FOLDER = os.path.join(RUNS_FOLDER, "single_runs")
 
 # %%
 BATCH_RUNS_FOLDER_BASE = os.path.join(
-    BATCH_RUNS_FOLDER, "batch_128_4_4_4core_bat_and_no_bat"
+    BATCH_RUNS_FOLDER, "batch_128_sv2_8_weeks_ef05_rf025_bnb"
 )
 folders = [
     os.path.join(BATCH_RUNS_FOLDER_BASE, folder_name) for folder_name in folder_names
