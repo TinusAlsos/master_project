@@ -3789,8 +3789,8 @@ def GTSEP_stochastic_v2(config: dict) -> gp.Model:
 
     # 5) Generator output limits (new)
     for i in G_new:
-        p_max = p_i_cum_max[i, y]
         for y in Y:
+            p_max = p_i_cum_max[i, y]
             if not is_renewable_map[i]:
                 # If not renewable, apply ramping limits
                 ramp_limit = p_max * ramping_limit
