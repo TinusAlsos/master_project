@@ -3196,16 +3196,17 @@ def make_battery_system_summary(
     """
     Compute system‐level battery summary metrics by year:
       - num_buildout       (count of batteries with new_capacity>0)
-      - capacity           (sum of total_capacity, MWh)
+      - capacity           (sum of new_capacity, MWh, i.e. *per year*)
+      - cumulative_capacity (sum of total_capacity, MWh, i.e. *existing in year*)
       - investment_cost    (sum of new_capacity*capital_cost, EUR)
-      - cycles_per_year    (expected annual discharge / capacity)
+      - cycles_per_year    (expected annual discharge / cumulative_capacity)
 
     Parameters
     ----------
     extended_batteries : pd.DataFrame
         Indexed by (year, battery) with columns:
         - new_capacity
-        - total_capacity
+        - total_capacity (cumulative)
         - capital_cost
     battery_discharging : pd.DataFrame
         MultiIndexed by (battery, scenario, year, week, hour) with 'value' = discharge MW.
@@ -3222,14 +3223,17 @@ def make_battery_system_summary(
     -------
     pd.DataFrame
         Indexed by year with columns:
-        ['num_buildout', 'capacity', 'investment_cost', 'cycles_per_year']
+        ['num_buildout', 'capacity', 'cumulative_capacity', 'investment_cost', 'cycles_per_year']
     """
     # 1) Buildout metrics from extended_batteries
     eb = extended_batteries.reset_index()
     eb["build_cost"] = eb["new_capacity"] * eb["capital_cost"]
+
+    # Calculate per-year (new) and cumulative capacity
     build_summary = eb.groupby("year").agg(
         num_buildout=("new_capacity", lambda x: (x > 0).sum()),
-        capacity=("total_capacity", "sum"),
+        capacity=("new_capacity", "sum"),                   # per year additions
+        cumulative_capacity=("total_capacity", "sum"),      # system-wide available capacity
         investment_cost=("build_cost", "sum"),
     )
 
@@ -3267,7 +3271,7 @@ def make_battery_system_summary(
 
     # 4) Merge into summary to compute cycles
     summary = build_summary.join(total_discharge)
-    summary["cycles_per_year"] = summary["expected_discharge"] / summary["capacity"]
+    summary["cycles_per_year"] = summary["expected_discharge"] / summary["cumulative_capacity"]
 
     # drop intermediate
     summary = summary.drop(columns=["expected_discharge"])
@@ -3277,6 +3281,7 @@ def make_battery_system_summary(
         summary.to_csv(os.path.join(savefolder, "battery_system_summary_by_year.csv"))
 
     return summary
+
 
 
 def plot_cycles_per_scenario_with_average(
