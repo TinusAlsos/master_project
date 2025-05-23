@@ -16,3 +16,7 @@ No preprocessing config provided. Skipping preprocessing...
 Path_or_name: 128_sv2_4_weeks_ef05_ramping_ramp025
 Job finished at Fri 23 May 15:44:28 CEST 2025
 Pushing to git
+[idun_runs 120f0a5] results from batch_128_sv2_4_weeks_efs_ramping
+ 2 files changed, 32 insertions(+)
+ create mode 100644 slurm/slurm_outputs/batch_128_sv2_4_weeks_efs_ramping22846868.err
+ create mode 100644 slurm/slurm_outputs/batch_128_sv2_4_weeks_efs_ramping22846868.txt

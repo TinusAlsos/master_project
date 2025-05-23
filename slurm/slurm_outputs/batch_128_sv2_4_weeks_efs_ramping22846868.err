@@ -12,3 +12,5 @@ Traceback (most recent call last):
   File "/cluster/home/tinusfa/master_project/src/utils.py", line 91, in load_model_config
     raise FileNotFoundError(f"Model configuration file not found: {config_path}")
 FileNotFoundError: Model configuration file not found: /cluster/home/tinusfa/master_project/configs/models/config_128_sv2_4_weeks_ef05_ramping_ramp025.yaml
+To github.com:TinusAlsos/master_project.git
+   cd4b5d2..120f0a5  idun_runs -> idun_runs
