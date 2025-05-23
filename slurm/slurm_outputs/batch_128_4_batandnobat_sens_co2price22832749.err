@@ -1,56 +1,0 @@
-Processing Models:   0%|          | 0/10 [00:00<?, ?model/s]
-Running EVPI analysis:   0%|          | 0/6 [00:00<?, ?it/s][A
-Running EVPI analysis:  17%|█▋        | 1/6 [04:19<21:39, 259.87s/it][A
-Running EVPI analysis:  33%|███▎      | 2/6 [08:47<17:37, 264.39s/it][A
-Running EVPI analysis:  50%|█████     | 3/6 [13:32<13:41, 273.83s/it][A
-Running EVPI analysis:  67%|██████▋   | 4/6 [17:37<08:45, 262.56s/it][A
-Running EVPI analysis:  83%|████████▎ | 5/6 [22:25<04:31, 271.66s/it][A
-Running EVPI analysis: 100%|██████████| 6/6 [26:28<00:00, 262.02s/it][ARunning EVPI analysis: 100%|██████████| 6/6 [26:28<00:00, 264.81s/it]
-Processing Models:  10%|█         | 1/10 [43:55<6:35:23, 2635.92s/model]
-Running EVPI analysis:   0%|          | 0/6 [00:00<?, ?it/s][A
-Running EVPI analysis:  17%|█▋        | 1/6 [04:20<21:41, 260.32s/it][A
-Running EVPI analysis:  33%|███▎      | 2/6 [08:46<17:34, 263.52s/it][A
-Running EVPI analysis:  50%|█████     | 3/6 [12:59<12:57, 259.02s/it][A
-Running EVPI analysis:  67%|██████▋   | 4/6 [17:04<08:26, 253.23s/it][A
-Running EVPI analysis:  83%|████████▎ | 5/6 [21:38<04:20, 260.84s/it][A
-Running EVPI analysis: 100%|██████████| 6/6 [25:38<00:00, 253.72s/it][ARunning EVPI analysis: 100%|██████████| 6/6 [25:38<00:00, 256.39s/it]
-Processing Models:  20%|██        | 2/10 [1:26:38<5:45:40, 2592.62s/model]
-Running EVPI analysis:   0%|          | 0/6 [00:00<?, ?it/s][A
-Running EVPI analysis:  17%|█▋        | 1/6 [04:17<21:28, 257.71s/it][A
-Running EVPI analysis:  33%|███▎      | 2/6 [09:14<18:43, 280.76s/it][A
-Running EVPI analysis:  50%|█████     | 3/6 [13:24<13:19, 266.50s/it][A
-Running EVPI analysis:  67%|██████▋   | 4/6 [17:31<08:38, 259.04s/it][A
-Running EVPI analysis:  83%|████████▎ | 5/6 [22:00<04:22, 262.63s/it][A
-Running EVPI analysis: 100%|██████████| 6/6 [26:02<00:00, 255.65s/it][ARunning EVPI analysis: 100%|██████████| 6/6 [26:02<00:00, 260.47s/it]
-Processing Models:  30%|███       | 3/10 [2:09:29<5:01:19, 2582.75s/model]
-Running EVPI analysis:   0%|          | 0/6 [00:00<?, ?it/s][A
-Running EVPI analysis:  17%|█▋        | 1/6 [04:17<21:26, 257.21s/it][A
-Running EVPI analysis:  33%|███▎      | 2/6 [09:03<18:16, 274.18s/it][A
-Running EVPI analysis:  50%|█████     | 3/6 [13:19<13:17, 265.89s/it][A
-Running EVPI analysis:  67%|██████▋   | 4/6 [17:47<08:53, 266.76s/it][A
-Running EVPI analysis:  83%|████████▎ | 5/6 [22:02<04:22, 262.69s/it][A
-Running EVPI analysis: 100%|██████████| 6/6 [26:39<00:00, 267.57s/it][ARunning EVPI analysis: 100%|██████████| 6/6 [26:39<00:00, 266.65s/it]
-Processing Models:  40%|████      | 4/10 [2:53:13<4:19:54, 2599.09s/model]
-Running EVPI analysis:   0%|          | 0/6 [00:00<?, ?it/s][A
-Running EVPI analysis:  17%|█▋        | 1/6 [04:16<21:23, 256.68s/it][A
-Running EVPI analysis:  33%|███▎      | 2/6 [09:26<19:12, 288.20s/it][A
-Running EVPI analysis:  50%|█████     | 3/6 [13:33<13:27, 269.13s/it][A
-Running EVPI analysis:  67%|██████▋   | 4/6 [18:13<09:06, 273.29s/it][A
-Running EVPI analysis:  83%|████████▎ | 5/6 [22:30<04:27, 267.75s/it][A
-Running EVPI analysis: 100%|██████████| 6/6 [26:38<00:00, 260.87s/it][ARunning EVPI analysis: 100%|██████████| 6/6 [26:38<00:00, 266.42s/it]
-Processing Models:  50%|█████     | 5/10 [3:37:39<3:38:36, 2623.37s/model]Processing Models:  50%|█████     | 5/10 [3:37:39<3:37:39, 2611.96s/model]
-Traceback (most recent call last):
-  File "<frozen runpy>", line 198, in _run_module_as_main
-  File "<frozen runpy>", line 88, in _run_code
-  File "/cluster/home/tinusfa/master_project/src/run_batches.py", line 86, in <module>
-    run_batches(
-  File "/cluster/home/tinusfa/master_project/src/run_batches.py", line 43, in run_batches
-    run(
-  File "/cluster/home/tinusfa/master_project/src/run.py", line 190, in run
-    model_config = load_model_config(model_config_name)
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/cluster/home/tinusfa/master_project/src/utils.py", line 91, in load_model_config
-    raise FileNotFoundError(f"Model configuration file not found: {config_path}")
-FileNotFoundError: Model configuration file not found: /cluster/home/tinusfa/master_project/configs/models/config_128_sv1_4_weeks____no_bats_co2price_80.yaml
-To github.com:TinusAlsos/master_project.git
-   c6af220..07cdb4f  idun_runs -> idun_runs

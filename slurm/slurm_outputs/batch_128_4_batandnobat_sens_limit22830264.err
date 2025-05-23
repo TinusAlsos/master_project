@@ -1,16 +1,0 @@
-Processing Models:   0%|          | 0/12 [00:00<?, ?model/s]Processing Models:   0%|          | 0/12 [00:00<?, ?model/s]
-Traceback (most recent call last):
-  File "<frozen runpy>", line 198, in _run_module_as_main
-  File "<frozen runpy>", line 88, in _run_code
-  File "/cluster/home/tinusfa/master_project/src/run_batches.py", line 86, in <module>
-    run_batches(
-  File "/cluster/home/tinusfa/master_project/src/run_batches.py", line 43, in run_batches
-    run(
-  File "/cluster/home/tinusfa/master_project/src/run.py", line 190, in run
-    model_config = load_model_config(model_config_name)
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/cluster/home/tinusfa/master_project/src/utils.py", line 91, in load_model_config
-    raise FileNotFoundError(f"Model configuration file not found: {config_path}")
-FileNotFoundError: Model configuration file not found: /cluster/home/tinusfa/master_project/configs/models/config_128_sv1_4_weeks___emissionsreduction_0.0.yaml
-To github.com:TinusAlsos/master_project.git
-   e5a21a2..8555fb1  idun_runs -> idun_runs

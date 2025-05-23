@@ -2469,6 +2469,16 @@ def plot_utilization_hierarchy(
     # total installed capacity per year×generator
     cap_df = generators["total_capacity"].unstack(level="generator")
 
+    print("capacity_factors shape:", capacity_factors.shape)
+    print("cf_weekly shape:", cf_weekly.shape)
+    print("weighted_cf shape:", weighted_cf.shape)
+    print("annual_cf shape:", annual_cf.shape)
+    print("cap_df shape:", cap_df.shape)
+    
+
+
+
+
     # potential generation = annual_cf * capacity
     potential = annual_cf * cap_df
 
@@ -2483,6 +2493,23 @@ def plot_utilization_hierarchy(
 
     # 4) Compute utilization factor per (year,scenario,carrier)
     util = actual_car.div(potential_car, level="year").stack().unstack("carrier")
+
+
+    print("Sample of potential_car:", potential_car.head())
+    print("potential shape:", potential.shape)
+
+    print("Sample of capacity_factors:", capacity_factors.head())
+    print("Sample of cf_weekly:", cf_weekly.head())
+    print("Sample of annual_cf:", annual_cf.head())
+    print("Sample of cap_df:", cap_df.head())
+    print("Sample of potential:", potential.head())
+
+    print("actual shape:", actual.shape)
+    print("Sample of actual:", actual.head())
+
+    print("actual_car shape:", actual_car.shape)
+    print("potential_car shape:", potential_car.shape)
+    print("Sample of actual_car:", actual_car.head())
 
     # 5) Plot
     carriers = util.columns.tolist()
@@ -3946,9 +3973,13 @@ def compute_lmp_bucket_frequencies(
     """
     Bucket hourly LMPs into ±10% intervals around each carrier’s mean production_cost,
     combine onwind/offwind into 'wind', rename ror to 'non-binding',
-    merge overlapping coal & CCGT into 'thermal', create gap buckets,
-    and include an 'other' category. Returns bucket bounds and frequencies.
+    merge overlapping coal & CCGT into 'thermal', create gap buckets for positive/negative/curtailment,
+    add symmetric negative buckets, and a curtailment bucket at -100 ±10%.
+    Returns bucket bounds and frequencies.
     """
+    import numpy as np
+    import os
+
     # 1) Mean production cost by carrier
     carrier_cost = generators.reset_index().groupby("carrier")["production_cost"].mean()
     # 2) Combine & rename carriers: merge coal+CCGT into 'thermal'
@@ -3958,13 +3989,10 @@ def compute_lmp_bucket_frequencies(
         "wind": (carrier_cost["onwind"] + carrier_cost["offwind-ac"]) / 2,
         "thermal": None,  # placeholder
     }
-    # compute thermal cost interval union
     coal_c = carrier_cost["coal"]
     ccgt_c = carrier_cost["CCGT"]
-    # lower = min(0.9*cost), upper = max(1.1*cost)
     thermal_lower = min(coal_c, ccgt_c) * 0.9
     thermal_upper = max(coal_c, ccgt_c) * 1.1
-    # assign a representative cost (midpoint) for sorting
     thermal_cost = (coal_c + ccgt_c) / 2
     cost_map["thermal"] = thermal_cost
 
@@ -3975,45 +4003,71 @@ def compute_lmp_bucket_frequencies(
             lower, upper = thermal_lower, thermal_upper
         else:
             if cost == 0:
-                # Avoid division by zero
                 lower, upper = -0.0001, 0.0001
             else:
                 lower, upper = cost * 0.9, cost * 1.1
         intervals.append({"label": label, "lower": lower, "upper": upper})
 
-    # 4) Sort by lower bound
-    intervals = sorted(intervals, key=lambda x: x["lower"])
+    # 4) Mirror negative buckets for each positive bucket (except non-binding/gap)
+    mirrored = []
+    for iv in intervals:
+        label = iv["label"]
+        if label == "non-binding":
+            continue
+        mirrored.append(
+            {"label": f"neg_{label}", "lower": -iv["upper"], "upper": -iv["lower"]}
+        )
 
-    # 5) Create gap buckets between non-overlapping intervals
-    buckets = []
-    for i, iv in enumerate(intervals):
-        buckets.append(iv)
-        if i < len(intervals) - 1:
-            next_iv = intervals[i + 1]
+    # 5) Add curtailment bucket: -100 ±10%
+    curtailment_cost = -100.0
+    curtailment_lower = curtailment_cost * 1.1  # -110
+    curtailment_upper = curtailment_cost * 0.9  # -90
+    curtailment_low, curtailment_up = min(curtailment_lower, curtailment_upper), max(
+        curtailment_lower, curtailment_upper
+    )
+    curtailment_bucket = {
+        "label": "curtailment",
+        "lower": curtailment_low,
+        "upper": curtailment_up,
+    }
+
+    # 6) Combine all buckets: positives, negatives, curtailment
+    all_buckets = intervals + mirrored + [curtailment_bucket]
+
+    # 7) Sort all buckets by lower bound
+    all_buckets = sorted(all_buckets, key=lambda x: x["lower"])
+
+    # 8) Add gap buckets for any space between buckets
+    buckets_with_gaps = []
+    for i, iv in enumerate(all_buckets):
+        buckets_with_gaps.append(iv)
+        if i < len(all_buckets) - 1:
+            next_iv = all_buckets[i + 1]
             if next_iv["lower"] > iv["upper"]:
-                buckets.append(
+                buckets_with_gaps.append(
                     {
                         "label": f"gap_{iv['label']}_{next_iv['label']}",
                         "lower": iv["upper"],
                         "upper": next_iv["lower"],
                     }
                 )
-    # 6) Sort buckets by lower bound again
-    buckets = sorted(buckets, key=lambda x: x["lower"])
 
-    # 7) Flatten LMPs
+    # 9) Final sort (optional, but keeps all in order)
+    buckets = sorted(buckets_with_gaps, key=lambda x: x["lower"])
+
+    # 10) Flatten LMPs
     df = power_balance_duals.reset_index()[["dual_value"]].rename(
         columns={"dual_value": "LMP"}
     )
 
-    # 8) Assign each LMP to a bucket
+    # 11) Assign each LMP to a bucket
     conditions = [
         (df["LMP"] >= b["lower"]) & (df["LMP"] <= b["upper"]) for b in buckets
     ]
     labels = [b["label"] for b in buckets]
     df["bucket"] = np.select(conditions, labels, default="other")
 
-    # 9) Compute frequencies
+    # 12) Compute frequencies
     abs_counts = (
         df["bucket"]
         .value_counts()
@@ -4023,12 +4077,12 @@ def compute_lmp_bucket_frequencies(
     total = len(df)
     rel_perc = (abs_counts / total) * 100
 
-    # 10) Prepare bounds table
+    # 13) Prepare bounds table
     bounds = pd.DataFrame(buckets).set_index("label")[["lower", "upper"]]
     bounds.index.name = "bucket"
     bounds.loc["other"] = [np.nan, np.nan]
 
-    # 11) Combine into result
+    # 14) Combine into result
     result = bounds.copy()
     result["absolute"] = abs_counts
     result["relative_percent"] = rel_perc
@@ -4584,27 +4638,78 @@ def list_nonzero_gen_extension_duals(
         result.to_csv(path)
     return result
 
+def make_lmp_bucket_label(key, low, up, mid):
+    # Curtailment
+    if key == "curtailment":
+        return "Curtailment\n-100"
+    # Solar, Wind, Thermal (positive)
+    elif key == "solar":
+        return f"Solar\n{mid:.3f}"
+    elif key == "wind":
+        return f"Wind\n{mid:.3f}"
+    elif key == "thermal":
+        return f"Thermal\n{mid:.2f}"
+    # Negative buckets
+    elif key.startswith("neg_"):
+        pos_type = key.replace("neg_", "")
+        label_base = {"solar": "Solar", "wind": "Wind", "thermal": "Thermal"}.get(pos_type, pos_type)
+        # parenthesis and minus
+        if pos_type in ["solar", "wind"]:
+            return f"-{label_base}\n({mid:.3f})"
+        else:
+            return f"-{label_base}\n({mid:.2f})"
+    # Negative gap
+    elif key.startswith("gap_neg_"):
+        # Use parenthesis around numbers and a single dash
+        return f"({low:.2f})-({up:.2f})"
+    # Positive gap
+    elif key.startswith("gap"):
+        return f"{low:.2f}-{up:.2f}"
+    elif key.startswith(">"):
+        return f"{key} €/MWh"
+    else:
+        return f"{key}\n{mid:.2f}"
+
+def make_lmp_bucket_label(key, low, up, mid):
+    if key == "curtailment":
+        return "Curtailment\n-100"
+    elif key == "solar":
+        return f"Solar\n{mid:.3f}"
+    elif key == "wind":
+        return f"Wind\n{mid:.3f}"
+    elif key == "thermal":
+        return f"Thermal\n{mid:.2f}"
+    # Negative mirrored buckets
+    elif key.startswith("neg_"):
+        pos_type = key.replace("neg_", "")
+        label_base = {"solar": "Solar", "wind": "Wind", "thermal": "Thermal"}.get(pos_type, pos_type)
+        if pos_type in ["solar", "wind"]:
+            return f"-{label_base}\n({mid:.3f})"
+        else:
+            return f"-{label_base}\n({mid:.2f})"
+    # Negative gap bucket: gap_neg_type1_type2
+    elif key.startswith("gap_neg_"):
+        return f"({low:.2f})-({up:.2f})"
+    # Positive gap
+    elif key.startswith("gap"):
+        return f"{low:.2f}-{up:.2f}"
+    elif key.startswith(">"):
+        return f"{key} €/MWh"
+    else:
+        return f"{key}\n{mid:.2f}"
 
 def plot_lmp_bucket_frequencies(
-    freqs: pd.DataFrame, savefolder: str | None = None
+    freqs: pd.DataFrame,
+    savefolder: str | None = None,
+    min_freq_percent: float = 0.2,  # show only buckets >= 0.2% frequency
 ) -> None:
     """
     Bar chart of LMP bucket absolute frequencies with custom colors and labels,
     plus bold text labels above each bar and extended top margin.
 
-    - Buckets sorted by lower bound.
-    - Ignore buckets with zero count.
-    - Rename 'other' to '>highest_upper'.
-    - 'Solar', 'Wind', 'Thermal' capitalized with midpoint on next line.
-    - Gaps labeled as 'lower-upper'.
-    - Solar and Wind midpoints with 3 decimals, others 2 decimals.
-    - No rotation on x-tick labels.
-    - Custom bar colors:
-        solar   -> solar color
-        wind    -> mix of onshore/offshore color
-        thermal -> CCGT color
-        gaps    -> gray
-        '>' bin -> black
+    - Negative buckets: mirrored color of positive
+    - Curtailment: hatched bar
+    - Only show buckets with frequency >= min_freq_percent
     """
     # Colors
     color_solar = "#f9d002"
@@ -4620,11 +4725,22 @@ def plot_lmp_bucket_frequencies(
     color_gap = "#888888"
     color_other = "black"
 
-    # Filter non-zero buckets
-    df = freqs[freqs["absolute"] > 0].copy()
-    # Rename other
+    color_dict = {
+        "solar": color_solar,
+        "wind": color_wind,
+        "thermal": color_thermal,
+        "curtailment": color_thermal,
+    }
+
+    # Compute min count based on percent threshold
+    total = freqs["absolute"].sum()
+    min_abs = max(1, int(np.floor(total * min_freq_percent / 100)))
+
+    # Filter non-zero and above-threshold buckets
+    df = freqs[(freqs["absolute"] >= min_abs)].copy()
+    # Rename 'other' bucket
     non_other = df.drop(index="other", errors="ignore")
-    max_upper = non_other["upper"].max()
+    max_upper = non_other["upper"].max() if not non_other.empty else 0
     if "other" in df.index:
         new_label = f">{max_upper:.2f}"
         df = df.rename(index={"other": new_label})
@@ -4637,36 +4753,47 @@ def plot_lmp_bucket_frequencies(
     uppers = df["upper"].values
     mids = (lowers + uppers) / 2
 
-    # Labels and colors
+    # Labels, colors, hatches
     labels = []
     colors = []
+    hatches = []
     for key, low, up, mid in zip(buckets, lowers, uppers, mids):
+        hatch = None
+        # Use the helper function for label formatting
+        labels.append(make_lmp_bucket_label(key, low, up, mid))
+        # Colors and hatches as before
         if key == "solar":
-            labels.append(f"Solar\n{mid:.3f}")
             colors.append(color_solar)
         elif key == "wind":
-            labels.append(f"Wind\n{mid:.3f}")
             colors.append(color_wind)
         elif key == "thermal":
-            labels.append(f"Thermal\n{mid:.2f}")
             colors.append(color_thermal)
-        elif key.startswith("gap"):
-            labels.append(f"{low:.2f}-{up:.2f}")
+        elif key.startswith("neg_"):
+            pos_type = key.replace("neg_", "")
+            colors.append(color_dict.get(pos_type, color_gap))
+        elif key == "curtailment":
+            colors.append(color_thermal)
+            hatch = "///"
+        elif key.startswith("gap") or key.startswith("gap_neg_"):
             colors.append(color_gap)
         elif key.startswith(">"):
-            labels.append(f"{key} €/MWh")
             colors.append(color_other)
         else:
-            labels.append(f"{key}\n{mid:.2f}")
             colors.append(color_gap)
+        hatches.append(hatch)
 
     # Plot
     fig, ax = plt.subplots(figsize=(10, 6))
     x = np.arange(len(buckets))
     bars = ax.bar(x, df["absolute"], color=colors, edgecolor="black")
 
+    # Apply hatches for curtailment
+    for i, (bar, hatch) in enumerate(zip(bars, hatches)):
+        if hatch:
+            bar.set_hatch(hatch)
+
     # Extend top margin
-    max_count = df["absolute"].max()
+    max_count = df["absolute"].max() if not df["absolute"].empty else 1
     ax.set_ylim(0, max_count * 1.10)
 
     # Text labels
@@ -4686,7 +4813,8 @@ def plot_lmp_bucket_frequencies(
     ax.set_xlabel("LMP Bucket [€/MWh]", fontsize=16)
     ax.set_ylabel("Frequency (timesteps)", fontsize=16)
     ax.set_xticks(x)
-    ax.set_xticklabels(labels, fontsize=14)
+    # Only one set_xticklabels, 45 degrees, no ha argument!
+    ax.set_xticklabels(labels, fontsize=14, rotation=45)
     ax.tick_params(axis="y", labelsize=14)
     ax.grid(axis="y", linestyle="--", alpha=0.5)
 
@@ -4702,27 +4830,17 @@ def plot_lmp_bucket_frequencies(
 
 
 def plot_lmp_bucket_percentages(
-    freqs: pd.DataFrame, savefolder: str | None = None
+    freqs: pd.DataFrame, savefolder: str | None = None, min_freq_percent: float = 0.2
 ) -> None:
     """
     Bar chart of LMP bucket relative frequencies (percent) with custom colors and labels,
     plus bold text labels above each bar and extended top margin to accommodate them.
 
-    - Buckets sorted by lower bound.
-    - Ignore buckets with zero count.
-    - Rename 'other' to '>highest_upper'.
-    - 'Solar', 'Wind', 'Thermal' capitalized with midpoint on next line.
-    - Gaps labeled as 'lower-upper'.
-    - Solar and Wind midpoints with 3 decimals, others 2 decimals.
-    - No rotation on x-tick labels.
-    - Custom bar colors:
-        solar   -> solar color
-        wind    -> mix of onshore/offshore color
-        thermal -> CCGT color
-        gaps    -> gray
-        '>' bin -> black
+    - Negative buckets: mirrored color of positive
+    - Curtailment: hatched bar
+    - Only show buckets with frequency >= min_freq_percent
     """
-    # Define colors
+    # Colors
     color_solar = "#f9d002"
     color_on = "#235ebc"
     color_off = "#6895dd"
@@ -4736,11 +4854,18 @@ def plot_lmp_bucket_percentages(
     color_gap = "#888888"
     color_other = "black"
 
-    # 1) Filter zero-count buckets
-    df = freqs[freqs["absolute"] > 0].copy()
+    color_dict = {
+        "solar": color_solar,
+        "wind": color_wind,
+        "thermal": color_thermal,
+        "curtailment": color_thermal,
+    }
+
+    # 1) Filter buckets above threshold
+    df = freqs[freqs["relative_percent"] >= min_freq_percent].copy()
     # 2) Rename 'other' bucket
     non_other = df.drop(index="other", errors="ignore")
-    max_upper = non_other["upper"].max()
+    max_upper = non_other["upper"].max() if not non_other.empty else 0
     if "other" in df.index:
         new_label = f">{max_upper:.2f}"
         df = df.rename(index={"other": new_label})
@@ -4753,36 +4878,46 @@ def plot_lmp_bucket_percentages(
     uppers = df["upper"].values
     mids = (lowers + uppers) / 2
 
-    # 4) Prepare labels and colors
+    # 4) Prepare labels, colors, hatches
     labels = []
     colors = []
+    hatches = []
     for key, low, up, mid in zip(buckets, lowers, uppers, mids):
+        hatch = None
+        labels.append(make_lmp_bucket_label(key, low, up, mid))
+        # Positive/negative colors and hatches
         if key == "solar":
-            labels.append(f"Solar\n{mid:.3f}")
             colors.append(color_solar)
         elif key == "wind":
-            labels.append(f"Wind\n{mid:.3f}")
             colors.append(color_wind)
         elif key == "thermal":
-            labels.append(f"Thermal\n{mid:.2f}")
             colors.append(color_thermal)
-        elif key.startswith("gap"):
-            labels.append(f"{low:.2f}-{up:.2f}")
+        elif key.startswith("neg_"):
+            pos_type = key.replace("neg_", "")
+            colors.append(color_dict.get(pos_type, color_gap))
+        elif key == "curtailment":
+            colors.append(color_thermal)
+            hatch = "///"
+        elif key.startswith("gap") or key.startswith("gap_neg_"):
             colors.append(color_gap)
         elif key.startswith(">"):
-            labels.append(f"{key} €/MWh")
             colors.append(color_other)
         else:
-            labels.append(f"{key}\n{mid:.2f}")
             colors.append(color_gap)
+        hatches.append(hatch)
 
     # 5) Plot bars
     fig, ax = plt.subplots(figsize=(10, 6))
     x = np.arange(len(buckets))
     bars = ax.bar(x, df["relative_percent"], color=colors, edgecolor="black")
 
+    # Apply hatches
+    for i, (bar, hatch) in enumerate(zip(bars, hatches)):
+        if hatch:
+            bar.set_hatch(hatch)
+
     # 6) Extend top margin so labels fit
-    max_pct = df["relative_percent"].max()
+    max_pct = df["relative_percent"].max() if not df["relative_percent"].empty else 1
     ax.set_ylim(0, max_pct * 1.1)
 
     # 7) Add bold text labels above bars
@@ -4802,7 +4937,8 @@ def plot_lmp_bucket_percentages(
     ax.set_xlabel("LMP Bucket [€/MWh]", fontsize=16)
     ax.set_ylabel("Frequency (%)", fontsize=16)
     ax.set_xticks(x)
-    ax.set_xticklabels(labels, fontsize=14)
+    # Only one set_xticklabels, 45 degrees, no ha argument
+    ax.set_xticklabels(labels, fontsize=14, rotation=45)
     ax.tick_params(axis="y", labelsize=14)
     ax.grid(axis="y", linestyle="--", alpha=0.5)
 
@@ -4815,6 +4951,177 @@ def plot_lmp_bucket_percentages(
         fig.savefig(
             os.path.join(savefolder, "lmp_bucket_percentages.png"), bbox_inches="tight"
         )
+
+def plot_lmp_bucket_percentages_by_year_scenario(
+    power_balance_duals: pd.DataFrame,
+    freqs: pd.DataFrame,
+    savefolder: str | None = None,
+    min_freq_percent: float = 0.2,
+) -> None:
+    """
+    For each year & scenario, plot LMP bucket % frequencies using global freqs,
+    including a correct ">cap" bin with upper=np.inf, and omitting buckets below min_freq_percent.
+    Negative buckets: mirrored color; curtailment: hatched.
+    """
+    # Colors
+    color_solar = "#f9d002"
+    color_on = "#235ebc"
+    color_off = "#6895dd"
+    wind_rgb = (
+        (int(color_on[1:3], 16) + int(color_off[1:3], 16)) // 2,
+        (int(color_on[3:5], 16) + int(color_off[3:5], 16)) // 2,
+        (int(color_on[5:7], 16) + int(color_off[5:7], 16)) // 2,
+    )
+    color_wind = "#{:02x}{:02x}{:02x}".format(*wind_rgb)
+    color_thermal = "#b20101"
+    color_gap = "#888888"
+    color_other = "black"
+
+    color_dict = {
+        "solar": color_solar,
+        "wind": color_wind,
+        "thermal": color_thermal,
+        "curtailment": color_thermal,
+    }
+
+    # Prepare global buckets
+    df_buckets = freqs[["lower", "upper"]].copy()
+    if "other" in df_buckets.index:
+        cap = df_buckets.drop(index="other")["upper"].max()
+        label = f">{cap:.2f}"
+        df_buckets = df_buckets.rename(index={"other": label})
+        df_buckets.at[label, "lower"] = cap
+        df_buckets.at[label, "upper"] = np.inf
+    df_buckets = df_buckets.sort_values("lower")
+
+    keys = df_buckets.index.tolist()
+    lowers = df_buckets["lower"].values
+    uppers = df_buckets["upper"].values
+
+    # --- Helper for label formatting (reuse from previous answers) ---
+    def make_lmp_bucket_label(key, low, up, mid):
+        if key == "curtailment":
+            return "Curtailment\n-100"
+        elif key == "solar":
+            return f"Solar\n{mid:.3f}"
+        elif key == "wind":
+            return f"Wind\n{mid:.3f}"
+        elif key == "thermal":
+            return f"Thermal\n{mid:.2f}"
+        elif key.startswith("neg_"):
+            pos_type = key.replace("neg_", "")
+            label_base = {"solar": "Solar", "wind": "Wind", "thermal": "Thermal"}.get(pos_type, pos_type)
+            if pos_type in ["solar", "wind"]:
+                return f"-{label_base}\n({mid:.3f})"
+            else:
+                return f"-{label_base}\n({mid:.2f})"
+        elif key.startswith("gap_neg_"):
+            return f"({low:.2f})-({up:.2f})"
+        elif key.startswith("gap"):
+            return f"{low:.2f}-{up:.2f}"
+        elif key.startswith(">"):
+            return f"{key} €/MWh"
+        else:
+            return f"{key}\n{mid:.2f}"
+
+    # Build labels, colors, hatches (for all buckets)
+    labels_full = []
+    colors_full = []
+    hatches_full = []
+    for key, low, up in zip(keys, lowers, uppers):
+        mid = (low + (up if np.isfinite(up) else low * 1.1)) / 2
+        hatch = None
+        labels_full.append(make_lmp_bucket_label(key, low, up, mid))
+        # Color logic
+        if key == "solar":
+            colors_full.append(color_solar)
+        elif key == "wind":
+            colors_full.append(color_wind)
+        elif key == "thermal":
+            colors_full.append(color_thermal)
+        elif key.startswith("neg_"):
+            pos_type = key.replace("neg_", "")
+            colors_full.append(color_dict.get(pos_type, color_gap))
+        elif key == "curtailment":
+            colors_full.append(color_thermal)
+            hatch = "///"
+        elif key.startswith("gap") or key.startswith("gap_neg_"):
+            colors_full.append(color_gap)
+        elif key.startswith(">"):
+            colors_full.append(color_other)
+        else:
+            colors_full.append(color_gap)
+        hatches_full.append(hatch)
+
+    # Loop through years & scenarios
+    for year in power_balance_duals.index.get_level_values("year").unique():
+        scen_list = (
+            power_balance_duals.xs(year, level="year")
+            .index.get_level_values("scenario")
+            .unique()
+        )
+        for scen in scen_list:
+            sub = power_balance_duals.xs((scen, year), level=("scenario", "year"))
+            vals = sub["dual_value"].values
+            total = vals.size
+            if total == 0:
+                continue
+
+            # Compute percents for each bucket
+            rel = []
+            for low, up in zip(lowers, uppers):
+                if np.isfinite(up):
+                    cnt = ((vals > low) & (vals <= up)).sum()
+                else:
+                    cnt = (vals > low).sum()
+                rel.append(cnt / total * 100)
+
+            # Apply frequency threshold
+            mask = np.array(rel) >= min_freq_percent
+            if not mask.any():
+                continue
+            x = np.arange(mask.sum())
+            lbls = [labels_full[i] for i, m in enumerate(mask) if m]
+            cols = [colors_full[i] for i, m in enumerate(mask) if m]
+            hatches = [hatches_full[i] for i, m in enumerate(mask) if m]
+            vals_pct = [rel[i] for i, m in enumerate(mask) if m]
+
+            # Plot
+            fig, ax = plt.subplots(figsize=(10, 6))
+            bars = ax.bar(x, vals_pct, color=cols, edgecolor="black")
+            # Apply hatches for curtailment
+            for i, (bar, hatch) in enumerate(zip(bars, hatches)):
+                if hatch:
+                    bar.set_hatch(hatch)
+            max_pct = max(vals_pct)
+            ax.set_ylim(0, max_pct * 1.10)
+            for xi, pct in zip(x, vals_pct):
+                ax.text(
+                    xi,
+                    pct + max_pct * 0.02,
+                    f"{pct:.1f}%",
+                    ha="center",
+                    va="bottom",
+                    fontsize=12,
+                    fontweight="bold",
+                )
+
+            # Styling
+            ax.set_xlabel("LMP Bucket [€/MWh]", fontsize=16)
+            ax.set_ylabel("Frequency (%)", fontsize=16)
+            ax.set_xticks(x)
+            ax.set_xticklabels(lbls, fontsize=14, rotation=45)
+            ax.tick_params(axis="y", labelsize=14)
+            ax.grid(axis="y", linestyle="--", alpha=0.5)
+            ax.set_title(f"{year} – {scen}", fontsize=16)
+            plt.tight_layout()
+            plt.show()
+
+            # Save
+            if savefolder:
+                fname = f"lmp_buckets_{year}_{scen}.png"
+                fig.savefig(os.path.join(savefolder, fname), bbox_inches="tight")
+            plt.close()
 
 
 def plot_high_lmp_event_counts(
@@ -4834,7 +5141,10 @@ def plot_high_lmp_event_counts(
     """
     # 1) Flatten and filter
     df = power_balance_duals.reset_index()[["year", "scenario", "dual_value"]]
+    print(f"df {df}")
     high = df[df["dual_value"] > cap]
+    print(f"=========================")
+    print(f"high {high}")
 
     # 2) Count events per year & scenario
     counts = (
@@ -4844,6 +5154,7 @@ def plot_high_lmp_event_counts(
         .fillna(0)
         .astype(int)
     )
+    print(counts)
 
     # 3) Plot grouped bar chart
     fig, ax = plt.subplots(figsize=(10, 6))
@@ -5362,129 +5673,7 @@ def plot_annual_lmp_by_scenario_line(
         )
 
 
-def plot_lmp_bucket_percentages_by_year_scenario(
-    power_balance_duals: pd.DataFrame,
-    freqs: pd.DataFrame,
-    savefolder: str | None = None,
-) -> None:
-    """
-    For each year & scenario, plot LMP bucket % frequencies using global freqs,
-    including a correct ">cap" bin with upper=np.inf, and omitting zero‐count buckets.
-    """
-    # Colors
-    color_solar = "#f9d002"
-    color_on = "#235ebc"
-    color_off = "#6895dd"
-    wind_rgb = (
-        (int(color_on[1:3], 16) + int(color_off[1:3], 16)) // 2,
-        (int(color_on[3:5], 16) + int(color_off[3:5], 16)) // 2,
-        (int(color_on[5:7], 16) + int(color_off[5:7], 16)) // 2,
-    )
-    color_wind = "#{:02x}{:02x}{:02x}".format(*wind_rgb)
-    color_thermal = "#b20101"
-    color_gap = "#888888"
-    color_other = "black"
 
-    # Prepare global buckets
-    df_buckets = freqs[["lower", "upper"]].copy()
-    if "other" in df_buckets.index:
-        cap = df_buckets.drop(index="other")["upper"].max()
-        label = f">{cap:.2f}"
-        df_buckets = df_buckets.rename(index={"other": label})
-        df_buckets.at[label, "lower"] = cap
-        df_buckets.at[label, "upper"] = np.inf
-    df_buckets = df_buckets.sort_values("lower")
-
-    keys = df_buckets.index.tolist()
-    lowers = df_buckets["lower"].values
-    uppers = df_buckets["upper"].values
-
-    # Build labels & colors
-    labels = []
-    colors = []
-    for key, low, up in zip(keys, lowers, uppers):
-        mid = (low + (up if np.isfinite(up) else low * 1.1)) / 2
-        if key == "solar":
-            labels.append(f"Solar\n{mid:.3f}")
-            colors.append(color_solar)
-        elif key == "wind":
-            labels.append(f"Wind\n{mid:.3f}")
-            colors.append(color_wind)
-        elif key == "thermal":
-            labels.append(f"Thermal\n{mid:.2f}")
-            colors.append(color_thermal)
-        elif key.startswith("gap"):
-            labels.append(f"{low:.2f}-{up:.2f}")
-            colors.append(color_gap)
-        elif key.startswith(">"):
-            labels.append(f"{key} €/MWh")
-            colors.append(color_other)
-        else:
-            labels.append(f"{key}\n{mid:.2f}")
-            colors.append(color_gap)
-
-    # Loop through years & scenarios
-    for year in power_balance_duals.index.get_level_values("year").unique():
-        scen_list = (
-            power_balance_duals.xs(year, level="year")
-            .index.get_level_values("scenario")
-            .unique()
-        )
-        for scen in scen_list:
-            sub = power_balance_duals.xs((scen, year), level=("scenario", "year"))
-            vals = sub["dual_value"].values
-            total = vals.size
-            if total == 0:
-                continue
-
-            # Compute percents
-            rel = []
-            for low, up in zip(lowers, uppers):
-                if np.isfinite(up):
-                    cnt = ((vals > low) & (vals <= up)).sum()
-                else:
-                    cnt = (vals > low).sum()
-                rel.append(cnt / total * 100)
-
-            # Filter out zero‐count
-            mask = np.array(rel) > 0
-            x = np.arange(mask.sum())
-            lbls = [labels[i] for i, m in enumerate(mask) if m]
-            cols = [colors[i] for i, m in enumerate(mask) if m]
-            vals_pct = [rel[i] for i, m in enumerate(mask) if m]
-
-            # Plot
-            fig, ax = plt.subplots(figsize=(10, 6))
-            bars = ax.bar(x, vals_pct, color=cols, edgecolor="black")
-            max_pct = max(vals_pct)
-            ax.set_ylim(0, max_pct * 1.10)
-            for xi, pct in zip(x, vals_pct):
-                ax.text(
-                    xi,
-                    pct + max_pct * 0.02,
-                    f"{pct:.1f}%",
-                    ha="center",
-                    va="bottom",
-                    fontsize=12,
-                    fontweight="bold",
-                )
-
-            # Styling
-            ax.set_xlabel("LMP Bucket [€/MWh]", fontsize=16)
-            ax.set_ylabel("Frequency (%)", fontsize=16)
-            ax.set_xticks(x)
-            ax.set_xticklabels(lbls, fontsize=14)
-            ax.tick_params(axis="y", labelsize=14)
-            ax.grid(axis="y", linestyle="--", alpha=0.5)
-            ax.set_title(f"{year} – {scen}", fontsize=16)
-            plt.tight_layout()
-            plt.show()
-
-            # Save
-            if savefolder:
-                fname = f"lmp_buckets_{year}_{scen}.png"
-                fig.savefig(os.path.join(savefolder, fname), bbox_inches="tight")
-            plt.close()
 
 
 def analyze_run_stochastic(
@@ -6046,20 +6235,28 @@ def analyze_run_stochastic(
         power_balance_duals, freqs, savefolder=dual_folder
     )
 
-    plot_high_lmp_event_counts(power_balance_duals, cap, savefolder=dual_folder)
-    plot_high_lmp_distribution(
-        power_balance_duals, cap, n_bins=100, savefolder=dual_folder
-    )
-    high_tbl = make_high_lmp_frequency_table(
-        power_balance_duals, cap=cap, n_bins=100, savefolder=dual_save_table_folder
-    )
-    top5 = get_top_high_lmp_buckets(
-        high_tbl, top_n=10, savefolder=dual_save_table_folder
-    )
-    plot_top_high_lmp_buckets(high_tbl, top_n=6, savefolder=dual_folder)
-    plot_top_high_bucket_detail(
-        power_balance_duals, high_tbl, width=1.0, savefolder=dual_folder
-    )
+    if freqs.loc["other", "absolute"] > 0.01:
+
+        # determine cap from your buckets:
+        cap = freqs.loc[freqs.index != "other", "upper"].max()
+
+        plot_high_lmp_event_counts(power_balance_duals, cap, savefolder=dual_folder)
+        plot_high_lmp_distribution(
+            power_balance_duals, cap, n_bins=100, savefolder=dual_folder
+        )
+        high_tbl = make_high_lmp_frequency_table(
+            power_balance_duals, cap=cap, n_bins=100, savefolder=dual_save_table_folder
+        )
+        top5 = get_top_high_lmp_buckets(
+            high_tbl, top_n=10, savefolder=dual_save_table_folder
+        )
+        plot_top_high_lmp_buckets(high_tbl, top_n=6, savefolder=dual_folder)
+        plot_top_high_bucket_detail(
+            power_balance_duals, high_tbl, width=1.0, savefolder=dual_folder
+        )
+        plot_lmp_histogram_70plus(
+           power_balance_duals, cap=70, bin_width=2.0, savefolder=dual_folder
+        )
     gap_subset = extract_duals_in_lmp_bucket(
         power_balance_duals, freqs, "gap_wind_thermal"
     )
@@ -6070,9 +6267,7 @@ def analyze_run_stochastic(
     )
     plot_gap_lmp_distribution(gap_subset, "gap_wind_thermal", savefolder=dual_folder)
 
-    plot_lmp_histogram_70plus(
-        power_balance_duals, cap=70, bin_width=2.0, savefolder=dual_folder
-    )
+
     freq_table = make_lmp_frequency_table(
         power_balance_duals, bin_width=1.0, cap=70, savefolder=dual_save_table_folder
     )

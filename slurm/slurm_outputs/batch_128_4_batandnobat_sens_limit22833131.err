@@ -1,55 +1,0 @@
-Processing Models:   0%|          | 0/12 [00:00<?, ?model/s]
-Running EVPI analysis:   0%|          | 0/6 [00:00<?, ?it/s][A
-Running EVPI analysis:  17%|█▋        | 1/6 [07:00<35:04, 420.81s/it][A
-Running EVPI analysis:  33%|███▎      | 2/6 [12:07<23:35, 353.94s/it][A
-Running EVPI analysis:  50%|█████     | 3/6 [18:42<18:37, 372.56s/it][A
-Running EVPI analysis:  67%|██████▋   | 4/6 [25:05<12:32, 376.49s/it][A
-Running EVPI analysis:  83%|████████▎ | 5/6 [31:32<06:20, 380.44s/it][A
-Running EVPI analysis: 100%|██████████| 6/6 [38:10<00:00, 386.43s/it][ARunning EVPI analysis: 100%|██████████| 6/6 [38:10<00:00, 381.78s/it]
-Processing Models:   8%|▊         | 1/12 [57:25<10:31:37, 3445.22s/model]
-Running EVPI analysis:   0%|          | 0/6 [00:00<?, ?it/s][A
-Running EVPI analysis:  17%|█▋        | 1/6 [17:03<1:25:16, 1023.36s/it][A
-Running EVPI analysis:  33%|███▎      | 2/6 [25:51<48:47, 731.91s/it]   [A
-Running EVPI analysis:  50%|█████     | 3/6 [33:51<30:51, 617.17s/it][A
-Running EVPI analysis:  67%|██████▋   | 4/6 [41:10<18:13, 546.54s/it][A
-Running EVPI analysis:  83%|████████▎ | 5/6 [50:09<09:03, 543.95s/it][A
-Running EVPI analysis: 100%|██████████| 6/6 [59:35<00:00, 551.57s/it][ARunning EVPI analysis: 100%|██████████| 6/6 [59:35<00:00, 595.98s/it]
-Processing Models:  17%|█▋        | 2/12 [2:31:29<13:09:49, 4738.98s/model]
-Running EVPI analysis:   0%|          | 0/6 [00:00<?, ?it/s][A
-Running EVPI analysis:  17%|█▋        | 1/6 [13:11<1:05:55, 791.12s/it][A
-Running EVPI analysis:  33%|███▎      | 2/6 [26:05<52:04, 781.16s/it]  [A
-Running EVPI analysis:  50%|█████     | 3/6 [33:42<31:40, 633.34s/it][A
-Running EVPI analysis:  67%|██████▋   | 4/6 [45:23<22:00, 660.11s/it][A
-Running EVPI analysis:  83%|████████▎ | 5/6 [53:52<10:05, 605.37s/it][A
-Running EVPI analysis: 100%|██████████| 6/6 [1:02:20<00:00, 572.49s/it][ARunning EVPI analysis: 100%|██████████| 6/6 [1:02:20<00:00, 623.48s/it]
-Processing Models:  25%|██▌       | 3/12 [4:15:38<13:34:15, 5428.36s/model]
-Running EVPI analysis:   0%|          | 0/6 [00:00<?, ?it/s][A
-Running EVPI analysis:  17%|█▋        | 1/6 [09:03<45:16, 543.21s/it][A
-Running EVPI analysis:  33%|███▎      | 2/6 [44:29<1:38:18, 1474.52s/it][A
-Running EVPI analysis:  50%|█████     | 3/6 [53:33<52:28, 1049.63s/it]  [A
-Running EVPI analysis:  67%|██████▋   | 4/6 [1:05:24<30:31, 915.85s/it][A
-Running EVPI analysis:  83%|████████▎ | 5/6 [1:16:12<13:39, 819.39s/it][A
-Running EVPI analysis: 100%|██████████| 6/6 [1:22:44<00:00, 674.00s/it][ARunning EVPI analysis: 100%|██████████| 6/6 [1:22:44<00:00, 827.43s/it]
-Processing Models:  33%|███▎      | 4/12 [6:05:27<13:04:51, 5886.45s/model]Processing Models:  33%|███▎      | 4/12 [6:18:39<12:37:18, 5679.77s/model]
-Traceback (most recent call last):
-  File "<frozen runpy>", line 198, in _run_module_as_main
-  File "<frozen runpy>", line 88, in _run_code
-  File "/cluster/home/tinusfa/master_project/src/run_batches.py", line 86, in <module>
-    run_batches(
-  File "/cluster/home/tinusfa/master_project/src/run_batches.py", line 43, in run_batches
-    run(
-  File "/cluster/home/tinusfa/master_project/src/run.py", line 215, in run
-    model_output = get_model(model_config)
-                   ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/cluster/home/tinusfa/master_project/src/models.py", line 4222, in get_model
-    return model_func(config)
-           ^^^^^^^^^^^^^^^^^^
-  File "/cluster/home/tinusfa/master_project/src/models.py", line 2927, in GTSEP_stochastic_v1
-    g[i, omega, y, w, t].X + (g_new[i, omega, y, w, t].X if i in G_new else 0),
-    ^^^^^^^^^^^^^^^^^^^^^^
-  File "src/gurobipy/var.pxi", line 128, in gurobipy._core.Var.__getattr__
-  File "src/gurobipy/var.pxi", line 156, in gurobipy._core.Var.getAttr
-  File "src/gurobipy/_attrutil.pyx", line 117, in gurobipy._attrutil._getattr
-AttributeError: Unable to retrieve attribute 'X'. Did you mean: 'Xn'?
-To github.com:TinusAlsos/master_project.git
-   afaec6f..2bd906b  idun_runs -> idun_runs

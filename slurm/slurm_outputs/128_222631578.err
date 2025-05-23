@@ -1,21 +1,0 @@
-Running EVPI analysis:   0%|          | 0/6 [00:00<?, ?it/s]Running EVPI analysis:  17%|█▋        | 1/6 [08:26<42:11, 506.37s/it]Running EVPI analysis:  33%|███▎      | 2/6 [16:32<32:57, 494.29s/it]Running EVPI analysis:  50%|█████     | 3/6 [25:28<25:41, 513.69s/it]Running EVPI analysis:  67%|██████▋   | 4/6 [34:07<17:10, 515.48s/it]Running EVPI analysis:  83%|████████▎ | 5/6 [43:50<08:59, 539.85s/it]Running EVPI analysis:  83%|████████▎ | 5/6 [44:48<08:57, 537.64s/it]
-Traceback (most recent call last):
-  File "<frozen runpy>", line 198, in _run_module_as_main
-  File "<frozen runpy>", line 88, in _run_code
-  File "/cluster/home/tinusfa/master_project/src/run.py", line 522, in <module>
-    run(
-  File "/cluster/home/tinusfa/master_project/src/run.py", line 299, in run
-    model_info_df = run(
-                    ^^^^
-  File "/cluster/home/tinusfa/master_project/src/run.py", line 215, in run
-    model_output = get_model(model_config)
-                   ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/cluster/home/tinusfa/master_project/src/models.py", line 4199, in get_model
-    return model_func(config)
-           ^^^^^^^^^^^^^^^^^^
-  File "/cluster/home/tinusfa/master_project/src/models.py", line 2869, in GTSEP_stochastic_v1
-    model.optimize()
-  File "src/gurobipy/_model.pyx", line 903, in gurobipy._model.Model.optimize
-gurobipy._exception.GurobiError: Overage for too long, 3 active sessions and over the baseline for 67 minutes
-To github.com:TinusAlsos/master_project.git
-   80965d4..0025678  idun_runs -> idun_runs
