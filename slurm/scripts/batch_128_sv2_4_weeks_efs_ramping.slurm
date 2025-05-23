@@ -36,7 +36,7 @@ export GRB_WLSSECRET="87c9d38e-3a81-40a9-8d23-fa6fd14a0645" >> ~/.bashrc
 export GRB_LICENSE_FILE="/cluster/home/tinusfa/master_project/gurobi.lic" >> ~/.bashrc
 source ~/.bashrc
 
-python -m src.run_batches -m 128_sv2_4_weeks_ef05_ramping_ramp004 128_sv2_4_weeks_ef05_ramping_ramp008 128_sv2_4_weeks_ef05_ramping_ramp012 128_sv2_4_weeks_ef05_ramping_ramp100 -b batch_128_sv2_4_weeks_efs_ramping
+python -m src.run_batches -m 128_sv2_4_weeks_ef05_ramping_ramp025 128_sv2_4_weeks_ef05_ramping_ramp050 128_sv2_4_weeks_ef05_ramping_ramp100  -b batch_128_sv2_4_weeks_efs_ramping
 
 echo "Job finished at $(date)"
 

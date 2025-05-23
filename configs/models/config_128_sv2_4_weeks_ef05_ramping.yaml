@@ -19,4 +19,4 @@ representative_periods:
 - 21  
 - 42  
 - 52  
-ramping_limit: 0.04
+ramping_limit: 0.25

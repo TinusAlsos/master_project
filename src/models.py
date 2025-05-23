@@ -3453,6 +3453,7 @@ def GTSEP_stochastic_v2(config: dict) -> gp.Model:
     scenario_file = config["scenario_file"]
     ramping_limit = config["ramping_limit"]
     yearly_discount = config["yearly_discount"]
+    CCGT_to_coal_ramp_ratio = config["CCGT_to_coal_ramp_ratio"]
 
     if not representative_period_unit == "week":
         raise ValueError(
@@ -3766,7 +3767,10 @@ def GTSEP_stochastic_v2(config: dict) -> gp.Model:
             p_max = generators.loc[(y, i), "p_nom"]
             if not is_renewable_map[i]:
                 # If not renewable, apply ramping limits
-                ramp_limit = p_max * ramping_limit
+                if "CCGT" in i:
+                    ramp_limit = p_max * ramping_limit
+                elif "coal" in i:
+                    ramp_limit = p_max * CCGT_to_coal_ramp_ratio * ramping_limit
             for ω in Omega_y[y]:
                 for w in W:
                     for t in T:
@@ -3793,7 +3797,10 @@ def GTSEP_stochastic_v2(config: dict) -> gp.Model:
             p_max = p_i_cum_max[i, y]
             if not is_renewable_map[i]:
                 # If not renewable, apply ramping limits
-                ramp_limit = p_max * ramping_limit
+                if "CCGT" in i:
+                    ramp_limit = p_max * ramping_limit
+                elif "coal" in i:
+                    ramp_limit = p_max * CCGT_to_coal_ramp_ratio * ramping_limit
             for ω in Omega_y[y]:
                 for w in W:
                     for t in T:
