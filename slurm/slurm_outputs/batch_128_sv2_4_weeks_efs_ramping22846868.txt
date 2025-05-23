@@ -1,0 +1,18 @@
+Running from this directory: /cluster/home/tinusfa/master_project
+Name of job: batch_128_sv2_4_weeks_efs_ramping
+ID of job: 22846868
+The job was run on these nodes: idun-04-09
+True
+Running batches for: ['128_sv2_4_weeks_ef05_ramping_ramp025', '128_sv2_4_weeks_ef05_ramping_ramp050', '128_sv2_4_weeks_ef05_ramping_ramp100']
+Saving results to: batch_128_sv2_4_weeks_efs_ramping
+Running batch of length 3.
+Batch folder: batch_128_sv2_4_weeks_efs_ramping
+Running the following model_configs:
+128_sv2_4_weeks_ef05_ramping_ramp025
+128_sv2_4_weeks_ef05_ramping_ramp050
+128_sv2_4_weeks_ef05_ramping_ramp100
+@@@@ Batch number 1: 128_sv2_4_weeks_ef05_ramping_ramp025 @@@@
+No preprocessing config provided. Skipping preprocessing...
+Path_or_name: 128_sv2_4_weeks_ef05_ramping_ramp025
+Job finished at Fri 23 May 15:44:28 CEST 2025
+Pushing to git
