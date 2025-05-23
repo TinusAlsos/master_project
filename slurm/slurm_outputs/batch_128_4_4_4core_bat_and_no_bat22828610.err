@@ -1,42 +1,0 @@
-Processing Models:   0%|          | 0/2 [00:00<?, ?model/s]
-Running EVPI analysis:   0%|          | 0/6 [00:00<?, ?it/s][A
-Running EVPI analysis:  17%|█▋        | 1/6 [04:29<22:29, 269.90s/it][A
-Running EVPI analysis:  33%|███▎      | 2/6 [09:06<18:14, 273.61s/it][A
-Running EVPI analysis:  50%|█████     | 3/6 [13:29<13:26, 268.84s/it][A
-Running EVPI analysis:  67%|██████▋   | 4/6 [17:42<08:45, 262.65s/it][A
-Running EVPI analysis:  83%|████████▎ | 5/6 [22:22<04:28, 268.95s/it][A
-Running EVPI analysis: 100%|██████████| 6/6 [26:31<00:00, 262.19s/it][ARunning EVPI analysis: 100%|██████████| 6/6 [26:31<00:00, 265.27s/it]
-Processing Models:  50%|█████     | 1/2 [43:58<43:58, 2638.08s/model]Processing Models:  50%|█████     | 1/2 [43:58<43:58, 2638.47s/model]
-Traceback (most recent call last):
-  File "<frozen runpy>", line 198, in _run_module_as_main
-  File "<frozen runpy>", line 88, in _run_code
-  File "/cluster/home/tinusfa/master_project/src/run_batches.py", line 86, in <module>
-    run_batches(
-  File "/cluster/home/tinusfa/master_project/src/run_batches.py", line 43, in run_batches
-    run(
-  File "/cluster/home/tinusfa/master_project/src/run.py", line 215, in run
-    model_output = get_model(model_config)
-                   ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/cluster/home/tinusfa/master_project/src/models.py", line 4203, in get_model
-    return model_func(config)
-           ^^^^^^^^^^^^^^^^^^
-  File "/cluster/home/tinusfa/master_project/src/models.py", line 2376, in GTSEP_stochastic_v1
-    input_data = load_multi_year_csv_files_with_week_from_folder(
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/cluster/home/tinusfa/master_project/src/utils.py", line 433, in load_multi_year_csv_files_with_week_from_folder
-    sub = data[component].xs(year, level="year").copy()
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/cluster/home/tinusfa/.conda/envs/project/lib/python3.12/site-packages/pandas/core/generic.py", line 4274, in xs
-    loc, new_ax = labels.get_loc_level(key, level=level, drop_level=drop_level)
-                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/cluster/home/tinusfa/.conda/envs/project/lib/python3.12/site-packages/pandas/core/indexes/multi.py", line 3150, in get_loc_level
-    loc, mi = self._get_loc_level(key, level=level)
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/cluster/home/tinusfa/.conda/envs/project/lib/python3.12/site-packages/pandas/core/indexes/multi.py", line 3290, in _get_loc_level
-    indexer = self._get_level_indexer(key, level=level)
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/cluster/home/tinusfa/.conda/envs/project/lib/python3.12/site-packages/pandas/core/indexes/multi.py", line 3418, in _get_level_indexer
-    raise KeyError(key)
-KeyError: 2030
-To github.com:TinusAlsos/master_project.git
-   ddd3a1f..a6890b2  idun_runs -> idun_runs

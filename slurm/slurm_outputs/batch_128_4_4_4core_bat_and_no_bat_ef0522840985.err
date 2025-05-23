@@ -1,19 +1,0 @@
-Processing Models:   0%|          | 0/2 [00:00<?, ?model/s]
-Running EVPI analysis:   0%|          | 0/6 [00:00<?, ?it/s][A
-Running EVPI analysis:  17%|█▋        | 1/6 [04:43<23:35, 283.11s/it][A
-Running EVPI analysis:  33%|███▎      | 2/6 [08:54<17:37, 264.35s/it][A
-Running EVPI analysis:  50%|█████     | 3/6 [13:25<13:22, 267.33s/it][A
-Running EVPI analysis:  67%|██████▋   | 4/6 [17:45<08:49, 264.68s/it][A
-Running EVPI analysis:  83%|████████▎ | 5/6 [22:32<04:32, 272.50s/it][A
-Running EVPI analysis: 100%|██████████| 6/6 [26:44<00:00, 265.71s/it][ARunning EVPI analysis: 100%|██████████| 6/6 [26:44<00:00, 267.45s/it]
-Processing Models:  50%|█████     | 1/2 [43:21<43:21, 2601.44s/model]
-Running EVPI analysis:   0%|          | 0/6 [00:00<?, ?it/s][A
-Running EVPI analysis:  17%|█▋        | 1/6 [02:51<14:15, 171.19s/it][A
-Running EVPI analysis:  33%|███▎      | 2/6 [05:41<11:22, 170.52s/it][A
-Running EVPI analysis:  50%|█████     | 3/6 [08:25<08:22, 167.63s/it][A
-Running EVPI analysis:  67%|██████▋   | 4/6 [11:37<05:54, 177.39s/it][A
-Running EVPI analysis:  83%|████████▎ | 5/6 [14:47<03:01, 181.92s/it][A
-Running EVPI analysis: 100%|██████████| 6/6 [17:50<00:00, 182.32s/it][ARunning EVPI analysis: 100%|██████████| 6/6 [17:50<00:00, 178.47s/it]
-Processing Models: 100%|██████████| 2/2 [1:12:11<00:00, 2089.12s/model]Processing Models: 100%|██████████| 2/2 [1:12:11<00:00, 2165.97s/model]
-To github.com:TinusAlsos/master_project.git
-   e85f730..79fca26  idun_runs -> idun_runs
