@@ -1,1 +1,21 @@
-Processing Models:   0%|          | 0/12 [00:00<?, ?model/s]Processing Models:   8%|▊         | 1/12 [1:00:59<11:10:55, 3659.58s/model]Processing Models:  17%|█▋        | 2/12 [2:49:53<14:51:42, 5350.20s/model]
+Processing Models:   0%|          | 0/12 [00:00<?, ?model/s]Processing Models:   8%|▊         | 1/12 [1:00:59<11:10:55, 3659.58s/model]Processing Models:  17%|█▋        | 2/12 [2:49:53<14:51:42, 5350.20s/model]Processing Models:  17%|█▋        | 2/12 [8:54:37<44:33:05, 16038.51s/model]
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/cluster/home/tinusfa/master_project/src/run_batches.py", line 86, in <module>
+    run_batches(
+  File "/cluster/home/tinusfa/master_project/src/run_batches.py", line 43, in run_batches
+    run(
+  File "/cluster/home/tinusfa/master_project/src/run.py", line 215, in run
+    model_output = get_model(model_config)
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cluster/home/tinusfa/master_project/src/models.py", line 6410, in get_model
+    return model_func(config)
+           ^^^^^^^^^^^^^^^^^^
+  File "/cluster/home/tinusfa/master_project/src/models.py", line 4054, in GTSEP_stochastic_v2
+    g[i, omega, y, w, t].X + (g_new[i, omega, y, w, t].X if i in G_new else 0),
+    ^^^^^^^^^^^^^^^^^^^^^^
+  File "src/gurobipy/var.pxi", line 128, in gurobipy._core.Var.__getattr__
+  File "src/gurobipy/var.pxi", line 156, in gurobipy._core.Var.getAttr
+  File "src/gurobipy/_attrutil.pyx", line 117, in gurobipy._attrutil._getattr
+AttributeError: Unable to retrieve attribute 'X'. Did you mean: 'Xn'?
