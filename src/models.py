@@ -14,7 +14,7 @@ from src.utils import (
 )
 import os
 
-TIMELIMIT = 60 * 60 * 6  # 6 hours
+TIMELIMIT = 60 * 60 * 20 # 20 hours
 
 PROCESSED_DATA_FOLDER = os.path.join(
     os.path.dirname(os.path.dirname(__file__)), "data", "processed"

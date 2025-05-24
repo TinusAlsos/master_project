@@ -1,7 +1,7 @@
 #!/bin/sh
 #SBATCH --account=share-iv-mtp       # E.g. "ie-idi" if you belong to IDI
 #SBATCH --job-name=batch_128_sv2_8_weeks_ef05_rf025_bnb_sens_limit
-#SBATCH --time=1-12:00:00         # format: D-HH:MM:SS
+#SBATCH --time=1-20:00:00         # format: D-HH:MM:SS
 
 #SBATCH --partition=CPUQ          # Asking for a GPU
 #SBATCH --mem=128G       # Asking for 128 RAM
@@ -37,7 +37,7 @@ export GRB_LICENSE_FILE="/cluster/home/tinusfa/master_project/gurobi.lic" >> ~/.
 source ~/.bashrc
 
 python -m src.setup_sensitivity_configs
-python -m src.run_batches -m 128_sv2_8_weeks_ef05_rf025_emissionsreduction_0.0 128_sv2_8_weeks_ef05_rf025_emissionsreduction_0.2 128_sv2_8_weeks_ef05_rf025_emissionsreduction_0.4 128_sv2_8_weeks_ef05_rf025_emissionsreduction_0.6 128_sv2_8_weeks_ef05_rf025_emissionsreduction_0.8 128_sv2_8_weeks_ef05_rf025_emissionsreduction_1.0 128_sv2_8_weeks_ef05_rf025_no_bat_emissionsreduction_0.0 128_sv2_8_weeks_ef05_rf025_no_bat_emissionsreduction_0.2 128_sv2_8_weeks_ef05_rf025_no_bat_emissionsreduction_0.4 128_sv2_8_weeks_ef05_rf025_no_bat_emissionsreduction_0.6 128_sv2_8_weeks_ef05_rf025_no_bat_emissionsreduction_0.8 128_sv2_8_weeks_ef05_rf025_no_bat_emissionsreduction_1.0 -b batch_128_sv2_8_weeks_ef05_rf025_bnb_sens_limit
+python -m src.run_batches -m 128_sv2_8_weeks_ef05_rf025_emissionsreduction_0.4 128_sv2_8_weeks_ef05_rf025_emissionsreduction_0.6 128_sv2_8_weeks_ef05_rf025_emissionsreduction_0.8 128_sv2_8_weeks_ef05_rf025_no_bat_emissionsreduction_0.0 128_sv2_8_weeks_ef05_rf025_no_bat_emissionsreduction_0.2 128_sv2_8_weeks_ef05_rf025_no_bat_emissionsreduction_0.4 128_sv2_8_weeks_ef05_rf025_no_bat_emissionsreduction_0.6 128_sv2_8_weeks_ef05_rf025_no_bat_emissionsreduction_0.8 -b batch_128_sv2_8_weeks_ef05_rf025_bnb_sens_limit
 
 echo "Job finished at $(date)"
 
