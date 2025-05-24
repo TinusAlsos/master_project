@@ -4580,3 +4580,8 @@ Time limit reached
 Warning: environment still referenced so free is deferred (Continue to use WLS)
 Job finished at Sat 24 May 06:12:31 CEST 2025
 Pushing to git
+[idun_runs 43e9ed3] results from batch_128_sv2_8_weeks_ef05_rf025_bnb_sens_limit
+ 7 files changed, 2070 insertions(+), 1 deletion(-)
+ create mode 100644 runs/batch_runs/batch_128_sv2_8_weeks_ef05_rf025_bnb_sens_limit/3_May24_Sat_h00_m07_s31-GTSEP_stochastic_v2-128_ES_PT_sv2/model_info/scenario_probabilities.json
+ create mode 100644 runs/batch_runs/batch_128_sv2_8_weeks_ef05_rf025_bnb_sens_limit/3_May24_Sat_h00_m07_s31-GTSEP_stochastic_v2-128_ES_PT_sv2/model_info/scenarios.json
+ create mode 100644 runs/batch_runs/batch_128_sv2_8_weeks_ef05_rf025_bnb_sens_limit/3_May24_Sat_h00_m07_s31-GTSEP_stochastic_v2-128_ES_PT_sv2/model_info/week_weights.json
