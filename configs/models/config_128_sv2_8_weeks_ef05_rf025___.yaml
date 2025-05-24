@@ -25,4 +25,4 @@ representative_periods:
 - 44
 ramping_limit: 0.25
 VSS: true
-'ESPI:': true
+EVPI: true
