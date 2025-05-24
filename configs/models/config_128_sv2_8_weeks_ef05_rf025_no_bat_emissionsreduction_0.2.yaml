@@ -24,4 +24,4 @@ representative_periods:
 - 48
 - 44
 ramping_limit: 0.25
-co2_emissions_path: C:\Users\tinus\OneDrive\Dokumenter\0 Master\code\master_project\data\co2_emissions_files\co2_emissions_2_May23_Fri_h19_m46_s36-GTSEP_stochastic_v2-128_ES_PT_sv2_no_bat_emissionsreduction_0.2.csv
+co2_emissions_path: /cluster/home/tinusfa/master_project/data/co2_emissions_files/co2_emissions_2_May23_Fri_h19_m46_s36-GTSEP_stochastic_v2-128_ES_PT_sv2_no_bat_emissionsreduction_0.2.csv
