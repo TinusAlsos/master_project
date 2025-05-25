@@ -1,15 +1,15 @@
 Case,Year,Scenario,utilization_rate (%),congestion_rate (%)
-Base,2025,NT,64.32,52.73
-Base,2030,NT,67.85,52.71
-Base,2040,DE,68.35,52.87
-Base,2040,GA,67.93,53.05
-Base,2040,NT,68.26,52.87
-Base,2050,DE,68.28,53.02
-Base,2050,GA,67.81,53.08
-No Battery,2025,NT,64.35,53.11
-No Battery,2030,NT,68.57,52.63
-No Battery,2040,DE,69.11,53.02
-No Battery,2040,GA,68.68,53.12
-No Battery,2040,NT,69.0,53.03
-No Battery,2050,DE,69.17,53.57
-No Battery,2050,GA,68.7,53.57
+Base,2025,NT,64.94,49.69
+Base,2030,NT,70.3,52.09
+Base,2040,DE,70.27,52.07
+Base,2040,GA,70.39,51.82
+Base,2040,NT,70.28,52.04
+Base,2050,DE,70.37,52.67
+Base,2050,GA,70.38,52.13
+No Battery,2025,NT,65.12,49.94
+No Battery,2030,NT,71.78,53.46
+No Battery,2040,DE,72.0,53.49
+No Battery,2040,GA,71.9,53.42
+No Battery,2040,NT,72.0,53.52
+No Battery,2050,DE,71.84,53.28
+No Battery,2050,GA,71.78,53.32

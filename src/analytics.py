@@ -26,7 +26,7 @@ category_colors = {
     "Invest Tx": "#009e73",  # green
     "Prod Cost": "#f0e442",  # yellow
     "CO₂ Cost": "#d55e00",  # orange
-    "Load Shedding Cost": "#cc79a7",  # magenta
+    "Load Shedding Cost": "#800080",  # purple
     "Curtailment Cost": "#56b4e9",  # light blue
 }
 
@@ -1202,6 +1202,8 @@ def plot_capacity_investment_by_carrier(
     ax.legend(labels, title="Technology")
 
     plt.tight_layout()
+    plt.show()
+
 
     # Save if requested
     if savefolder:
@@ -1211,7 +1213,6 @@ def plot_capacity_investment_by_carrier(
     # Print title line instead of setting it on the plot
     print("Annual Capacity Investments by Technology")
 
-    plt.show()
 
 
 def plot_capacity_spending_by_carrier(
@@ -6256,9 +6257,15 @@ def analyze_run_stochastic(
             high_tbl, top_n=10, savefolder=dual_save_table_folder
         )
         plot_top_high_lmp_buckets(high_tbl, top_n=6, savefolder=dual_folder)
-        plot_top_high_bucket_detail(
-            power_balance_duals, high_tbl, width=1.0, savefolder=dual_folder
+        high_tbl = make_high_lmp_frequency_table(
+            power_balance_duals, cap=500, n_bins=50, savefolder=dual_folder
         )
+        top5 = get_top_high_lmp_buckets(
+            high_tbl, top_n=10, savefolder=dual_folder
+        )
+        print(top5)
+        plot_top_high_lmp_buckets(high_tbl, top_n=5, savefolder=dual_folder)
+
         plot_lmp_histogram_70plus(
            power_balance_duals, cap=70, bin_width=2.0, savefolder=dual_folder
         )

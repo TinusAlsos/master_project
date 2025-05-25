@@ -801,7 +801,20 @@ def plot_sized_branches(buses: pd.DataFrame, branches: pd.DataFrame, savefolder=
 def plot_sized_branches_with_year(
     buses: pd.DataFrame, branches: pd.DataFrame, year: int, savefolder=None
 ):
-    """Plots the base network with buses and transmission lines, without generators."""
+    """Plots the base network with buses and transmission lines, without generators.
+    Line width is normalized between 100 MW (thin) and 5000 MW (thick).
+    """
+    import geopandas as gpd
+    import matplotlib.pyplot as plt
+    from matplotlib.collections import LineCollection
+    import matplotlib.lines as mlines
+    import os
+
+    # Fixed capacity normalization values
+    min_capacity = 100   # MW
+    max_capacity = 5000  # MW
+    min_line_width = 1
+    max_line_width = 5
 
     # Convert buses DataFrame to a GeoDataFrame
     geometry_buses = gpd.points_from_xy(buses["x"], buses["y"])
@@ -813,11 +826,6 @@ def plot_sized_branches_with_year(
     # Generate list of line segments for LineCollection based on bus coordinates
     lines = []
     line_widths = []
-    max_capacity = branches["p_max"].max()
-    min_capacity = branches["p_max"].min()
-    min_line_width = 1
-    max_line_width = 5
-
     for _, row in branches.iterrows():
         if row["bus0"] in bus_coords and row["bus1"] in bus_coords:
             point0 = (bus_coords[row["bus0"]]["x"], bus_coords[row["bus0"]]["y"])
@@ -825,11 +833,9 @@ def plot_sized_branches_with_year(
             lines.append([point0, point1])
 
             # Normalize p_max between min_line_width and max_line_width
-            divide_by = (max_capacity - min_capacity) / (
-                max_line_width - min_line_width
-            )
-            divide_by = divide_by if divide_by != 0 else 1
-            linewidth = min_line_width + (row["p_max"] - min_capacity) / divide_by
+            normed = (row["p_max"] - min_capacity) / (max_capacity - min_capacity)
+            normed = max(0, min(normed, 1))  # Clip between 0 and 1
+            linewidth = min_line_width + (max_line_width - min_line_width) * normed
             line_widths.append(linewidth)
         else:
             print(f"Excluded line with missing bus coordinates: {row}")
@@ -843,13 +849,12 @@ def plot_sized_branches_with_year(
     # Plot buses
     gdf_buses.plot(
         ax=ax, color="black", marker="o", markersize=50, zorder=20
-    )  # No legend entry for buses
+    )
 
     # Create legend entries for line capacities
-    max_capacity_label = f"{max_capacity:.0f} MW"
-    min_capacity_label = f"{min_capacity:.0f} MW"
+    max_capacity_label = "5000 MW"
+    min_capacity_label = "100 MW"
 
-    # Custom legend items for max and min capacities
     max_line = mlines.Line2D(
         [], [], color="red", linewidth=max_line_width, label=max_capacity_label
     )
@@ -857,14 +862,25 @@ def plot_sized_branches_with_year(
         [], [], color="red", linewidth=min_line_width, label=min_capacity_label
     )
     bus_legend = mlines.Line2D(
-        [],
-        [],
-        color="black",
-        marker="o",
-        linestyle="None",
-        markersize=10,
-        label="Bus",
+        [], [], color="black", marker="o", linestyle="None", markersize=10, label="Bus"
     )
+
+    # Add text labels for major cities
+    for node, city in node_to_city.items():
+        if node in buses.index:
+            plt.text(
+                buses.loc[node, "x"],
+                buses.loc[node, "y"] + 0.2,
+                city,
+                fontsize=14,
+                ha="center",
+                va="center",
+                weight="bold",
+                color="black",
+                zorder=25,
+            )
+        else:
+            print(f"Excluded city with missing bus coordinates: {city}")
 
     # Combine all legend elements into one legend and place in the lower right
     legend_elements = [max_line, min_line, bus_legend]
@@ -887,6 +903,7 @@ def plot_sized_branches_with_year(
     if savefolder:
         savepath = os.path.join(savefolder, f"grid_new_branches_{year}.png")
         fig.savefig(savepath, bbox_inches="tight")
+
 
 
 def plot_sized_lines_with_extensions(
