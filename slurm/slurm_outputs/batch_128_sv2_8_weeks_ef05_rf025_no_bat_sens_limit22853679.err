@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/cluster/home/tinusfa/master_project/src/setup_sensitivity_configs.py", line 91, in <module>
+    utils.load_csv_files_from_folder_with_scenarios(decision_variables_folder)
+  File "/cluster/home/tinusfa/master_project/src/utils.py", line 274, in load_csv_files_from_folder_with_scenarios
+    for file in os.listdir(data_folder_path):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/cluster/home/tinusfa/master_project/runs/batch_runs/batch_128_sv2_8_weeks_ef05_rf025_bnb/1_May23_Fri_h18_m29_s11-GTSEP_stochastic_v2-128_ES_PT_sv2/decision_variables'
+Processing Models:   0%|          | 0/4 [00:00<?, ?model/s]Processing Models:  25%|██▌       | 1/4 [47:56<2:23:50, 2876.98s/model]Processing Models:  50%|█████     | 2/4 [1:36:17<1:36:22, 2891.08s/model]Processing Models:  75%|███████▌  | 3/4 [2:00:51<37:23, 2243.94s/model]  Processing Models: 100%|██████████| 4/4 [2:21:54<00:00, 1856.70s/model]Processing Models: 100%|██████████| 4/4 [2:21:54<00:00, 2128.73s/model]
